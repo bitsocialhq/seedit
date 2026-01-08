@@ -42,7 +42,7 @@ const CommunitiesDropdown = () => {
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
         {reversedSubscriptions?.map((subscription: string, index: number) => (
           <Link key={index} to={`/p/${subscription}`} className={styles.dropdownItem}>
-            {Plebbit.getShortAddress(subscription)}
+            {Plebbit.getShortAddress({ address: subscription })}
           </Link>
         ))}
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
@@ -331,7 +331,7 @@ const TopBar = memo(() => {
             )}
             {subscriptions?.length > 0 && <span className={styles.separator}> | </span>}
             {reversedSubscriptions?.map((subscription: string, index: number) => {
-              const shortAddress = Plebbit.getShortAddress(subscription);
+              const shortAddress = Plebbit.getShortAddress({ address: subscription });
               const displayAddress = shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
               return (
                 <li key={index}>
@@ -345,7 +345,7 @@ const TopBar = memo(() => {
             {!hideDefaultCommunities && filteredSubplebbitAddresses?.length > 0 && <span className={styles.separator}> | </span>}
             {!hideDefaultCommunities &&
               filteredSubplebbitAddresses?.map((address, index) => {
-                const shortAddress = Plebbit.getShortAddress(address);
+                const shortAddress = Plebbit.getShortAddress({ address });
                 const displayAddress = shortAddress.includes('.eth')
                   ? shortAddress.slice(0, -4)
                   : shortAddress.includes('.sol')

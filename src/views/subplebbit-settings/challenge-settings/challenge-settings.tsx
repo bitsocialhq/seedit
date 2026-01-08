@@ -498,8 +498,8 @@ const Challenges = ({
 
   return (
     <div className={`${styles.box} ${isReadOnly && !challenges ? styles.hidden : styles.visible}`}>
-      <div className={styles.boxTitle}>{t('anti_spam_challenges')}</div>
-      <div className={styles.boxSubtitle}>{t('anti_spam_challenges_subtitle')}</div>
+      <div className={styles.boxTitle}>{t('challenges')}</div>
+      <div className={styles.boxSubtitle}>{t('challenges_subtitle')}</div>
       <div className={styles.boxInput}>
         {!isReadOnly && (
           <button className={styles.addButton} onClick={handleAddChallenge} disabled={isReadOnly}>

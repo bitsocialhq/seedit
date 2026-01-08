@@ -13,6 +13,7 @@ import { registerSW } from 'virtual:pwa-register';
 if (window.location.hostname.startsWith('p2p.')) {
   (window as any).defaultPlebbitOptions = {
     libp2pJsClientsOptions: [{ key: 'libp2pjs' }],
+    httpsRoutersOptions: ['https://peers.pleb.bot', 'https://peers.forumindex.com'],
   };
 }
 

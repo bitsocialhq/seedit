@@ -265,7 +265,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
                 onTouchEnd={() => handleCommunitySelect(address)}
                 onMouseEnter={() => setActiveDropdownIndex(index)}
               >
-                {Plebbit.getShortAddress(address)}
+                {Plebbit.getShortAddress({ address })}
               </li>
             ))}
           </ul>

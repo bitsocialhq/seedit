@@ -405,7 +405,7 @@ const SubplebbitAddressField = () => {
                 setPublishPostStore({ subplebbitAddress: subscription });
               }}
             >
-              {Plebbit.getShortAddress(subscription)}
+              {Plebbit.getShortAddress({ address: subscription })}
             </span>
           ))}
         </div>
@@ -471,7 +471,7 @@ const SubmitPage = () => {
 
   const selectedSubplebbitData = useSubplebbit({ subplebbitAddress });
   const { rules, title: subplebbitTitle } = selectedSubplebbitData;
-  const shortAddress = subplebbitAddress && Plebbit.getShortAddress(subplebbitAddress);
+  const shortAddress = subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress });
   const { isOffline, offlineTitle } = useIsSubplebbitOffline(selectedSubplebbitData);
 
   const { index, publishComment } = usePublishComment(publishCommentOptions);

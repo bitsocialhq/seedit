@@ -282,7 +282,7 @@ const InboxShowParentButton = ({ parentCid }: { parentCid: string | undefined })
 
 const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, subplebbitAddress, timestamp }: ParentLinkProps) => {
   const { t } = useTranslation();
-  const shortSubplebbitAddress = subplebbitAddress ? (subplebbitAddress.includes('.') ? subplebbitAddress : Plebbit.getShortAddress(subplebbitAddress)) : '';
+  const shortSubplebbitAddress = subplebbitAddress ? (subplebbitAddress.includes('.') ? subplebbitAddress : Plebbit.getShortAddress({ address: subplebbitAddress })) : '';
 
   return (
     <>

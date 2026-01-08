@@ -38,7 +38,7 @@ const BlockSubplebbitButton = ({ subplebbitAddress }: HideMenuProps) => {
 
   return (
     <div className={styles.menuItem} onClick={blocked ? unblock : block}>
-      {blocked ? `${t('unblock')}` : `${t('block')}`} p/{subplebbitAddress && Plebbit.getShortAddress(subplebbitAddress)}
+      {blocked ? `${t('unblock')}` : `${t('block')}`} p/{subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress })}
     </div>
   );
 };

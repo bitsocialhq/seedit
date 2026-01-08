@@ -164,3 +164,6 @@ yarn-error.log*
 
 # YoYo AI version control directory
 .yoyo/
+
+.specstory/
+.cursorindexingignore

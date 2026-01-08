@@ -5,6 +5,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import eslint from 'vite-plugin-eslint';
 import { VitePWA } from 'vite-plugin-pwa';
 import reactScan from '@react-scan/vite-plugin-react-scan';
+import { reactGrab } from 'react-grab/plugins/vite';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -25,6 +26,8 @@ export default defineConfig({
       showToolbar: true,
       playSound: true,
     }),
+    // Only include React Grab in development mode - never in production builds
+    (isDevelopment || (!isProduction && process.env.NODE_ENV !== 'production')) && reactGrab(),
     !isProduction && eslint({
       lintOnStart: true,
       overrideConfigFile: './.eslintrc.cjs',
@@ -201,7 +204,9 @@ export default defineConfig({
       'buffer',
       'process',
       'stream-browserify',
-      'isomorphic-fetch'
+      'isomorphic-fetch',
+      'workbox-core',
+      'workbox-precaching'
     ],
   },
   esbuild: {

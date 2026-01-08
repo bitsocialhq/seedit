@@ -332,14 +332,16 @@ const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; p
   const subplebbitTitle = (
     <Link to={`/p/${isInPendingPostView ? pendingPostSubplebbitAddress : subplebbitAddress}`}>
       {title ||
-        (subplebbitAddress && Plebbit.getShortAddress(subplebbitAddress)) ||
-        (pendingPostSubplebbitAddress && Plebbit.getShortAddress(pendingPostSubplebbitAddress))}
+        (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress })) ||
+        (pendingPostSubplebbitAddress && Plebbit.getShortAddress({ address: pendingPostSubplebbitAddress }))}
     </Link>
   );
   const domainTitle = <Link to={`/domain/${params.domain}`}>{params.domain}</Link>;
   const submitTitle = <span className={styles.submitTitle}>{t('submit')}</span>;
   const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
-  const authorTitle = <Link to={`/u/${params.authorAddress}/c/${params.commentCid}`}>{params.authorAddress && Plebbit.getShortAddress(params.authorAddress)}</Link>;
+  const authorTitle = (
+    <Link to={`/u/${params.authorAddress}/c/${params.commentCid}`}>{params.authorAddress && Plebbit.getShortAddress({ address: params.authorAddress })}</Link>
+  );
 
   if (isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity) {
     return <span>{t('over_18')}</span>;
