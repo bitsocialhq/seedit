@@ -102,11 +102,11 @@ const SortItems = () => {
     let sortLink = isInSubplebbitView
       ? `/p/${params.subplebbitAddress}/${sortType}`
       : isInAllView
-        ? `p/all/${sortType}`
+        ? `/p/all/${sortType}`
         : isInModView
-          ? `p/mod/${sortType}`
+          ? `/p/mod/${sortType}`
           : isInDomainView
-            ? `domain/${params.domain}/${sortType}`
+            ? `/domain/${params.domain}/${sortType}`
             : sortType;
     if (timeFilterName) {
       sortLink = sortLink + `/${timeFilterName}`;
