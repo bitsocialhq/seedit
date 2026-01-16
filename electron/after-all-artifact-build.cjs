@@ -32,7 +32,7 @@ function createHtmlArchive() {
   }
 }
 
-module.exports = async function afterAllArtifactBuild(buildResult) {
+module.exports = async function afterAllArtifactBuild(_buildResult) {
   addPortableToPortableExecutableFileName();
   createHtmlArchive();
 };

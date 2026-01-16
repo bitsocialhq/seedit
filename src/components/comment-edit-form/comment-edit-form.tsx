@@ -73,7 +73,7 @@ const CommentEditForm = ({ commentCid, hideCommentEditForm }: CommentEditFormPro
   useEffect(() => {
     if (shouldPublish) {
       publishCommentEdit();
-      hideCommentEditForm && hideCommentEditForm();
+      if (hideCommentEditForm) hideCommentEditForm();
       setShouldPublish(false);
     }
   }, [shouldPublish, publishCommentEdit, hideCommentEditForm]);
@@ -171,7 +171,7 @@ const CommentEditForm = ({ commentCid, hideCommentEditForm }: CommentEditFormPro
         <button
           className={styles.cancel}
           onClick={() => {
-            hideCommentEditForm && hideCommentEditForm();
+            if (hideCommentEditForm) hideCommentEditForm();
           }}
         >
           {t('cancel')}

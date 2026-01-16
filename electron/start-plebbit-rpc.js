@@ -23,7 +23,7 @@ const plebbitRpcAuthKeyPath = path.join(defaultPlebbitOptions.dataPath, 'auth-ke
 let plebbitRpcAuthKey;
 try {
   plebbitRpcAuthKey = fs.readFileSync(plebbitRpcAuthKeyPath, 'utf8');
-} catch (e) {
+} catch {
   plebbitRpcAuthKey = randomBytes(32).toString('base64').replace(/[/+=]/g, '').substring(0, 40);
   fs.ensureFileSync(plebbitRpcAuthKeyPath);
   fs.writeFileSync(plebbitRpcAuthKeyPath, plebbitRpcAuthKey);
@@ -44,7 +44,7 @@ const startPlebbitRpcAutoRestart = async () => {
 
         console.log(`plebbit rpc: listening on ws://localhost:${port} (local connections only)`);
         console.log(`plebbit rpc: listening on ws://localhost:${port}/${plebbitRpcAuthKey} (secret auth key for remote connections)`);
-        plebbitWebSocketServer.ws.on('connection', (socket, request) => {
+        plebbitWebSocketServer.ws.on('connection', (socket) => {
           console.log('plebbit rpc: new connection');
           // debug raw JSON RPC messages in console
           if (isDev) {

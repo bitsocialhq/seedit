@@ -1,2 +1,2 @@
-// https://github.com/plebbit/lists/blob/master/README.md
+// https://github.com/bitsocialhq/lists/blob/master/README.md
 export const nsfwTags = ['adult', 'gore', 'vulgar', 'anti'];

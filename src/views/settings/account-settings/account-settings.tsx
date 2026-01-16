@@ -137,10 +137,10 @@ const ExportAccountButton = () => {
       // exportAccount might not include plebbitOptions, so we need to include it from useAccount()
       let accountDataToInclude;
       if (includePlebbitOptions) {
-        const { plebbit, ...completeAccountData } = account;
+        const { plebbit: _plebbit, ...completeAccountData } = account;
         accountDataToInclude = completeAccountData;
       } else {
-        const { plebbit, plebbitOptions, ...completeAccountData } = account;
+        const { plebbit: _plebbit, plebbitOptions: _plebbitOptions, ...completeAccountData } = account;
         accountDataToInclude = completeAccountData;
       }
       exportedAccount.account = accountDataToInclude;

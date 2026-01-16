@@ -102,12 +102,12 @@ const SortItems = () => {
     let sortLink = isInSubplebbitView
       ? `/p/${params.subplebbitAddress}/${sortType}`
       : isInAllView
-      ? `p/all/${sortType}`
-      : isInModView
-      ? `p/mod/${sortType}`
-      : isInDomainView
-      ? `domain/${params.domain}/${sortType}`
-      : sortType;
+        ? `/p/all/${sortType}`
+        : isInModView
+          ? `/p/mod/${sortType}`
+          : isInDomainView
+            ? `/domain/${params.domain}/${sortType}`
+            : sortType;
     if (timeFilterName) {
       sortLink = sortLink + `/${timeFilterName}`;
     }
@@ -250,7 +250,6 @@ const SettingsHeaderTabs = () => {
 };
 
 const HeaderTabs = () => {
-  const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
   const isInAllView = isAllView(location.pathname);
@@ -287,8 +286,6 @@ const HeaderTabs = () => {
     return <SortItems />;
   } else if (isInProfileView || isInAuthorView) {
     return <AuthorHeaderTabs />;
-  } else if (isInPendingPostView) {
-    return <span className={styles.pageName}>{t('pending')}</span>;
   } else if (isInInboxView) {
     return <InboxHeaderTabs />;
   } else if (isInSubplebbitsView && !isInCreateSubplebbitView) {
@@ -453,10 +450,10 @@ const Header = () => {
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-      ? `/p/${accountComment?.subplebbitAddress}/submit`
-      : subplebbitAddress
-      ? `/p/${subplebbitAddress}/submit`
-      : '/submit';
+        ? `/p/${accountComment?.subplebbitAddress}/submit`
+        : subplebbitAddress
+          ? `/p/${subplebbitAddress}/submit`
+          : '/submit';
 
   return (
     <div className={styles.header}>

@@ -44,7 +44,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const currentQuery = searchParams.get('q') || '';
   const [isInCommunitySearch, setIsInCommunitySearch] = useState(() => {
-    if (!!currentQuery) return true;
+    if (currentQuery) return true;
     if (isInFeedView) return false;
     return false; // always default to 'go to a community' in non-feed views
   });
@@ -104,7 +104,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   );
 
   useEffect(() => {
-    if (!!searchParams.get('q')) {
+    if (searchParams.get('q')) {
       setIsInCommunitySearch(true);
     } else if (!isInFeedView) {
       setIsInCommunitySearch(false);

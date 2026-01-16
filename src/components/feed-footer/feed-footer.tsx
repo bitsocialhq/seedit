@@ -151,7 +151,7 @@ const FeedFooter = ({
               <div className={styles.notModerator}>{t('not_moderator')}</div>
             ) : (
               <div>
-                <Trans i18nKey='no_communities_found' components={[<a href='https://github.com/plebbit/lists'>https://github.com/plebbit/lists</a>]} />
+                <Trans i18nKey='no_communities_found' components={[<a href='https://github.com/bitsocialhq/lists'>https://github.com/bitsocialhq/lists</a>]} />
                 <br />
                 {t('connect_community_notice')}
               </div>

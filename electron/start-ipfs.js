@@ -62,12 +62,12 @@ const startIpfs = async () => {
   // init ipfs client on first launch
   try {
     await spawnAsync(ipfsPath, ['init'], { env, hideWindows: true });
-  } catch (e) {}
+  } catch {}
 
   // make sure repo is migrated
   try {
     await spawnAsync(ipfsPath, ['repo', 'migrate'], { env, hideWindows: true });
-  } catch (e) {}
+  } catch {}
 
   // dont use 8080 port because it's too common
   await spawnAsync(ipfsPath, ['config', '--json', 'Addresses.Gateway', '"/ip4/127.0.0.1/tcp/6473"'], {
@@ -141,7 +141,7 @@ const startIpfsAutoRestart = async () => {
       try {
         // try to run exported onError callback, can be undefined
         DefaultExport.onError(e)?.catch?.(console.log);
-      } catch (e) {}
+      } catch {}
     }
     pendingStart = false;
   };

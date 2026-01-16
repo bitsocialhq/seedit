@@ -101,7 +101,7 @@ const UploadMediaForm = () => {
       if (!(isAndroid || isElectron)) {
         if (window.confirm(t('upload_button_warning'))) {
           const link = document.createElement('a');
-          link.href = 'https://github.com/plebbit/seedit/releases/latest';
+          link.href = 'https://github.com/bitsocialhq/seedit/releases/latest';
           link.target = '_blank';
           link.rel = 'noopener noreferrer';
           link.click();
@@ -170,7 +170,7 @@ const UploadMediaForm = () => {
     if (!(isAndroid || isElectron)) {
       if (window.confirm(t('upload_button_warning'))) {
         const link = document.createElement('a');
-        link.href = 'https://github.com/plebbit/seedit/releases/latest';
+        link.href = 'https://github.com/bitsocialhq/seedit/releases/latest';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.click();
@@ -424,7 +424,11 @@ const RulesInfo = ({ shortAddress, rules }: { shortAddress: string; rules: strin
       </span>
       <div className={styles.boxContent}>
         <div className={styles.description}>
-          <ol className={styles.rules}>{rules?.map((rule: string, index: number) => <li key={index}>{rule}</li>)}</ol>
+          <ol className={styles.rules}>
+            {rules?.map((rule: string, index: number) => (
+              <li key={index}>{rule}</li>
+            ))}
+          </ol>
         </div>
       </div>
     </div>

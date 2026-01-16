@@ -9,7 +9,19 @@
     <meta name="description" content="serverless, adminless, decentralized reddit alternative" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <title>seedit</title>
+    <title>Seedit</title>
+    <!-- React Grab: Hold ⌘C and click any element to provide visual context to AI coding agents (dev only) -->
+    <script type="module">
+      if (import.meta.env.DEV) {
+        import("react-grab");
+      }
+    </script>
+    <script>
+      // Redirect non-hash URLs to hash URLs on initial load
+      if (window.location.pathname && window.location.pathname !== '/' && window.location.pathname !== '/index.html' && !window.location.hash) {
+        window.location.replace('/#' + window.location.pathname + window.location.search);
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

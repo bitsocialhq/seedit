@@ -71,7 +71,7 @@ const EditMenu = ({ commentCid, showCommentEditForm }: EditMenuProps) => {
       <li className={styles.button}>
         <span
           onClick={() => {
-            showCommentEditForm && commentCid && showCommentEditForm();
+            if (showCommentEditForm && commentCid) showCommentEditForm();
           }}
         >
           {t('edit')}
@@ -92,7 +92,7 @@ const EditMenu = ({ commentCid, showCommentEditForm }: EditMenuProps) => {
         <li className={styles.button}>
           <span
             onClick={() => {
-              commentCid && deleteComment();
+              if (commentCid) deleteComment();
             }}
           >
             {deleted ? t('undelete') : t('delete')}

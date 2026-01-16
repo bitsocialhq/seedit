@@ -24,7 +24,7 @@ const BlockAuthorButton = ({ author, toggleIsMenuOpen }: HideMenuProps) => {
       className={styles.menuItem}
       onClick={() => {
         (blocked ? unblock : block)();
-        toggleIsMenuOpen && toggleIsMenuOpen();
+        if (toggleIsMenuOpen) toggleIsMenuOpen();
       }}
     >
       {blocked ? `${t('unblock')}` : `${t('block')}`} u/{author?.shortAddress}

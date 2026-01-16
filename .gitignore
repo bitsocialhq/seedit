@@ -160,10 +160,3 @@ yarn-error.log*
 
 .vscode
 .cursor
-.playwright-mcp
-
-# YoYo AI version control directory
-.yoyo/
-
-.specstory/
-.cursorindexingignore

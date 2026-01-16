@@ -18,7 +18,7 @@ const getClientHost = (clientUrl: string): string => {
   if (!clientHosts[clientUrl]) {
     try {
       clientHosts[clientUrl] = new URL(clientUrl).hostname || clientUrl;
-    } catch (e) {
+    } catch {
       clientHosts[clientUrl] = clientUrl;
     }
   }
@@ -121,7 +121,7 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
       }
 
       // find all client urls
-      const clientHosts = new Set([...pagesStatesClientHosts]);
+      const clientHosts = new Set(pagesStatesClientHosts);
       states['fetching-ipns']?.clientUrls.forEach((clientUrl) => clientHosts.add(getClientHost(clientUrl)));
       states['fetching-ipfs']?.clientUrls.forEach((clientUrl) => clientHosts.add(getClientHost(clientUrl)));
 

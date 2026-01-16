@@ -2,10 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import eslint from 'vite-plugin-eslint';
 import { VitePWA } from 'vite-plugin-pwa';
 import reactScan from '@react-scan/vite-plugin-react-scan';
-import { reactGrab } from 'react-grab/plugins/vite';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -25,15 +23,6 @@ export default defineConfig({
     (isDevelopment || (!isProduction && process.env.NODE_ENV !== 'production')) && reactScan({
       showToolbar: true,
       playSound: true,
-    }),
-    // Only include React Grab in development mode - never in production builds
-    (isDevelopment || (!isProduction && process.env.NODE_ENV !== 'production')) && reactGrab(),
-    !isProduction && eslint({
-      lintOnStart: true,
-      overrideConfigFile: './.eslintrc.cjs',
-      failOnError: false,
-      failOnWarning: false,
-      cache: true,
     }),
     nodePolyfills({
       globals: {
@@ -60,7 +49,7 @@ export default defineConfig({
       manifest: {
         name: 'Seedit',
         short_name: 'Seedit',
-        description: 'A GUI for plebbit similar to old.reddit',
+        description: 'A serverless, adminless, decentralized reddit alternative',
         theme_color: '#ffffff',
         background_color: '#ffffee',
         display: 'standalone',
@@ -89,15 +78,14 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api/, /^\/_(.*)/],
-        
+        maximumFileSizeToCacheInBytes: 6000000,
         runtimeCaching: [
-          // Always get fresh HTML from network first
+          // Fix index.html not refreshing on new versions
           {
             urlPattern: ({ url }) => url.pathname === '/' || url.pathname === '/index.html',
-            handler: 'NetworkFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'html-cache',
-              networkTimeoutSeconds: 3
+              cacheName: 'html-cache'
             }
           },
           // PNG caching
@@ -164,7 +152,9 @@ export default defineConfig({
       'stream': 'stream-browserify',
       'crypto': 'crypto-browserify',
       'buffer': 'buffer',
-    }
+      'util/': 'util',
+      'util': 'util',
+    },
   },
   server: {
     port: 3000,
@@ -177,40 +167,33 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'build',
+    outDir: 'dist',
     emptyOutDir: true,
     sourcemap: process.env.GENERATE_SOURCEMAP === 'true',
-    target: process.env.ELECTRON ? 'electron-renderer' : 'modules',
-    chunkSizeWarningLimit: 1000,
+    target: process.env.ELECTRON ? 'electron-renderer' : 'esnext',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'react-i18next', 'i18next', 'i18next-browser-languagedetector', 'i18next-http-backend']
+        manualChunks(id) {
+          if (/[\\/]node_modules[\\/](react|react-dom|react-router-dom|react-i18next|i18next|i18next-browser-languagedetector|i18next-http-backend)[\\/]/.test(id)) {
+            return 'vendor';
+          }
         }
       }
     }
   },
   base: process.env.PUBLIC_URL || '/',
   optimizeDeps: {
-    esbuildOptions: {
-      target: 'es2020',
-      define: {
-        global: 'globalThis',
-      },
-    },
     include: [
       'ethers',
       'assert',
       'buffer',
       'process',
+      'util',
       'stream-browserify',
       'isomorphic-fetch',
       'workbox-core',
       'workbox-precaching'
     ],
-  },
-  esbuild: {
-    target: 'es2020'
   },
   define: {
     'process.env.VITE_COMMIT_REF': JSON.stringify(process.env.COMMIT_REF),

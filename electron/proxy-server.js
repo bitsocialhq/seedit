@@ -7,7 +7,7 @@ import httpProxy from 'http-proxy';
 const proxy = httpProxy.createProxyServer({});
 
 // rewrite the request
-proxy.on('proxyReq', function (proxyReq, req, res, options) {
+proxy.on('proxyReq', function (proxyReq) {
   // remove headers that could potentially cause an ipfs 403 error
   proxyReq.removeHeader('X-Forwarded-For');
   proxyReq.removeHeader('X-Forwarded-Proto');

@@ -58,7 +58,7 @@ const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
             u/{Plebbit.getShortAddress({ address })}
           </li>
         ))}
-        {/* TODO: https://github.com/plebbit/seedit/issues/274
+        {/* TODO: https://github.com/bitsocialhq/seedit/issues/274
          <li className={styles.listMore}>{t('about_moderation')} »</li> */}
       </ul>
     </div>
@@ -140,25 +140,25 @@ export const Footer = () => {
           </li>
           <span className={styles.footerSeparator}>|</span>
           <li>
-            <a href='https://github.com/plebbit/seedit' target='_blank' rel='noopener noreferrer'>
+            <a href='https://github.com/bitsocialhq/seedit' target='_blank' rel='noopener noreferrer'>
               github
             </a>
             <span className={styles.footerSeparator}>|</span>
           </li>
           <li>
-            <a href='https://t.me/plebbit' target='_blank' rel='noopener noreferrer'>
+            <a href='https://t.me/bitsocialhq' target='_blank' rel='noopener noreferrer'>
               telegram
             </a>
             <span className={styles.footerSeparator}>|</span>
           </li>
           <li>
-            <a href='https://x.com/getplebbit' target='_blank' rel='noopener noreferrer'>
+            <a href='https://x.com/bitsocialhq' target='_blank' rel='noopener noreferrer'>
               x
             </a>
             <span className={styles.footerSeparator}>|</span>
           </li>
           <li>
-            <a href='https://plebbit.github.io/docs/learn/clients/seedit/what-is-seedit' target='_blank' rel='noopener noreferrer'>
+            <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
               docs
             </a>
           </li>
@@ -201,10 +201,10 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-      ? `/p/${pendingPost?.subplebbitAddress}/submit`
-      : address || params?.subplebbitAddress
-      ? `/p/${address || params?.subplebbitAddress}/submit`
-      : '/submit';
+        ? `/p/${pendingPost?.subplebbitAddress}/submit`
+        : address || params?.subplebbitAddress
+          ? `/p/${address || params?.subplebbitAddress}/submit`
+          : '/submit';
 
   const { blocked, unblock, block } = useBlock({ address });
 
@@ -261,7 +261,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
       navigate('/communities/create');
     } else if (window.confirm(t('create_community_warning'))) {
       const link = document.createElement('a');
-      link.href = 'https://github.com/plebbit/seedit/releases/latest';
+      link.href = 'https://github.com/bitsocialhq/seedit/releases/latest';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.click();
@@ -365,7 +365,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
           )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
         {isInSubplebbitsView && (
-          <a href='https://github.com/plebbit/lists' target='_blank' rel='noopener noreferrer'>
+          <a href='https://github.com/bitsocialhq/lists' target='_blank' rel='noopener noreferrer'>
             <div className={styles.largeButton}>
               <div className={styles.nub} />
               {t('submit_community')}

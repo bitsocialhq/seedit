@@ -1,19 +1,5 @@
 import './log.js';
-import {
-  app,
-  BrowserWindow,
-  Menu,
-  MenuItem,
-  Tray,
-  screen as electronScreen,
-  shell,
-  dialog,
-  nativeTheme,
-  ipcMain,
-  Notification,
-  systemPreferences,
-  clipboard,
-} from 'electron';
+import { app, BrowserWindow, Menu, MenuItem, Tray, shell, dialog, nativeTheme, ipcMain, Notification, systemPreferences, clipboard } from 'electron';
 import isDev from 'electron-is-dev';
 import fs from 'fs';
 import path from 'path';
@@ -335,7 +321,7 @@ const createMainWindow = () => {
   });
 
   // deny attaching webview https://www.electronjs.org/docs/latest/tutorial/security#12-verify-webview-options-before-creation
-  mainWindow.webContents.on('will-attach-webview', (e, webPreferences, params) => {
+  mainWindow.webContents.on('will-attach-webview', (e) => {
     // deny all
     e.preventDefault();
   });
@@ -352,7 +338,7 @@ const createMainWindow = () => {
       if (tray) {
         try {
           tray.destroy();
-        } catch (e) {}
+        } catch {}
       }
       tray = new Tray(trayIconPath);
       tray.setToolTip('seedit');
@@ -375,7 +361,11 @@ const createMainWindow = () => {
 
       // show/hide on tray right click
       tray.on('right-click', () => {
-        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+        if (mainWindow.isVisible()) {
+          mainWindow.hide();
+        } else {
+          mainWindow.show();
+        }
       });
 
       // close to tray

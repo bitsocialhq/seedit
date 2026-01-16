@@ -46,7 +46,7 @@ const Domain = () => {
         if (hostname === domain) return true;
 
         return hostname.endsWith(`.${domain}`) || hostname === domain;
-      } catch (e) {
+      } catch {
         return false;
       }
     },
@@ -70,7 +70,7 @@ const Domain = () => {
       subplebbitAddresses: string[];
       filter: CommentsFilter;
     } = {
-      newerThan: searchQuery ? 0 : timeFilterSeconds ?? 0,
+      newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
       sortType,
       subplebbitAddresses,
       filter: { filter: filterFunc, key: filterKey },
@@ -121,6 +121,13 @@ const Domain = () => {
     filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
   });
 
+  const { feed: yearlyFeed } = useFeed({
+    subplebbitAddresses,
+    sortType,
+    newerThan: 60 * 60 * 24 * 365,
+    filter: { filter: matchesDomain, key: `domain-filter-yearly-${domain}` },
+  });
+
   const documentTitle = domain + ' - Seedit';
   useEffect(() => {
     document.title = documentTitle;
@@ -150,6 +157,7 @@ const Domain = () => {
     subplebbitAddressesWithNewerPosts,
     weeklyFeedLength: weeklyFeed.length,
     monthlyFeedLength: monthlyFeed.length,
+    yearlyFeedLength: yearlyFeed.length,
     currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
     reset,
     searchQuery: searchQuery,

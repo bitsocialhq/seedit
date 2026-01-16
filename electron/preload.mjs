@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 // dev uses http://localhost, prod uses file://...index.html
-const isDev = window.location.protocol === 'http:';
 
 const defaultPlebbitOptions = {
   plebbitRpcClientsOptions: ['ws://localhost:9138'],
@@ -23,10 +22,10 @@ contextBridge.exposeInMainWorld('electron', {
       'plugin:file-uploader:pickAndUploadMedia',
       'plugin:file-uploader:uploadMedia',
       'plugin:file-uploader:pickMedia',
-      'get-notification-permission-status', 
-      'get-platform', 
-      'test-notification-permission', 
-      'copy-to-clipboard'
+      'get-notification-permission-status',
+      'get-platform',
+      'test-notification-permission',
+      'copy-to-clipboard',
     ];
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, ...args);
@@ -45,4 +44,4 @@ contextBridge.exposeInMainWorld('electronApi', {
   testNotification: () => ipcRenderer.invoke('test-notification-permission'),
   showNotification: (notification) => ipcRenderer.send('show-notification', notification),
   copyToClipboard: (text) => ipcRenderer.invoke('copy-to-clipboard', text),
-}); 
+});

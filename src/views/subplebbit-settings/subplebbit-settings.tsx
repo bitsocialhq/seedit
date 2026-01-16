@@ -322,7 +322,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   );
 };
 
-const JSONSettings = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
+const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { subplebbitAddress } = useParams<{ subplebbitAddress: string }>();

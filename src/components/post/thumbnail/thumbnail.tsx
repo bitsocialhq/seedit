@@ -170,7 +170,9 @@ const Thumbnail = ({
             onClick={(e) => {
               if (e.button === 0 && isReply) {
                 e.preventDefault();
-                toggleExpanded && !(isReply && (noMediaLinkIcon === 'link' || noMediaLinkIcon === 'notfound')) && toggleExpanded();
+                if (toggleExpanded && !(isReply && (noMediaLinkIcon === 'link' || noMediaLinkIcon === 'notfound'))) {
+                  toggleExpanded();
+                }
               }
             }}
           >

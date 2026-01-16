@@ -29,7 +29,7 @@ export const exportFile = async ({ content, fileName, mimeType = 'application/js
 /**
  * Export file on mobile platforms using Capacitor APIs
  */
-const exportFileOnMobile = async ({ content, fileName, mimeType }: ExportFileOptions): Promise<void> => {
+const exportFileOnMobile = async ({ content, fileName }: ExportFileOptions): Promise<void> => {
   try {
     let result;
     let writeError;

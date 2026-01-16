@@ -102,7 +102,7 @@ const Expando = ({
             onClick={(e) => {
               if (e.button === 0) {
                 e.preventDefault();
-                toggleExpanded && toggleExpanded();
+                if (toggleExpanded) toggleExpanded();
               }
             }}
           >

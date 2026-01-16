@@ -1,0 +1,295 @@
+name: Test Builds
+
+on:
+  push:
+    branches: [ development, master ]
+  pull_request:
+    branches: [ development, master ]
+
+jobs:
+  test-linux:
+    name: Test Linux (Ubuntu)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Cache electron binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-
+
+      - name: Install dependencies
+        run: |
+          for i in 1 2 3; do
+            echo "yarn install attempt $i"
+            yarn install --frozen-lockfile --ignore-engines --network-timeout 100000 --network-concurrency 1 && break
+            sleep 5
+            [ "$i" = "3" ] && exit 1
+          done
+
+      - name: Download IPFS
+        run: node electron/download-ipfs && chmod +x bin/linux/ipfs
+
+      - name: Build React App
+        run: yarn build
+        env:
+          CI: ''
+
+      - name: Build Electron App (Linux)
+        run: yarn electron:build:linux
+
+      - name: Smoke Test
+        run: |
+          echo "Testing AppImage startup..."
+          APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
+          echo "Found AppImage: $APPIMAGE"
+          chmod +x "$APPIMAGE"
+          # Use --appimage-extract-and-run to avoid FUSE requirement in CI
+          # Run with timeout and expect it to start (will be killed after timeout)
+          timeout 10s "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
+          APP_PID=$!
+          sleep 5
+          # Check if process is still running (means it started successfully)
+          if kill -0 $APP_PID 2>/dev/null; then
+            echo "✓ App started successfully"
+            kill $APP_PID 2>/dev/null || true
+            exit 0
+          else
+            echo "✗ App failed to start"
+            exit 1
+          fi
+
+  test-mac-intel:
+    name: Test Mac (Intel)
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+      
+      - name: Install setuptools for native modules
+        run: |
+          # Use pip with --break-system-packages for CI environment
+          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+
+      - name: Cache electron binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/electron
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-
+
+      - name: Install dependencies
+        run: |
+          for i in 1 2 3; do
+            echo "yarn install attempt $i"
+            yarn install --frozen-lockfile --ignore-engines --network-timeout 100000 --network-concurrency 1 && break
+            sleep 5
+            [ "$i" = "3" ] && exit 1
+          done
+
+      - name: Download IPFS
+        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
+
+      - name: Build React App
+        run: yarn build
+        env:
+          CI: ''
+
+      - name: Build Electron App
+        # Use --dir to build only the .app bundle without DMG
+        # This avoids flaky hdiutil "Resource busy" errors in CI
+        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+
+      - name: Smoke Test
+        run: |
+          if [ -d "dist/mac/5chan.app" ]; then
+            echo "Testing dist/mac/5chan.app..."
+            # Run the app in background - it will start IPFS which takes time
+            # We just verify it launches without crashing
+            ./dist/mac/5chan.app/Contents/MacOS/5chan &
+            APP_PID=$!
+            sleep 10
+            # Check if process is still running (means it started successfully)
+            if kill -0 $APP_PID 2>/dev/null; then
+              echo "✓ App started successfully"
+              kill $APP_PID 2>/dev/null || true
+              # Also kill any child processes (IPFS)
+              pkill -P $APP_PID 2>/dev/null || true
+              pkill -f ipfs 2>/dev/null || true
+              exit 0
+            else
+              echo "✗ App failed to start or crashed"
+              exit 1
+            fi
+          else
+            echo "Could not find dist/mac/5chan.app to test"
+            ls -R dist
+            exit 1
+          fi
+
+  test-mac-arm:
+    name: Test Mac (Apple Silicon)
+    runs-on: macOS-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Install setuptools for native modules
+        run: |
+          # Use pip with --break-system-packages for CI environment
+          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+
+      - name: Cache electron binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/electron
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-
+
+      - name: Install dependencies
+        run: |
+          for i in 1 2 3; do
+            echo "yarn install attempt $i"
+            yarn install --frozen-lockfile --ignore-engines --network-timeout 100000 --network-concurrency 1 && break
+            sleep 5
+            [ "$i" = "3" ] && exit 1
+          done
+
+      - name: Download IPFS
+        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
+
+      - name: Build React App
+        run: yarn build
+        env:
+          CI: ''
+
+      - name: Build Electron App
+        # On M1 runner, this should produce arm64 build
+        # Use --dir to build only the .app bundle without DMG
+        # This avoids flaky hdiutil "Resource busy" errors in CI
+        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+
+      - name: Smoke Test
+        run: |
+          if [ -d "dist/mac-arm64/5chan.app" ]; then
+            APP_PATH="dist/mac-arm64/5chan.app"
+          elif [ -d "dist/mac/5chan.app" ]; then
+            APP_PATH="dist/mac/5chan.app"
+          else
+            echo "Could not find 5chan.app to test"
+            ls -R dist
+            exit 1
+          fi
+          
+          echo "Testing $APP_PATH..."
+          # Run the app in background - it will start IPFS which takes time
+          # We just verify it launches without crashing
+          "./$APP_PATH/Contents/MacOS/5chan" &
+          APP_PID=$!
+          sleep 10
+          # Check if process is still running (means it started successfully)
+          if kill -0 $APP_PID 2>/dev/null; then
+            echo "✓ App started successfully"
+            kill $APP_PID 2>/dev/null || true
+            # Also kill any child processes (IPFS)
+            pkill -P $APP_PID 2>/dev/null || true
+            pkill -f ipfs 2>/dev/null || true
+            exit 0
+          else
+            echo "✗ App failed to start or crashed"
+            exit 1
+          fi
+
+  test-windows:
+    name: Test Windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Cache electron binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/AppData/Local/electron/Cache
+          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for i in 1 2 3; do
+            echo "yarn install attempt $i"
+            yarn install --frozen-lockfile --ignore-engines --network-timeout 100000 --network-concurrency 1 && break
+            sleep 5
+            [ "$i" = "3" ] && exit 1
+          done
+
+      - name: Download IPFS
+        run: node electron/download-ipfs
+
+      - name: Build React App
+        run: yarn build
+        env:
+          CI: ''
+
+      - name: Build Electron App
+        run: yarn electron:build:windows
+        timeout-minutes: 30
+
+      - name: Smoke Test
+        shell: bash
+        run: |
+          # Try to find the unpacked executable first as it's easiest to run
+          if [ -d "dist/win-unpacked" ]; then
+             echo "Testing unpacked exe..."
+             # Run with timeout - app starts IPFS so won't exit on its own
+             timeout 15s ./dist/win-unpacked/5chan.exe &
+             APP_PID=$!
+             sleep 8
+             # Check if process started successfully
+             if kill -0 $APP_PID 2>/dev/null; then
+               echo "✓ App started successfully"
+               taskkill //F //PID $APP_PID 2>/dev/null || true
+               # Kill any IPFS processes
+               taskkill //F //IM ipfs.exe 2>/dev/null || true
+               exit 0
+             else
+               echo "✗ App failed to start"
+               exit 1
+             fi
+          else
+             echo "No unpacked directory found"
+             ls -R dist
+             exit 1
+          fi

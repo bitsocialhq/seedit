@@ -1,13 +1,7 @@
 {
-  "hot": "شائع",
-  "new": "جديد",
-  "active": "نشط",
-  "controversial": "مثير للجدل",
-  "top": "الأعلى تصويتًا",
   "about": "حول",
   "comments": "تعليقات",
   "preferences": "التفضيلات",
-  "account_bar_language": "العربية",
   "submit": "إرسال",
   "dark": "داكن",
   "light": "فاتح",
@@ -22,7 +16,6 @@
   "post_comments": "تعليقات",
   "share": "مشاركة",
   "save": "حفظ",
-  "unsave": "إلغاء الحفظ",
   "hide": "إخفاء",
   "report": "الإبلاغ",
   "crosspost": "نشر متقاطع",
@@ -37,11 +30,7 @@
   "time_1_year_ago": "منذ عام واحد",
   "time_x_years_ago": "منذ {{count}} سنوات",
   "spoiler": "حرق",
-  "unspoiler": "إلغاء حرق",
-  "reply_permalink": "رابط ثابت",
-  "embed": "تضمين",
   "reply_reply": "الرد",
-  "best": "أفضل",
   "reply_sorted_by": "مرتبة حسب",
   "all_comments": "جميع {{count}} التعليقات",
   "no_comments": "لا تعليقات (بعد)",
@@ -66,11 +55,10 @@
   "next": "التالي",
   "loading": "تحميل",
   "pending": "قيد الانتظار",
-  "or": "أو",
   "submit_subscriptions_notice": "المجتمعات المقترحة",
   "submit_subscriptions": "مجتمعاتك المشتركة",
   "rules_for": "قواعد لـ",
-  "no_communities_found": "لا توجد مجتمعات على <1>https://github.com/plebbit/lists</1>",
+  "no_communities_found": "لا توجد مجتمعات على <1>https://github.com/bitsocialhq/lists</1>",
   "connect_community_notice": "للاتصال بمجتمع، استخدم 🔎 في أعلى اليمين",
   "options": "خيارات",
   "hide_options": "إخفاء الخيارات",
@@ -85,7 +73,6 @@
   "time_x_months": "{{count}} أشهر",
   "time_1_year": "عام واحد",
   "time_x_years": "{{count}} سنوات",
-  "search": "بحث",
   "submit_post": "قدم مشاركة جديدة",
   "create_your_community": "أنشئ مجتمعك الخاص",
   "moderators": "المشرفون",
@@ -95,7 +82,6 @@
   "created_by": "تم إنشاؤها بواسطة {{creatorAddress}}",
   "community_for": "مجتمع لمدة {{date}}",
   "post_submitted_on": "تم تقديم هذا المنشور في {{postDate}}",
-  "readers_count": "قرّاء {{count}}",
   "users_online": "مستخدمين {{count}} هنا الآن",
   "point": "نقطة",
   "points": "نقاط",
@@ -107,26 +93,15 @@
   "moderation": "مراقبة",
   "interface_language": "لغة الواجهة",
   "theme": "نسق",
-  "profile": "الملف الشخصي",
   "account": "حساب",
   "display_name": "اسم العرض",
   "crypto_address": "عنوان العملة الرقمية",
-  "reset": "إعادة",
-  "changes": "تغييرات",
   "check": "تحقق",
   "crypto_address_verification": "إذا تم حل عنوان العملة الرقمية عبر الند للند",
-  "is_current_account": "هل هذا الحساب الحالي",
-  "account_data_preview": "معاينة بيانات الحساب",
   "create": "أنشئ",
-  "a_new_account": "حساب جديد",
-  "import": "استيراد",
-  "export": "تصدير",
   "delete": "حذف",
-  "full_account_data": "بيانات الحساب الكاملة",
-  "this_account": "هذا الحساب",
   "locked": "مقفل",
   "reason": "السبب",
-  "no_posts_found": "لم يتم العثور على منشورات",
   "sorted_by": "مرتبة حسب",
   "downvoted": "قمت بالتصويت بالسلب",
   "hidden": "مخفي",
@@ -138,21 +113,14 @@
   "full_comments": "جميع التعليقات",
   "context": "السياق",
   "block": "حظر",
-  "hide_post": "إخفاء المنشور",
   "post": "منشور",
   "unhide": "إظهار",
   "unblock": "إلغاء الحظر",
   "undo": "تراجع",
   "post_hidden": "المنشور مخفي",
-  "old": "قديمة",
-  "copy_link": "انسخ الرابط",
   "link_copied": "تم نسخ الرابط",
-  "view_on": "عرض على {{destination}}",
   "block_community": "حظر المجتمع",
   "unblock_community": "إلغاء حظر المجتمع",
-  "block_community_alert": "هل أنت متأكد أنك تريد حظر هذا المجتمع؟",
-  "unblock_community_alert": "هل أنت متأكد أنك تريد إلغاء حظر هذا المجتمع؟",
-  "search_community_address": "ابحث عن عنوان مجتمع",
   "search_feed_post": "ابحث عن منشور في هذا التغذية",
   "from": "من",
   "via": "عبر",
@@ -169,15 +137,12 @@
   "no_posts": "لا توجد مشاركات",
   "media_url": "عنوان وسائط",
   "post_locked_info": "هذه المشاركة {{state}}. لن تتمكن من التعليق.",
-  "no_subscriptions_notice": "لم تنضم إلى أي مجتمع بعد.",
   "members_count": "{{count}} أعضاء",
   "communities": "مجتمع",
   "edit": "تعديل",
   "moderator": "مشرف",
   "description": "وصف",
   "rules": "قواعد",
-  "challenge": "تحدي",
-  "settings": "الإعدادات",
   "save_options": "حفظ الخيارات",
   "logo": "شعار",
   "address": "عنوان",
@@ -188,26 +153,15 @@
   "moderation_tools": "أدوات الإشراف",
   "submit_to": "إرسال إلى <1>{{link}}</1>",
   "edit_subscriptions": "تحرير الاشتراكات",
-  "last_account_notice": "لا يمكنك حذف حسابك الأخير، يرجى إنشاء حساب جديد أولاً.",
   "delete_confirm": "هل أنت متأكد أنك تريد حذف {{value}}؟",
   "saving": "حفظ",
   "deleted": "تم الحذف",
-  "mark_spoiler": "وسم كما حرق",
-  "remove_spoiler": "إزالة حريف",
-  "delete_post": "حذف المنشور",
-  "undo_delete": "تراجع الحذف",
-  "edit_content": "تحرير المحتوى",
   "online": "متصل",
   "offline": "غير متصل",
-  "download_app": "تحميل التطبيق",
-  "approved_user": "مستخدم معتمد",
   "subscriber": "مشترك",
-  "approved": "معتمد",
-  "proposed": "مقترح",
   "join_communities_notice": "انقر على الأزرار <1>{{join}}</1> أو <2>{{leave}}</2> لاختيار المجتمعات التي تظهر على صفحة البداية.",
   "below_subscribed": "فيما يلي المجتمعات التي اشتركت فيها.",
   "not_subscribed": "لم تشترك في أي مجتمع حتى الآن.",
-  "below_approved_user": "أدناه هي المجتمعات التي أنت مستخدم معتمد فيها.",
   "below_moderator_access": "أدناه هي المجتمعات التي لديك وصولاً كمشرف إليها.",
   "not_moderator": "أنت لست مشرفًا على أي مجتمع.",
   "create_community": "إنشاء مجتمع",
@@ -228,7 +182,6 @@
   "address_setting_info": "قم بتعيين عنوان مجتمع قابل قراءة باستخدام نطاق العملات الرقمية",
   "enter_crypto_address": "الرجاء إدخال عنوان كريبتو صالح.",
   "check_for_updates": "<1>تحقق</1> من التحديثات",
-  "general_settings": "إعدادات عامة",
   "refresh_to_update": "قم بتحديث الصفحة للتحديث",
   "latest_development_version": "أنت على أحدث إصدار تطوير، النسخة {{commit}}. لاستخدام النسخة الثابتة، انتقل إلى {{link}}.",
   "latest_stable_version": "أنت على أحدث نسخة ثابتة، seedit v{{version}}.",
@@ -236,7 +189,6 @@
   "new_stable_version": "إصدار مستقر جديد متاح، seedit v{{newVersion}}. أنت تستخدم seedit v{{oldVersion}}.",
   "download_latest_desktop": "حمل أحدث إصدار سطح المكتب هنا: {{link}}",
   "contribute_on_github": "المساهمة على GitHub",
-  "create_community_not_available": "غير متاح على الويب بعد. يمكنك إنشاء مجتمع باستخدام تطبيق سطح المكتب، قم بتنزيله هنا: {{desktopLink}}. إذا كنت مرتاحًا باستخدام سطر الأوامر، تحقق من: {{cliLink}}",
   "no_media_found": "لم يتم العثور على وسائط",
   "no_image_found": "لم يتم العثور على صورة",
   "warning_spam": "تحذير: لم يتم تحديد تحدي، المجتمع عُرضة لهجمات البريد العشوائي.",
@@ -254,7 +206,6 @@
   "owner": "المالك",
   "admin": "مسؤول",
   "settings_saved": "تم حفظ الإعدادات لـ p/{{subplebbitAddress}}",
-  "mod_edit": "تحرير المشرف",
   "continue_thread": "تابع هذا الموضوع",
   "mod_edit_reason": "سبب تعديل المشرف",
   "double_confirm": "هل أنت متأكد حقًا؟ هذا الإجراء لا يمكن التراجع عنه.",
@@ -266,12 +217,10 @@
   "not_found_description": "الصفحة التي طلبتها غير موجودة",
   "last_edited": "آخر تعديل {{timestamp}}",
   "view_spoiler": "عرض الحاضر",
-  "more": "المزيد",
   "default_communities": "المجتمعات الافتراضية",
   "avatar": "الصورة الرمزية",
   "pending_edit": "تحرير معلق",
   "failed_edit": "فشل التعديل",
-  "copy_full_address": "<1>نسخ</1> العنوان الكامل",
   "node_stats": "إحصائيات العقدة",
   "version": "الإصدار",
   "edit_reason": "سبب التعديل",
@@ -291,30 +240,22 @@
   "ban_user_for": "حظر المستخدم لمدة <1></1> يوم(أيام)",
   "crypto_wallets": "محافظ العملات الرقمية",
   "wallet_address": "عنوان المحفظة",
-  "save_wallets": "<1>حفظ</1> المحفظة(المحافظ) في الحساب",
   "remove": "إزالة",
   "add_wallet": "<1>إضافة</1> محفظة رقمية",
   "show_settings": "عرض الإعدادات",
   "hide_settings": "إخفاء الإعدادات",
-  "wallet": "محفظة",
   "undelete": "إلغاء الحذف",
   "downloading_comments": "تحميل التعليقات",
   "you_blocked_community": "لقد حظرت هذه المجتمعة",
   "show": "اظهر",
   "plebbit_options": "خيارات plebbit",
   "general": "عام",
-  "own_communities": "المجتمعات الخاصة بي",
-  "invalid_community_address": "عنوان المجتمع غير صالح",
-  "newer_posts_available": "مشاركات جديدة متوفرة: <1>إعادة تحميل الخلاصة</1>",
   "more_posts_last_week": "{{count}} منشورات في الأسبوع {{currentTimeFilterName}}: <1>عرض المزيد من المنشورات من الأسبوع الماضي</1>",
   "more_posts_last_month": "{{count}} منشورات في {{currentTimeFilterName}}: <1>عرض المزيد من المشاركات من الشهر الماضي</1>",
-  "sure_delete": "هل أنت متأكد أنك تريد حذف هذا المنشور؟",
-  "sure_undelete": "هل أنت متأكد أنك تريد استعادة هذا المنشور؟",
   "profile_info": "تم إنشاء حسابك u/{{shortAddress}}. <1>تعيين اسم العرض</1>, <2>تصدير النسخة الاحتياطية</2>, <3>اعرف المزيد</3>.",
   "show_all_instead": "عرض المشاركات منذ {{timeFilterName}} ، <1>عرض الكل بدلاً من ذلك</1>",
   "subplebbit_offline_info": "قد يكون الرد على الرسائل غير متاح حالياً وقد تفشل النشر.",
   "posts_last_synced_info": "آخر تزامن الرسائل {{time}}، قد يكون الرد على الرسائل غير متاح حالياً وقد تفشل النشر.",
-  "stored_locally": "مخزنة محليًا ({{location}})، ليست متزامنة عبر الأجهزة",
   "import_account_backup": "<1>استيراد</1> نسخة احتياطية للحساب",
   "export_account_backup": "<1>تصدير</1> نسخة احتياطية للحساب",
   "save_reset_changes": "<1>حفظ</1> أو <2>إعادة تعيين</2> التغييرات",
@@ -334,17 +275,11 @@
   "communities_you_moderate": "المجتمعات التي تشرف عليها",
   "blur_media": "تمويه الوسائط المعلمة كـ NSFW/18+",
   "nsfw_content": "محتوى NSFW",
-  "nsfw_communities": "مجتمعات NSFW",
-  "hide_adult": "إخفاء المجتمعات المعلَمة كـ \"بالغ\"",
-  "hide_gore": "إخفاء المجتمعات المعلَمة كـ \"دموي\"",
-  "hide_anti": "إخفاء المجتمعات المعلَمة كـ \"مناهض\"",
-  "filters": "مرشحات",
   "see_nsfw": "انقر لرؤية NSFW",
   "see_nsfw_spoiler": "انقر لرؤية NSFW المفسد",
   "always_show_nsfw": "هل تريد دائمًا عرض وسائل الإعلام NSFW؟",
   "always_show_nsfw_notice": "حسنًا، لقد غيرنا تفضيلاتك لعرض وسائل الإعلام NSFW دائمًا.",
   "content_options": "خيارات المحتوى",
-  "hide_vulgar": "إخفاء المجتمعات المعلَمة كـ \"فاحش\"",
   "over_18": "أكثر من 18؟",
   "must_be_over_18": "يجب أن تكون فوق 18 عامًا لعرض هذه المجتمع",
   "must_be_over_18_explanation": "يجب أن تكون في سن 18 عامًا على الأقل لعرض هذا المحتوى. هل أنت فوق 18 عامًا ومستعد لرؤية المحتوى البالغ؟",
@@ -355,7 +290,6 @@
   "block_user": "حظر المستخدم",
   "unblock_user": "إلغاء حظر المستخدم",
   "filtering_by_tag": "تصفية حسب التاغ: \"{{tag}}\"",
-  "read_only_community_settings": "إعدادات المجتمع للقراءة فقط",
   "you_are_moderator": "أنت مشرف في هذه المجتمع",
   "you_are_admin": "أنت مشرف في هذه المجتمع",
   "you_are_owner": "أنت مالك هذا المجتمع",
@@ -377,7 +311,6 @@
   "search_posts": "البحث عن المشاركات",
   "found_n_results_for": "تم العثور على {{count}} منشورات لـ \"{{query}}\"",
   "clear_search": "مسح البحث",
-  "loading_iframe": "تحميل الإطار",
   "no_matches_found_for": "لم يتم العثور على تطابقات لـ \"{{query}}\"",
   "searching": "البحث",
   "hide_default_communities_from_topbar": "إخفاء المجتمعات الافتراضية من شريط الأدوات العلوي",
@@ -410,42 +343,48 @@
   "expand_media_previews_based_on_community_media_preferences": "قم بتوسيع معاينات الوسائط بناءً على تفضيلات الوسائط في تلك المجتمع",
   "show_all_nsfw": "عرض كل المحتوى NSFW",
   "hide_all_nsfw": "إخفاء كل المحتوى غير الآمن",
-  "unstoppable_by_design": "...لا يمكن إيقافه حسب التصميم.",
-  "servers_are_overrated": "الخوادم مبالغ في شأنها.",
-  "cryptographic_playground": "... الملعب التشفيري.",
-  "where_you_own_the_keys": "...حيث تمتلك المفاتيح.",
-  "no_middleman_here": "...لا وسيط هنا.",
-  "join_the_decentralution": "...انضم إلى الثورة اللامركزية.",
-  "because_privacy_matters": "...لأن الخصوصية مهمة.",
-  "freedom_served_fresh_daily": "...الحرية تُقدّم طازجة يوميًا.",
-  "your_community_your_rules": "مجتمعك، قواعدك.",
-  "centralization_is_boring": "...المركزية مملة.",
-  "like_torrents_for_thoughts": "...مثل التورنت، للأفكار.",
-  "cant_stop_the_signal": "...لا يمكن إيقاف الإشارة.",
-  "fully_yours_forever": "...لك تمامًا، إلى الأبد.",
-  "powered_by_caffeine": "...مدعوم بالكافيين.",
-  "speech_wants_to_be_free": "...الصوت يريد أن يكون حراً.",
-  "crypto_certified_community": "...مجتمع معتمد بالتشفير.",
-  "take_ownership_literally": "...تحمل المسؤولية حرفياً.",
-  "your_ideas_decentralized": "...أفكارك، موزعة.",
-  "for_digital_sovereignty": "...من أجل السيادة الرقمية.",
-  "for_your_movement": "...لحركتك.",
-  "because_you_love_freedom": "...لأنك تحب الحرية.",
-  "decentralized_but_for_real": "...لامركزي، ولكن حقاً.",
-  "for_your_peace_of_mind": "...لراحة بالك.",
-  "no_corporation_to_answer_to": "...لا شركة للمساءلة.",
-  "your_tokenized_sovereignty": "...سيادتك المُرمَّزة.",
-  "for_text_only_wonders": "...للعجائب النصية فقط.",
-  "because_open_source_rulez": "...لأن المصدر المفتوح هو الأفضل.",
-  "truly_peer_to_peer": "...نظير إلى نظير حقًا.",
-  "no_hidden_fees": "...لا رسوم خفية.",
-  "no_global_rules": "...لا توجد قواعد عامة.",
-  "for_reddits_downfall": "...لسقوط Reddit.",
-  "evil_corp_cant_stop_us": "...Evil Corp™ لا يمكنها إيقافنا.",
-  "no_gods_no_global_admins": "...لا آلهة، لا مسؤولون عامون.",
   "tags": "الوسوم",
   "moderator_of": "مشرف على",
   "not_subscriber_nor_moderator": "أنت لست مشتركًا ولا مشرفًا في أي مجتمع.",
   "more_posts_last_year": "{{count}} منشورات في {{currentTimeFilterName}}: <1>عرض المزيد من المنشورات من العام الماضي</1>",
-  "editor_fallback_warning": "فشل تحميل المحرر المتقدم، يتم استخدام محرر نصوص أساسي كبديل."
+  "editor_fallback_warning": "فشل تحميل المحرر المتقدم، يتم استخدام محرر نصوص أساسي كبديل.",
+  "hot": "hot",
+  "new": "new",
+  "active": "active",
+  "top": "top",
+  "best": "best",
+  "old": "old",
+  "unstoppable_by_design": "...unstoppable by design.",
+  "servers_are_overrated": "...servers are overrated.",
+  "cryptographic_playground": "... cryptographic playground.",
+  "where_you_own_the_keys": "...where you own the keys.",
+  "no_middleman_here": "...no middleman here.",
+  "join_the_decentralution": "...join the decentralution.",
+  "because_privacy_matters": "...because privacy matters.",
+  "freedom_served_fresh_daily": "...freedom served fresh daily.",
+  "your_community_your_rules": "...your community, your rules.",
+  "centralization_is_boring": "...centralization is boring.",
+  "like_torrents_for_thoughts": "...like torrents, for thoughts.",
+  "cant_stop_the_signal": "...can't stop the signal.",
+  "fully_yours_forever": "...fully yours, forever.",
+  "powered_by_caffeine": "...powered by caffeine.",
+  "speech_wants_to_be_free": "...speech wants to be free.",
+  "crypto_certified_community": "...crypto-certified community.",
+  "take_ownership_literally": "...take ownership literally.",
+  "your_ideas_decentralized": "...your ideas, decentralized.",
+  "for_digital_sovereignty": "...for digital sovereignty.",
+  "for_your_movement": "...for your movement.",
+  "because_you_love_freedom": "...because you love freedom.",
+  "decentralized_but_for_real": "...decentralized, but for real.",
+  "for_your_peace_of_mind": "...for your peace of mind.",
+  "no_corporation_to_answer_to": "...no corporation to answer to.",
+  "your_tokenized_sovereignty": "...your tokenized sovereignty.",
+  "for_text_only_wonders": "...for text-only wonders.",
+  "because_open_source_rulez": "...because open source rulez.",
+  "truly_peer_to_peer": "...truly peer to peer.",
+  "no_hidden_fees": "...no hidden fees.",
+  "no_global_rules": "...no global rules.",
+  "for_reddits_downfall": "...for Reddit's downfall.",
+  "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
+  "no_gods_no_global_admins": "...no gods, no global admins."
 }

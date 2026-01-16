@@ -152,7 +152,7 @@ const SubplebbitDataEditor = () => {
         settings: parsedSettings.settings ?? {},
         subplebbitAddress: parsedSettings.subplebbitAddress,
       });
-    } catch (error) {
+    } catch {
       // Invalid JSON - don't spam console during active typing
       // Just silently skip sync until JSON becomes valid
     }

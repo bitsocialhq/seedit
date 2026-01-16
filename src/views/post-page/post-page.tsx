@@ -148,10 +148,10 @@ const Post = ({ post }: { post: Comment }) => {
                 {replyCount !== undefined
                   ? commentCount
                   : state === 'failed'
-                  ? t('post_has_failed')
-                  : cid
-                  ? `${t('downloading_comments')}...`
-                  : `${t('post_is_pending')}...`}
+                    ? t('post_has_failed')
+                    : cid
+                      ? `${t('downloading_comments')}...`
+                      : `${t('post_is_pending')}...`}
               </span>
             </div>
           )}
@@ -269,7 +269,7 @@ const PostPage = () => {
   const resetFeed = useFeedResetStore((state) => state.reset);
   useEffect(() => {
     if (pendingPost?.cid && pendingPost?.subplebbitAddress) {
-      resetFeed && resetFeed();
+      if (resetFeed) resetFeed();
       navigate(`/p/${pendingPost?.subplebbitAddress}/c/${pendingPost?.cid}`, { replace: true });
     }
   }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
