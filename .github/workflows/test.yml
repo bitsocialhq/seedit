@@ -119,11 +119,11 @@ jobs:
 
       - name: Smoke Test
         run: |
-          if [ -d "dist/mac/5chan.app" ]; then
-            echo "Testing dist/mac/5chan.app..."
+          if [ -d "dist/mac/seedit.app" ]; then
+            echo "Testing dist/mac/seedit.app..."
             # Run the app in background - it will start IPFS which takes time
             # We just verify it launches without crashing
-            ./dist/mac/5chan.app/Contents/MacOS/5chan &
+            ./dist/mac/seedit.app/Contents/MacOS/seedit &
             APP_PID=$!
             sleep 10
             # Check if process is still running (means it started successfully)
@@ -139,7 +139,7 @@ jobs:
               exit 1
             fi
           else
-            echo "Could not find dist/mac/5chan.app to test"
+            echo "Could not find dist/mac/seedit.app to test"
             ls -R dist
             exit 1
           fi
@@ -195,12 +195,12 @@ jobs:
 
       - name: Smoke Test
         run: |
-          if [ -d "dist/mac-arm64/5chan.app" ]; then
-            APP_PATH="dist/mac-arm64/5chan.app"
-          elif [ -d "dist/mac/5chan.app" ]; then
-            APP_PATH="dist/mac/5chan.app"
+          if [ -d "dist/mac-arm64/seedit.app" ]; then
+            APP_PATH="dist/mac-arm64/seedit.app"
+          elif [ -d "dist/mac/seedit.app" ]; then
+            APP_PATH="dist/mac/seedit.app"
           else
-            echo "Could not find 5chan.app to test"
+            echo "Could not find seedit.app to test"
             ls -R dist
             exit 1
           fi
@@ -208,7 +208,7 @@ jobs:
           echo "Testing $APP_PATH..."
           # Run the app in background - it will start IPFS which takes time
           # We just verify it launches without crashing
-          "./$APP_PATH/Contents/MacOS/5chan" &
+          "./$APP_PATH/Contents/MacOS/seedit" &
           APP_PID=$!
           sleep 10
           # Check if process is still running (means it started successfully)
@@ -274,7 +274,7 @@ jobs:
           if [ -d "dist/win-unpacked" ]; then
              echo "Testing unpacked exe..."
              # Run with timeout - app starts IPFS so won't exit on its own
-             timeout 15s ./dist/win-unpacked/5chan.exe &
+             timeout 15s ./dist/win-unpacked/seedit.exe &
              APP_PID=$!
              sleep 8
              # Check if process started successfully
