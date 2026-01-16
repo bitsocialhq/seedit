@@ -177,7 +177,7 @@ const Mod = () => {
     if (!params.timeFilterName && !searchQuery && sessionKey) {
       const sessionPreference = sessionStorage.getItem(sessionKey);
       if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
-        const targetPath = `/p/mod/${sortType}/${sessionPreference}${location.search}`;
+        const targetPath = `/s/mod/${sortType}/${sessionPreference}${location.search}`;
         navigate(targetPath, { replace: true });
       }
     }

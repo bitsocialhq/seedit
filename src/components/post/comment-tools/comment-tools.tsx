@@ -114,7 +114,7 @@ const PostTools = ({
   const commentCountButton = failed ? (
     <span>{commentCount}</span>
   ) : (
-    <Link to={cid ? `/p/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
+    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
       {commentCount}
     </Link>
   );
@@ -158,7 +158,7 @@ const ReplyTools = ({
   const permalink = failed ? (
     <span>permalink</span>
   ) : (
-    <Link to={cid ? `/p/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   );
@@ -202,7 +202,7 @@ const SingleReplyTools = ({
   const hasContext = parentCid !== postCid;
 
   const permalinkButton = cid ? (
-    <Link to={cid ? `/p/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   ) : (
@@ -210,13 +210,13 @@ const SingleReplyTools = ({
   );
 
   const contextButton = cid ? (
-    <Link to={cid ? (hasContext ? `/p/${subplebbitAddress}/c/${cid}/?context=3` : `/p/${subplebbitAddress}/c/${cid}`) : `/profile/${index}`}>{t('context')}</Link>
+    <Link to={cid ? (hasContext ? `/s/${subplebbitAddress}/c/${cid}/?context=3` : `/s/${subplebbitAddress}/c/${cid}`) : `/profile/${index}`}>{t('context')}</Link>
   ) : (
     <span>{t('context')}</span>
   );
 
   const fullCommentsButton = cid ? (
-    <Link to={cid ? `/p/${subplebbitAddress}/c/${postCid}` : `/profile/${index}`}>
+    <Link to={cid ? `/s/${subplebbitAddress}/c/${postCid}` : `/profile/${index}`}>
       {t('full_comments')} {comment?.replyCount ? `(${comment?.replyCount})` : ''}
     </Link>
   ) : (

@@ -38,7 +38,7 @@ const AuthorModeratingList = ({ accountSubplebbits, authorSubplebbits, isAuthor 
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
           {subplebbitAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={`/p/${address}`}>p/{Plebbit.getShortAddress({ address })}</Link>
+              <Link to={`/s/${address}`}>s/{Plebbit.getShortAddress({ address })}</Link>
             </li>
           ))}
         </ul>

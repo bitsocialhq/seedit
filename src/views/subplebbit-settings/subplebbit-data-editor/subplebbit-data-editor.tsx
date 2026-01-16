@@ -325,7 +325,7 @@ const SubplebbitDataEditor = () => {
           />
           <div>
             <br />
-            <button onClick={() => navigate(`/p/${subplebbitAddress}/settings`)}>return to settings</button>
+            <button onClick={() => navigate(`/s/${subplebbitAddress}/settings`)}>return to settings</button>
           </div>
         </div>
       )}

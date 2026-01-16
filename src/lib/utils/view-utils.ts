@@ -14,27 +14,27 @@ export const getAboutLink = (pathname: string, params: ParamsType): string => {
   // some subs might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
 
-  if (decodedPathname.startsWith(`/p/${params.subplebbitAddress}/c/${params.commentCid}`)) {
-    return `/p/${params.subplebbitAddress}/c/${params.commentCid}/about`;
-  } else if (decodedPathname.startsWith(`/p/${params.subplebbitAddress}`)) {
-    return `/p/${params.subplebbitAddress}/about`;
+  if (decodedPathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}`)) {
+    return `/s/${params.subplebbitAddress}/c/${params.commentCid}/about`;
+  } else if (decodedPathname.startsWith(`/s/${params.subplebbitAddress}`)) {
+    return `/s/${params.subplebbitAddress}/about`;
   } else if (decodedPathname.startsWith('/profile')) {
     return '/profile/about';
   } else if (decodedPathname.startsWith('/u/')) {
     return `/u/${params.authorAddress}/c/${params.commentCid}/about`;
-  } else if (decodedPathname.startsWith('/p/all')) {
-    return '/p/all/about';
+  } else if (decodedPathname.startsWith('/s/all')) {
+    return '/s/all/about';
   } else {
     return '/about';
   }
 };
 
 export const isAllView = (pathname: string): boolean => {
-  return pathname === '/p/all' || pathname.startsWith('/p/all/');
+  return pathname === '/s/all' || pathname.startsWith('/s/all/');
 };
 
 export const isAllAboutView = (pathname: string): boolean => {
-  return pathname === '/p/all/about';
+  return pathname === '/s/all/about';
 };
 
 export const isAuthorView = (pathname: string): boolean => {
@@ -90,7 +90,7 @@ export const isInboxUnreadView = (pathname: string): boolean => {
 };
 
 export const isModView = (pathname: string): boolean => {
-  return pathname === `/p/mod` || pathname.startsWith(`/p/mod/`);
+  return pathname === `/s/mod` || pathname.startsWith(`/s/mod/`);
 };
 
 export const isPendingPostView = (pathname: string, params: ParamsType): boolean => {
@@ -100,18 +100,18 @@ export const isPendingPostView = (pathname: string, params: ParamsType): boolean
 export const isPostPageView = (pathname: string, params: ParamsType): boolean => {
   // some subs might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
-  return params.subplebbitAddress && params.commentCid ? decodedPathname.startsWith(`/p/${params.subplebbitAddress}/c/${params.commentCid}`) : false;
+  return params.subplebbitAddress && params.commentCid ? decodedPathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}`) : false;
 };
 
 export const isPostPageAboutView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress && params.commentCid ? pathname.startsWith(`/p/${params.subplebbitAddress}/c/${params.commentCid}/about`) : false;
+  return params.subplebbitAddress && params.commentCid ? pathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}/about`) : false;
 };
 
 export const isPostContextView = (pathname: string, params: ParamsType, search: string): boolean => {
   if (!params.subplebbitAddress || !params.commentCid) return false;
 
   const decodedPathname = decodeURIComponent(pathname);
-  const expectedPathBase = `/p/${params.subplebbitAddress}/c/${params.commentCid}`;
+  const expectedPathBase = `/s/${params.subplebbitAddress}/c/${params.commentCid}`;
 
   if (!decodedPathname.startsWith(expectedPathBase)) return false;
 
@@ -168,19 +168,19 @@ export const isSubmitView = (pathname: string): boolean => {
 export const isSubplebbitView = (pathname: string, params: ParamsType): boolean => {
   // some subs might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
-  return params.subplebbitAddress ? decodedPathname.startsWith(`/p/${params.subplebbitAddress}`) : false;
+  return params.subplebbitAddress ? decodedPathname.startsWith(`/s/${params.subplebbitAddress}`) : false;
 };
 
 export const isSubplebbitAboutView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname.startsWith(`/p/${params.subplebbitAddress}/about`) : false;
+  return params.subplebbitAddress ? pathname.startsWith(`/s/${params.subplebbitAddress}/about`) : false;
 };
 
 export const isSubplebbitSettingsView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname === `/p/${params.subplebbitAddress}/settings` || pathname === `/p/${params.subplebbitAddress}/settings/editor` : false;
+  return params.subplebbitAddress ? pathname === `/s/${params.subplebbitAddress}/settings` || pathname === `/s/${params.subplebbitAddress}/settings/editor` : false;
 };
 
 export const isSubplebbitSubmitView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname === `/p/${params.subplebbitAddress}/submit` : false;
+  return params.subplebbitAddress ? pathname === `/s/${params.subplebbitAddress}/submit` : false;
 };
 
 export const isSubplebbitsView = (pathname: string): boolean => {

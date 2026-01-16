@@ -71,9 +71,9 @@ const renderAnchorLink = (children: React.ReactNode, href: string) => {
         shouldReplaceText = children[0] === href || children[0].trim() === href.trim();
       }
 
-      // For display purposes, remove leading slash from paths like "/p/something"
+      // For display purposes, remove leading slash from paths like "/s/something"
       let displayText: React.ReactNode = children;
-      if (shouldReplaceText && internalPath.startsWith('/p/')) {
+      if (shouldReplaceText && internalPath.startsWith('/s/')) {
         displayText = internalPath.substring(1); // Remove leading slash
       } else if (shouldReplaceText) {
         displayText = internalPath;
@@ -87,7 +87,7 @@ const renderAnchorLink = (children: React.ReactNode, href: string) => {
   }
 
   // Handle hash routes and internal patterns (including routes that start with /#/)
-  if (href.startsWith('#/') || href.startsWith('/#/') || href.startsWith('/p/') || href.match(/^\/p\/[^/]+(\/c\/[^/]+)?$/)) {
+  if (href.startsWith('#/') || href.startsWith('/#/') || href.startsWith('/s/') || href.match(/^\/s\/[^/]+(\/c\/[^/]+)?$/)) {
     return <Link to={href}>{children}</Link>;
   }
 

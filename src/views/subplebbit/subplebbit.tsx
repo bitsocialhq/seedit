@@ -191,7 +191,7 @@ const Footer = ({
           i18nKey='show_all_instead'
           values={{ timeFilterName }}
           components={{
-            1: <Link key='show_all_instead_link' to={`/p/${subplebbitAddress}`} />,
+            1: <Link key='show_all_instead_link' to={`/s/${subplebbitAddress}`} />,
           }}
         />
       </div>

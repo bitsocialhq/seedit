@@ -211,8 +211,8 @@ const Subplebbit = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe }: 
         ? description.slice(0, 100) + '...'
         : description
       : description.length > 400
-      ? description.slice(0, 400) + '...'
-      : description);
+        ? description.slice(0, 400) + '...'
+        : description);
 
   return (
     <div className={`${styles.subplebbit} ${isUnsubscribed ? styles.unsubscribed : ''}`}>
@@ -243,7 +243,7 @@ const Subplebbit = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe }: 
             </div>
           </div>
           <div className={`${styles.avatar} ${showSprout ? styles.defaultAvatar : ''}`}>
-            <Link to={`/p/${address}`}>
+            <Link to={`/s/${address}`}>
               {suggested?.avatarUrl ? (
                 <img
                   key={suggested.avatarUrl}
@@ -263,8 +263,8 @@ const Subplebbit = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe }: 
         <div className={styles.entry}>
           <div className={styles.title}>
             <div className={styles.titleWrapper}>
-              <Link to={`/p/${address}`}>
-                p/{address?.includes('.') ? address : shortAddress}
+              <Link to={`/s/${address}`}>
+                s/{address?.includes('.') ? address : shortAddress}
                 {title && `: ${title}`}
               </Link>
             </div>
@@ -276,7 +276,7 @@ const Subplebbit = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe }: 
                 <SubscribeButton address={address} onUnsubscribe={onUnsubscribe} />
               </span>
               {(userRole || isUserOwner) && (
-                <Link to={`/p/${address}/settings`}>
+                <Link to={`/s/${address}/settings`}>
                   <span className={`${styles.moderatorIcon} ${isNsfw ? styles.addMarginRight : ''}`} title={userRole || 'owner'} />
                 </Link>
               )}

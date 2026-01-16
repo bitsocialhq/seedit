@@ -307,7 +307,7 @@ const Home = () => {
             />
             <div className={styles.fakePost} />
             <div className={styles.findCommunities}>
-              <Link to='/p/all/hot/1m'>{t('find_communities')}</Link>
+              <Link to='/s/all/hot/1m'>{t('find_communities')}</Link>
             </div>
           </div>
         ) : (

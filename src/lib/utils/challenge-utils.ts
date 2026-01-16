@@ -25,7 +25,7 @@ export const alertChallengeVerificationFailed = (challengeVerification: Challeng
 
     const finalMessage = errorMessages.filter(Boolean).join(' ');
 
-    alert(`p/${publication?.subplebbitAddress} error: ${finalMessage || 'unknown error'}`);
+    alert(`s/${publication?.subplebbitAddress} error: ${finalMessage || 'unknown error'}`);
   } else {
     console.warn('Challenge verification succeeded but no action taken:', challengeVerification);
   }

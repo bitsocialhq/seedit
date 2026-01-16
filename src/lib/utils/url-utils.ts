@@ -18,7 +18,7 @@ export const isValidURL = (url: string) => {
 };
 
 export const copyShareLinkToClipboard = async (subplebbitAddress: string, cid: string) => {
-  const shareLink = `https://pleb.bz/p/${subplebbitAddress}/c/${cid}`;
+  const shareLink = `https://pleb.bz/s/${subplebbitAddress}/c/${cid}`;
   await copyToClipboard(shareLink);
 };
 
@@ -48,14 +48,14 @@ export const isSeeditLink = (url: string): boolean => {
       if (parsedUrl.searchParams.has('redirect')) {
         return false;
       }
-      // Must match exactly: /p/{subplebbitAddress}/c/{cid}
-      return /^\/p\/[^/]+\/c\/[^/]+$/.test(routePath);
+      // Must match exactly: /s/{subplebbitAddress}/c/{cid}
+      return /^\/s\/[^/]+\/c\/[^/]+$/.test(routePath);
     }
 
     // For other seedit hostnames, support:
-    // - /p/{subplebbitAddress}
-    // - /p/{subplebbitAddress}/c/{commentCid}
-    return /^\/p\/[^/]+(\/c\/[^/]+)?$/.test(routePath);
+    // - /s/{subplebbitAddress}
+    // - /s/{subplebbitAddress}/c/{commentCid}
+    return /^\/s\/[^/]+(\/c\/[^/]+)?$/.test(routePath);
   } catch {
     return false;
   }
@@ -96,12 +96,12 @@ const isValidDomain = (str: string): boolean => {
 
 // Check if a plain text pattern is a valid seedit subplebbit reference
 export const isValidSubplebbitPattern = (pattern: string): boolean => {
-  // Must start with "p/"
-  if (!pattern.startsWith('p/')) {
+  // Must start with "s/"
+  if (!pattern.startsWith('s/')) {
     return false;
   }
 
-  const pathPart = pattern.substring(2); // Remove "p/"
+  const pathPart = pattern.substring(2); // Remove "s/"
 
   // Check if it's a post pattern: subplebbitAddress/c/cid
   const postMatch = pathPart.match(/^([^/]+)\/c\/([^/]+)$/);
@@ -117,15 +117,15 @@ export const isValidSubplebbitPattern = (pattern: string): boolean => {
 
 // Preprocess content to convert plain text seedit patterns to markdown links
 export const preprocessSeeditPatterns = (content: string): string => {
-  // Pattern to match "p/something" or "p/something/c/something"
+  // Pattern to match "s/something" or "s/something/c/something"
   // Use negative lookbehind to avoid matching patterns that are already part of URLs
-  // This prevents matching "p/" that comes after "://" or other URL indicators
-  const pattern = /(?<!https?:\/\/[^\s]*)\bp\/([a-zA-Z0-9\-.]+(?:\/c\/[a-zA-Z0-9]{10,100})?)[.,:;!?]*/g;
+  // This prevents matching "s/" that comes after "://" or other URL indicators
+  const pattern = /(?<!https?:\/\/[^\s]*)\bs\/([a-zA-Z0-9\-.]+(?:\/c\/[a-zA-Z0-9]{10,100})?)[.,:;!?]*/g;
 
   return content.replace(pattern, (match, capturedPath) => {
     // Remove any trailing punctuation from the captured path
     const cleanPath = capturedPath.replace(/[.,:;!?]+$/, '');
-    const fullPattern = `p/${cleanPath}`;
+    const fullPattern = `s/${cleanPath}`;
 
     if (isValidSubplebbitPattern(fullPattern)) {
       // Get the trailing punctuation that was matched but shouldn't be part of the link

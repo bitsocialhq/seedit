@@ -420,7 +420,7 @@ const RulesInfo = ({ shortAddress, rules }: { shortAddress: string; rules: strin
   return (
     <div className={styles.box}>
       <span className={`${styles.boxTitle} ${styles.rulesTitle}`}>
-        {t('rules_for')} p/{shortAddress}
+        {t('rules_for')} s/{shortAddress}
       </span>
       <div className={styles.boxContent}>
         <div className={styles.description}>
@@ -528,7 +528,7 @@ const SubmitPage = () => {
             link: subplebbitTitle || shortAddress || 'seedit',
           }}
           components={{
-            1: shortAddress ? <Link key='submit_to_link' to={`/p/${subplebbitAddress}`} className={styles.location} /> : <span key='submit_to_span' />,
+            1: shortAddress ? <Link key='submit_to_link' to={`/s/${subplebbitAddress}`} className={styles.location} /> : <span key='submit_to_span' />,
           }}
         />
       </h1>

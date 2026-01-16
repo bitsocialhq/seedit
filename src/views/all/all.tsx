@@ -32,7 +32,7 @@ const All = () => {
     if (!params.timeFilterName && !searchQuery && sessionKey) {
       const sessionPreference = sessionStorage.getItem(sessionKey);
       if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
-        const targetPath = `/p/all/${sortType}/${sessionPreference}${location.search}`;
+        const targetPath = `/s/all/${sortType}/${sessionPreference}${location.search}`;
         navigate(targetPath, { replace: true });
       }
     }

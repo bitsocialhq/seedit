@@ -76,7 +76,7 @@ const CommentsButton = () => {
 
   return (
     <li className={(isInPostPageView || isInPendingPostView) && !isInHomeAboutView && !isInPostPageAboutView ? styles.selected : styles.choice}>
-      <Link to={`/p/${params.subplebbitAddress}/c/${params.commentCid}`} onClick={(e) => isInPendingPostView && e.preventDefault()}>
+      <Link to={`/s/${params.subplebbitAddress}/c/${params.commentCid}`} onClick={(e) => isInPendingPostView && e.preventDefault()}>
         {t('comments')}
       </Link>
     </li>
@@ -100,11 +100,11 @@ const SortItems = () => {
 
   return sortTypes.map((sortType, index) => {
     let sortLink = isInSubplebbitView
-      ? `/p/${params.subplebbitAddress}/${sortType}`
+      ? `/s/${params.subplebbitAddress}/${sortType}`
       : isInAllView
-        ? `/p/all/${sortType}`
+        ? `/s/all/${sortType}`
         : isInModView
-          ? `/p/mod/${sortType}`
+          ? `/s/mod/${sortType}`
           : isInDomainView
             ? `/domain/${params.domain}/${sortType}`
             : sortType;
@@ -327,7 +327,7 @@ const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; p
   const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
 
   const subplebbitTitle = (
-    <Link to={`/p/${isInPendingPostView ? pendingPostSubplebbitAddress : subplebbitAddress}`}>
+    <Link to={`/s/${isInPendingPostView ? pendingPostSubplebbitAddress : subplebbitAddress}`}>
       {title ||
         (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress })) ||
         (pendingPostSubplebbitAddress && Plebbit.getShortAddress({ address: pendingPostSubplebbitAddress }))}
@@ -450,9 +450,9 @@ const Header = () => {
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? `/p/${accountComment?.subplebbitAddress}/submit`
+        ? `/s/${accountComment?.subplebbitAddress}/submit`
         : subplebbitAddress
-          ? `/p/${subplebbitAddress}/submit`
+          ? `/s/${subplebbitAddress}/submit`
           : '/submit';
 
   return (

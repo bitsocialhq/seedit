@@ -166,7 +166,7 @@ const Post = ({ post }: { post: Comment }) => {
             <div className={styles.singleCommentInfobar}>
               <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
               <div className={styles.singleCommentInfobarLink}>
-                <Link to={`/p/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+                <Link to={`/s/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
               </div>
             </div>
           )}
@@ -225,7 +225,7 @@ const PostWithContext = ({ post }: { post: Comment }) => {
         <div className={styles.singleCommentInfobar}>
           <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
           <div className={styles.singleCommentInfobarLink}>
-            <Link to={`/p/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+            <Link to={`/s/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
           </div>
         </div>
         <div className={styles.replies}>
@@ -270,7 +270,7 @@ const PostPage = () => {
   useEffect(() => {
     if (pendingPost?.cid && pendingPost?.subplebbitAddress) {
       if (resetFeed) resetFeed();
-      navigate(`/p/${pendingPost?.subplebbitAddress}/c/${pendingPost?.cid}`, { replace: true });
+      navigate(`/s/${pendingPost?.subplebbitAddress}/c/${pendingPost?.cid}`, { replace: true });
     }
   }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
 

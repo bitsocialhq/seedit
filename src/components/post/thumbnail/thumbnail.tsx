@@ -179,7 +179,7 @@ const Thumbnail = ({
             {mediaComponent}
           </a>
         ) : (
-          <Link to={`/p/${subplebbitAddress}/c/${cid}`}>{mediaComponent}</Link>
+          <Link to={`/s/${subplebbitAddress}/c/${cid}`}>{mediaComponent}</Link>
         )}
       </span>
     </span>

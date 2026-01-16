@@ -332,7 +332,7 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
       <div className={`${styles.boxTitle} ${styles.JSONSettingsTitle}`}>{t('json_settings')}</div>
       <div className={styles.boxSubtitle}>{t('json_settings_info')}</div>
       <div className={`${styles.boxInput} ${styles.JSONSettings}`}>
-        <button onClick={() => navigate(`/p/${subplebbitAddress}/settings/editor`)}>{t('edit')}</button>
+        <button onClick={() => navigate(`/s/${subplebbitAddress}/settings/editor`)}>{t('edit')}</button>
       </div>
     </div>
   );
@@ -412,7 +412,7 @@ const SubplebbitSettings = () => {
 
   const [showDeleting, setShowDeleting] = useState(false);
   const _deleteSubplebbit = async () => {
-    if (subplebbitAddress && window.confirm(t('delete_confirm', { value: `p/${shortAddress}`, interpolation: { escapeValue: false } }))) {
+    if (subplebbitAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
       if (window.confirm(t('double_confirm'))) {
         try {
           setShowDeleting(true);
@@ -468,7 +468,7 @@ const SubplebbitSettings = () => {
       }
 
       resetSubplebbitSettingsStore();
-      navigate(`/p/${createdSubplebbit?.address}/`);
+      navigate(`/s/${createdSubplebbit?.address}/`);
     }
   }, [createdSubplebbit, navigate, resetSubplebbitSettingsStore, account, subscribe]);
 

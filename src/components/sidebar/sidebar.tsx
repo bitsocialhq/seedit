@@ -85,7 +85,7 @@ const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
         {`(${postScore === '?' ? '?' : `${upvotePercentage}`}% ${t('upvoted')})`}
       </div>
       <div className={styles.shareLink}>
-        {t('share_link')}: <input type='text' value={`https://pleb.bz/p/${subplebbitAddress}/c/${cid}`} readOnly={true} />
+        {t('share_link')}: <input type='text' value={`https://pleb.bz/s/${subplebbitAddress}/c/${cid}`} readOnly={true} />
       </div>
     </div>
   );
@@ -102,7 +102,7 @@ const ModerationTools = ({ address }: { address?: string }) => {
       <div className={styles.listTitle}>{t('moderation_tools')}</div>
       <ul className={`${styles.listContent} ${styles.modsList}`}>
         <li className={`${styles.moderationTool} ${isInSubplebbitSettingsView ? styles.selectedTool : ''}`}>
-          <Link className={styles.communitySettingsTool} to={`/p/${address}/settings`}>
+          <Link className={styles.communitySettingsTool} to={`/s/${address}/settings`}>
             {t('community_settings')}
           </Link>
         </li>
@@ -201,9 +201,9 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? `/p/${pendingPost?.subplebbitAddress}/submit`
+        ? `/s/${pendingPost?.subplebbitAddress}/submit`
         : address || params?.subplebbitAddress
-          ? `/p/${address || params?.subplebbitAddress}/submit`
+          ? `/s/${address || params?.subplebbitAddress}/submit`
           : '/submit';
 
   const { blocked, unblock, block } = useBlock({ address });
@@ -307,7 +307,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
           !isInDomainView &&
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
-              <Link className={styles.title} to={`/p/${address}`}>
+              <Link className={styles.title} to={`/s/${address}`}>
                 {subplebbit?.address}
               </Link>
               <div className={styles.subscribeContainer}>
@@ -387,7 +387,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
         {(!(isMobile && isInHomeAboutView) || isInSubplebbitAboutView || isInPostPageAboutView) && <Footer />}
         {address && !(moderatorRole || isOwner) && (
           <div className={styles.readOnlySettingsLink}>
-            <Link to={`/p/${address}/settings`}>{t('community_settings')}</Link>
+            <Link to={`/s/${address}/settings`}>{t('community_settings')}</Link>
           </div>
         )}
         {isMobile && isInHomeAboutView && <FAQ />}

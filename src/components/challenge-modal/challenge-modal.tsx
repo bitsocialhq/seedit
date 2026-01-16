@@ -225,7 +225,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
                 {t('iframe_challenge_open_confirmation', {
                   subplebbit,
                   url: decodeURIComponent(getChallengeUrl()),
-                  defaultValue: `p/${subplebbit} challenge wants to open ${decodeURIComponent(getChallengeUrl())}`,
+                  defaultValue: `s/${subplebbit} challenge wants to open ${decodeURIComponent(getChallengeUrl())}`,
                 })}
               </div>
             </div>

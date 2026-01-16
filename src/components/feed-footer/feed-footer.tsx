@@ -120,7 +120,7 @@ const FeedFooter = ({
               i18nKey='more_posts_last_week'
               values={{ currentTimeFilterName, count: feedLength }}
               components={{
-                1: <Link key='weekly-posts-link' to={(isInModView ? '/p/mod/' : isInAllView ? '/p/all/' : '/') + (params?.sortType || 'hot') + '/1w'} />,
+                1: <Link key='weekly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1w'} />,
               }}
             />
           </div>
@@ -130,7 +130,7 @@ const FeedFooter = ({
               i18nKey='more_posts_last_month'
               values={{ currentTimeFilterName, count: feedLength }}
               components={{
-                1: <Link key='monthly-posts-link' to={(isInModView ? '/p/mod/' : isInAllView ? '/p/all/' : '/') + (params?.sortType || 'hot') + '/1m'} />,
+                1: <Link key='monthly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1m'} />,
               }}
             />
           </div>
@@ -140,7 +140,7 @@ const FeedFooter = ({
               i18nKey='more_posts_last_year'
               values={{ currentTimeFilterName, count: feedLength }}
               components={{
-                1: <Link key='yearly-posts-link' to={(isInModView ? '/p/mod/' : isInAllView ? '/p/all/' : '/') + (params?.sortType || 'hot') + '/1y'} />,
+                1: <Link key='yearly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1y'} />,
               }}
             />
           </div>

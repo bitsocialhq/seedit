@@ -245,7 +245,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                       {displayedTitle}
                     </a>
                   ) : (
-                    <Link className={linkClass} to={cid ? `/p/${subplebbitAddress}/c/${cid}` : `/profile/${post?.index}`} onClick={handlePostClick}>
+                    <Link className={linkClass} to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${post?.index}`} onClick={handlePostClick}>
                       {displayedTitle}
                     </Link>
                   )}
@@ -260,7 +260,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                     {hostname ? (
                       <Link to={`/domain/${hostname}`}>{hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname}</Link>
                     ) : (
-                      <Link to={`/p/${subplebbitAddress}`}>
+                      <Link to={`/s/${subplebbitAddress}`}>
                         self.{subplebbit?.shortAddress || (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress }))}
                       </Link>
                     )}
@@ -308,8 +308,8 @@ const Post = ({ index, post = {} }: PostProps) => {
                             />
                           </span>
                         )}
-                        <Link className={`${styles.subplebbit} ${subscribed && hasClickedSubscribe ? styles.greenSubplebbitAddress : ''}`} to={`/p/${subplebbitAddress}`}>
-                          p/{subplebbit?.shortAddress || (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress }))}
+                        <Link className={`${styles.subplebbit} ${subscribed && hasClickedSubscribe ? styles.greenSubplebbitAddress : ''}`} to={`/s/${subplebbitAddress}`}>
+                          s/{subplebbit?.shortAddress || (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress }))}
                         </Link>
                       </span>
                     </>

@@ -41,7 +41,7 @@ const CommunitiesDropdown = () => {
       <span className={styles.selectedTitle}>{t('my_communities')}</span>
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
         {reversedSubscriptions?.map((subscription: string, index: number) => (
-          <Link key={index} to={`/p/${subscription}`} className={styles.dropdownItem}>
+          <Link key={index} to={`/s/${subscription}`} className={styles.dropdownItem}>
             {Plebbit.getShortAddress({ address: subscription })}
           </Link>
         ))}
@@ -203,7 +203,7 @@ const SortTypesDropdown = () => {
       <span className={styles.selectedTitle}>{t(getSelectedSortLabel())}</span>
       <div className={`${styles.dropChoices} ${styles.sortsDropChoices} ${sortsDropdownClass}`} ref={sortsdropdownItemsRef}>
         {sortTypes.map((sortType, index) => {
-          let dropdownLink = isInSubplebbitView ? `/p/${params.subplebbitAddress}/${sortType}` : isinAllView ? `/p/all/${sortType}` : sortType;
+          let dropdownLink = isInSubplebbitView ? `/s/${params.subplebbitAddress}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
           if (timeFilterName) {
             dropdownLink += `/${timeFilterName}`;
           }
@@ -238,14 +238,14 @@ const TimeFilterDropdown = () => {
 
   const getTimeFilterLink = (timeFilterName: string) => {
     return isInSubplebbitView
-      ? `/p/${params.subplebbitAddress}/${selectedSortType}/${timeFilterName}`
+      ? `/s/${params.subplebbitAddress}/${selectedSortType}/${timeFilterName}`
       : isinAllView
-      ? `p/all/${selectedSortType}/${timeFilterName}`
-      : isInModView
-      ? `/p/mod/${selectedSortType}/${timeFilterName}`
-      : isInDomainView
-      ? `/domain/${params.domain}/${selectedSortType}/${timeFilterName}`
-      : `/${selectedSortType}/${timeFilterName}`;
+        ? `s/all/${selectedSortType}/${timeFilterName}`
+        : isInModView
+          ? `/s/mod/${selectedSortType}/${timeFilterName}`
+          : isInDomainView
+            ? `/domain/${params.domain}/${selectedSortType}/${timeFilterName}`
+            : `/${selectedSortType}/${timeFilterName}`;
   };
 
   useEffect(() => {
@@ -317,14 +317,14 @@ const TopBar = memo(() => {
             </li>
             <li>
               <span className={styles.separator}>-</span>
-              <Link to='/p/all' className={isinAllView ? styles.selected : styles.choice}>
+              <Link to='/s/all' className={isinAllView ? styles.selected : styles.choice}>
                 {t('all')}
               </Link>
             </li>
             {accountSubplebbitAddresses.length > 0 && (
               <li>
                 <span className={styles.separator}>-</span>
-                <Link to='/p/mod' className={isInModView ? styles.selected : styles.choice}>
+                <Link to='/s/mod' className={isInModView ? styles.selected : styles.choice}>
                   {t('mod')}
                 </Link>
               </li>
@@ -336,7 +336,7 @@ const TopBar = memo(() => {
               return (
                 <li key={index}>
                   {index !== 0 && <span className={styles.separator}>-</span>}
-                  <Link to={`/p/${subscription}`} className={params.subplebbitAddress === subscription ? styles.selected : styles.choice}>
+                  <Link to={`/s/${subscription}`} className={params.subplebbitAddress === subscription ? styles.selected : styles.choice}>
                     {displayAddress}
                   </Link>
                 </li>
@@ -349,12 +349,12 @@ const TopBar = memo(() => {
                 const displayAddress = shortAddress.includes('.eth')
                   ? shortAddress.slice(0, -4)
                   : shortAddress.includes('.sol')
-                  ? shortAddress.slice(0, -4)
-                  : shortAddress;
+                    ? shortAddress.slice(0, -4)
+                    : shortAddress;
                 return (
                   <li key={index}>
                     {index !== 0 && <span className={styles.separator}>-</span>}
-                    <Link to={`/p/${address}`} className={params.subplebbitAddress === address ? styles.selected : styles.choice}>
+                    <Link to={`/s/${address}`} className={params.subplebbitAddress === address ? styles.selected : styles.choice}>
                       {displayAddress}
                     </Link>
                   </li>

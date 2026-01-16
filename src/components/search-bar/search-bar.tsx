@@ -142,7 +142,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     const searchInput = searchInputRef.current?.value;
     if (searchInput) {
       setInputValue('');
-      navigate(`/p/${searchInput}`);
+      navigate(`/s/${searchInput}`);
     }
   };
 
@@ -184,7 +184,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       setActiveDropdownIndex(-1);
       setShowExpando(false);
       searchInputRef.current?.blur();
-      navigate(`/p/${address}`);
+      navigate(`/s/${address}`);
     },
     [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex],
   );

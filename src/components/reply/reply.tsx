@@ -100,7 +100,7 @@ const ReplyAuthor = ({
               {' '}
               [
               {isAuthorSubmitter && (
-                <Link to={`/p/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+                <Link to={`/s/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
                   S
                 </Link>
               )}
@@ -117,7 +117,7 @@ const ReplyAuthor = ({
             <span className={styles.moderatorBrackets}>
               {' '}
               [
-              <Link to={`/p/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+              <Link to={`/s/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
                 S
               </Link>
               ]
@@ -217,7 +217,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
 
   return (
     <div className={styles.parent}>
-      <Link to={`/p/${subplebbitAddress}/c/${cid}`} className={styles.parentLink}>
+      <Link to={`/s/${subplebbitAddress}/c/${cid}`} className={styles.parentLink}>
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
@@ -225,8 +225,8 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         u/{author?.shortAddress}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={`/p/${subplebbitAddress}`} className={styles.parentSubplebbit}>
-        p/{subplebbitAddress}
+      <Link to={`/s/${subplebbitAddress}`} className={styles.parentSubplebbit}>
+        s/{subplebbitAddress}
       </Link>
     </div>
   );
@@ -246,7 +246,7 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
   return (
     <div className={styles.inboxParentLinkWrapper}>
       <span className={styles.inboxParentLinkSubject}>{isInboxCommentReply ? t('comment_reply') : isInboxPostReply ? t('post_reply') : ''}</span>
-      <Link to={`/p/${subplebbitAddress}/c/${cid}`} className={styles.inboxParentLink}>
+      <Link to={`/s/${subplebbitAddress}/c/${cid}`} className={styles.inboxParentLink}>
         {postTitle}
       </Link>
     </div>
@@ -260,7 +260,7 @@ const InboxParentComment = ({ parentCid }: { parentCid: string | undefined }) =>
   return (
     <>
       <Expando content={content} expanded={true} showContent={true} />
-      <Link className={styles.viewParentComment} to={`/p/${subplebbitAddress}/c/${parentCid}`}>
+      <Link className={styles.viewParentComment} to={`/s/${subplebbitAddress}/c/${parentCid}`}>
         {t('view_parent_comment')}
       </Link>
     </>
@@ -292,8 +292,8 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
           u/{shortAddress}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={`/p/${subplebbitAddress}`} className={styles.inboxParentSubplebbit}>
-          p/{shortSubplebbitAddress}{' '}
+        <Link to={`/s/${subplebbitAddress}`} className={styles.inboxParentSubplebbit}>
+          s/{shortSubplebbitAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}
       </div>
@@ -583,7 +583,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                         />
                       ) : (
                         <div className={styles.continueThisThread}>
-                          <Link to={`/p/${subplebbitAddress}/c/${cid}`}>{t('continue_thread')}</Link>
+                          <Link to={`/s/${subplebbitAddress}/c/${cid}`}>{t('continue_thread')}</Link>
                         </div>
                       )}
                     </Fragment>

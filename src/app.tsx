@@ -90,15 +90,15 @@ const App = () => {
             <Route path='/about' element={<AboutView />} />
             <Route path='/submit' element={<SubmitPage />} />
 
-            <Route path='/p/:subplebbitAddress/c/:commentCid' element={<PostPage />} />
-            <Route path='/p/:subplebbitAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/s/:subplebbitAddress/c/:commentCid' element={<PostPage />} />
+            <Route path='/s/:subplebbitAddress/c/:commentCid/about' element={<AboutView />} />
 
-            <Route path='/p/:subplebbitAddress/submit' element={<SubmitPage />} />
-            <Route path='/p/:subplebbitAddress/about' element={<AboutView />} />
+            <Route path='/s/:subplebbitAddress/submit' element={<SubmitPage />} />
+            <Route path='/s/:subplebbitAddress/about' element={<AboutView />} />
 
             <Route path='/settings' element={<Settings />} />
-            <Route path='/p/:subplebbitAddress/settings' element={<SubplebbitSettings />} />
-            <Route path='/p/:subplebbitAddress/settings/editor' element={<SubplebbitDataEditor />} />
+            <Route path='/s/:subplebbitAddress/settings' element={<SubplebbitSettings />} />
+            <Route path='/s/:subplebbitAddress/settings/editor' element={<SubplebbitDataEditor />} />
             <Route path='/settings/plebbit-options' element={<Settings />} />
             <Route path='/settings/content-options' element={<Settings />} />
             <Route path='/settings/account-data' element={<AccountDataEditor />} />
@@ -125,11 +125,11 @@ const App = () => {
           <Route element={feedLayout}>
             <Route path='/:sortType?/:timeFilterName?' element={<Home />} />
 
-            <Route path='/p/all/:sortType?/:timeFilterName?' element={<All />} />
+            <Route path='/s/all/:sortType?/:timeFilterName?' element={<All />} />
 
-            <Route path='/p/mod/:sortType?/:timeFilterName?' element={<Mod />} />
+            <Route path='/s/mod/:sortType?/:timeFilterName?' element={<Mod />} />
 
-            <Route path='/p/:subplebbitAddress/:sortType?/:timeFilterName?' element={<Subplebbit />} />
+            <Route path='/s/:subplebbitAddress/:sortType?/:timeFilterName?' element={<Subplebbit />} />
 
             <Route path='/domain/:domain/:sortType?/:timeFilterName?' element={<Domain />} />
 
