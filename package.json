@@ -1,8 +1,8 @@
 {
   "name": "Seedit",
   "version": "0.5.10",
-  "description": "A GUI for plebbit similar to old.reddit",
-  "author": "Plebbit Labs",
+  "description": "A bitsocial client with an old.reddit UI",
+  "author": "Bitsocial Labs",
   "type": "module",
   "license": "GPL-2.0-only",
   "private": true,
