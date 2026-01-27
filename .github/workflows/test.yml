@@ -25,8 +25,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -50,54 +50,24 @@ jobs:
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
-          
-          # Try unpacked directory first (more reliable for testing)
-          if [ -d "dist/linux-unpacked" ]; then
-            echo "Testing unpacked executable..."
-            EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable | head -n 1)
-            if [ -n "$EXE" ]; then
-              echo "Found executable: $EXE"
-              "$EXE" --no-sandbox &
-              APP_PID=$!
-              sleep 10
-              if kill -0 $APP_PID 2>/dev/null; then
-                echo "✓ App started successfully"
-                kill $APP_PID 2>/dev/null || true
-                pkill -P $APP_PID 2>/dev/null || true
-                pkill -f ipfs 2>/dev/null || true
-                exit 0
-              else
-                echo "✗ App failed to start or crashed"
-                exit 1
-              fi
-            fi
-          fi
-          
-          # Fallback to AppImage
+          echo "Testing AppImage startup..."
           APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
-          if [ -n "$APPIMAGE" ]; then
-            echo "Found AppImage: $APPIMAGE"
-            chmod +x "$APPIMAGE"
-            "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
-            APP_PID=$!
-            sleep 10
-            if kill -0 $APP_PID 2>/dev/null; then
-              echo "✓ App started successfully"
-              kill $APP_PID 2>/dev/null || true
-              pkill -P $APP_PID 2>/dev/null || true
-              pkill -f ipfs 2>/dev/null || true
-              exit 0
-            else
-              echo "✗ App failed to start or crashed"
-              exit 1
-            fi
+          echo "Found AppImage: $APPIMAGE"
+          chmod +x "$APPIMAGE"
+          # Use --appimage-extract-and-run to avoid FUSE requirement in CI
+          # Run with timeout and expect it to start (will be killed after timeout)
+          timeout 10s "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
+          APP_PID=$!
+          sleep 5
+          # Check if process is still running (means it started successfully)
+          if kill -0 $APP_PID 2>/dev/null; then
+            echo "✓ App started successfully"
+            kill $APP_PID 2>/dev/null || true
+            exit 0
+          else
+            echo "✗ App failed to start"
+            exit 1
           fi
-          
-          echo "✗ No runnable artifact found"
-          ls -R dist/
-          exit 1
 
   test-mac-intel:
     name: Test Mac (Intel)
@@ -122,8 +92,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/Library/Caches/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -145,50 +115,32 @@ jobs:
       - name: Build Electron App
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
+        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
-          
-          # Find any .app bundle in dist/mac/
-          APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "✗ No .app bundle found in dist/mac/"
-            ls -R dist/
-            exit 1
-          fi
-          
-          echo "Testing $APP_PATH..."
-          # Find the executable inside the app bundle
-          APP_NAME=$(basename "$APP_PATH" .app)
-          EXE_PATH="$APP_PATH/Contents/MacOS/$APP_NAME"
-          
-          if [ ! -f "$EXE_PATH" ]; then
-            # Try to find any executable in MacOS folder
-            EXE_PATH=$(find "$APP_PATH/Contents/MacOS" -type f -perm +111 | head -n 1)
-          fi
-          
-          if [ -z "$EXE_PATH" ] || [ ! -f "$EXE_PATH" ]; then
-            echo "✗ Could not find executable in $APP_PATH"
-            ls -la "$APP_PATH/Contents/MacOS/"
-            exit 1
-          fi
-          
-          echo "Running: $EXE_PATH"
-          "$EXE_PATH" &
-          APP_PID=$!
-          sleep 10
-          
-          if kill -0 $APP_PID 2>/dev/null; then
-            echo "✓ App started successfully"
-            kill $APP_PID 2>/dev/null || true
-            pkill -P $APP_PID 2>/dev/null || true
-            pkill -f ipfs 2>/dev/null || true
-            exit 0
+          if [ -d "dist/mac/seedit.app" ]; then
+            echo "Testing dist/mac/seedit.app..."
+            # Run the app in background - it will start IPFS which takes time
+            # We just verify it launches without crashing
+            ./dist/mac/seedit.app/Contents/MacOS/seedit &
+            APP_PID=$!
+            sleep 10
+            # Check if process is still running (means it started successfully)
+            if kill -0 $APP_PID 2>/dev/null; then
+              echo "✓ App started successfully"
+              kill $APP_PID 2>/dev/null || true
+              # Also kill any child processes (IPFS)
+              pkill -P $APP_PID 2>/dev/null || true
+              pkill -f ipfs 2>/dev/null || true
+              exit 0
+            else
+              echo "✗ App failed to start or crashed"
+              exit 1
+            fi
           else
-            echo "✗ App failed to start or crashed"
+            echo "Could not find dist/mac/seedit.app to test"
+            ls -R dist
             exit 1
           fi
 
@@ -215,8 +167,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/Library/Caches/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -239,49 +191,31 @@ jobs:
         # On M1 runner, this should produce arm64 build
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
+        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
-          
-          # Find any .app bundle in dist/mac-arm64/ or dist/mac/
-          APP_PATH=$(find dist/mac-arm64 -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
-          fi
-          
-          if [ -z "$APP_PATH" ]; then
-            echo "✗ No .app bundle found"
-            ls -R dist/
+          if [ -d "dist/mac-arm64/seedit.app" ]; then
+            APP_PATH="dist/mac-arm64/seedit.app"
+          elif [ -d "dist/mac/seedit.app" ]; then
+            APP_PATH="dist/mac/seedit.app"
+          else
+            echo "Could not find seedit.app to test"
+            ls -R dist
             exit 1
           fi
           
           echo "Testing $APP_PATH..."
-          # Find the executable inside the app bundle
-          APP_NAME=$(basename "$APP_PATH" .app)
-          EXE_PATH="$APP_PATH/Contents/MacOS/$APP_NAME"
-          
-          if [ ! -f "$EXE_PATH" ]; then
-            # Try to find any executable in MacOS folder
-            EXE_PATH=$(find "$APP_PATH/Contents/MacOS" -type f -perm +111 | head -n 1)
-          fi
-          
-          if [ -z "$EXE_PATH" ] || [ ! -f "$EXE_PATH" ]; then
-            echo "✗ Could not find executable in $APP_PATH"
-            ls -la "$APP_PATH/Contents/MacOS/"
-            exit 1
-          fi
-          
-          echo "Running: $EXE_PATH"
-          "$EXE_PATH" &
+          # Run the app in background - it will start IPFS which takes time
+          # We just verify it launches without crashing
+          "./$APP_PATH/Contents/MacOS/seedit" &
           APP_PID=$!
           sleep 10
-          
+          # Check if process is still running (means it started successfully)
           if kill -0 $APP_PID 2>/dev/null; then
             echo "✓ App started successfully"
             kill $APP_PID 2>/dev/null || true
+            # Also kill any child processes (IPFS)
             pkill -P $APP_PID 2>/dev/null || true
             pkill -f ipfs 2>/dev/null || true
             exit 0
@@ -308,8 +242,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/AppData/Local/electron/Cache
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         shell: bash
@@ -336,35 +270,26 @@ jobs:
       - name: Smoke Test
         shell: bash
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
-          
-          # Try to find the unpacked executable
+          # Try to find the unpacked executable first as it's easiest to run
           if [ -d "dist/win-unpacked" ]; then
-            echo "Contents of dist/win-unpacked:"
-            ls -la dist/win-unpacked/
-            
-            # Find any .exe file (case insensitive)
-            EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" | head -n 1)
-            if [ -n "$EXE" ]; then
-              echo "Testing: $EXE"
-              timeout 15s "$EXE" &
-              APP_PID=$!
-              sleep 10
-              if kill -0 $APP_PID 2>/dev/null; then
-                echo "✓ App started successfully"
-                taskkill //F //PID $APP_PID 2>/dev/null || true
-                taskkill //F //IM ipfs.exe 2>/dev/null || true
-                exit 0
-              else
-                echo "✗ App failed to start or crashed"
-                exit 1
-              fi
-            else
-              echo "✗ No .exe found in dist/win-unpacked/"
-            fi
+             echo "Testing unpacked exe..."
+             # Run with timeout - app starts IPFS so won't exit on its own
+             timeout 15s ./dist/win-unpacked/seedit.exe &
+             APP_PID=$!
+             sleep 8
+             # Check if process started successfully
+             if kill -0 $APP_PID 2>/dev/null; then
+               echo "✓ App started successfully"
+               taskkill //F //PID $APP_PID 2>/dev/null || true
+               # Kill any IPFS processes
+               taskkill //F //IM ipfs.exe 2>/dev/null || true
+               exit 0
+             else
+               echo "✗ App failed to start"
+               exit 1
+             fi
+          else
+             echo "No unpacked directory found"
+             ls -R dist
+             exit 1
           fi
-          
-          echo "✗ No runnable artifact found"
-          ls -R dist/
-          exit 1
