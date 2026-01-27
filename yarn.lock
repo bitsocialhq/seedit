@@ -3392,6 +3392,18 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@mintpass/challenge@1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@mintpass/challenge/-/challenge-1.1.10.tgz#b32547c55462df4582861e1ae005888056178d74"
+  integrity sha512-ICi668eSf6nqdwERqXXHWevrO/5CIx4mMFxsS7Ob/IS1lmRr5h7jeAfp4HVofdCkyMw6K61nzjfnhd9rd9AMjQ==
+  dependencies:
+    "@keyv/sqlite" "^4.0.5"
+    env-paths "^3.0.0"
+    keyv "5.5.0"
+    multiformats "^13.1.0"
+    uint8arrays "^4.0.3"
+    viem "2.45.0"
+
 "@mintpass/challenge@1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@mintpass/challenge/-/challenge-1.1.6.tgz#91cb412585ee8febfd921135e4388c6d5e0783c9"
@@ -3957,6 +3969,71 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@plebbit/plebbit-js@https://github.com/plebbit/plebbit-js.git#8e7d818688d0b4aab2ce6271b271167a4eb75225":
+  version "0.0.8"
+  resolved "https://github.com/plebbit/plebbit-js.git#8e7d818688d0b4aab2ce6271b271167a4eb75225"
+  dependencies:
+    "@bonfida/spl-name-service" "3.0.10"
+    "@enhances/with-resolvers" "0.0.5"
+    "@helia/block-brokers" "5.0.13"
+    "@helia/delegated-routing-v1-http-api-client" "5.1.4"
+    "@helia/ipns" "9.1.5"
+    "@helia/unixfs" "6.0.4"
+    "@libp2p/crypto" "5.1.13"
+    "@libp2p/fetch" "4.0.9"
+    "@libp2p/gossipsub" "15.0.11"
+    "@libp2p/identify" "4.0.9"
+    "@libp2p/interfaces" "3.3.2"
+    "@libp2p/peer-id" "6.0.4"
+    "@libp2p/peer-id-factory" "4.2.4"
+    "@libp2p/websockets" "10.1.2"
+    "@mintpass/challenge" "1.1.10"
+    "@plebbit/plebbit-logger" "github:plebbit/plebbit-logger#355a96d7659ed820047980049dfa627d30d83a69"
+    "@plebbit/proper-lockfile" "github:plebbit/node-proper-lockfile#7fd6332117340c1d3d98dd0afee2d31cc06f72b8"
+    "@types/proper-lockfile" "4.1.2"
+    assert "2.1.0"
+    better-sqlite3 "12.4.1"
+    blockstore-core "6.1.1"
+    blockstore-fs "3.0.2"
+    blockstore-idb "3.0.1"
+    buffer "6.0.3"
+    captcha-canvas "3.3.4"
+    cbor "9.0.1"
+    debounce "1.2.1"
+    err-code "3.0.1"
+    ethers "6.16.0"
+    ext-name "5.0.0"
+    helia "6.0.14"
+    hpagent "1.2.0"
+    it-all "3.0.6"
+    jose "4.11.0"
+    js-sha256 "0.11.1"
+    js-sha512 "0.9.0"
+    kubo-rpc-client "6.0.2"
+    limiter-es6-compat "2.1.2"
+    localforage "1.10.0"
+    lodash.merge "4.6.2"
+    lru-cache "10.1.0"
+    open-graph-scraper "6.10.0"
+    p-limit "4.0.0"
+    p-timeout "6.1.2"
+    peer-id "0.16.0"
+    probe-image-size "7.2.3"
+    remeda "1.57.0"
+    retry "0.13.1"
+    rpc-websockets "9.3.1"
+    safe-stable-stringify "2.4.3"
+    sha1-uint8array "0.10.7"
+    skia-canvas "3.0.8"
+    tcp-port-used "1.0.2"
+    tiny-typed-emitter "2.1.0"
+    tinycache "1.1.2"
+    ts-custom-error "3.3.1"
+    typestub-ipfs-only-hash "4.0.0"
+    uuid "11.1.0"
+    viem "2.43.1"
+    zod "4.1.12"
+
 "@plebbit/plebbit-js@https://github.com/plebbit/plebbit-js.git#a21d896bd55c76070758dae65dc0693d1c3726db":
   version "0.0.8"
   resolved "https://github.com/plebbit/plebbit-js.git#a21d896bd55c76070758dae65dc0693d1c3726db"
@@ -4040,6 +4117,22 @@
   resolved "https://github.com/plebbit/plebbit-react-hooks.git#5524168ef478bc06518168d4c99a829a85c92f69"
   dependencies:
     "@plebbit/plebbit-js" "https://github.com/plebbit/plebbit-js.git#a21d896bd55c76070758dae65dc0693d1c3726db"
+    "@plebbit/plebbit-logger" "https://github.com/plebbit/plebbit-logger.git"
+    assert "2.0.0"
+    ethers "5.6.9"
+    localforage "1.10.0"
+    lodash.isequal "4.5.0"
+    memoizee "0.4.15"
+    quick-lru "5.1.1"
+    uint8arrays "3.1.1"
+    uuid "11.1.0"
+    zustand "4.0.0"
+
+"@plebbit/plebbit-react-hooks@https://github.com/plebbit/plebbit-react-hooks.git#df3cb6901f63054870dc127cd7565c98617c2a4f":
+  version "0.0.1"
+  resolved "https://github.com/plebbit/plebbit-react-hooks.git#df3cb6901f63054870dc127cd7565c98617c2a4f"
+  dependencies:
+    "@plebbit/plebbit-js" "https://github.com/plebbit/plebbit-js.git#8e7d818688d0b4aab2ce6271b271167a4eb75225"
     "@plebbit/plebbit-logger" "https://github.com/plebbit/plebbit-logger.git"
     assert "2.0.0"
     ethers "5.6.9"
@@ -11620,6 +11713,20 @@ ox@0.10.5:
     abitype "^1.2.3"
     eventemitter3 "5.0.1"
 
+ox@0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/ox/-/ox-0.11.3.tgz#f50be1cae88822f5111b1e3f4a324c4c07eed422"
+  integrity sha512-1bWYGk/xZel3xro3l8WGg6eq4YEKlaqvyMtVhfMFpbJzK2F6rj4EDRtqDCWVEJMkzcmEi9uW2QxsqELokOlarw==
+  dependencies:
+    "@adraffy/ens-normalize" "^1.11.0"
+    "@noble/ciphers" "^1.3.0"
+    "@noble/curves" "1.9.1"
+    "@noble/hashes" "^1.8.0"
+    "@scure/bip32" "^1.7.0"
+    "@scure/bip39" "^1.6.0"
+    abitype "^1.2.3"
+    eventemitter3 "5.0.1"
+
 oxfmt@0.24.0:
   version "0.24.0"
   resolved "https://registry.yarnpkg.com/oxfmt/-/oxfmt-0.24.0.tgz#5fb82886d2764a9fab094623e0fe0519afb903ec"
@@ -14625,6 +14732,20 @@ viem@2.43.1:
     abitype "1.2.3"
     isows "1.0.7"
     ox "0.10.5"
+    ws "8.18.3"
+
+viem@2.45.0:
+  version "2.45.0"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.45.0.tgz#5f7f28b639193b783b7fbb6bef7575e9cc8d6f86"
+  integrity sha512-iVA9qrAgRdtpWa80lCZ6Jri6XzmLOwwA1wagX2HnKejKeliFLpON0KOdyfqvcy+gUpBVP59LBxP2aKiL3aj8fg==
+  dependencies:
+    "@noble/curves" "1.9.1"
+    "@noble/hashes" "1.8.0"
+    "@scure/bip32" "1.7.0"
+    "@scure/bip39" "1.6.0"
+    abitype "1.2.3"
+    isows "1.0.7"
+    ox "0.11.3"
     ws "8.18.3"
 
 vite-plugin-node-polyfills@0.24.0:
