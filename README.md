@@ -1,31 +1,36 @@
+[![Build Status](https://img.shields.io/github/actions/workflow/status/bitsocialhq/seedit/test.yml?branch=master)](https://github.com/bitsocialhq/seedit/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/bitsocialhq/seedit)](https://github.com/bitsocialhq/seedit/releases/latest)
+[![License](https://img.shields.io/badge/license-GPL--2.0--only-red.svg)](https://github.com/bitsocialhq/seedit/blob/master/LICENSE)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 <img src="https://github.com/plebeius-eth/assets/blob/main/seedit-logo.png" width="302" height="111">
 
 _Telegram group for this repo https://t.me/seeditreact_
 
 # Seedit
 
-Seedit is a serverless, adminless, decentralized reddit alternative. Seedit is a client (interface) for the Plebbit protocol, which is a decentralized social network where anyone can create and fully own unstoppable communities. Learn more: https://plebbit.com
+Seedit is a serverless, adminless, decentralized and open-sorce (old)reddit alternative built on the [Bitsocial protocol](https://bitsocial.net). Like reddit, anyone can create a seedit community, It features a similar homepage structure as reddit, but with a crucial difference: **anyone can create and own communities, and multiple communities can compete for each default community slot**.
 
 - Seedit web version: https://seedit.app — or, using Brave/IPFS Companion: https://seedit.eth
 
 ### Downloads
-- Seedit desktop version (full p2p plebbit node, seeds automatically): available for Mac/Windows/Linux, [download link in the release page](https://github.com/plebbit/seedit/releases/latest)
-- Seedit mobile version: available for Android, [download link in the release page](https://github.com/plebbit/seedit/releases/latest)
+- Seedit desktop version (full p2p bitsocial node, seeds automatically): available for Mac/Windows/Linux, [download link in the release page](https://github.com/bitsocialhq/seedit/releases/latest)
+- Seedit mobile version: available for Android, [download link in the release page](https://github.com/bitsocialhq/seedit/releases/latest)
 
 <br />
 
 <img src="https://github.com/plebeius-eth/assets/blob/main/seedit-screenshot.jpg" width="849">
 
 ## How to create a community
-In the plebbit protocol, a seedit community is called a _subplebbit_. To run a subplebbit, you can choose between two options:
+To run a community, you can choose between two options:
 
-1. If you prefer to use a **GUI**, download the desktop version of the Seedit client, available for Windows, MacOS and Linux: [latest release](https://github.com/plebbit/seedit/releases/latest). Create a subplebbit using using the familiar old.reddit-like UI, and modify its settings to your liking. The app runs an IPFS node, meaning you have to keep it running to have your board online.
-2. If you prefer to use a **command line interface**, install plebbit-cli, available for Windows, MacOS and Linux: [latest release](https://github.com/plebbit/plebbit-cli/releases/latest). Follow the instructions in the readme of the repo. When running the daemon for the first time, it will output WebUI links you can use to manage your subplebbit with the ease of the GUI.
+1. If you prefer to use a **GUI**, download the desktop version of the Seedit client, available for Windows, MacOS and Linux: [latest release](https://github.com/bitsocialhq/seedit/releases/latest). Create a community using using the familiar old.reddit-like UI, and modify its settings to your liking. The app runs an IPFS node, meaning you have to keep it running to have your board online.
+2. If you prefer to use a **command line interface**, install bitsocial-cli, available for Windows, MacOS and Linux: [latest release](https://github.com/bitsocialhq/bitsocial-cli/releases/latest). Follow the instructions in the readme of the repo. When running the daemon for the first time, it will output WebUI links you can use to manage your community with the ease of the GUI.
 
-Peers can connect to your subplebbit using any plebbit client, such as Plebchan or Seedit. They only need the subplebbit's address, which is not stored in any central database, as plebbit is a pure peer-to-peer protocol.
+Peers can connect to your bitsocial community using any bitsocial client, such as Seedit or [5chan](https://github.com/bitsocialhq/5chan). They only need the community address, which is not stored in any central database, as bitsocial is a pure peer-to-peer protocol.
 
-### How to add a community to the default list (p/all)
-The default list of communities, used on p/all on Seedit, is plebbit's [temporary default subplebbits](https://github.com/plebbit/lists) list. You can open a pull request in that repo to add your subplebbit to the list, or contact devs via telegram [@plebbit](https://t.me/plebbit). In the future, this process will be automated by submitting proposals to a plebbit DAO, using the [plebbit token](https://etherscan.io/token/0xea81dab2e0ecbc6b5c4172de4c22b6ef6e55bd8f).
+### How to add a community to the default list (s/all)
+The default list of communities, used on s/all on Seedit, is bitsocial's [default-multisub.json list](https://github.com/bitsocialhq/lists/blob/master/default-multisub.json). You can open a pull request in that repo to add your community to the list.
 
 ## To run locally
 
@@ -44,4 +49,4 @@ The default list of communities, used on p/all on Seedit, is plebbit's [temporar
 
 ### Build:
 
-The linux/windows/mac/android build scripts are in https://github.com/plebbit/seedit/blob/master/.github/workflows/release.yml
+The linux/windows/mac/android build scripts are in https://github.com/bitsocialhq/seedit/blob/master/.github/workflows/release.yml
