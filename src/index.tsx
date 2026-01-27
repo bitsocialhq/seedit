@@ -9,6 +9,12 @@ import './themes.css';
 import './preload-assets.css';
 import { App as CapacitorApp } from '@capacitor/app';
 import { registerSW } from 'virtual:pwa-register';
+import { Analytics } from '@vercel/analytics/react';
+
+// Only enable analytics on seedit.app (Vercel deployment)
+// Exclude Electron (file:// or localhost), Capacitor/APK (capacitor:// or localhost), and IPFS (ipfs:// or different domain)
+const isVercelDeployment =
+  typeof window !== 'undefined' && (window.location.hostname === 'seedit.app' || window.location.hostname === 'www.seedit.app') && !window.isElectron;
 
 if (window.location.hostname.startsWith('p2p.')) {
   (window as any).defaultPlebbitOptions = {
@@ -38,6 +44,7 @@ root.render(
   <React.StrictMode>
     <Router>
       <App />
+      {isVercelDeployment && <Analytics />}
     </Router>
   </React.StrictMode>,
 );

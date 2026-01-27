@@ -18,6 +18,7 @@
     "@types/node": "20.8.2",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.10",
+    "@vercel/analytics": "^1.6.1",
     "ace-builds": "1.41.0",
     "cross-env": "7.0.3",
     "electron-context-menu": "3.3.0",
