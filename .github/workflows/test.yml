@@ -145,7 +145,7 @@ jobs:
       - name: Build Electron App
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
+        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
