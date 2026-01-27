@@ -9,7 +9,7 @@ _Telegram group for this repo https://t.me/seeditreact_
 
 # Seedit
 
-Seedit is a serverless, adminless, decentralized and open-sorce (old)reddit alternative built on the [Bitsocial protocol](https://bitsocial.net). Like reddit, anyone can create a seedit community, It features a similar homepage structure as reddit, but with a crucial difference: **anyone can create and own communities, and multiple communities can compete for each default community slot**.
+Seedit is a serverless, adminless, decentralized and open-source (old)reddit alternative built on the [Bitsocial protocol](https://bitsocial.net). Like reddit, anyone can create a seedit community, It features a similar homepage structure as reddit, but with a crucial difference: **anyone can create and own communities, and multiple communities can compete for each default community slot**.
 
 - Seedit web version: https://seedit.app — or, using Brave/IPFS Companion: https://seedit.eth
 
