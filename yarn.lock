@@ -940,20 +940,20 @@
     ipaddr.js "^2.2.0"
     punycode "^2.3.1"
 
-"@capacitor/android@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-7.2.0.tgz#f30e313315ab92c500bd57d9f0c4716a46b42f40"
-  integrity sha512-zdhEy3jZPG5Toe/pGzKtDgIiBGywjaoEuQWnGVjBYPlSAEUtAhpZ2At7V0SCb26yluAuzrAUV0Ue+LQeEtHwFQ==
+"@capacitor/android@7.4.5":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-7.4.5.tgz#3832b457e0a3a7079a645bf5be3cc23d406c2971"
+  integrity sha512-G76C+PGIFkG+hxj6JLlY003txRaGZwsXBPo4b4xiZMZaD6DG++sDCoumYl/5xL40dL2b8P5tb3CKf/khWyL2Gw==
 
 "@capacitor/app@7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-7.0.1.tgz#0d0709fb4dde5046c24853f2d6b77a7ea411f748"
   integrity sha512-ArlVZAAla4MwQoKh26x2AaTDOBh5Vhp1VhMKR3RwqZSsZnazKTFGNrPbr9Ez5r1knnEDfApyjwp1uZnXK1WTYQ==
 
-"@capacitor/cli@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-7.2.0.tgz#ea279f14e575b059edb7fe8dc64a8e3379088616"
-  integrity sha512-RNW9vtYYYSDmOdguYBSW0VpRnG/d6lGydlc9DLrJ7qbSPxFrotTz9IjkM48O+SruUma61DyuSqJttdbay2xSxg==
+"@capacitor/cli@7.4.5":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-7.4.5.tgz#056d8acc0d27ec3f8f79a5588e6cd6539db2895d"
+  integrity sha512-ApKxpzcWTqmyTD+WxBvL7UJt+x0xr9Vqa+S4Iqbl/R2kC0tf1ay22wE9pOrdWXbTqFbNhBuUuRvTvZ6Edp7QzQ==
   dependencies:
     "@ionic/cli-framework-output" "^2.2.8"
     "@ionic/utils-subprocess" "^3.0.1"
@@ -963,7 +963,7 @@
     env-paths "^2.2.0"
     fs-extra "^11.2.0"
     kleur "^4.1.5"
-    native-run "^2.0.1"
+    native-run "^2.0.3"
     open "^8.4.0"
     plist "^3.1.0"
     prompts "^2.4.2"
@@ -973,10 +973,10 @@
     tslib "^2.8.1"
     xml2js "^0.6.2"
 
-"@capacitor/core@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-7.2.0.tgz#fdd1c5d2fbfa257887ce6065f66151a51f0e6d1b"
-  integrity sha512-2zCnA6RJeZ9ec4470o8QMZEQTWpekw9FNoqm5TLc10jeCrhvHVI8MPgxdZVc3mOdFlyieYu4AS1fNxSqbS57Pw==
+"@capacitor/core@7.4.5":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-7.4.5.tgz#334d77356fa473e95d51cf6375e9b36471faf2d6"
+  integrity sha512-JnUywi0WRbqm4QYoplNsMQ7KAVuyrQFha0dOH9YDVCyrVHUvPcvrnK+9j5elUMgy+pOh3ve+pk6BVoySr91c+A==
   dependencies:
     tslib "^2.1.0"
 
@@ -11224,10 +11224,10 @@ napi-build-utils@^2.0.0:
   resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-2.0.0.tgz#13c22c0187fcfccce1461844136372a47ddc027e"
   integrity sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==
 
-native-run@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/native-run/-/native-run-2.0.1.tgz#a9b213c32824b007cbdd0279e0edd3c24bcc2f7a"
-  integrity sha512-XfG1FBZLM50J10xH9361whJRC9SHZ0Bub4iNRhhI61C8Jv0e1ud19muex6sNKB51ibQNUJNuYn25MuYET/rE6w==
+native-run@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/native-run/-/native-run-2.0.3.tgz#b1ceb39c8d24abf4916c07ae9aad5a9fbcd31a02"
+  integrity sha512-U1PllBuzW5d1gfan+88L+Hky2eZx+9gv3Pf6rNBxKbORxi7boHzqiA6QFGSnqMem4j0A9tZ08NMIs5+0m/VS1Q==
   dependencies:
     "@ionic/utils-fs" "^3.1.7"
     "@ionic/utils-terminal" "^2.3.4"

@@ -98,9 +98,9 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/android": "7.2.0",
-    "@capacitor/cli": "7.2.0",
-    "@capacitor/core": "7.2.0",
+    "@capacitor/android": "7.4.5",
+    "@capacitor/cli": "7.4.5",
+    "@capacitor/core": "7.4.5",
     "@electron/rebuild": "4.0.1",
     "@react-scan/vite-plugin-react-scan": "0.1.8",
     "@types/memoizee": "0.4.9",
