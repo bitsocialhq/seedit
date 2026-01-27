@@ -174,21 +174,17 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.social-networking",
-      "type": "distribution",
-      "identity": null,
-      "executableName": "seedit"
+      "type": "distribution"
     },
     "win": {
       "target": [
         "portable",
         "nsis"
-      ],
-      "executableName": "seedit"
+      ]
     },
     "linux": {
       "target": "AppImage",
-      "category": "Network",
-      "executableName": "seedit"
+      "category": "Network"
     }
   },
   "lint-staged": {
