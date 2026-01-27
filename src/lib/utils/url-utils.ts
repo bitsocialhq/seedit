@@ -18,7 +18,7 @@ export const isValidURL = (url: string) => {
 };
 
 export const copyShareLinkToClipboard = async (subplebbitAddress: string, cid: string) => {
-  const shareLink = `https://pleb.bz/s/${subplebbitAddress}/c/${cid}`;
+  const shareLink = `https://seedit.app/s/${subplebbitAddress}/c/${cid}`;
   await copyToClipboard(shareLink);
 };
 
