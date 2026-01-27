@@ -146,7 +146,7 @@ jobs:
 
   test-mac-arm:
     name: Test Mac (Apple Silicon)
-    runs-on: macOS-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
