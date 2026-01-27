@@ -52,6 +52,11 @@ jobs:
         run: |
           echo "Testing AppImage startup..."
           APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
+          if [ -z "$APPIMAGE" ]; then
+            echo "Error: No AppImage found in dist/"
+            ls -la dist/
+            exit 1
+          fi
           echo "Found AppImage: $APPIMAGE"
           chmod +x "$APPIMAGE"
           # Use --appimage-extract-and-run to avoid FUSE requirement in CI
@@ -115,7 +120,7 @@ jobs:
       - name: Build Electron App
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+        run: yarn build:preload && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
@@ -191,7 +196,7 @@ jobs:
         # On M1 runner, this should produce arm64 build
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+        run: yarn build:preload && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
@@ -268,28 +273,29 @@ jobs:
         timeout-minutes: 30
 
       - name: Smoke Test
-        shell: bash
+        shell: pwsh
         run: |
           # Try to find the unpacked executable first as it's easiest to run
-          if [ -d "dist/win-unpacked" ]; then
-             echo "Testing unpacked exe..."
-             # Run with timeout - app starts IPFS so won't exit on its own
-             timeout 15s ./dist/win-unpacked/seedit.exe &
-             APP_PID=$!
-             sleep 8
-             # Check if process started successfully
-             if kill -0 $APP_PID 2>/dev/null; then
-               echo "✓ App started successfully"
-               taskkill //F //PID $APP_PID 2>/dev/null || true
-               # Kill any IPFS processes
-               taskkill //F //IM ipfs.exe 2>/dev/null || true
-               exit 0
-             else
-               echo "✗ App failed to start"
-               exit 1
-             fi
-          else
-             echo "No unpacked directory found"
-             ls -R dist
-             exit 1
-          fi
+          if (Test-Path "dist/win-unpacked") {
+            Write-Output "Testing unpacked exe..."
+            # Start the app as a background job
+            $process = Start-Process -FilePath "./dist/win-unpacked/seedit.exe" -PassThru
+            # Wait a bit for the app to start
+            Start-Sleep -Seconds 8
+            # Check if process is still running (means it started successfully)
+            if (!$process.HasExited) {
+              Write-Output "✓ App started successfully"
+              # Kill the app process
+              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+              # Kill any IPFS processes
+              Get-Process -Name "ipfs" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+              exit 0
+            } else {
+              Write-Output "✗ App failed to start or crashed"
+              exit 1
+            }
+          } else {
+            Write-Output "No unpacked directory found"
+            Get-ChildItem -Recurse dist
+            exit 1
+          }
