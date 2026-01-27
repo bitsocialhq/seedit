@@ -183,8 +183,7 @@ jobs:
       - run: sed -i "s/versionName \"1.0\"/versionName \"$(node -e "console.log(require('./package.json').version)")\"/" ./android/app/build.gradle
       - run: cat ./android/app/build.gradle
       # build apk
-      - run: npx cap update
-      - run: npx cap copy
+      - run: npx cap sync android
       - run: cd android && gradle bundle
       - run: cd android && ./gradlew assembleRelease --stacktrace
       # optimize apk
