@@ -181,7 +181,7 @@ When proposing or implementing code changes, always suggest a short GitHub commi
 When proposing or implementing code changes, always suggest a GitHub issue title and description to keep track of the problem that was fixed. Format:
 
 - **Title**: As short as possible, may use commas to list related commits that resolve the same Github issue. Use markdown.
-- **Description**: 2-3 informal sentences describing the problem (not the solution). Write as if the issue hasn't been fixed yet. Bullet points are encouranged but may not always be necessary. Use markdown.
+- **Description**: 2-3 informal sentences describing the problem (not the solution). Write as if the issue hasn't been fixed yet. Bullet points are encouraged but may not always be necessary. Use markdown.
 
 ### Troubleshooting
 
