@@ -348,7 +348,7 @@ jobs:
             EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" | head -n 1)
             if [ -n "$EXE" ]; then
               echo "Testing: $EXE"
-              timeout 15s "$EXE" &
+              "$EXE" &
               APP_PID=$!
               sleep 10
               if kill -0 $APP_PID 2>/dev/null; then
