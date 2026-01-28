@@ -31,7 +31,8 @@ yarn electron     # Run Electron app
 ## Code Style
 
 - TypeScript strict mode
-- Prettier for formatting (runs on pre-commit)
+- **oxfmt** for formatting (runs on pre-commit via husky; recommend setting up AI hooks too)
+- **oxlint** for linting, **tsgo** for type-checking
 - **DRY principle**: Always follow the DRY principle when possible. Never repeat UI elements across views—extract them into reusable components in `src/components/`. Same applies to logic—extract into custom hooks in `src/hooks/`.
 
 ## React Patterns (Critical)
@@ -106,6 +107,55 @@ Discover and install skills from the open agent skills ecosystem.
 npx skills add https://github.com/vercel-labs/skills --skill find-skills
 ```
 
+## AI Agent Hooks (Recommended)
+
+If you're using an AI coding assistant (Cursor, Claude Code, Codex, etc.), set up hooks to automatically enforce code quality. Most modern AI agents support lifecycle hooks.
+
+### Recommended Hooks
+
+Set up these hooks for this project:
+
+| Hook | Command | Purpose |
+|------|---------|---------|
+| `afterFileEdit` | `npx oxfmt <file>` | Auto-format files after AI edits |
+| `stop` | `yarn lint && yarn type-check` | Verify code when agent finishes |
+
+### Why Use Hooks
+
+- **Consistent formatting** — Every file follows the same style
+- **Catch issues early** — Lint and type errors are caught before commit/CI
+- **Less manual work** — No need to run `yarn prettier`, `yarn lint`, `yarn type-check` manually
+
+### Example Hook Scripts
+
+**Format hook** (runs after each file edit):
+```bash
+#!/bin/bash
+# Auto-format JS/TS files after AI edits
+# Hook receives JSON via stdin with file_path
+
+input=$(cat)
+file_path=$(echo "$input" | grep -o '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/')
+
+case "$file_path" in
+  *.js|*.ts|*.tsx|*.mjs) npx oxfmt "$file_path" 2>/dev/null ;;
+esac
+exit 0
+```
+
+**Verify hook** (runs when agent finishes):
+```bash
+#!/bin/bash
+# Run lint and type-check when agent finishes
+
+cat > /dev/null  # consume stdin
+echo "=== yarn lint ===" && yarn lint
+echo "=== yarn type-check ===" && yarn type-check
+exit 0
+```
+
+Consult your AI tool's documentation for how to configure hooks (e.g., `hooks.json` for Cursor/Claude Code).
+
 ## Recommended MCP Servers
 
 ### GitHub MCP
@@ -171,17 +221,29 @@ node scripts/update-translations.js --audit --write
 
 ### GitHub Commits
 
-When proposing or implementing code changes, always suggest a short GitHub commit title, and if the commit title isn't exhaustive enough, then provide also a commit description. Format:
+When proposing or implementing code changes, always suggest a commit message. Format:
 
-- **Title**: Use [Conventional Commits](https://www.conventionalcommits.org/) style (e.g., `fix: ...`, `feat: ...`, `perf: ...`, `refactor: ...`, `docs: ...`, `chore: ...`). Use the `perf` type for performance optimizations (not `fix`). Keep it short. Use markdown.
-- **Description**: If the title is missing important information, also provide a description, consisting of 2-3 informal sentences describing the solution (not the problem) that is being committed. Concise, technical, no bullet points. Use markdown.
+- **Title**: Use [Conventional Commits](https://www.conventionalcommits.org/) style. Use `perf` for performance optimizations (not `fix`). Keep it short. **MUST be wrapped in backticks.**
+- **Description**: Optional. 2-3 informal sentences describing the solution (not the problem). Concise, technical, no bullet points. Use backticks for code references.
 
-### Github Issues
+Example output:
 
-When proposing or implementing code changes, always suggest a GitHub issue title and description to keep track of the problem that was fixed. Format:
+> **Commit title:** `fix: correct date formatting in timezone conversion`
+>
+> Updated `formatDate()` in `date-utils.ts` to properly handle timezone offsets.
 
-- **Title**: As short as possible, may use commas to list related commits that resolve the same Github issue. Use markdown.
-- **Description**: 2-3 informal sentences describing the problem (not the solution). Write as if the issue hasn't been fixed yet. Bullet points are encouraged but may not always be necessary. Use markdown.
+### GitHub Issues
+
+When proposing or implementing code changes, always suggest a GitHub issue to track the problem. Format:
+
+- **Title**: As short as possible. **MUST be wrapped in backticks.**
+- **Description**: 2-3 informal sentences describing the problem (not the solution). Write as if the issue hasn't been fixed yet. Use backticks for code references.
+
+Example output:
+
+> **GitHub issue:**
+> - **Title:** `Date formatting displays incorrect timezone`
+> - **Description:** Comment timestamps show incorrect timezones when users view posts from different regions. The `formatDate()` function doesn't account for user's local timezone settings.
 
 ### Troubleshooting
 
