@@ -1,8 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { requestNotificationPermission, showLocalNotification } from '../../../lib/push';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
 import styles from './notifications-settings.module.css';
+
+const clearTimeoutRef = (timeoutRef: { current: ReturnType<typeof setTimeout> | null }) => {
+  if (timeoutRef.current) {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = null;
+  }
+};
 
 const NotificationsSettings = () => {
   const { t } = useTranslation();
@@ -10,8 +17,17 @@ const NotificationsSettings = () => {
   const [permissionStatus, setPermissionStatus] = useState<string | null>(null);
   const [platform, setPlatform] = useState<NodeJS.Platform | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showDeniedMessage, setShowDeniedMessage] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [flashStatus, setFlashStatus] = useState<'denied' | 'success' | null>(null);
+  const flashTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleFlashReset = useCallback((status: 'denied' | 'success') => {
+    setFlashStatus(status);
+    clearTimeoutRef(flashTimeoutRef);
+    flashTimeoutRef.current = setTimeout(() => {
+      setFlashStatus(null);
+      flashTimeoutRef.current = null;
+    }, 5000);
+  }, []);
 
   // Function to check permission via API, memoized with useCallback
   const checkPermissionStatus = useCallback(async () => {
@@ -28,8 +44,7 @@ const NotificationsSettings = () => {
         if (enableLocalNotifications) {
           setEnableLocalNotifications(false);
         }
-        setShowDeniedMessage(true);
-        setTimeout(() => setShowDeniedMessage(false), 5000);
+        scheduleFlashReset('denied');
       } else if (nativeStatus === 'not-determined') {
         console.warn('[NotificationsSettings] Permission status is not-determined, cannot test.');
       } else if (nativeStatus === 'not-supported') {
@@ -41,23 +56,39 @@ const NotificationsSettings = () => {
       console.error('[Electron Native] Error checking notification permissions:', err);
       setPermissionStatus('unknown');
     }
-  }, [setEnableLocalNotifications, enableLocalNotifications]);
+  }, [enableLocalNotifications, scheduleFlashReset, setEnableLocalNotifications]);
 
-  // Run the check on mount
   useEffect(() => {
-    if (window.electronApi) {
-      if (window.electronApi.getPlatform) {
-        window.electronApi.getPlatform().then(setPlatform).catch(console.error);
+    if (!window.electronApi) return;
+
+    let cancelled = false;
+
+    const loadPlatform = async () => {
+      if (!window.electronApi?.getPlatform) return;
+      try {
+        const value = await window.electronApi.getPlatform();
+        if (!cancelled) {
+          setPlatform(value);
+        }
+      } catch (error) {
+        console.error(error);
       }
-      checkPermissionStatus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Keep dependencies empty - runs only once
+    };
+
+    loadPlatform();
+    void checkPermissionStatus();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [checkPermissionStatus]);
+
+  useEffect(() => () => clearTimeoutRef(flashTimeoutRef), []);
 
   const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const isEnabled = event.target.checked;
     setIsLoading(true);
-    setShowSuccessMessage(false);
+    setFlashStatus(null);
 
     try {
       if (isEnabled) {
@@ -67,12 +98,10 @@ const NotificationsSettings = () => {
           setPermissionStatus(currentStatus);
           if (currentStatus === 'granted') {
             setEnableLocalNotifications(true);
-            setShowSuccessMessage(true);
-            setTimeout(() => setShowSuccessMessage(false), 5000);
+            scheduleFlashReset('success');
           } else if (currentStatus === 'denied') {
             setEnableLocalNotifications(false); // Ensure it's off if denied
-            setShowDeniedMessage(true);
-            setTimeout(() => setShowDeniedMessage(false), 5000);
+            scheduleFlashReset('denied');
           } else if (currentStatus === 'not-determined') {
             setEnableLocalNotifications(false); // Keep it off until granted
             console.warn('[NotificationsSettings] Permission not determined. User must grant via OS prompt.');
@@ -87,13 +116,11 @@ const NotificationsSettings = () => {
           if (granted) {
             setEnableLocalNotifications(true);
             setPermissionStatus('granted');
-            setShowSuccessMessage(true);
-            setTimeout(() => setShowSuccessMessage(false), 5000);
+            scheduleFlashReset('success');
           } else {
             setEnableLocalNotifications(false);
             setPermissionStatus('denied');
-            setShowDeniedMessage(true);
-            setTimeout(() => setShowDeniedMessage(false), 5000);
+            scheduleFlashReset('denied');
           }
         }
       } else {
@@ -121,8 +148,7 @@ const NotificationsSettings = () => {
             });
           } else if (status === 'denied') {
             alert('Notifications are denied in System Settings.');
-            setShowDeniedMessage(true);
-            setTimeout(() => setShowDeniedMessage(false), 5000);
+            scheduleFlashReset('denied');
           } else if (status === 'not-determined') {
             alert('Permission not yet granted. The app will ask when it first tries to notify you (or test again).');
           } else {
@@ -162,14 +188,14 @@ const NotificationsSettings = () => {
         )}
 
         {/* Permission status messages */}
-        {showDeniedMessage && permissionStatus === 'denied' && (
+        {flashStatus === 'denied' && permissionStatus === 'denied' && (
           <span className={styles.permissionStatus} data-status={permissionStatus}>
             <span className={styles.permissionStatusDenied}>
               {window.electronApi?.isElectron && platform === 'darwin'
                 ? 'Permission denied. Please go to System Settings > Notifications > Seedit and enable notifications.'
                 : window.electronApi?.isElectron
-                ? `Permission denied. Please check your system's ${platform && `(${platform}) `} notification settings for this application.`
-                : `Permission denied. Please allow notifications for this site in your browser settings.`}
+                  ? `Permission denied. Please check your system's ${platform && `(${platform}) `} notification settings for this application.`
+                  : `Permission denied. Please allow notifications for this site in your browser settings.`}
             </span>
           </span>
         )}
@@ -178,7 +204,7 @@ const NotificationsSettings = () => {
             <span className={styles.permissionStatusRequesting}>Click "Allow" to enable notifications</span>
           </span>
         )}
-        {showSuccessMessage && permissionStatus === 'granted' && enableLocalNotifications && (
+        {flashStatus === 'success' && permissionStatus === 'granted' && enableLocalNotifications && (
           <span className={styles.permissionStatus} data-status={permissionStatus}>
             <span className={styles.permissionStatusSuccess}>
               Success! You're done.
