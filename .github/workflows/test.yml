@@ -53,10 +53,31 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const linux=build.linux||{}; console.log(linux.executableName || build.productName || pkg.name)")
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const linux=build.linux||{}; (linux.executableName || build.productName || pkg.name)")
           echo "Expected app name: $APP_NAME"
           
-          # Try unpacked directory first (more reliable for testing)
+          echo "Testing AppImage startup..."
+          APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
+          if [ -n "$APPIMAGE" ]; then
+            echo "Found AppImage: $APPIMAGE"
+            chmod +x "$APPIMAGE"
+            # Use --appimage-extract-and-run to avoid FUSE requirement in CI
+            timeout 15s "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
+            APP_PID=$!
+            sleep 5
+            if kill -0 $APP_PID 2>/dev/null; then
+              echo "✓ App started successfully"
+              kill $APP_PID 2>/dev/null || true
+              pkill -P $APP_PID 2>/dev/null || true
+              pkill -f ipfs 2>/dev/null || true
+              exit 0
+            else
+              echo "✗ App failed to start"
+              exit 1
+            fi
+          fi
+          
+          # Fallback to linux-unpacked if AppImage isn't present
           if [ -d "dist/linux-unpacked" ]; then
             echo "Testing unpacked executable..."
             # Look for the app executable by name (excludes .so libraries)
@@ -88,26 +109,6 @@ jobs:
                 echo "✗ App failed to start or crashed"
                 exit 1
               fi
-            fi
-          fi
-          
-          # Fallback to AppImage
-          APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
-          if [ -n "$APPIMAGE" ]; then
-            echo "Found AppImage: $APPIMAGE"
-            chmod +x "$APPIMAGE"
-            "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
-            APP_PID=$!
-            sleep 10
-            if kill -0 $APP_PID 2>/dev/null; then
-              echo "✓ App started successfully"
-              kill $APP_PID 2>/dev/null || true
-              pkill -P $APP_PID 2>/dev/null || true
-              pkill -f ipfs 2>/dev/null || true
-              exit 0
-            else
-              echo "✗ App failed to start or crashed"
-              exit 1
             fi
           fi
           
@@ -168,7 +169,7 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; console.log(mac.executableName || build.productName || pkg.name)")
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; (mac.executableName || build.productName || pkg.name)")
           echo "Expected app name: $APP_NAME"
           
           # Find .app bundle in dist/mac/
@@ -272,7 +273,7 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; console.log(mac.executableName || build.productName || pkg.name)")
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; (mac.executableName || build.productName || pkg.name)")
           echo "Expected app name: $APP_NAME"
           
           # Find .app bundle in dist/mac-arm64/ or dist/mac/
@@ -378,7 +379,7 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const win=build.win||{}; console.log(win.executableName || build.productName || pkg.name)")
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const win=build.win||{}; (win.executableName || build.productName || pkg.name)")
           echo "Expected app name: $APP_NAME"
           
           # Try to find the unpacked executable
@@ -401,14 +402,12 @@ jobs:
             fi
             if [ -f "$EXE" ]; then
               echo "Testing: $EXE"
-              "$EXE" &
+              timeout 15s "$EXE" &
               APP_PID=$!
-              sleep 10
-              EXE_BASENAME=$(basename "$EXE")
-              if kill -0 $APP_PID 2>/dev/null || tasklist //FI "IMAGENAME eq $EXE_BASENAME" 2>/dev/null | findstr /I "$EXE_BASENAME" > /dev/null; then
+              sleep 8
+              if kill -0 $APP_PID 2>/dev/null; then
                 echo "✓ App started successfully"
                 taskkill //F //PID $APP_PID 2>/dev/null || true
-                taskkill //F //IM "$EXE_BASENAME" 2>/dev/null || true
                 taskkill //F //IM ipfs.exe 2>/dev/null || true
                 exit 0
               else
