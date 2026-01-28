@@ -118,13 +118,14 @@ Set up these hooks for this project:
 | Hook | Command | Purpose |
 |------|---------|---------|
 | `afterFileEdit` | `npx oxfmt <file>` | Auto-format files after AI edits |
-| `stop` | `yarn lint && yarn type-check` | Verify code when agent finishes |
+| `stop` | `yarn lint && yarn type-check && yarn audit` | Verify code and security when agent finishes |
 
 ### Why Use Hooks
 
 - **Consistent formatting** — Every file follows the same style
 - **Catch issues early** — Lint and type errors are caught before commit/CI
-- **Less manual work** — No need to run `yarn prettier`, `yarn lint`, `yarn type-check` manually
+- **Security awareness** — `yarn audit` flags known vulnerabilities in dependencies
+- **Less manual work** — No need to run `yarn prettier`, `yarn lint`, `yarn type-check`, `yarn audit` manually
 
 ### Example Hook Scripts
 
@@ -146,11 +147,12 @@ exit 0
 **Verify hook** (runs when agent finishes):
 ```bash
 #!/bin/bash
-# Run lint and type-check when agent finishes
+# Run lint, type-check, and security audit when agent finishes
 
 cat > /dev/null  # consume stdin
 echo "=== yarn lint ===" && yarn lint
 echo "=== yarn type-check ===" && yarn type-check
+echo "=== yarn audit ===" && yarn audit
 exit 0
 ```
 
