@@ -238,7 +238,6 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
           autoCapitalize='off'
           placeholder={placeholder}
           ref={(instance) => {
-            // @ts-expect-error Property 'current' is read-only.
             searchInputRef.current = instance;
             refs.setReference(instance);
           }}

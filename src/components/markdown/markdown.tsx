@@ -13,9 +13,14 @@ interface MarkdownProps {
   content: string;
 }
 
-interface ExtendedComponents extends Components {
-  spoiler: React.ComponentType<{ children: React.ReactNode }>;
-}
+type ExtendedComponents = Partial<Components> & {
+  spoiler?: React.ComponentType<{ children?: React.ReactNode }>;
+  a?: React.ComponentType<{ children?: React.ReactNode; href?: string }>;
+  img?: React.ComponentType<{ src?: string; alt?: string }>;
+  video?: React.ComponentType<{ src?: string }>;
+  iframe?: React.ComponentType<{ src?: string }>;
+  source?: React.ComponentType<{ src?: string }>;
+};
 
 const MAX_LENGTH_FOR_GFM = 10000; // remarkGfm lags with large content
 
@@ -129,25 +134,25 @@ const Markdown = ({ content }: MarkdownProps) => {
       <ReactMarkdown
         children={preprocessedContent}
         remarkPlugins={remarkPlugins}
-        rehypePlugins={[[rehypeRaw as any], [rehypeSanitize, customSchema]]}
+        rehypePlugins={[[rehypeRaw as any], [rehypeSanitize as any, customSchema]]}
         components={
           {
-            a: ({ children, href }) => renderAnchorLink(children, href || ''),
-            p: ({ children }) => {
+            a: ({ children, href }: { children?: React.ReactNode; href?: string }) => renderAnchorLink(children, href || ''),
+            p: ({ children }: { children?: React.ReactNode }) => {
               const isEmpty =
                 !children ||
                 (Array.isArray(children) && children.every((child) => child === null || child === undefined || (typeof child === 'string' && child.trim() === '')));
 
               return !isEmpty && <p>{children}</p>;
             },
-            img: ({ src, alt }) => {
+            img: ({ src, alt }: { src?: string; alt?: string }) => {
               const displayText = src || alt || 'image';
               return <span>{displayText}</span>;
             },
-            video: ({ src }) => <span>{src}</span>,
-            iframe: ({ src }) => <span>{src}</span>,
-            source: ({ src }) => <span>{src}</span>,
-            spoiler: ({ children }) => <SpoilerText>{children}</SpoilerText>,
+            video: ({ src }: { src?: string }) => <span>{src}</span>,
+            iframe: ({ src }: { src?: string }) => <span>{src}</span>,
+            source: ({ src }: { src?: string }) => <span>{src}</span>,
+            spoiler: ({ children }: { children?: React.ReactNode }) => <SpoilerText>{children}</SpoilerText>,
           } as ExtendedComponents
         }
       />

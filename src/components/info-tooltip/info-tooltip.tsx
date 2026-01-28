@@ -11,7 +11,7 @@ const InfoTooltip = ({ content, showTooltip = true }: InfoTooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
-  const exitTimeoutRef = useRef<NodeJS.Timeout>();
+  const exitTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Handle opening and closing with animations
   const handleOpenChange = (open: boolean) => {

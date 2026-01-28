@@ -116,7 +116,7 @@ const SubplebbitDataEditor = () => {
   const subplebbitSettings = useMemo(() => JSON.stringify(currentSettings, null, 2), [currentSettings]);
 
   // Update text when settings change, but not when user is actively typing
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   useEffect(() => {
     // Clear any pending timeout
     if (timeoutRef.current) {
