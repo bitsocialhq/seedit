@@ -56,8 +56,13 @@ jobs:
           # Try unpacked directory first (more reliable for testing)
           if [ -d "dist/linux-unpacked" ]; then
             echo "Testing unpacked executable..."
-            EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable | head -n 1)
-            if [ -n "$EXE" ]; then
+            # Look for the app executable by name (excludes .so libraries)
+            EXE="dist/linux-unpacked/seedit"
+            if [ ! -x "$EXE" ]; then
+              # Fallback: find executable that's not a .so file
+              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable ! -name "*.so*" | head -n 1)
+            fi
+            if [ -n "$EXE" ] && [ -x "$EXE" ]; then
               echo "Found executable: $EXE"
               "$EXE" --no-sandbox &
               APP_PID=$!
@@ -145,7 +150,7 @@ jobs:
       - name: Build Electron App
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build:preload && yarn electron-rebuild && electron-builder build --publish never -m --dir
+        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
@@ -239,7 +244,7 @@ jobs:
         # On M1 runner, this should produce arm64 build
         # Use --dir to build only the .app bundle without DMG
         # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build:preload && yarn electron-rebuild && electron-builder build --publish never -m --dir
+        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
 
       - name: Smoke Test
         run: |
@@ -344,9 +349,17 @@ jobs:
             echo "Contents of dist/win-unpacked:"
             ls -la dist/win-unpacked/
             
-            # Find any .exe file (case insensitive)
-            EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" | head -n 1)
-            if [ -n "$EXE" ]; then
+            # Look for seedit.exe first (the configured executableName)
+            EXE="dist/win-unpacked/seedit.exe"
+            if [ ! -f "$EXE" ]; then
+              # Fallback: find any .exe that's not electron.exe (generic name)
+              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" ! -iname "electron.exe" | head -n 1)
+            fi
+            if [ ! -f "$EXE" ]; then
+              # Last resort: use electron.exe if that's all we have
+              EXE="dist/win-unpacked/electron.exe"
+            fi
+            if [ -f "$EXE" ]; then
               echo "Testing: $EXE"
               "$EXE" &
               APP_PID=$!
