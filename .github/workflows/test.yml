@@ -53,24 +53,35 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const linux=build.linux||{}; console.log(linux.executableName || build.productName || pkg.name)")
+          echo "Expected app name: $APP_NAME"
+          
           # Try unpacked directory first (more reliable for testing)
           if [ -d "dist/linux-unpacked" ]; then
             echo "Testing unpacked executable..."
             # Look for the app executable by name (excludes .so libraries)
-            EXE="dist/linux-unpacked/seedit"
+            EXE="dist/linux-unpacked/$APP_NAME"
             if [ ! -x "$EXE" ]; then
-              # Fallback: find executable that's not a .so file
-              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable ! -name "*.so*" | head -n 1)
+              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable -iname "$APP_NAME" | head -n 1)
+            fi
+            if [ ! -x "$EXE" ]; then
+              # Fallback: find executable that's not a .so file or sandbox helpers
+              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable ! -name "*.so*" ! -name "chrome-sandbox" ! -name "chrome_crashpad_handler" | head -n 1)
             fi
             if [ -n "$EXE" ] && [ -x "$EXE" ]; then
               echo "Found executable: $EXE"
-              "$EXE" --no-sandbox &
+              if command -v xvfb-run >/dev/null 2>&1; then
+                xvfb-run -a "$EXE" --no-sandbox --disable-gpu &
+              else
+                "$EXE" --no-sandbox --disable-gpu &
+              fi
               APP_PID=$!
               sleep 10
-              if kill -0 $APP_PID 2>/dev/null; then
+              if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE" >/dev/null; then
                 echo "✓ App started successfully"
                 kill $APP_PID 2>/dev/null || true
                 pkill -P $APP_PID 2>/dev/null || true
+                pkill -f "$EXE" 2>/dev/null || true
                 pkill -f ipfs 2>/dev/null || true
                 exit 0
               else
@@ -157,8 +168,17 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          # Find any .app bundle in dist/mac/
-          APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; console.log(mac.executableName || build.productName || pkg.name)")
+          echo "Expected app name: $APP_NAME"
+          
+          # Find .app bundle in dist/mac/
+          APP_PATH="dist/mac/${APP_NAME}.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH=$(find dist/mac -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
+          fi
+          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
+            APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
+          fi
           if [ -z "$APP_PATH" ]; then
             echo "✗ No .app bundle found in dist/mac/"
             ls -R dist/
@@ -186,10 +206,11 @@ jobs:
           APP_PID=$!
           sleep 10
           
-          if kill -0 $APP_PID 2>/dev/null; then
+          if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE_PATH" >/dev/null; then
             echo "✓ App started successfully"
             kill $APP_PID 2>/dev/null || true
             pkill -P $APP_PID 2>/dev/null || true
+            pkill -f "$EXE_PATH" 2>/dev/null || true
             pkill -f ipfs 2>/dev/null || true
             exit 0
           else
@@ -251,9 +272,21 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
-          # Find any .app bundle in dist/mac-arm64/ or dist/mac/
-          APP_PATH=$(find dist/mac-arm64 -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; console.log(mac.executableName || build.productName || pkg.name)")
+          echo "Expected app name: $APP_NAME"
+          
+          # Find .app bundle in dist/mac-arm64/ or dist/mac/
+          APP_PATH="dist/mac-arm64/${APP_NAME}.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH=$(find dist/mac-arm64 -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
+          fi
           if [ -z "$APP_PATH" ]; then
+            APP_PATH="dist/mac/${APP_NAME}.app"
+            if [ ! -d "$APP_PATH" ]; then
+              APP_PATH=$(find dist/mac -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
+            fi
+          fi
+          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
             APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
           fi
           
@@ -284,10 +317,11 @@ jobs:
           APP_PID=$!
           sleep 10
           
-          if kill -0 $APP_PID 2>/dev/null; then
+          if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE_PATH" >/dev/null; then
             echo "✓ App started successfully"
             kill $APP_PID 2>/dev/null || true
             pkill -P $APP_PID 2>/dev/null || true
+            pkill -f "$EXE_PATH" 2>/dev/null || true
             pkill -f ipfs 2>/dev/null || true
             exit 0
           else
@@ -344,16 +378,22 @@ jobs:
           echo "Listing dist directory..."
           ls -la dist/
           
+          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const win=build.win||{}; console.log(win.executableName || build.productName || pkg.name)")
+          echo "Expected app name: $APP_NAME"
+          
           # Try to find the unpacked executable
           if [ -d "dist/win-unpacked" ]; then
             echo "Contents of dist/win-unpacked:"
             ls -la dist/win-unpacked/
             
             # Look for seedit.exe first (the configured executableName)
-            EXE="dist/win-unpacked/seedit.exe"
+            EXE="dist/win-unpacked/${APP_NAME}.exe"
+            if [ ! -f "$EXE" ]; then
+              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "${APP_NAME}.exe" | head -n 1)
+            fi
             if [ ! -f "$EXE" ]; then
               # Fallback: find any .exe that's not electron.exe (generic name)
-              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" ! -iname "electron.exe" | head -n 1)
+              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" ! -iname "electron.exe" ! -iname "chrome_crashpad_handler.exe" | head -n 1)
             fi
             if [ ! -f "$EXE" ]; then
               # Last resort: use electron.exe if that's all we have
@@ -364,9 +404,11 @@ jobs:
               "$EXE" &
               APP_PID=$!
               sleep 10
-              if kill -0 $APP_PID 2>/dev/null; then
+              EXE_BASENAME=$(basename "$EXE")
+              if kill -0 $APP_PID 2>/dev/null || tasklist //FI "IMAGENAME eq $EXE_BASENAME" 2>/dev/null | findstr /I "$EXE_BASENAME" > /dev/null; then
                 echo "✓ App started successfully"
                 taskkill //F //PID $APP_PID 2>/dev/null || true
+                taskkill //F //IM "$EXE_BASENAME" 2>/dev/null || true
                 taskkill //F //IM ipfs.exe 2>/dev/null || true
                 exit 0
               else
