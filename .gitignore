@@ -97,6 +97,9 @@ out
 .nuxt
 dist
 
+# Electron Forge output
+squashfs-root
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js

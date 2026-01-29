@@ -10,6 +10,46 @@ import { fileURLToPath } from 'url';
 const dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 const envPaths = EnvPaths('plebbit', { suffix: false });
 
+// Resolve kubo binary path
+const getKuboPath = async () => {
+  if (isDev) {
+    // In dev, use kubo from node_modules
+    const { path: getKuboBinaryPath } = await import('kubo');
+    return getKuboBinaryPath();
+  } else {
+    // In production, resolve from app.asar.unpacked
+    // kubo package exports a path() function that returns the binary location
+    const appPath = process.resourcesPath;
+    const unpackedPath = path.join(appPath, 'app.asar.unpacked');
+    const kuboModulePath = path.join(unpackedPath, 'node_modules', 'kubo');
+
+    // Try to import kubo from unpacked location
+    try {
+      // Use path.join to ensure correct path separators, then convert to file URL
+      const kuboUrl = path.isAbsolute(kuboModulePath) ? `file://${kuboModulePath.replace(/\\/g, '/')}` : `file://${path.resolve(kuboModulePath).replace(/\\/g, '/')}`;
+      const kuboModule = await import(kuboUrl);
+      const { path: getKuboBinaryPath } = kuboModule;
+      return getKuboBinaryPath();
+    } catch (err) {
+      // Fallback: try to find the binary directly
+      const kuboBinPath = path.join(kuboModulePath, 'kubo', 'ipfs');
+      const kuboBinPathWin = path.join(kuboModulePath, 'kubo', 'ipfs.exe');
+      if (fs.existsSync(kuboBinPath)) {
+        return kuboBinPath;
+      }
+      if (fs.existsSync(kuboBinPathWin)) {
+        return kuboBinPathWin;
+      }
+      // Last resort: try node_modules/.bin path
+      const binPath = process.platform === 'win32' ? path.join(kuboModulePath, 'bin', 'ipfs.exe') : path.join(kuboModulePath, 'bin', 'ipfs');
+      if (fs.existsSync(binPath)) {
+        return binPath;
+      }
+      throw new Error(`Could not find kubo binary in ${kuboModulePath}: ${err.message}`);
+    }
+  }
+};
+
 // use this custom function instead of spawnSync for better logging
 // also spawnSync might have been causing crash on start on windows
 const spawnAsync = (...args) =>
@@ -32,23 +72,8 @@ const spawnAsync = (...args) =>
   });
 
 const startIpfs = async () => {
-  const ipfsFileName = process.platform == 'win32' ? 'ipfs.exe' : 'ipfs';
-  let ipfsPath = path.join(process.resourcesPath, 'bin', ipfsFileName);
-  let ipfsDataPath = path.join(envPaths.data, 'ipfs');
-
-  // test launching the ipfs binary in dev mode
-  // they must be downloaded first using `yarn electron:build`
-  if (isDev) {
-    let binFolderName = 'win';
-    if (process.platform === 'linux') {
-      binFolderName = 'linux';
-    }
-    if (process.platform === 'darwin') {
-      binFolderName = 'mac';
-    }
-    ipfsPath = path.join(dirname, '..', 'bin', binFolderName, ipfsFileName);
-    ipfsDataPath = path.join(dirname, '..', '.plebbit', 'ipfs');
-  }
+  const ipfsPath = await getKuboPath();
+  const ipfsDataPath = isDev ? path.join(dirname, '..', '.plebbit', 'ipfs') : path.join(envPaths.data, 'ipfs');
 
   if (!fs.existsSync(ipfsPath)) {
     throw Error(`ipfs binary '${ipfsPath}' doesn't exist`);

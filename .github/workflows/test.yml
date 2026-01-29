@@ -37,84 +37,23 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/linux/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
       - name: Build Electron App (Linux)
-        run: yarn electron:build:linux
+        run: yarn electron:make:linux
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
+          echo "Listing out directory..."
+          ls -la out/ || echo "out/ directory not found"
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const linux=build.linux||{}; (linux.executableName || build.productName || pkg.name)")
-          echo "Expected app name: $APP_NAME"
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
           
-          echo "Testing AppImage startup..."
-          APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
-          if [ -n "$APPIMAGE" ]; then
-            echo "Found AppImage: $APPIMAGE"
-            chmod +x "$APPIMAGE"
-            # Use --appimage-extract-and-run to avoid FUSE requirement in CI
-            timeout 15s "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
-            APP_PID=$!
-            sleep 5
-            if kill -0 $APP_PID 2>/dev/null; then
-              echo "✓ App started successfully"
-              kill $APP_PID 2>/dev/null || true
-              pkill -P $APP_PID 2>/dev/null || true
-              pkill -f ipfs 2>/dev/null || true
-              exit 0
-            else
-              echo "✗ App failed to start"
-              exit 1
-            fi
-          fi
-          
-          # Fallback to linux-unpacked if AppImage isn't present
-          if [ -d "dist/linux-unpacked" ]; then
-            echo "Testing unpacked executable..."
-            # Look for the app executable by name (excludes .so libraries)
-            EXE="dist/linux-unpacked/$APP_NAME"
-            if [ ! -x "$EXE" ]; then
-              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable -iname "$APP_NAME" | head -n 1)
-            fi
-            if [ ! -x "$EXE" ]; then
-              # Fallback: find executable that's not a .so file or sandbox helpers
-              EXE=$(find dist/linux-unpacked -maxdepth 1 -type f -executable ! -name "*.so*" ! -name "chrome-sandbox" ! -name "chrome_crashpad_handler" | head -n 1)
-            fi
-            if [ -n "$EXE" ] && [ -x "$EXE" ]; then
-              echo "Found executable: $EXE"
-              if command -v xvfb-run >/dev/null 2>&1; then
-                xvfb-run -a "$EXE" --no-sandbox --disable-gpu &
-              else
-                "$EXE" --no-sandbox --disable-gpu &
-              fi
-              APP_PID=$!
-              sleep 10
-              if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE" >/dev/null; then
-                echo "✓ App started successfully"
-                kill $APP_PID 2>/dev/null || true
-                pkill -P $APP_PID 2>/dev/null || true
-                pkill -f "$EXE" 2>/dev/null || true
-                pkill -f ipfs 2>/dev/null || true
-                exit 0
-              else
-                echo "✗ App failed to start or crashed"
-                exit 1
-              fi
-            fi
-          fi
-          
-          echo "✗ No runnable artifact found"
-          ls -R dist/
-          exit 1
+          node scripts/verify-executable.js "$EXE"
 
   test-mac-intel:
     name: Test Mac (Intel)
@@ -151,73 +90,23 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
       - name: Build Electron App
-        # Use --dir to build only the .app bundle without DMG
-        # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
+        run: yarn electron:make:mac
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
+          echo "Listing out directory..."
+          ls -la out/ || echo "out/ directory not found"
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; (mac.executableName || build.productName || pkg.name)")
-          echo "Expected app name: $APP_NAME"
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
           
-          # Find .app bundle in dist/mac/
-          APP_PATH="dist/mac/${APP_NAME}.app"
-          if [ ! -d "$APP_PATH" ]; then
-            APP_PATH=$(find dist/mac -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
-          fi
-          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
-            APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
-          fi
-          if [ -z "$APP_PATH" ]; then
-            echo "✗ No .app bundle found in dist/mac/"
-            ls -R dist/
-            exit 1
-          fi
-          
-          echo "Testing $APP_PATH..."
-          # Find the executable inside the app bundle
-          APP_NAME=$(basename "$APP_PATH" .app)
-          EXE_PATH="$APP_PATH/Contents/MacOS/$APP_NAME"
-          
-          if [ ! -f "$EXE_PATH" ]; then
-            # Try to find any executable in MacOS folder
-            EXE_PATH=$(find "$APP_PATH/Contents/MacOS" -type f -perm +111 | head -n 1)
-          fi
-          
-          if [ -z "$EXE_PATH" ] || [ ! -f "$EXE_PATH" ]; then
-            echo "✗ Could not find executable in $APP_PATH"
-            ls -la "$APP_PATH/Contents/MacOS/"
-            exit 1
-          fi
-          
-          echo "Running: $EXE_PATH"
-          "$EXE_PATH" &
-          APP_PID=$!
-          sleep 10
-          
-          if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE_PATH" >/dev/null; then
-            echo "✓ App started successfully"
-            kill $APP_PID 2>/dev/null || true
-            pkill -P $APP_PID 2>/dev/null || true
-            pkill -f "$EXE_PATH" 2>/dev/null || true
-            pkill -f ipfs 2>/dev/null || true
-            exit 0
-          else
-            echo "✗ App failed to start or crashed"
-            exit 1
-          fi
+          node scripts/verify-executable.js "$EXE"
 
   test-mac-arm:
     name: Test Mac (Apple Silicon)
@@ -254,81 +143,23 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
       - name: Build Electron App
-        # On M1 runner, this should produce arm64 build
-        # Use --dir to build only the .app bundle without DMG
-        # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build:preload && yarn electron-rebuild && yarn electron-builder build --publish never -m --dir
+        run: yarn electron:make:mac
 
       - name: Smoke Test
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
+          echo "Listing out directory..."
+          ls -la out/ || echo "out/ directory not found"
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const mac=build.mac||{}; (mac.executableName || build.productName || pkg.name)")
-          echo "Expected app name: $APP_NAME"
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
           
-          # Find .app bundle in dist/mac-arm64/ or dist/mac/
-          APP_PATH="dist/mac-arm64/${APP_NAME}.app"
-          if [ ! -d "$APP_PATH" ]; then
-            APP_PATH=$(find dist/mac-arm64 -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
-          fi
-          if [ -z "$APP_PATH" ]; then
-            APP_PATH="dist/mac/${APP_NAME}.app"
-            if [ ! -d "$APP_PATH" ]; then
-              APP_PATH=$(find dist/mac -maxdepth 1 -name "${APP_NAME}.app" -type d 2>/dev/null | head -n 1)
-            fi
-          fi
-          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
-            APP_PATH=$(find dist/mac -maxdepth 1 -name "*.app" -type d 2>/dev/null | head -n 1)
-          fi
-          
-          if [ -z "$APP_PATH" ]; then
-            echo "✗ No .app bundle found"
-            ls -R dist/
-            exit 1
-          fi
-          
-          echo "Testing $APP_PATH..."
-          # Find the executable inside the app bundle
-          APP_NAME=$(basename "$APP_PATH" .app)
-          EXE_PATH="$APP_PATH/Contents/MacOS/$APP_NAME"
-          
-          if [ ! -f "$EXE_PATH" ]; then
-            # Try to find any executable in MacOS folder
-            EXE_PATH=$(find "$APP_PATH/Contents/MacOS" -type f -perm +111 | head -n 1)
-          fi
-          
-          if [ -z "$EXE_PATH" ] || [ ! -f "$EXE_PATH" ]; then
-            echo "✗ Could not find executable in $APP_PATH"
-            ls -la "$APP_PATH/Contents/MacOS/"
-            exit 1
-          fi
-          
-          echo "Running: $EXE_PATH"
-          "$EXE_PATH" &
-          APP_PID=$!
-          sleep 10
-          
-          if kill -0 $APP_PID 2>/dev/null || pgrep -f "$EXE_PATH" >/dev/null; then
-            echo "✓ App started successfully"
-            kill $APP_PID 2>/dev/null || true
-            pkill -P $APP_PID 2>/dev/null || true
-            pkill -f "$EXE_PATH" 2>/dev/null || true
-            pkill -f ipfs 2>/dev/null || true
-            exit 0
-          else
-            echo "✗ App failed to start or crashed"
-            exit 1
-          fi
+          node scripts/verify-executable.js "$EXE"
 
   test-windows:
     name: Test Windows
@@ -361,64 +192,22 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
       - name: Build Electron App
-        run: yarn electron:build:windows
+        run: yarn electron:make:windows
         timeout-minutes: 30
 
       - name: Smoke Test
         shell: bash
         run: |
-          echo "Listing dist directory..."
-          ls -la dist/
+          echo "Listing out directory..."
+          ls -la out/ || echo "out/ directory not found"
           
-          APP_NAME=$(node -p "const pkg=require('./package.json'); const build=pkg.build||{}; const win=build.win||{}; (win.executableName || build.productName || pkg.name)")
-          echo "Expected app name: $APP_NAME"
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
           
-          # Try to find the unpacked executable
-          if [ -d "dist/win-unpacked" ]; then
-            echo "Contents of dist/win-unpacked:"
-            ls -la dist/win-unpacked/
-            
-            # Look for seedit.exe first (the configured executableName)
-            EXE="dist/win-unpacked/${APP_NAME}.exe"
-            if [ ! -f "$EXE" ]; then
-              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "${APP_NAME}.exe" | head -n 1)
-            fi
-            if [ ! -f "$EXE" ]; then
-              # Fallback: find any .exe that's not electron.exe (generic name)
-              EXE=$(find dist/win-unpacked -maxdepth 1 -iname "*.exe" ! -iname "electron.exe" ! -iname "chrome_crashpad_handler.exe" | head -n 1)
-            fi
-            if [ ! -f "$EXE" ]; then
-              # Last resort: use electron.exe if that's all we have
-              EXE="dist/win-unpacked/electron.exe"
-            fi
-            if [ -f "$EXE" ]; then
-              echo "Testing: $EXE"
-              timeout 15s "$EXE" &
-              APP_PID=$!
-              sleep 8
-              if kill -0 $APP_PID 2>/dev/null; then
-                echo "✓ App started successfully"
-                taskkill //F //PID $APP_PID 2>/dev/null || true
-                taskkill //F //IM ipfs.exe 2>/dev/null || true
-                exit 0
-              else
-                echo "✗ App failed to start or crashed"
-                exit 1
-              fi
-            else
-              echo "✗ No .exe found in dist/win-unpacked/"
-            fi
-          fi
-          
-          echo "✗ No runnable artifact found"
-          ls -R dist/
-          exit 1
+          node scripts/verify-executable.js "$EXE"
