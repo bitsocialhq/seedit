@@ -75,30 +75,37 @@ appProcess.stderr.on('data', (data) => {
 async function pollPort() {
   const maxAttempts = 30; // 30 attempts over 30 seconds
   let attempts = 0;
+  let pollTimeoutId;
 
-  const interval = setInterval(async () => {
+  const tick = async () => {
     attempts++;
     const inUse = await checkPort();
 
     if (inUse) {
       portAvailable = true;
       console.log(`✓ RPC port ${rpcPort} is in use (app is running)`);
-      clearInterval(interval);
+      clearTimeout(pollTimeoutId);
       clearTimeout(timeoutId);
       cleanup();
       process.exit(0);
+      return;
     }
 
     if (attempts >= maxAttempts || appExited) {
-      clearInterval(interval);
+      clearTimeout(pollTimeoutId);
       clearTimeout(timeoutId);
       if (!portAvailable) {
         console.error(`✗ RPC port ${rpcPort} did not become available within ${timeout / 1000} seconds`);
         cleanup();
         process.exit(1);
       }
+      return;
     }
-  }, 1000);
+
+    pollTimeoutId = setTimeout(tick, 1000);
+  };
+
+  pollTimeoutId = setTimeout(tick, 1000);
 }
 
 // Set overall timeout
