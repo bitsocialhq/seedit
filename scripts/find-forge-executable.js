@@ -29,7 +29,9 @@ const candidateRoots = [
   join(repoRoot, 'electron', 'out'),
 ].filter(Boolean);
 
-const skipDirs = new Set(['node_modules', '.git']);
+// Skip directories that contain helper binaries/app code, not the main executable
+// 'resources' contains the app bundle with IPFS binaries in bin/ - don't recurse there
+const skipDirs = new Set(['node_modules', '.git', 'bin', 'app', 'resources']);
 
 function findExecutable(dir, platform) {
   const entries = readdirSync(dir, { withFileTypes: true });
