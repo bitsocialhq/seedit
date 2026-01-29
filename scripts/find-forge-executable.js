@@ -4,20 +4,31 @@
  * This script locates the executable in the out/ directory structure.
  */
 
-import { readdirSync, statSync, existsSync } from 'fs';
-import { join, resolve } from 'path';
+import { readdirSync, statSync, existsSync, readFileSync } from 'fs';
+import { isAbsolute, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
 
 const platform = process.platform;
-const outDir = join(__dirname, '..', 'out');
+const repoRoot = resolve(__dirname, '..');
+const packageJson = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf-8'));
+const appName = (packageJson.build?.productName || packageJson.name || 'seedit').toLowerCase();
 
-if (!existsSync(outDir)) {
-  console.error('Error: out/ directory does not exist. Run electron-forge package or make first.');
-  process.exit(1);
-}
+const resolveOutDir = (dir) => (isAbsolute(dir) ? dir : join(repoRoot, dir));
+
+const envOutDir = process.env.ELECTRON_FORGE_OUT_DIR;
+const candidateRoots = [
+  envOutDir ? resolveOutDir(envOutDir) : null,
+  join(repoRoot, 'out'),
+  join(repoRoot, 'out', 'make'),
+  join(repoRoot, '..', 'out'),
+  join(repoRoot, '..', '..', 'out'),
+  join(repoRoot, 'electron', 'out'),
+].filter(Boolean);
+
+const skipDirs = new Set(['node_modules', '.git']);
 
 function findExecutable(dir, platform) {
   const entries = readdirSync(dir, { withFileTypes: true });
@@ -26,34 +37,37 @@ function findExecutable(dir, platform) {
     const fullPath = join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      // Check common Forge output directories
-      if (entry.name.includes(platform) || entry.name.includes('unpacked') || entry.name.endsWith('.app')) {
-        const result = findExecutable(fullPath, platform);
-        if (result) return result;
+      if (skipDirs.has(entry.name)) continue;
+
+      if (platform === 'darwin' && entry.name.endsWith('.app')) {
+        const appPath = fullPath;
+        const exePath = join(appPath, 'Contents', 'MacOS', entry.name.replace('.app', ''));
+        if (existsSync(exePath)) {
+          return exePath;
+        }
       }
+
+      const result = findExecutable(fullPath, platform);
+      if (result) return result;
     } else if (entry.isFile()) {
       // Check if it's an executable
       if (platform === 'win32') {
-        if (entry.name.endsWith('.exe') && !entry.name.includes('electron') && !entry.name.includes('crashpad')) {
+        const lowerName = entry.name.toLowerCase();
+        if (lowerName.endsWith('.exe') && !lowerName.includes('electron') && !lowerName.includes('crashpad')) {
+          if (lowerName.includes(appName)) {
+            return fullPath;
+          }
           return fullPath;
         }
       } else if (platform === 'darwin') {
-        // macOS .app bundles contain executables in Contents/MacOS/
-        if (entry.name.endsWith('.app')) {
-          const appPath = fullPath;
-          const exePath = join(appPath, 'Contents', 'MacOS', entry.name.replace('.app', ''));
-          if (existsSync(exePath)) {
-            return exePath;
-          }
-          // Try to find any executable in MacOS folder
-          const macosDir = join(appPath, 'Contents', 'MacOS');
-          if (existsSync(macosDir)) {
-            const macosFiles = readdirSync(macosDir);
-            const exe = macosFiles.find((f) => {
-              const stat = statSync(join(macosDir, f));
-              return stat.isFile() && stat.mode & parseInt('111', 8);
-            });
-            if (exe) return join(macosDir, exe);
+        const stat = statSync(fullPath);
+        if (stat.isFile() && stat.mode & parseInt('111', 8)) {
+          const lowerName = entry.name.toLowerCase();
+          if (!lowerName.includes('helper') && !lowerName.includes('crashpad')) {
+            if (lowerName.includes(appName)) {
+              return fullPath;
+            }
+            return fullPath;
           }
         }
       } else if (platform === 'linux') {
@@ -65,7 +79,11 @@ function findExecutable(dir, platform) {
         const stat = statSync(fullPath);
         if (stat.isFile() && stat.mode & parseInt('111', 8) && !entry.name.includes('.so')) {
           // Skip helper binaries
-          if (!entry.name.includes('chrome') && !entry.name.includes('crashpad')) {
+          const lowerName = entry.name.toLowerCase();
+          if (!lowerName.includes('chrome') && !lowerName.includes('crashpad')) {
+            if (lowerName.includes(appName)) {
+              return fullPath;
+            }
             return fullPath;
           }
         }
@@ -76,12 +94,27 @@ function findExecutable(dir, platform) {
   return null;
 }
 
-const executable = findExecutable(outDir, platform);
+let executable = null;
+const checkedDirs = [];
+
+for (const root of candidateRoots) {
+  if (!existsSync(root)) {
+    checkedDirs.push(`${root} (missing)`);
+    continue;
+  }
+
+  const result = findExecutable(root, platform);
+  checkedDirs.push(root);
+  if (result) {
+    executable = result;
+    break;
+  }
+}
 
 if (!executable) {
-  console.error(`Error: Could not find executable in ${outDir}`);
+  console.error('Error: Could not find packaged executable.');
   console.error('Platform:', platform);
-  console.error('Contents:', readdirSync(outDir));
+  console.error('Checked directories:', checkedDirs.join(', '));
   process.exit(1);
 }
 
