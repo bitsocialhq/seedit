@@ -194,7 +194,7 @@ const NotificationsSettings = () => {
               {window.electronApi?.isElectron && platform === 'darwin'
                 ? 'Permission denied. Please go to System Settings > Notifications > Seedit and enable notifications.'
                 : window.electronApi?.isElectron
-                  ? `Permission denied. Please check your system's ${platform && `(${platform}) `} notification settings for this application.`
+                  ? `Permission denied. Please check your system's ${platform ? `(${platform}) ` : ''} notification settings for this application.`
                   : `Permission denied. Please allow notifications for this site in your browser settings.`}
             </span>
           </span>
