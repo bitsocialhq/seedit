@@ -20,7 +20,6 @@ const config = {
       /^\/scripts$/,
       /^\/\.git/,
       /^\/\.plebbit$/,
-      /^\/bin$/,
       /^\/out$/,
       /^\/dist$/,
       /^\/squashfs-root$/,
@@ -37,6 +36,8 @@ const config = {
       /\.env$/,
       /\.DS_Store$/,
       /yarn\.lock$/,
+      // Exclude build-time scripts from the package
+      /electron\/before-pack\.js/,
       // kubo npm package creates symlinks that break build - exclude its bin dir
       // (we download our own kubo binary in generateAssets hook)
       /node_modules\/kubo\/bin/,

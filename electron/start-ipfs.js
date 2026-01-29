@@ -10,6 +10,16 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 const envPaths = EnvPaths('plebbit', { suffix: false });
 
+// Get platform-specific binary name
+const getIpfsBinaryName = () => (process.platform === 'win32' ? 'ipfs.exe' : 'ipfs');
+
+// Get platform subdirectory name for bin/ folder
+const getPlatformDir = () => {
+  if (process.platform === 'win32') return 'win';
+  if (process.platform === 'darwin') return 'mac';
+  return 'linux';
+};
+
 // Resolve kubo binary path
 const getKuboPath = async () => {
   if (isDev) {
@@ -17,35 +27,43 @@ const getKuboPath = async () => {
     const { path: getKuboBinaryPath } = await import('kubo');
     return getKuboBinaryPath();
   } else {
-    // In production, resolve from app.asar.unpacked
-    // kubo package exports a path() function that returns the binary location
+    // In production, the binary is downloaded to bin/<platform>/ipfs by generateAssets hook
+    // With asar: false, files are at resources/app/ instead of resources/app.asar.unpacked
     const appPath = process.resourcesPath;
+    const binaryName = getIpfsBinaryName();
+    const platformDir = getPlatformDir();
+
+    // Try the bin/ directory first (where generateAssets downloads binaries)
+    const binDirPath = path.join(appPath, 'app', 'bin', platformDir, binaryName);
+    if (fs.existsSync(binDirPath)) {
+      return binDirPath;
+    }
+
+    // Fallback: try app.asar.unpacked for ASAR builds (if we ever re-enable ASAR)
     const unpackedPath = path.join(appPath, 'app.asar.unpacked');
     const kuboModulePath = path.join(unpackedPath, 'node_modules', 'kubo');
 
     // Try to import kubo from unpacked location
     try {
-      // Convert to file URL to handle Windows drive letters correctly
       const kuboUrl = pathToFileURL(path.resolve(kuboModulePath)).href;
       const kuboModule = await import(kuboUrl);
       const { path: getKuboBinaryPath } = kuboModule;
       return getKuboBinaryPath();
     } catch (err) {
-      // Fallback: try to find the binary directly
-      const kuboBinPath = path.join(kuboModulePath, 'kubo', 'ipfs');
-      const kuboBinPathWin = path.join(kuboModulePath, 'kubo', 'ipfs.exe');
+      // Fallback: try to find the binary directly in kubo module
+      const kuboBinPath = path.join(kuboModulePath, 'kubo', binaryName);
       if (fs.existsSync(kuboBinPath)) {
         return kuboBinPath;
       }
-      if (fs.existsSync(kuboBinPathWin)) {
-        return kuboBinPathWin;
+
+      // Last resort: check in resources/app/node_modules/kubo for non-ASAR builds
+      const appModulePath = path.join(appPath, 'app', 'node_modules', 'kubo');
+      const appKuboBinPath = path.join(appModulePath, 'kubo', binaryName);
+      if (fs.existsSync(appKuboBinPath)) {
+        return appKuboBinPath;
       }
-      // Last resort: try node_modules/.bin path
-      const binPath = process.platform === 'win32' ? path.join(kuboModulePath, 'bin', 'ipfs.exe') : path.join(kuboModulePath, 'bin', 'ipfs');
-      if (fs.existsSync(binPath)) {
-        return binPath;
-      }
-      throw new Error(`Could not find kubo binary in ${kuboModulePath}: ${err.message}`);
+
+      throw new Error(`Could not find kubo binary. Checked: ${binDirPath}, ${kuboBinPath}, ${appKuboBinPath}`);
     }
   }
 };
