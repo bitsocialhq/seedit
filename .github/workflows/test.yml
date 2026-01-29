@@ -63,25 +63,11 @@ jobs:
 
       - name: Package Electron App
         timeout-minutes: 30
-        env:
-          DEBUG: "electron-forge:*,electron-packager"
         run: |
-          echo "=== Running electron-forge package with DEBUG ==="
-          yarn electron-forge package 2>&1 | tee forge-output.log || {
-            echo "=== electron-forge FAILED ==="
-            echo "=== Last 100 lines of output ==="
-            tail -100 forge-output.log
-            echo "=== Checking temp directories ==="
-            find /tmp -maxdepth 3 -name "*electron*" -type d 2>/dev/null || true
-            exit 1
-          }
-          echo "=== electron-forge completed ==="
-          ls -la out/ || {
-            echo "=== out/ not found ==="
-            echo "=== Full forge output ==="
-            cat forge-output.log
-            exit 1
-          }
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          echo "=== Checking out/ directory ==="
+          ls -la out/
 
       - name: Smoke Test
         run: |
@@ -139,15 +125,10 @@ jobs:
 
       - name: Package Electron App
         timeout-minutes: 30
-        env:
-          DEBUG: "electron-forge:*,electron-packager"
         run: |
-          yarn electron-forge package 2>&1 | tee forge-output.log || {
-            echo "=== FAILED - Last 100 lines ==="
-            tail -100 forge-output.log
-            exit 1
-          }
-          ls -la out/ || { cat forge-output.log; exit 1; }
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
 
       - name: Smoke Test
         run: |
@@ -205,15 +186,10 @@ jobs:
 
       - name: Package Electron App
         timeout-minutes: 30
-        env:
-          DEBUG: "electron-forge:*,electron-packager"
         run: |
-          yarn electron-forge package 2>&1 | tee forge-output.log || {
-            echo "=== FAILED - Last 100 lines ==="
-            tail -100 forge-output.log
-            exit 1
-          }
-          ls -la out/ || { cat forge-output.log; exit 1; }
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
 
       - name: Smoke Test
         run: |
@@ -273,15 +249,10 @@ jobs:
       - name: Package Electron App
         shell: bash
         timeout-minutes: 30
-        env:
-          DEBUG: "electron-forge:*,electron-packager"
         run: |
-          yarn electron-forge package 2>&1 | tee forge-output.log || {
-            echo "=== FAILED - Last 100 lines ==="
-            tail -100 forge-output.log
-            exit 1
-          }
-          ls -la out/ || { cat forge-output.log; exit 1; }
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
 
       - name: Smoke Test
         shell: bash

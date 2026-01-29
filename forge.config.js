@@ -1,66 +1,63 @@
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import fs from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Read package.json to get app metadata
-const packageJson = JSON.parse(fs.readFileSync(join(__dirname, 'package.json'), 'utf-8'));
+import { downloadIpfsClients } from './electron/before-pack.js';
 
 const config = {
   packagerConfig: {
-    name: packageJson.build?.productName || packageJson.name,
-    executableName: packageJson.build?.mac?.executableName || packageJson.build?.win?.executableName || packageJson.build?.linux?.executableName || packageJson.name,
+    name: 'seedit',
+    executableName: 'seedit',
     appBundleId: 'seedit.desktop',
 
-    // Unpack native modules and kubo binary from ASAR so they can be executed
-    asar: {
-      unpack: '{*.node,*.dll,*.dylib,*.so,**/kubo/bin/**,**/kubo/kubo/**}',
-    },
+    // NOTE: asar is disabled because of a bug where electron-packager silently fails
+    // during asar creation with seedit's large node_modules. The app works fine without it.
+    // TODO: investigate and fix the asar creation issue
+    asar: false,
 
     // Exclude unnecessary files from the package
     ignore: [
-      /^\/src/,
-      /^\/public/,
-      /^\/android/,
-      /^\/\.github/,
-      /^\/scripts/,
-      /^\/electron\/.*\.(ts|mjs)$/,
-      /^\/electron\/vite.*\.js$/,
-      /^\/electron\/download-ipfs\.js$/,
-      /^\/electron\/before-pack\.js$/,
-      /^\/electron\/after-all-artifact-build\.cjs$/,
-      /^\/electron\/build-docker\.sh$/,
-      /^\/electron\/src\//,
+      /^\/src$/,
+      /^\/public$/,
+      /^\/android$/,
+      /^\/\.github$/,
+      /^\/scripts$/,
       /^\/\.git/,
-      /^\/\.gitignore/,
-      /^\/\.oxfmtrc\.json/,
-      /^\/oxlintrc\.json/,
-      /^\/tsconfig\.json/,
-      /^\/vite\.config\.js/,
-      /^\/forge\.config\.js/,
-      /^\/capacitor\.config\.ts/,
-      /^\/README\.md/,
-      /^\/CHANGELOG\.md/,
-      /^\/LICENSE/,
-      /^\/AGENTS\.md/,
-      /^\/\.env/,
-      /^\/\.plebbit/,
-      /^\/bin/,
-      /^\/node_modules\/\.cache/,
-      /^\/node_modules\/\.bin/,
-      /^\/\.yarn/,
-      /^\/yarn\.lock/,
-      /^\/\.DS_Store/,
-      /^\/out/,
-      /^\/squashfs-root/,
-      /^\/dist/,
+      /^\/\.plebbit$/,
+      /^\/bin$/,
+      /^\/out$/,
+      /^\/dist$/,
+      /^\/squashfs-root$/,
+      /\.map$/,
+      /\.md$/,
+      /\.ts$/,
+      /\.mjs$/,
+      /tsconfig\.json$/,
+      /\.oxfmtrc/,
+      /oxlintrc/,
+      /vite\.config/,
+      /forge\.config/,
+      /capacitor\.config/,
+      /\.env$/,
+      /\.DS_Store$/,
+      /yarn\.lock$/,
+      // kubo npm package creates symlinks that break build - exclude its bin dir
+      // (we download our own kubo binary in generateAssets hook)
+      /node_modules\/kubo\/bin/,
+      // Exclude .bin directories anywhere in node_modules (contain escaping symlinks)
+      /node_modules\/.*\/\.bin/,
+      /node_modules\/\.bin/,
+      /node_modules\/\.cache/,
     ],
   },
 
   rebuildConfig: {
     force: true,
+  },
+
+  hooks: {
+    // Download IPFS/Kubo binaries before packaging
+    generateAssets: async () => {
+      console.log('Downloading IPFS clients...');
+      await downloadIpfsClients();
+      console.log('IPFS clients downloaded.');
+    },
   },
 
   makers: [
@@ -69,7 +66,7 @@ const config = {
       name: '@electron-forge/maker-dmg',
       platforms: ['darwin'],
       config: {
-        name: packageJson.build?.productName || packageJson.name,
+        name: 'seedit',
         format: 'UDZO',
       },
     },
@@ -82,7 +79,7 @@ const config = {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
       config: {
-        name: packageJson.build?.productName || packageJson.name,
+        name: 'seedit',
       },
     },
     // Linux

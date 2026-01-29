@@ -132,7 +132,9 @@
     "vite-plugin-node-polyfills": "0.24.0",
     "vite-plugin-pwa": "0.21.1",
     "wait-on": "7.0.1",
-    "@reforged/maker-appimage": "5.1.1"
+    "@reforged/maker-appimage": "5.1.1",
+    "glob": "10.5.0",
+    "progress": "2.0.3"
   },
   "resolutions": {
     "js-yaml": "4.1.1",
@@ -153,46 +155,6 @@
     "@peculiar/asn1-schema": "2.5.0"
   },
   "main": "electron/main.js",
-  "build": {
-    "appId": "seedit.desktop",
-    "productName": "seedit",
-    "beforePack": "electron/before-pack.js",
-    "afterAllArtifactBuild": "electron/after-all-artifact-build.cjs",
-    "extraResources": [
-      {
-        "from": "bin/${os}",
-        "to": "bin",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "files": [
-      "dist/**/*",
-      "electron/**/*",
-      "package.json",
-      "node_modules/**/*"
-    ],
-    "extends": null,
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.social-networking",
-      "type": "distribution",
-      "executableName": "seedit"
-    },
-    "win": {
-      "target": [
-        "portable",
-        "nsis"
-      ],
-      "executableName": "seedit"
-    },
-    "linux": {
-      "target": "AppImage",
-      "category": "Network",
-      "executableName": "seedit"
-    }
-  },
   "lint-staged": {
     "{src,electron}/**/*.{js,ts,tsx,mjs}": [
       "oxfmt"
