@@ -13,14 +13,9 @@ const config = {
     name: packageJson.build?.productName || packageJson.name,
     executableName: packageJson.build?.mac?.executableName || packageJson.build?.win?.executableName || packageJson.build?.linux?.executableName || packageJson.name,
     appBundleId: 'seedit.desktop',
+    // Unpack native modules and kubo binary from ASAR so they can be executed
     asar: {
-      unpack: [
-        // Unpack kubo binary (only the bin folder with the actual executable)
-        '**/kubo/bin/**',
-        '**/kubo/kubo/**',
-        // Unpack native .node modules
-        '**/*.node',
-      ],
+      unpack: '{*.node,*.dll,*.dylib,*.so,**/kubo/bin/**,**/kubo/kubo/**}',
     },
     ignore: [
       // Source files (not needed in production)
@@ -61,9 +56,15 @@ const config = {
       /^\/\.DS_Store/,
       /^\/out/,
       /^\/squashfs-root/,
+      /^\/dist/, // Old build output (now using build/)
     ],
     extraResource: [],
   },
+
+  rebuildConfig: {
+    force: true,
+  },
+
   makers: [
     {
       name: '@electron-forge/maker-dmg',
@@ -98,12 +99,7 @@ const config = {
       },
     },
   ],
-  plugins: [
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
-    },
-  ],
+  plugins: [],
 };
 
 export default config;
