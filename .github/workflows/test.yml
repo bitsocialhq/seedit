@@ -37,19 +37,51 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build Electron App
-        run: yarn electron:package
+      - name: Build React App
+        run: yarn build
         env:
           CI: ''
 
+      - name: Build Preload Script
+        run: yarn build:preload
+
+      - name: Verify build outputs
+        run: |
+          echo "=== Checking build/ directory ==="
+          ls -la build/ || exit 1
+          echo "=== Checking build/electron/preload.cjs ==="
+          ls -la build/electron/preload.cjs || exit 1
+          echo "=== Checking build/index.html ==="
+          ls -la build/index.html || exit 1
+
+      - name: Verify forge config
+        run: |
+          echo "=== forge.config.js exists ==="
+          ls -la forge.config.js
+          echo "=== Validating forge config can be loaded ==="
+          node -e "import('./forge.config.js').then(c => console.log('Config loaded, makers:', c.default.makers?.length || 0)).catch(e => { console.error(e); process.exit(1); })"
+
+      - name: Package Electron App
+        run: |
+          echo "=== Node version ==="
+          node --version
+          echo "=== Electron Forge version ==="
+          npx electron-forge --version || true
+          echo "=== Running electron-forge package ==="
+          npx electron-forge package 2>&1
+          FORGE_EXIT=$?
+          echo "=== Forge exit code: $FORGE_EXIT ==="
+          echo "=== Workspace contents ==="
+          ls -la
+          echo "=== Checking out/ ==="
+          ls -la out/ 2>/dev/null || echo "out/ does not exist"
+          exit $FORGE_EXIT
+
       - name: Smoke Test
         run: |
-          echo "Listing out directory..."
-          ls -la out/ || echo "out/ directory not found"
-
+          ls -la out/
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-
           node scripts/verify-executable.js "$EXE"
 
   test-mac-intel:
@@ -67,9 +99,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install setuptools for native modules
-        run: |
-          # Use pip with --break-system-packages for CI environment
-          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+        run: pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
 
       - name: Cache electron binaries
         uses: actions/cache@v4
@@ -87,19 +117,32 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build Electron App
-        run: yarn electron:package
+      - name: Build React App
+        run: yarn build
         env:
           CI: ''
 
+      - name: Build Preload Script
+        run: yarn build:preload
+
+      - name: Verify build outputs
+        run: |
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        run: |
+          npx electron-forge package 2>&1
+          FORGE_EXIT=$?
+          ls -la out/ 2>/dev/null || echo "out/ does not exist"
+          exit $FORGE_EXIT
+
       - name: Smoke Test
         run: |
-          echo "Listing out directory..."
-          ls -la out/ || echo "out/ directory not found"
-
+          ls -la out/
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-
           node scripts/verify-executable.js "$EXE"
 
   test-mac-arm:
@@ -117,9 +160,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install setuptools for native modules
-        run: |
-          # Use pip with --break-system-packages for CI environment
-          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+        run: pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
 
       - name: Cache electron binaries
         uses: actions/cache@v4
@@ -137,19 +178,32 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build Electron App
-        run: yarn electron:package
+      - name: Build React App
+        run: yarn build
         env:
           CI: ''
 
+      - name: Build Preload Script
+        run: yarn build:preload
+
+      - name: Verify build outputs
+        run: |
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        run: |
+          npx electron-forge package 2>&1
+          FORGE_EXIT=$?
+          ls -la out/ 2>/dev/null || echo "out/ does not exist"
+          exit $FORGE_EXIT
+
       - name: Smoke Test
         run: |
-          echo "Listing out directory..."
-          ls -la out/ || echo "out/ directory not found"
-
+          ls -la out/
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-
           node scripts/verify-executable.js "$EXE"
 
   test-windows:
@@ -183,20 +237,36 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build Electron App
+      - name: Build React App
         shell: bash
-        timeout-minutes: 30
-        run: yarn electron:package
+        run: yarn build
         env:
           CI: ''
+
+      - name: Build Preload Script
+        shell: bash
+        run: yarn build:preload
+
+      - name: Verify build outputs
+        shell: bash
+        run: |
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        shell: bash
+        timeout-minutes: 30
+        run: |
+          npx electron-forge package 2>&1
+          FORGE_EXIT=$?
+          ls -la out/ 2>/dev/null || echo "out/ does not exist"
+          exit $FORGE_EXIT
 
       - name: Smoke Test
         shell: bash
         run: |
-          echo "Listing out directory..."
-          ls -la out/ || echo "out/ directory not found"
-
+          ls -la out/
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-
           node scripts/verify-executable.js "$EXE"
