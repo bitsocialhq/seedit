@@ -43,7 +43,7 @@ jobs:
           CI: ''
 
       - name: Build Electron App (Linux)
-        run: yarn electron:make:linux
+        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
@@ -96,7 +96,7 @@ jobs:
           CI: ''
 
       - name: Build Electron App
-        run: yarn electron:make:mac
+        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
@@ -149,7 +149,7 @@ jobs:
           CI: ''
 
       - name: Build Electron App
-        run: yarn electron:make:mac
+        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
@@ -198,7 +198,7 @@ jobs:
           CI: ''
 
       - name: Build Electron App
-        run: yarn electron:make:windows
+        run: yarn electron:package:ci
         timeout-minutes: 30
 
       - name: Smoke Test

@@ -67,6 +67,7 @@
     "electron:start": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && yarn electron\"",
     "electron:start:no-delete-data": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && yarn electron:no-delete-data\"",
     "electron:package": "yarn build && yarn build:preload && cross-env DEBUG=electron-packager electron-forge package",
+    "electron:package:ci": "yarn build:preload && cross-env DEBUG=electron-packager electron-forge package",
     "electron:make": "yarn build && yarn build:preload && cross-env DEBUG=electron-packager electron-forge make",
     "electron:make:linux": "yarn build && yarn build:preload && cross-env DEBUG=electron-packager electron-forge make --platform=linux",
     "electron:make:mac": "yarn build && yarn build:preload && cross-env DEBUG=electron-packager electron-forge make --platform=darwin",
