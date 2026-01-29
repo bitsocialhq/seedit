@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Author, useAccount, useComment, useSubplebbit } from '@plebbit/plebbit-react-hooks';
@@ -59,20 +59,34 @@ const ModOrReportButton = ({ cid, isAuthor, isAccountMod, isCommentAuthorMod }: 
 const ShareButton = ({ cid, subplebbitAddress }: { cid: string; subplebbitAddress: string }) => {
   const { t } = useTranslation();
   const [hasCopied, setHasCopied] = useState(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (hasCopied) {
-      setTimeout(() => setHasCopied(false), 2000);
+  const clearResetTimeout = () => {
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current);
+      resetTimeoutRef.current = null;
     }
-  }, [hasCopied]);
+  };
+
+  const scheduleReset = () => {
+    clearResetTimeout();
+    resetTimeoutRef.current = setTimeout(() => {
+      setHasCopied(false);
+      resetTimeoutRef.current = null;
+    }, 2000);
+  };
+
+  useEffect(() => () => clearResetTimeout(), []);
 
   const handleCopy = async () => {
     try {
       setHasCopied(true);
+      scheduleReset();
       await copyShareLinkToClipboard(subplebbitAddress, cid);
     } catch (error) {
       console.error('Failed to copy share link:', error);
       setHasCopied(false);
+      clearResetTimeout();
     }
   };
 

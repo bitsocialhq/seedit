@@ -27,7 +27,7 @@ const Author = () => {
 
   const { authorComments, error, lastCommentCid, hasMore, loadMore } = useAuthorComments({ commentCid, authorAddress });
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);

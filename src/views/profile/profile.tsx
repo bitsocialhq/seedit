@@ -152,7 +152,7 @@ const Overview = () => {
     }
   }, [error, sortedComments]);
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);
@@ -193,7 +193,7 @@ const Comments = () => {
     }
   }, [error, sortedComments]);
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);
@@ -234,7 +234,7 @@ const Submitted = () => {
     }
   }, [error, sortedComments]);
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);
@@ -279,7 +279,7 @@ const VotedComments = ({ voteType }: { voteType: 1 | -1 }) => {
     }
   }, [error, paginatedCids, hasMore]);
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);

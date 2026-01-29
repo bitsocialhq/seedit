@@ -13,17 +13,21 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          ['babel-plugin-react-compiler', { 
-            verbose: true 
-          }]
-        ]
-      }
+          [
+            'babel-plugin-react-compiler',
+            {
+              verbose: true,
+            },
+          ],
+        ],
+      },
     }),
     // Only include React Scan in development mode - never in production builds
-    (isDevelopment || (!isProduction && process.env.NODE_ENV !== 'production')) && reactScan({
-      showToolbar: true,
-      playSound: true,
-    }),
+    !isProduction &&
+      reactScan({
+        showToolbar: true,
+        playSound: true,
+      }),
     nodePolyfills({
       globals: {
         Buffer: true,
@@ -57,20 +61,20 @@ export default defineConfig({
           {
             src: '/android-chrome-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: '/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
+          },
+          {
+            src: '/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
       },
       workbox: {
         clientsClaim: true,
@@ -85,8 +89,8 @@ export default defineConfig({
             urlPattern: ({ url }) => url.pathname === '/' || url.pathname === '/index.html',
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'html-cache'
-            }
+              cacheName: 'html-cache',
+            },
           },
           // PNG caching
           {
@@ -95,9 +99,9 @@ export default defineConfig({
             options: {
               cacheName: 'images',
               expiration: {
-                maxEntries: 50
-              }
-            }
+                maxEntries: 50,
+              },
+            },
           },
           // Add additional asset caching
           {
@@ -107,9 +111,9 @@ export default defineConfig({
               cacheName: 'assets-cache',
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
           },
           // Google Fonts caching
           {
@@ -119,12 +123,12 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 365 days
               },
               cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
+                statuses: [0, 200],
+              },
+            },
           },
           {
             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
@@ -133,27 +137,27 @@ export default defineConfig({
               cacheName: 'google-fonts-webfonts',
               expiration: {
                 maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 365 days
               },
               cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
-        ]
-      }
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
+      },
     }),
   ],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
       'node-fetch': 'isomorphic-fetch',
-      'assert': 'assert',
-      'stream': 'stream-browserify',
-      'crypto': 'crypto-browserify',
-      'buffer': 'buffer',
+      assert: 'assert',
+      stream: 'stream-browserify',
+      crypto: 'crypto-browserify',
+      buffer: 'buffer',
       'util/': 'util',
-      'util': 'util',
+      util: 'util',
     },
   },
   server: {
@@ -163,11 +167,12 @@ export default defineConfig({
       usePolling: true,
     },
     hmr: {
-      overlay: false
-    }
+      overlay: false,
+    },
   },
   build: {
-    outDir: 'dist',
+    // Use 'build' to match what electron/main.js expects (../build/index.html)
+    outDir: 'build',
     emptyOutDir: true,
     sourcemap: process.env.GENERATE_SOURCEMAP === 'true',
     target: process.env.ELECTRON ? 'electron-renderer' : 'esnext',
@@ -177,27 +182,17 @@ export default defineConfig({
           if (/[\\/]node_modules[\\/](react|react-dom|react-router-dom|react-i18next|i18next|i18next-browser-languagedetector|i18next-http-backend)[\\/]/.test(id)) {
             return 'vendor';
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
   base: process.env.PUBLIC_URL || '/',
   optimizeDeps: {
-    include: [
-      'ethers',
-      'assert',
-      'buffer',
-      'process',
-      'util',
-      'stream-browserify',
-      'isomorphic-fetch',
-      'workbox-core',
-      'workbox-precaching'
-    ],
+    include: ['ethers', 'assert', 'buffer', 'process', 'util', 'stream-browserify', 'isomorphic-fetch', 'workbox-core', 'workbox-precaching'],
   },
   define: {
     'process.env.VITE_COMMIT_REF': JSON.stringify(process.env.COMMIT_REF),
-    'global': 'globalThis',
-    '__dirname': '""',
-  }
+    global: 'globalThis',
+    __dirname: '""',
+  },
 });

@@ -60,9 +60,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macOS-13 # Intel x64
+          - runner: macos-15-intel # Intel x64
             arch: x64
-          - runner: macOS-14 # Apple Silicon arm64
+          - runner: macos-latest # Apple Silicon arm64
             arch: arm64
     runs-on: ${{ matrix.runner }}
     permissions:
@@ -81,6 +81,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      # install missing dep for sqlite (use setup-python to avoid PEP 668 externally-managed-environment error)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install setuptools
 
       - name: Install dependencies (with Node v22)
         run: yarn install --frozen-lockfile --ignore-engines
@@ -177,8 +183,7 @@ jobs:
       - run: sed -i "s/versionName \"1.0\"/versionName \"$(node -e "console.log(require('./package.json').version)")\"/" ./android/app/build.gradle
       - run: cat ./android/app/build.gradle
       # build apk
-      - run: npx cap update
-      - run: npx cap copy
+      - run: npx cap sync android
       - run: cd android && gradle bundle
       - run: cd android && ./gradlew assembleRelease --stacktrace
       # optimize apk

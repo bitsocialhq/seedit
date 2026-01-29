@@ -35,8 +35,8 @@ const useIsSubplebbitOffline = (subplebbit: Subplebbit) => {
   const offlineTitle = isLoading
     ? t('loading')
     : updatedAt
-    ? isOffline && t('posts_last_synced_info', { time: getFormattedTimeAgo(updatedAt), interpolation: { escapeValue: false } })
-    : t('subplebbit_offline_info');
+      ? isOffline && t('posts_last_synced_info', { time: getFormattedTimeAgo(updatedAt), interpolation: { escapeValue: false } })
+      : t('subplebbit_offline_info');
 
   // ensure isOffline is false until we have enough information
   const hasEnoughInfo = subplebbitOfflineStore.initialLoad === false || updatedAt !== undefined;

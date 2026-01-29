@@ -141,6 +141,10 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     }
     const searchInput = searchInputRef.current?.value;
     if (searchInput) {
+      if (searchInput.toLowerCase() === params.subplebbitAddress?.toLowerCase()) {
+        alert(t('already_in_community'));
+        return;
+      }
       setInputValue('');
       navigate(`/s/${searchInput}`);
     }
@@ -179,6 +183,10 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const handleCommunitySelect = useCallback(
     (address: string) => {
+      if (address.toLowerCase() === params.subplebbitAddress?.toLowerCase()) {
+        alert(t('already_in_community'));
+        return;
+      }
       setInputValue('');
       setIsInputFocused(false);
       setActiveDropdownIndex(-1);
@@ -186,7 +194,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       searchInputRef.current?.blur();
       navigate(`/s/${address}`);
     },
-    [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex],
+    [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, params.subplebbitAddress, t],
   );
 
   const handleKeyDown = useCallback(
@@ -230,7 +238,6 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
           autoCapitalize='off'
           placeholder={placeholder}
           ref={(instance) => {
-            // @ts-expect-error Property 'current' is read-only.
             searchInputRef.current = instance;
             refs.setReference(instance);
           }}

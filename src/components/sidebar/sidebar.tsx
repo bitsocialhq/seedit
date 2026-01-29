@@ -84,9 +84,11 @@ const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
         <span className={styles.postScoreWord}>{postScore === 1 ? t('point') : t('points')}</span>{' '}
         {`(${postScore === '?' ? '?' : `${upvotePercentage}`}% ${t('upvoted')})`}
       </div>
-      <div className={styles.shareLink}>
-        {t('share_link')}: <input type='text' value={`https://pleb.bz/s/${subplebbitAddress}/c/${cid}`} readOnly={true} />
-      </div>
+      {subplebbitAddress && cid && (
+        <div className={styles.shareLink}>
+          {t('share_link')}: <input type='text' value={`https://seedit.app/s/${subplebbitAddress}/c/${cid}`} readOnly={true} />
+        </div>
+      )}
     </div>
   );
 };

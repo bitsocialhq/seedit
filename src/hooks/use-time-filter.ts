@@ -1,14 +1,28 @@
 import assert from 'assert';
+import { useEffect } from 'react';
 import { useLocation, useParams, Params } from 'react-router-dom';
 import { isSubplebbitView, isAllView, isModView, isHomeView, isDomainView } from '../lib/utils/view-utils';
 
 // the timestamp the last time the user visited
 const lastVisitTimestamp = localStorage.getItem('seeditLastVisitTimestamp');
 
-// update the last visited timestamp every n seconds
-setInterval(() => {
-  localStorage.setItem('seeditLastVisitTimestamp', Date.now().toString());
-}, 60 * 1000);
+const VISIT_UPDATE_INTERVAL_MS = 60 * 1000;
+let lastVisitIntervalId: ReturnType<typeof setInterval> | null = null;
+let lastVisitIntervalUsers = 0;
+
+const startLastVisitInterval = () => {
+  if (lastVisitIntervalId) return;
+  lastVisitIntervalId = setInterval(() => {
+    localStorage.setItem('seeditLastVisitTimestamp', Date.now().toString());
+  }, VISIT_UPDATE_INTERVAL_MS);
+};
+
+const stopLastVisitIntervalIfUnused = () => {
+  if (lastVisitIntervalUsers === 0 && lastVisitIntervalId) {
+    clearInterval(lastVisitIntervalId);
+    lastVisitIntervalId = null;
+  }
+};
 
 const timeFilterNamesToSeconds: Record<string, number | undefined> = {
   '1h': 60 * 60,
@@ -119,6 +133,16 @@ const useTimeFilter = () => {
   const isInSubplebbitView = isSubplebbitView(location.pathname, params);
   const isInDomainView = Boolean(params.domain);
   const sessionKey = getSessionKeyForView(location.pathname, params);
+
+  useEffect(() => {
+    lastVisitIntervalUsers += 1;
+    startLastVisitInterval();
+
+    return () => {
+      lastVisitIntervalUsers -= 1;
+      stopLastVisitIntervalIfUnused();
+    };
+  }, []);
 
   let timeFilterName = params.timeFilterName;
   if (!timeFilterName) {

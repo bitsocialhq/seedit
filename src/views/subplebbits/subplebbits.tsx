@@ -581,7 +581,7 @@ const Subplebbits = () => {
   }, [documentTitle]);
 
   const renderErrors = () => {
-    const errorsToDisplay: JSX.Element[] = [];
+    const errorsToDisplay: React.JSX.Element[] = [];
     Object.entries(errors).forEach(([source, errorObj]) => {
       if (!errorObj) return;
 

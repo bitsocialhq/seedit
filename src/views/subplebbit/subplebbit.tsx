@@ -355,7 +355,7 @@ const Subplebbit = () => {
   const hasUnhiddenAnyNsfwCommunity = !hideAdultCommunities || !hideGoreCommunities || !hideAntiCommunities || !hideVulgarCommunities;
   const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
 
-  const prevErrorMessageRef = useRef<string | undefined>();
+  const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (error && error.message !== prevErrorMessageRef.current) {
       console.log(error);

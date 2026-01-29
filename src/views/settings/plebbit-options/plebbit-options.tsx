@@ -5,16 +5,16 @@ import { setAccount, useAccount, usePlebbitRpcSettings } from '@plebbit/plebbit-
 import styles from './plebbit-options.module.css';
 
 interface SettingsProps {
-  ipfsGatewayUrlsRef?: RefObject<HTMLTextAreaElement>;
-  mediaIpfsGatewayUrlRef?: RefObject<HTMLInputElement>;
-  pubsubProvidersRef?: RefObject<HTMLTextAreaElement>;
-  ethRpcRef?: RefObject<HTMLTextAreaElement>;
-  solRpcRef?: RefObject<HTMLTextAreaElement>;
-  maticRpcRef?: RefObject<HTMLTextAreaElement>;
-  avaxRpcRef?: RefObject<HTMLTextAreaElement>;
-  httpRoutersRef?: RefObject<HTMLTextAreaElement>;
-  plebbitRpcRef?: RefObject<HTMLInputElement>;
-  plebbitDataPathRef?: RefObject<HTMLInputElement>;
+  ipfsGatewayUrlsRef?: RefObject<HTMLTextAreaElement | null>;
+  mediaIpfsGatewayUrlRef?: RefObject<HTMLInputElement | null>;
+  pubsubProvidersRef?: RefObject<HTMLTextAreaElement | null>;
+  ethRpcRef?: RefObject<HTMLTextAreaElement | null>;
+  solRpcRef?: RefObject<HTMLTextAreaElement | null>;
+  maticRpcRef?: RefObject<HTMLTextAreaElement | null>;
+  avaxRpcRef?: RefObject<HTMLTextAreaElement | null>;
+  httpRoutersRef?: RefObject<HTMLTextAreaElement | null>;
+  plebbitRpcRef?: RefObject<HTMLInputElement | null>;
+  plebbitDataPathRef?: RefObject<HTMLInputElement | null>;
 }
 
 const IPFSGatewaysSettings = ({ ipfsGatewayUrlsRef, mediaIpfsGatewayUrlRef }: SettingsProps) => {

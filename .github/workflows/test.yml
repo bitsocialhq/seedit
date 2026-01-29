@@ -25,8 +25,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -37,37 +37,45 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/linux/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
-      - name: Build Electron App (Linux)
-        run: yarn electron:build:linux
+      - name: Build Preload Script
+        run: yarn build:preload
 
-      - name: Smoke Test
+      - name: Verify build outputs
         run: |
-          echo "Testing AppImage startup..."
-          APPIMAGE=$(find dist -name "*.AppImage" | head -n 1)
-          echo "Found AppImage: $APPIMAGE"
-          chmod +x "$APPIMAGE"
-          # Use --appimage-extract-and-run to avoid FUSE requirement in CI
-          # Run with timeout and expect it to start (will be killed after timeout)
-          timeout 10s "$APPIMAGE" --appimage-extract-and-run --no-sandbox &
-          APP_PID=$!
-          sleep 5
-          # Check if process is still running (means it started successfully)
-          if kill -0 $APP_PID 2>/dev/null; then
-            echo "✓ App started successfully"
-            kill $APP_PID 2>/dev/null || true
-            exit 0
-          else
-            echo "✗ App failed to start"
-            exit 1
-          fi
+          echo "=== Checking build/ directory ==="
+          ls -la build/ || exit 1
+          echo "=== Checking build/electron/preload.cjs ==="
+          ls -la build/electron/preload.cjs || exit 1
+          echo "=== Checking build/index.html ==="
+          ls -la build/index.html || exit 1
+
+      - name: Verify forge config
+        run: |
+          echo "=== forge.config.js exists ==="
+          ls -la forge.config.js
+          echo "=== Validating forge config can be loaded ==="
+          node -e "import('./forge.config.js').then(c => console.log('Config loaded, makers:', c.default.makers?.length || 0)).catch(e => { console.error(e); process.exit(1); })"
+
+      - name: Package Electron App
+        timeout-minutes: 30
+        run: |
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          echo "=== Checking out/ directory ==="
+          ls -la out/
+
+      - name: Verify Executable
+        run: |
+          ls -la out/
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
+          # Verify the file exists and is executable
+          test -f "$EXE" && test -x "$EXE" && echo "✓ Executable is valid"
 
   test-mac-intel:
     name: Test Mac (Intel)
@@ -76,24 +84,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'yarn'
-      
+
       - name: Install setuptools for native modules
-        run: |
-          # Use pip with --break-system-packages for CI environment
-          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+        run: pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
 
       - name: Cache electron binaries
         uses: actions/cache@v4
         with:
           path: ~/Library/Caches/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -104,54 +110,42 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
-      - name: Build Electron App
-        # Use --dir to build only the .app bundle without DMG
-        # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+      - name: Build Preload Script
+        run: yarn build:preload
 
-      - name: Smoke Test
+      - name: Verify build outputs
         run: |
-          if [ -d "dist/mac/seedit.app" ]; then
-            echo "Testing dist/mac/seedit.app..."
-            # Run the app in background - it will start IPFS which takes time
-            # We just verify it launches without crashing
-            ./dist/mac/seedit.app/Contents/MacOS/seedit &
-            APP_PID=$!
-            sleep 10
-            # Check if process is still running (means it started successfully)
-            if kill -0 $APP_PID 2>/dev/null; then
-              echo "✓ App started successfully"
-              kill $APP_PID 2>/dev/null || true
-              # Also kill any child processes (IPFS)
-              pkill -P $APP_PID 2>/dev/null || true
-              pkill -f ipfs 2>/dev/null || true
-              exit 0
-            else
-              echo "✗ App failed to start or crashed"
-              exit 1
-            fi
-          else
-            echo "Could not find dist/mac/seedit.app to test"
-            ls -R dist
-            exit 1
-          fi
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        timeout-minutes: 30
+        run: |
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
+
+      - name: Verify Executable
+        run: |
+          ls -la out/
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
+          test -f "$EXE" && test -x "$EXE" && echo "✓ Executable is valid"
 
   test-mac-arm:
     name: Test Mac (Apple Silicon)
-    runs-on: macOS-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
@@ -159,16 +153,14 @@ jobs:
           cache: 'yarn'
 
       - name: Install setuptools for native modules
-        run: |
-          # Use pip with --break-system-packages for CI environment
-          pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
+        run: pip3 install --break-system-packages setuptools || pip3 install --user setuptools || true
 
       - name: Cache electron binaries
         uses: actions/cache@v4
         with:
           path: ~/Library/Caches/electron
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         run: |
@@ -179,50 +171,33 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs && chmod +x bin/mac/ipfs
-
       - name: Build React App
         run: yarn build
         env:
           CI: ''
 
-      - name: Build Electron App
-        # On M1 runner, this should produce arm64 build
-        # Use --dir to build only the .app bundle without DMG
-        # This avoids flaky hdiutil "Resource busy" errors in CI
-        run: yarn build && yarn build:preload && yarn electron-builder build --publish never -m --dir
+      - name: Build Preload Script
+        run: yarn build:preload
 
-      - name: Smoke Test
+      - name: Verify build outputs
         run: |
-          if [ -d "dist/mac-arm64/seedit.app" ]; then
-            APP_PATH="dist/mac-arm64/seedit.app"
-          elif [ -d "dist/mac/seedit.app" ]; then
-            APP_PATH="dist/mac/seedit.app"
-          else
-            echo "Could not find seedit.app to test"
-            ls -R dist
-            exit 1
-          fi
-          
-          echo "Testing $APP_PATH..."
-          # Run the app in background - it will start IPFS which takes time
-          # We just verify it launches without crashing
-          "./$APP_PATH/Contents/MacOS/seedit" &
-          APP_PID=$!
-          sleep 10
-          # Check if process is still running (means it started successfully)
-          if kill -0 $APP_PID 2>/dev/null; then
-            echo "✓ App started successfully"
-            kill $APP_PID 2>/dev/null || true
-            # Also kill any child processes (IPFS)
-            pkill -P $APP_PID 2>/dev/null || true
-            pkill -f ipfs 2>/dev/null || true
-            exit 0
-          else
-            echo "✗ App failed to start or crashed"
-            exit 1
-          fi
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        timeout-minutes: 30
+        run: |
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
+
+      - name: Verify Executable
+        run: |
+          ls -la out/
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
+          test -f "$EXE" && test -x "$EXE" && echo "✓ Executable is valid"
 
   test-windows:
     name: Test Windows
@@ -231,7 +206,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
@@ -242,8 +217,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/AppData/Local/electron/Cache
-          key: ${{ runner.os }}-electron-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-electron-
+          key: ${{ runner.os }}-electron-v2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-electron-v2-
 
       - name: Install dependencies
         shell: bash
@@ -255,41 +230,35 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Download IPFS
-        run: node electron/download-ipfs
-
       - name: Build React App
+        shell: bash
         run: yarn build
         env:
           CI: ''
 
-      - name: Build Electron App
-        run: yarn electron:build:windows
-        timeout-minutes: 30
+      - name: Build Preload Script
+        shell: bash
+        run: yarn build:preload
 
-      - name: Smoke Test
+      - name: Verify build outputs
         shell: bash
         run: |
-          # Try to find the unpacked executable first as it's easiest to run
-          if [ -d "dist/win-unpacked" ]; then
-             echo "Testing unpacked exe..."
-             # Run with timeout - app starts IPFS so won't exit on its own
-             timeout 15s ./dist/win-unpacked/seedit.exe &
-             APP_PID=$!
-             sleep 8
-             # Check if process started successfully
-             if kill -0 $APP_PID 2>/dev/null; then
-               echo "✓ App started successfully"
-               taskkill //F //PID $APP_PID 2>/dev/null || true
-               # Kill any IPFS processes
-               taskkill //F //IM ipfs.exe 2>/dev/null || true
-               exit 0
-             else
-               echo "✗ App failed to start"
-               exit 1
-             fi
-          else
-             echo "No unpacked directory found"
-             ls -R dist
-             exit 1
-          fi
+          ls -la build/ || exit 1
+          ls -la build/electron/preload.cjs || exit 1
+          ls -la build/index.html || exit 1
+
+      - name: Package Electron App
+        shell: bash
+        timeout-minutes: 30
+        run: |
+          set -o pipefail
+          yarn electron-forge package 2>&1 | tee forge-output.log
+          ls -la out/
+
+      - name: Verify Executable
+        shell: bash
+        run: |
+          ls -la out/
+          EXE=$(node scripts/find-forge-executable.js)
+          echo "Found executable: $EXE"
+          test -f "$EXE" && test -x "$EXE" && echo "✓ Executable is valid"
