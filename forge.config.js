@@ -26,7 +26,6 @@ const config = {
       /\.map$/,
       /\.md$/,
       /\.ts$/,
-      /\.mjs$/,
       /tsconfig\.json$/,
       /\.oxfmtrc/,
       /oxlintrc/,
