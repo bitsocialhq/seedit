@@ -37,22 +37,19 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build React App
-        run: yarn build
+      - name: Build Electron App
+        run: yarn electron:package
         env:
           CI: ''
-
-      - name: Build Electron App (Linux)
-        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
           echo "Listing out directory..."
           ls -la out/ || echo "out/ directory not found"
-          
+
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-          
+
           node scripts/verify-executable.js "$EXE"
 
   test-mac-intel:
@@ -62,13 +59,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'yarn'
-      
+
       - name: Install setuptools for native modules
         run: |
           # Use pip with --break-system-packages for CI environment
@@ -90,22 +87,19 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build React App
-        run: yarn build
+      - name: Build Electron App
+        run: yarn electron:package
         env:
           CI: ''
-
-      - name: Build Electron App
-        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
           echo "Listing out directory..."
           ls -la out/ || echo "out/ directory not found"
-          
+
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-          
+
           node scripts/verify-executable.js "$EXE"
 
   test-mac-arm:
@@ -115,7 +109,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
@@ -143,22 +137,19 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build React App
-        run: yarn build
+      - name: Build Electron App
+        run: yarn electron:package
         env:
           CI: ''
-
-      - name: Build Electron App
-        run: yarn electron:package:ci
 
       - name: Smoke Test
         run: |
           echo "Listing out directory..."
           ls -la out/ || echo "out/ directory not found"
-          
+
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-          
+
           node scripts/verify-executable.js "$EXE"
 
   test-windows:
@@ -168,7 +159,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
@@ -192,22 +183,20 @@ jobs:
             [ "$i" = "3" ] && exit 1
           done
 
-      - name: Build React App
-        run: yarn build
+      - name: Build Electron App
+        shell: bash
+        timeout-minutes: 30
+        run: yarn electron:package
         env:
           CI: ''
-
-      - name: Build Electron App
-        run: yarn electron:package:ci
-        timeout-minutes: 30
 
       - name: Smoke Test
         shell: bash
         run: |
           echo "Listing out directory..."
           ls -la out/ || echo "out/ directory not found"
-          
+
           EXE=$(node scripts/find-forge-executable.js)
           echo "Found executable: $EXE"
-          
+
           node scripts/verify-executable.js "$EXE"
