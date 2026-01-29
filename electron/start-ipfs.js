@@ -6,7 +6,7 @@ import ps from 'node:process';
 import proxyServer from './proxy-server.js';
 import tcpPortUsed from 'tcp-port-used';
 import EnvPaths from 'env-paths';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 const dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
 const envPaths = EnvPaths('plebbit', { suffix: false });
 
@@ -25,8 +25,8 @@ const getKuboPath = async () => {
 
     // Try to import kubo from unpacked location
     try {
-      // Use path.join to ensure correct path separators, then convert to file URL
-      const kuboUrl = path.isAbsolute(kuboModulePath) ? `file://${kuboModulePath.replace(/\\/g, '/')}` : `file://${path.resolve(kuboModulePath).replace(/\\/g, '/')}`;
+      // Convert to file URL to handle Windows drive letters correctly
+      const kuboUrl = pathToFileURL(path.resolve(kuboModulePath)).href;
       const kuboModule = await import(kuboUrl);
       const { path: getKuboBinaryPath } = kuboModule;
       return getKuboBinaryPath();
