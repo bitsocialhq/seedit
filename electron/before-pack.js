@@ -18,7 +18,8 @@ const ipfsClientLinuxPath = path.join(ipfsClientsPath, 'linux');
 // const ipfsClientLinuxUrl = `https://github.com/plebbit/kubo/releases/download/v${ipfsClientVersion}/ipfs-linux-amd64`
 
 // official kubo download links https://docs.ipfs.tech/install/command-line/#install-official-binary-distributions
-const ipfsClientVersion = '0.32.1';
+// NOTE: Keep this version in sync with the kubo version in package.json to avoid repo version mismatches
+const ipfsClientVersion = '0.39.0';
 
 // Resolve desired build arch: allow overriding via env (so cross-arch builds pick correct binary)
 const resolveBuildArch = () => {

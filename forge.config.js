@@ -5,6 +5,7 @@ const config = {
     name: 'seedit',
     executableName: 'seedit',
     appBundleId: 'seedit.desktop',
+    icon: './public/icon', // electron-forge adds the correct extension per platform
 
     // NOTE: asar is disabled because of a bug where electron-packager silently fails
     // during asar creation with seedit's large node_modules. The app works fine without it.
@@ -67,6 +68,7 @@ const config = {
       platforms: ['darwin'],
       config: {
         name: 'seedit',
+        icon: './public/icon.png',
         format: 'UDZO',
       },
     },
@@ -80,6 +82,7 @@ const config = {
       platforms: ['win32'],
       config: {
         name: 'seedit',
+        setupIcon: './public/favicon.ico',
       },
     },
     // Linux
@@ -88,6 +91,8 @@ const config = {
       platforms: ['linux'],
       config: {
         options: {
+          name: 'seedit',
+          icon: './public/icon.png',
           categories: ['Network'],
         },
       },

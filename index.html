@@ -18,7 +18,14 @@
     </script>
     <script>
       // Redirect non-hash URLs to hash URLs on initial load
-      if (window.location.pathname && window.location.pathname !== '/' && window.location.pathname !== '/index.html' && !window.location.hash) {
+      // Skip redirect for file:// protocol (Electron) or if pathname ends with index.html
+      if (
+        window.location.protocol !== 'file:' &&
+        window.location.pathname &&
+        window.location.pathname !== '/' &&
+        !window.location.pathname.endsWith('/index.html') &&
+        !window.location.hash
+      ) {
         window.location.replace('/#' + window.location.pathname + window.location.search);
       }
     </script>

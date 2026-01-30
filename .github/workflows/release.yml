@@ -128,7 +128,7 @@ jobs:
         with:
           # needed for git commit history changelog
           fetch-depth: 0
-      - name: Setup Node.js v22 # electron-rebuild needs Node 22+
+      - name: Setup Node.js v22
         uses: actions/setup-node@v2
         with:
           node-version: 22
