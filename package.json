@@ -62,7 +62,7 @@
     "test": "vitest",
     "preview": "vite preview",
     "analyze-bundle": "cross-env NODE_ENV=production PUBLIC_URL=./ GENERATE_SOURCEMAP=true vite build && npx source-map-explorer 'build/assets/*.js'",
-    "electron": "yarn build:preload && cross-env ELECTRON_IS_DEV=1 yarn electron:before && cross-env ELECTRON_IS_DEV=1 electron .",
+    "electron": "yarn build:preload && yarn electron:before && electron .",
     "electron:no-delete-data": "yarn build:preload && electron .",
     "electron:start": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && yarn electron\"",
     "electron:start:no-delete-data": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && yarn electron:no-delete-data\"",
