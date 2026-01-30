@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Author, useAccount, useComment, useSubplebbit } from '@plebbit/plebbit-react-hooks';
+import useScheduledReset from '../../../hooks/use-scheduled-reset';
 import styles from './comment-tools.module.css';
 import EditMenu from './edit-menu';
 import HideMenu from './hide-menu';
@@ -59,24 +60,9 @@ const ModOrReportButton = ({ cid, isAuthor, isAccountMod, isCommentAuthorMod }: 
 const ShareButton = ({ cid, subplebbitAddress }: { cid: string; subplebbitAddress: string }) => {
   const { t } = useTranslation();
   const [hasCopied, setHasCopied] = useState(false);
-  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearResetTimeout = () => {
-    if (resetTimeoutRef.current) {
-      clearTimeout(resetTimeoutRef.current);
-      resetTimeoutRef.current = null;
-    }
-  };
-
-  const scheduleReset = () => {
-    clearResetTimeout();
-    resetTimeoutRef.current = setTimeout(() => {
-      setHasCopied(false);
-      resetTimeoutRef.current = null;
-    }, 2000);
-  };
-
-  useEffect(() => () => clearResetTimeout(), []);
+  const resetCopied = useCallback(() => setHasCopied(false), []);
+  const [scheduleReset, clearReset] = useScheduledReset(resetCopied, 2000);
 
   const handleCopy = async () => {
     try {
@@ -86,7 +72,7 @@ const ShareButton = ({ cid, subplebbitAddress }: { cid: string; subplebbitAddres
     } catch (error) {
       console.error('Failed to copy share link:', error);
       setHasCopied(false);
-      clearResetTimeout();
+      clearReset();
     }
   };
 

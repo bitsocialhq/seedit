@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import useScheduledReset from '../../hooks/use-scheduled-reset';
 import { copyToClipboard } from '../../lib/utils/clipboard-utils';
 import styles from './error-display.module.css';
 
@@ -46,30 +47,11 @@ const ErrorDisplay = ({ error }: { error: unknown }) => {
   const { t } = useTranslation();
   const [feedbackMessageKey, setFeedbackMessageKey] = useState<string | null>(null);
   const errorDetails = getErrorDetails(error);
-  const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetFeedback = useCallback(() => setFeedbackMessageKey(null), []);
+  const [scheduleFeedbackReset] = useScheduledReset(resetFeedback, 1500);
 
   const originalDisplayMessage = errorDetails?.message ? `${t('error')}: ${errorDetails.message}` : null;
-
-  const clearFeedbackTimeout = () => {
-    if (feedbackTimeoutRef.current) {
-      clearTimeout(feedbackTimeoutRef.current);
-      feedbackTimeoutRef.current = null;
-    }
-  };
-
-  const scheduleFeedbackReset = () => {
-    clearFeedbackTimeout();
-    feedbackTimeoutRef.current = setTimeout(() => {
-      setFeedbackMessageKey(null);
-      feedbackTimeoutRef.current = null;
-    }, 1500);
-  };
-
-  useEffect(() => {
-    return () => {
-      clearFeedbackTimeout();
-    };
-  }, []);
 
   const handleMessageClick = async () => {
     if (!errorDetails?.message || feedbackMessageKey) return;
