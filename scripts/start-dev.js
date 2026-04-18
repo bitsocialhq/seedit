@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
+import { get } from 'node:http';
 import { resolvePort } from './dev-server-utils.mjs';
 
 const isWindows = process.platform === 'win32';
@@ -123,6 +124,17 @@ const child = spawn(command, args, {
   env: process.env,
 });
 
+if (publicUrl && process.env.BROWSER !== 'none') {
+  waitForHttpReady(publicUrl, 30_000)
+    .then(() => {
+      console.log(`Opening ${publicUrl} in browser...`);
+      openInBrowser(publicUrl);
+    })
+    .catch((error) => {
+      console.warn(`Could not auto-open ${publicUrl}: ${error.message}`);
+    });
+}
+
 child.on('exit', (code, signal) => {
   if (signal) {
     process.kill(process.pid, signal);
@@ -131,3 +143,40 @@ child.on('exit', (code, signal) => {
 
   process.exit(code ?? 0);
 });
+
+async function waitForHttpReady(url, timeoutMs) {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < timeoutMs) {
+    const ready = await new Promise((resolve) => {
+      const request = get(url, (response) => {
+        response.resume();
+        const statusCode = response.statusCode ?? 500;
+        resolve(statusCode >= 200 && statusCode < 400);
+      });
+
+      request.on('error', () => resolve(false));
+      request.setTimeout(2_000, () => {
+        request.destroy();
+        resolve(false);
+      });
+    });
+
+    if (ready) {
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+
+  throw new Error(`Timed out waiting for ${url}`);
+}
+
+function openInBrowser(url) {
+  const opener =
+    process.platform === 'darwin' ? { cmd: 'open', args: [url] }
+    : process.platform === 'win32' ? { cmd: 'cmd', args: ['/c', 'start', '""', url] }
+    : { cmd: 'xdg-open', args: [url] };
+
+  spawn(opener.cmd, opener.args, { stdio: 'ignore', detached: true }).unref();
+}
