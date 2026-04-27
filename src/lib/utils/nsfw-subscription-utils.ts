@@ -4,7 +4,7 @@ const NSFW_SUBSCRIPTION_PROMPT_KEY_PREFIX = 'seedit-nsfw-subscription-prompt-sho
 
 export interface NSFWSubscriptionOptions {
   account: any;
-  defaultSubplebbits: any[];
+  defaultCommunities: any[];
   tagsToShow: string[];
   isShowingAll?: boolean;
 }
@@ -28,8 +28,8 @@ export const markNSFWSubscriptionPromptShown = (tagsToShow: string[], isShowingA
   localStorage.setItem(key, 'true');
 };
 
-export const getCommunitiesWithTags = (defaultSubplebbits: any[], tags: string[]): string[] => {
-  return defaultSubplebbits
+export const getCommunitiesWithTags = (defaultCommunities: any[], tags: string[]): string[] => {
+  return defaultCommunities
     .filter((sub) => {
       const subTags = sub.tags || [];
       return tags.some((tag) => subTags.includes(tag));
@@ -37,12 +37,12 @@ export const getCommunitiesWithTags = (defaultSubplebbits: any[], tags: string[]
     .map((sub) => sub.address);
 };
 
-export const handleNSFWSubscriptionPrompt = async ({ account, defaultSubplebbits, tagsToShow, isShowingAll = false }: NSFWSubscriptionOptions): Promise<void> => {
-  if (!shouldShowNSFWSubscriptionPrompt(tagsToShow, isShowingAll) || !account || !defaultSubplebbits.length) {
+export const handleNSFWSubscriptionPrompt = async ({ account, defaultCommunities, tagsToShow, isShowingAll = false }: NSFWSubscriptionOptions): Promise<void> => {
+  if (!shouldShowNSFWSubscriptionPrompt(tagsToShow, isShowingAll) || !account || !defaultCommunities.length) {
     return;
   }
 
-  const communitiesToSubscribe = getCommunitiesWithTags(defaultSubplebbits, tagsToShow);
+  const communitiesToSubscribe = getCommunitiesWithTags(defaultCommunities, tagsToShow);
 
   if (communitiesToSubscribe.length === 0) {
     return;

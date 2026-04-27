@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { PublishCommentModerationOptions, useComment, useEditedComment, usePublishCommentModeration } from '@bitsocial/bitsocial-react-hooks';
 import styles from './mod-menu.module.css';
 import { alertChallengeVerificationFailed } from '../../../../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../../../../lib/utils/comment-utils';
 import challengesStore from '../../../../stores/use-challenges-store';
 
 const { addChallenge } = challengesStore.getState();
@@ -26,11 +27,12 @@ const ModMenu = ({ cid, isCommentAuthorMod }: ModMenuProps) => {
   const isReply = post?.parentCid;
   const [isModMenuOpen, setIsModMenuOpen] = useState(false);
 
-  const { removed, locked, spoiler, nsfw, pinned, banExpiresAt, subplebbitAddress, purged } = post || {};
+  const { removed, locked, spoiler, nsfw, pinned, banExpiresAt, purged } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
 
   const defaultPublishOptions: PublishCommentModerationOptions = {
     commentCid: cid,
-    subplebbitAddress,
+    subplebbitAddress: communityAddress,
     commentModeration: {
       removed: removed ?? false,
       purged: purged ?? false,
@@ -118,7 +120,7 @@ const ModMenu = ({ cid, isCommentAuthorMod }: ModMenuProps) => {
     if (publishCommentModerationOptions.commentModeration.purged) {
       const confirmed = window.confirm(
         'You are purging this comment. Are you sure you want to continue?\n\n' +
-          "The comment will be completely removed from this subplebbit's database. This action is irreversible.",
+          "The comment will be completely removed from this community's database. This action is irreversible.",
       );
       if (!confirmed) {
         return;

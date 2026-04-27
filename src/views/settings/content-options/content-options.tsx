@@ -138,7 +138,7 @@ const MediaOptions = () => {
 const CommunitiesOptions = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultSubplebbits = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubplebbits();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
@@ -175,7 +175,7 @@ const CommunitiesOptions = () => {
             if (!newValue) {
               await handleNSFWSubscriptionPrompt({
                 account,
-                defaultSubplebbits,
+                defaultCommunities,
                 tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
                 isShowingAll: true,
               });
@@ -201,7 +201,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['adult'],
                 });
               }
@@ -224,7 +224,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['gore'],
                 });
               }
@@ -247,7 +247,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['anti'],
                 });
               }
@@ -270,7 +270,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['vulgar'],
                 });
               }

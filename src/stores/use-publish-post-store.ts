@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import challengesStore from './use-challenges-store';
 import { Comment, PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
 
 const { addChallenge } = challengesStore.getState();
 
 type SubmitState = {
-  subplebbitAddress: string | undefined;
+  communityAddress: string | undefined;
   title: string | undefined;
   content: string | undefined;
   link: string | undefined;
@@ -18,7 +19,7 @@ type SubmitState = {
 };
 
 const usePublishPostStore = create<SubmitState>((set) => ({
-  subplebbitAddress: undefined,
+  communityAddress: undefined,
   title: undefined,
   content: undefined,
   link: undefined,
@@ -28,9 +29,10 @@ const usePublishPostStore = create<SubmitState>((set) => ({
   setPublishPostStore: (comment) =>
     set((state) => {
       const nextState = { ...state };
-      const { subplebbitAddress, title, content, link, spoiler, nsfw } = comment;
+      const commentCommunityAddress = getCommentCommunityAddress(comment);
+      const { title, content, link, spoiler, nsfw } = comment;
 
-      if (subplebbitAddress !== undefined) nextState.subplebbitAddress = subplebbitAddress;
+      if (commentCommunityAddress !== undefined) nextState.communityAddress = commentCommunityAddress;
       if (title !== undefined) nextState.title = title;
       if (content !== undefined) nextState.content = content || undefined;
       if (link !== undefined) nextState.link = link || undefined;
@@ -38,7 +40,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
       if (nsfw !== undefined) nextState.nsfw = nsfw || undefined;
 
       nextState.publishCommentOptions = {
-        subplebbitAddress: nextState.subplebbitAddress,
+        subplebbitAddress: nextState.communityAddress,
         title: nextState.title,
         content: nextState.content,
         link: nextState.link,
@@ -56,7 +58,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
     }),
   resetPublishPostStore: () =>
     set({
-      subplebbitAddress: undefined,
+      communityAddress: undefined,
       title: undefined,
       content: undefined,
       link: undefined,

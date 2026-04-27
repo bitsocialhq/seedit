@@ -56,7 +56,7 @@ const CommunitiesDropdown = () => {
 const TagFilterDropdown = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultSubplebbits = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubplebbits();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
@@ -102,7 +102,7 @@ const TagFilterDropdown = () => {
     if (!newState) {
       await handleNSFWSubscriptionPrompt({
         account,
-        defaultSubplebbits,
+        defaultCommunities,
         tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
         isShowingAll: true,
       });
@@ -121,7 +121,7 @@ const TagFilterDropdown = () => {
     if (!newState) {
       await handleNSFWSubscriptionPrompt({
         account,
-        defaultSubplebbits,
+        defaultCommunities,
         tagsToShow: [tagName],
       });
     }
@@ -291,15 +291,15 @@ const TopBar = memo(() => {
   const homeButtonClass = isInHomeView ? styles.selected : styles.choice;
 
   const { hideDefaultCommunities } = useContentOptionsStore();
-  const subplebbitAddresses = useDefaultSubplebbitAddresses();
-  const { accountCommunities: accountSubplebbits } = useAccountCommunities();
-  const accountSubplebbitAddresses = useMemo(() => Object.keys(accountSubplebbits), [accountSubplebbits]);
+  const communityAddresses = useDefaultSubplebbitAddresses();
+  const { accountCommunities } = useAccountCommunities();
+  const accountCommunityAddresses = useMemo(() => Object.keys(accountCommunities), [accountCommunities]);
 
   const account = useAccount();
   const subscriptions = useMemo(() => account?.subscriptions, [account?.subscriptions]);
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
 
-  const filteredSubplebbitAddresses = useMemo(() => subplebbitAddresses?.filter((address) => !subscriptions?.includes(address)), [subplebbitAddresses, subscriptions]);
+  const filteredCommunityAddresses = useMemo(() => communityAddresses?.filter((address) => !subscriptions?.includes(address)), [communityAddresses, subscriptions]);
 
   return (
     <div className={styles.headerArea}>
@@ -321,7 +321,7 @@ const TopBar = memo(() => {
                 {t('all')}
               </Link>
             </li>
-            {accountSubplebbitAddresses.length > 0 && (
+            {accountCommunityAddresses.length > 0 && (
               <li>
                 <span className={styles.separator}>-</span>
                 <Link to='/s/mod' className={isInModView ? styles.selected : styles.choice}>
@@ -342,9 +342,9 @@ const TopBar = memo(() => {
                 </li>
               );
             })}
-            {!hideDefaultCommunities && filteredSubplebbitAddresses?.length > 0 && <span className={styles.separator}> | </span>}
+            {!hideDefaultCommunities && filteredCommunityAddresses?.length > 0 && <span className={styles.separator}> | </span>}
             {!hideDefaultCommunities &&
-              filteredSubplebbitAddresses?.map((address, index) => {
+              filteredCommunityAddresses?.map((address, index) => {
                 const shortAddress = getShortAddress(address);
                 const displayAddress = shortAddress.includes('.eth')
                   ? shortAddress.slice(0, -4)

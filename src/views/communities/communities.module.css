@@ -18,7 +18,7 @@
   border: 1px solid var(--code-border);
 }
 
-.subplebbit {
+.community {
   padding-bottom: 1px;
   height: auto;
   overflow: hidden;
@@ -237,7 +237,7 @@
   margin-top: 2px;
 }
 
-.subplebbitsTabs {
+.communitiesTabs {
   border-bottom: 1px dotted gray;
   padding: 5px 10px;
   margin-left: 5px;
@@ -248,12 +248,12 @@
   text-transform: lowercase;
 }
 
-.subplebbitsTabs a span {
+.communitiesTabs a span {
   display: inline;
   white-space: nowrap;
 }
 
-.subplebbitsTabs a {
+.communitiesTabs a {
   text-decoration: none;
   color: var(--text-primary);
 }
@@ -302,7 +302,7 @@
     display: none;
   }
 
-  .subplebbit {
+  .community {
     padding-right: 5px;
   }
 
@@ -310,7 +310,7 @@
     margin-left: 5px;
   }
 
-  .subplebbitsTabs {
+  .communitiesTabs {
     margin-right: 5px;
   }
 }

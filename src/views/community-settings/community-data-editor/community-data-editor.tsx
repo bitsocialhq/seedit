@@ -58,9 +58,9 @@ const CommunityDataEditor = () => {
   const theme = useTheme((state) => state.theme);
   const [text, setText] = useState('');
 
-  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
-  const { address, createdAt, description, error, rules, settings, suggested, roles, title } = subplebbit || {};
+  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const { address, createdAt, description, error, rules, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
 
   const {
@@ -79,10 +79,10 @@ const CommunityDataEditor = () => {
 
   const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
 
-  // Use store state if available, otherwise fall back to original subplebbit data
+  // Use store state if available, otherwise fall back to original community data
   const currentSettings = useMemo(() => {
     const { communityAddress: storeAddr } = useCommunitySettingsStore.getState();
-    const hasStoreData = storeAddr === subplebbitAddress;
+    const hasStoreData = storeAddr === communityAddress;
 
     return {
       title: hasStoreData ? storeTitle : title,
@@ -92,7 +92,7 @@ const CommunityDataEditor = () => {
       rules: hasStoreData ? storeRules : rules,
       roles: hasStoreData ? storeRoles : roles,
       settings: hasStoreData ? storeSettings : settings,
-      communityAddress: hasStoreData ? storeCommunityAddress : subplebbitAddress,
+      communityAddress: hasStoreData ? storeCommunityAddress : communityAddress,
     };
   }, [
     storeTitle,
@@ -110,10 +110,10 @@ const CommunityDataEditor = () => {
     rules,
     roles,
     settings,
-    subplebbitAddress,
+    communityAddress,
   ]);
 
-  const subplebbitSettings = useMemo(() => JSON.stringify(currentSettings, null, 2), [currentSettings]);
+  const communitySettings = useMemo(() => JSON.stringify(currentSettings, null, 2), [currentSettings]);
 
   // Update text when settings change, but not when user is actively typing
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -125,7 +125,7 @@ const CommunityDataEditor = () => {
 
     // Debounce setting text to avoid interrupting user typing
     timeoutRef.current = setTimeout(() => {
-      setText(subplebbitSettings);
+      setText(communitySettings);
     }, 100);
 
     return () => {
@@ -133,7 +133,7 @@ const CommunityDataEditor = () => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [subplebbitSettings]);
+  }, [communitySettings]);
 
   // Sync editor changes to store immediately when JSON is valid
   const handleTextChange = (newText: string) => {
@@ -176,7 +176,7 @@ const CommunityDataEditor = () => {
             setCurrentError(publishCommunityEditError);
             alert(publishCommunityEditError.message || 'Error: ' + publishCommunityEditError);
           } else {
-            alert(t('settings_saved', { subplebbitAddress }));
+            alert(t('settings_saved', { communityAddress }));
           }
         } catch (e) {
           setShowSaving(false);
@@ -184,7 +184,7 @@ const CommunityDataEditor = () => {
           if (e instanceof Error) {
             console.warn(e);
             setCurrentError(e);
-            alert(`failed editing subplebbit: ${e.message}`);
+            alert(`failed editing community: ${e.message}`);
           } else {
             console.error('An unknown error occurred:', e);
           }
@@ -220,19 +220,19 @@ const CommunityDataEditor = () => {
       if (e instanceof Error) {
         console.warn(e);
         setCurrentError(e);
-        alert(`failed editing subplebbit: ${e.message}`);
+        alert(`failed editing community: ${e.message}`);
       } else {
         console.error('An unknown error occurred:', e);
       }
     }
   };
 
-  // Set store for loaded subplebbit settings when editing
+  // Set store for loaded community settings when editing
   useEffect(() => {
     if (hasLoaded) {
-      // Only reset if we're switching to a different subplebbit or if store is uninitialized
+      // Only reset if we're switching to a different community or if store is uninitialized
       const { communityAddress: storeCommunityAddress } = useCommunitySettingsStore.getState();
-      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== subplebbitAddress;
+      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== communityAddress;
 
       if (shouldReset) {
         resetCommunitySettingsStore();
@@ -244,13 +244,13 @@ const CommunityDataEditor = () => {
           rules: rules ?? [],
           roles: roles ?? {},
           settings: settings ?? {},
-          communityAddress: subplebbitAddress,
+          communityAddress: communityAddress,
         });
       }
     }
-  }, [hasLoaded, resetCommunitySettingsStore, setCommunitySettingsStore, title, description, address, suggested, rules, roles, settings, subplebbitAddress]);
+  }, [hasLoaded, resetCommunitySettingsStore, setCommunitySettingsStore, title, description, address, suggested, rules, roles, settings, communityAddress]);
 
-  const loadingStateString = useStateString(subplebbit);
+  const loadingStateString = useStateString(community);
 
   if (!hasLoaded) {
     return (
@@ -320,12 +320,12 @@ const CommunityDataEditor = () => {
             i18nKey='save_reset_changes'
             components={{
               1: <button key='saveCommunitySettingsButton' onClick={saveCommunitySettings} />,
-              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(subplebbitSettings)} />,
+              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(communitySettings)} />,
             }}
           />
           <div>
             <br />
-            <button onClick={() => navigate(`/s/${subplebbitAddress}/settings`)}>return to settings</button>
+            <button onClick={() => navigate(`/s/${communityAddress}/settings`)}>return to settings</button>
           </div>
         </div>
       )}

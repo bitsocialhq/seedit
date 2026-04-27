@@ -23,7 +23,7 @@ type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
 const Home = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const subplebbitAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
+  const communityAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
   const { isCheckingAccount } = useAutoSubscribeStore();
   const accountAddress = account?.author?.address;
   const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress);
@@ -76,7 +76,7 @@ const Home = () => {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: 10,
       sortType,
-      communities: getCommunityIdentifiers(subplebbitAddresses),
+      communities: getCommunityIdentifiers(communityAddresses),
     };
 
     if (searchQuery) {
@@ -87,9 +87,9 @@ const Home = () => {
     }
 
     return options;
-  }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery, commentFilter]);
+  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, commentFilter]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
 
   useEffect(() => {
     startTransition(() => {
@@ -127,7 +127,7 @@ const Home = () => {
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
   } = useFeed({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
   });
@@ -136,7 +136,7 @@ const Home = () => {
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
   } = useFeed({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
   });
@@ -145,7 +145,7 @@ const Home = () => {
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
   } = useFeed({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
   });
@@ -197,8 +197,8 @@ const Home = () => {
       feedLength: feed?.length,
       hasFeedLoaded: !!feed,
       hasMore,
-      subplebbitAddresses,
-      subplebbitAddressesWithNewerPosts,
+      communityAddresses,
+      communityAddressesWithNewerPosts,
       weeklyFeedLength: weeklyFeed.length,
       monthlyFeedLength: monthlyFeed.length,
       yearlyFeedLength: yearlyFeed.length,
@@ -212,8 +212,8 @@ const Home = () => {
     [
       feed,
       hasMore,
-      subplebbitAddresses,
-      subplebbitAddressesWithNewerPosts,
+      communityAddresses,
+      communityAddressesWithNewerPosts,
       weeklyFeed.length,
       monthlyFeed.length,
       yearlyFeed.length,
@@ -263,7 +263,7 @@ const Home = () => {
       return;
     }
 
-    if (subplebbitAddresses.length > 0 || feed?.length > 0) {
+    if (communityAddresses.length > 0 || feed?.length > 0) {
       setSubscriptionState('hasSubscriptions');
       return;
     }
@@ -273,12 +273,12 @@ const Home = () => {
       return;
     }
 
-    if (!isCheckingSubscriptions && feed?.length === 0 && subplebbitAddresses.length === 0 && safeToShowNoSubscriptions) {
+    if (!isCheckingSubscriptions && feed?.length === 0 && communityAddresses.length === 0 && safeToShowNoSubscriptions) {
       setSubscriptionState('noSubscriptions');
     } else {
       setSubscriptionState('loading');
     }
-  }, [isCheckingSubscriptions, subplebbitAddresses, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
+  }, [isCheckingSubscriptions, communityAddresses, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
 
   return (
     <div>

@@ -151,7 +151,7 @@
   font-style: italic;
 }
 
-.subplebbit:hover, .author:hover span {
+.community:hover, .author:hover span {
   text-decoration: underline;
 }
 
@@ -258,11 +258,11 @@
   background-image: url("/assets/buttons/all_feed_subscribed.png");
 }
 
-.greenSubplebbitAddress {
+.greenCommunityAddress {
   color: var(--green-bright) !important;
 }
 
-.subscribeButtonWrapper:hover + .subplebbit {
+.subscribeButtonWrapper:hover + .community {
   color: var(--green-bright) !important;
 }
 

@@ -156,9 +156,9 @@ const About = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isInHomeAboutView = isHomeAboutView(location.pathname);
-  const { commentCid, communityAddress: subplebbitAddress } = useParams();
+  const { commentCid, communityAddress } = useParams();
 
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
+  const subplebbit = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {

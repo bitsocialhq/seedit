@@ -44,7 +44,7 @@ import {
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
-import { useIsBroadlyNsfwSubplebbit } from '../../hooks/use-is-broadly-nsfw-subplebbit';
+import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import styles from './header.module.css';
@@ -193,7 +193,7 @@ const InboxHeaderTabs = () => {
   );
 };
 
-const SubplebbitsHeaderTabs = () => {
+const CommunitiesHeaderTabs = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const isInCommunitiesSubscriberView = isCommunitiesSubscriberView(location.pathname);
@@ -289,14 +289,14 @@ const HeaderTabs = () => {
   } else if (isInInboxView) {
     return <InboxHeaderTabs />;
   } else if (isInCommunitiesView && !isInCreateCommunityView) {
-    return <SubplebbitsHeaderTabs />;
+    return <CommunitiesHeaderTabs />;
   } else if (isInSettingsView || isInSettingsPlebbitOptionsView || isInSettingsContentOptionsView) {
     return <SettingsHeaderTabs />;
   }
   return null;
 };
 
-const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; pendingPostSubplebbitAddress?: string }) => {
+const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pendingPostCommunityAddress?: string }) => {
   const account = useAccount();
   const { t } = useTranslation();
   const params = useParams();
@@ -320,15 +320,15 @@ const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; p
   const isInCreateCommunityView = isCreateCommunityView(location.pathname);
   const isInNotFoundView = useNotFoundStore((state) => state.isNotFound);
 
-  const subplebbitAddress = params.communityAddress;
+  const communityAddress = params.communityAddress;
 
   const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
   const hasUnhiddenAnyNsfwCommunity = !hideAdultCommunities || !hideGoreCommunities || !hideAntiCommunities || !hideVulgarCommunities;
-  const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
+  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
 
-  const subplebbitTitle = (
-    <Link to={`/s/${isInPendingPostView ? pendingPostSubplebbitAddress : subplebbitAddress}`}>
-      {title || (subplebbitAddress && getShortAddress(subplebbitAddress)) || (pendingPostSubplebbitAddress && getShortAddress(pendingPostSubplebbitAddress))}
+  const communityTitle = (
+    <Link to={`/s/${isInPendingPostView ? pendingPostCommunityAddress : communityAddress}`}>
+      {title || (communityAddress && getShortAddress(communityAddress)) || (pendingPostCommunityAddress && getShortAddress(pendingPostCommunityAddress))}
     </Link>
   );
   const domainTitle = <Link to={`/domain/${params.domain}`}>{params.domain}</Link>;
@@ -336,18 +336,18 @@ const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; p
   const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
   const authorTitle = <Link to={`/u/${params.authorAddress}/c/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
 
-  if (isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity) {
+  if (isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) {
     return <span>{t('over_18')}</span>;
   } else if (isInCommunitySubmitView) {
     return (
       <>
-        {subplebbitTitle}: {submitTitle}
+        {communityTitle}: {submitTitle}
       </>
     );
   } else if (isInCommunitySettingsView) {
     return (
       <>
-        {subplebbitTitle}: <span className={styles.lowercase}>{t('community_settings')}</span>
+        {communityTitle}: <span className={styles.lowercase}>{t('community_settings')}</span>
       </>
     );
   } else if (isInSubmitView) {
@@ -357,7 +357,7 @@ const HeaderTitle = ({ title, pendingPostSubplebbitAddress }: { title: string; p
   } else if (isInProfileView && !isInPendingPostView) {
     return profileTitle;
   } else if (isInPostPageView || isInPendingPostView || (isInCommunityView && !isInCommunitySettingsView)) {
-    return subplebbitTitle;
+    return communityTitle;
   } else if (isInAuthorView) {
     return authorTitle;
   } else if (isInInboxView) {
@@ -383,8 +383,8 @@ const Header = () => {
   const [theme] = useTheme();
   const location = useLocation();
   const params = useParams();
-  const subplebbit = useCommunity(params?.communityAddress ? { community: { name: params?.communityAddress }, onlyIfCached: true } : undefined);
-  const { suggested, title } = subplebbit || {};
+  const community = useCommunity(params?.communityAddress ? { community: { name: params?.communityAddress }, onlyIfCached: true } : undefined);
+  const { suggested, title } = community || {};
 
   const commentIndex = params?.accountCommentIndex ? parseInt(params?.accountCommentIndex) : undefined;
   const accountComment = useAccountComment({ commentIndex });
@@ -427,7 +427,7 @@ const Header = () => {
     (isInDomainView && !isInHomeAboutView) ||
     (isInAuthorView && !isInHomeAboutView);
 
-  const subplebbitAddress = params.communityAddress;
+  const communityAddress = params.communityAddress;
 
   const contentOptionsStore = useContentOptionsStore();
   const hasUnhiddenAnyNsfwCommunity =
@@ -435,9 +435,9 @@ const Header = () => {
     !contentOptionsStore.hideGoreCommunities ||
     !contentOptionsStore.hideAntiCommunities ||
     !contentOptionsStore.hideVulgarCommunities;
-  const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
+  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
 
-  const logoIsAvatar = isInCommunityView && suggested?.avatarUrl && !(isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity);
+  const logoIsAvatar = isInCommunityView && suggested?.avatarUrl && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity);
   const logoSrc = logoIsAvatar ? suggested?.avatarUrl : 'assets/sprout/sprout.png';
   const logoLink = '/';
 
@@ -446,8 +446,8 @@ const Header = () => {
       ? '/submit'
       : isInPendingPostView
         ? `/s/${accountComment?.subplebbitAddress}/submit`
-        : subplebbitAddress
-          ? `/s/${subplebbitAddress}/submit`
+        : communityAddress
+          ? `/s/${communityAddress}/submit`
           : '/submit';
 
   return (
@@ -469,22 +469,22 @@ const Header = () => {
         </div>
         {!isInHomeView && !isInHomeAboutView && !isInModView && !isInAllView && (
           <span className={`${styles.pageName} ${!logoIsAvatar && styles.soloPageName}`}>
-            <HeaderTitle title={title} pendingPostSubplebbitAddress={accountComment?.subplebbitAddress} />
+            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
           </span>
         )}
         {(isInModView || isInAllView) && (
           <div className={`${styles.pageName} ${styles.allOrModPageName}`}>
-            <HeaderTitle title={title} pendingPostSubplebbitAddress={accountComment?.subplebbitAddress} />
+            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
           </div>
         )}
-        {!isMobile && !(isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity) && (
+        {!isMobile && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) && (
           <ul className={styles.tabMenu}>
             <HeaderTabs />
             {(isInHomeView || isInHomeAboutView) && <AboutButton />}
           </ul>
         )}
       </div>
-      {isMobile && !isInCommunitySubmitView && !(isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity) && (
+      {isMobile && !isInCommunitySubmitView && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) && (
         <ul className={`${styles.tabMenu} ${isInProfileView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />
           {(isInHomeView || isInHomeAboutView || isInCommunityView || isInHomeAboutView || isInPostPageView) && <AboutButton />}

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, useAccountComment, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import { getPostScore } from '../../lib/utils/post-utils';
 import { getFormattedDate, getFormattedTimeDuration, getFormattedTimeAgo } from '../../lib/utils/time-utils';
-import { findSubplebbitCreator } from '../../lib/utils/user-utils';
+import { findCommunityCreator } from '../../lib/utils/user-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import {
   isAllView,
@@ -132,7 +132,7 @@ export const Footer = () => {
   return (
     <div
       className={`${styles.footer} ${isMobile && (isInHomeAboutView || isInPostPageAboutView) ? styles.mobileFooter : ''} ${
-        isInCommunityView ? styles.subplebbitFooterMargin : ''
+        isInCommunityView ? styles.communityFooterMargin : ''
       }`}
     >
       <div className={styles.footerLinks}>
@@ -197,15 +197,15 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
 
   const pendingPost = useAccountComment({ commentIndex: params?.accountCommentIndex as any });
 
-  const subplebbitCreator = findSubplebbitCreator(roles);
-  const creatorAddress = subplebbitCreator === 'anonymous' ? 'anonymous' : `${getShortAddress(subplebbitCreator)}`;
+  const communityCreator = findCommunityCreator(roles);
+  const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : `${getShortAddress(communityCreator)}`;
   const submitRoute =
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
         ? `/s/${pendingPost?.subplebbitAddress}/submit`
-        : address || params?.subplebbitAddress
-          ? `/s/${address || params?.subplebbitAddress}/submit`
+        : address || params?.communityAddress
+          ? `/s/${address || params?.communityAddress}/submit`
           : '/submit';
 
   const { blocked, unblock, block } = useBlock({ address });

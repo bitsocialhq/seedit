@@ -325,14 +325,14 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
+  const { communityAddress } = useParams<{ communityAddress: string }>();
 
   return (
     <div className={`${styles.box}`}>
       <div className={`${styles.boxTitle} ${styles.JSONSettingsTitle}`}>{t('json_settings')}</div>
       <div className={styles.boxSubtitle}>{t('json_settings_info')}</div>
       <div className={`${styles.boxInput} ${styles.JSONSettings}`}>
-        <button onClick={() => navigate(`/s/${subplebbitAddress}/settings/editor`)}>{t('edit')}</button>
+        <button onClick={() => navigate(`/s/${communityAddress}/settings/editor`)}>{t('edit')}</button>
       </div>
     </div>
   );
@@ -340,9 +340,9 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
 
 const CommunitySettings = () => {
   const { t } = useTranslation();
-  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
-  const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = subplebbit || {};
+  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
 
   const { challenges: rpcChallenges } = usePkcRpcSettings().pkcRpcSettings || {};
@@ -363,7 +363,7 @@ const CommunitySettings = () => {
   const userAddress = account?.author?.address;
   const userIsOwnerOrAdmin = isUserOwnerOrAdmin(roles, userAddress);
 
-  const { isOffline, offlineTitle } = useIsCommunityOffline(subplebbit || {});
+  const { isOffline, offlineTitle } = useIsCommunityOffline(community || {});
 
   // General fields can be edited by owners/admins even without RPC connection
   const isReadOnly = (!settings && isInCommunitySettingsView && !userIsOwnerOrAdmin) || (!isConnectedToRpc && isInCreateCommunityView && !userIsOwnerOrAdmin);
@@ -388,7 +388,7 @@ const CommunitySettings = () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
-      console.log('Saving subplebbit with options:', publishCommunityEditOptions);
+      console.log('Saving community with options:', publishCommunityEditOptions);
       await publishSubplebbitEdit();
       setShowSaving(false);
 
@@ -396,14 +396,14 @@ const CommunitySettings = () => {
         setCurrentError(publishCommunityEditError);
         alert(publishCommunityEditError.message || 'Error: ' + publishCommunityEditError);
       } else {
-        alert(t('settings_saved', { subplebbitAddress }));
+        alert(t('settings_saved', { communityAddress }));
       }
     } catch (e) {
       setShowSaving(false);
       if (e instanceof Error) {
         console.warn(e);
         setCurrentError(e);
-        alert(`failed editing subplebbit: ${e.message}`);
+        alert(`failed editing community: ${e.message}`);
       } else {
         console.error('An unknown error occurred:', e);
       }
@@ -412,18 +412,18 @@ const CommunitySettings = () => {
 
   const [showDeleting, setShowDeleting] = useState(false);
   const _deleteCommunity = async () => {
-    if (subplebbitAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
+    if (communityAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
       if (window.confirm(t('double_confirm'))) {
         try {
           setShowDeleting(true);
-          await deleteCommunity(subplebbitAddress);
+          await deleteCommunity(communityAddress);
           setShowDeleting(false);
           alert(t('community_deleted'));
           navigate('/', { replace: true });
         } catch (e) {
           if (e instanceof Error) {
             console.warn(e);
-            alert(`failed deleting subplebbit: ${e.message}`);
+            alert(`failed deleting community: ${e.message}`);
           } else {
             console.error('An unknown error occurred:', e);
           }
@@ -436,7 +436,7 @@ const CommunitySettings = () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
-      console.log('Creating subplebbit with settings:', publishCommunityEditOptions);
+      console.log('Creating community with settings:', publishCommunityEditOptions);
       await createSubplebbit();
       setShowSaving(false);
 
@@ -449,7 +449,7 @@ const CommunitySettings = () => {
       if (e instanceof Error) {
         console.warn(e);
         setCurrentError(e);
-        alert(`failed creating subplebbit: ${e.message}`);
+        alert(`failed creating community: ${e.message}`);
       } else {
         console.error('An unknown error occurred:', e);
       }
@@ -500,12 +500,12 @@ const CommunitySettings = () => {
     }
   }, [isInCreateCommunityView, storeTitle, resetCommunitySettingsStore, setCommunitySettingsStore, account, isInCommunitySettingsView]);
 
-  // Set store for loaded subplebbit settings when editing
+  // Set store for loaded community settings when editing
   useEffect(() => {
     if (!isInCreateCommunityView && hasLoaded) {
-      // Only reset if we're switching to a different subplebbit or if store is uninitialized
+      // Only reset if we're switching to a different community or if store is uninitialized
       const { communityAddress: storeCommunityAddress } = useCommunitySettingsStore.getState();
-      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== subplebbitAddress;
+      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== communityAddress;
 
       if (shouldReset) {
         resetCommunitySettingsStore();
@@ -518,7 +518,7 @@ const CommunitySettings = () => {
           roles: roles ?? {},
           settings: settings ?? {},
           challenges: challenges ?? [],
-          communityAddress: subplebbitAddress,
+          communityAddress: communityAddress,
         });
       }
     }
@@ -535,7 +535,7 @@ const CommunitySettings = () => {
     roles,
     settings,
     challenges,
-    subplebbitAddress,
+    communityAddress,
   ]);
 
   const documentTitle = useMemo(() => {
@@ -556,7 +556,7 @@ const CommunitySettings = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const loadingStateString = useStateString(subplebbit);
+  const loadingStateString = useStateString(community);
 
   if (!hasLoaded && !isInCreateCommunityView) {
     return (
@@ -577,7 +577,7 @@ const CommunitySettings = () => {
     <div className={styles.content}>
       {!isInCreateCommunityView && (
         <div className={styles.sidebar}>
-          <Sidebar subplebbit={subplebbit} />
+          <Sidebar subplebbit={community} />
         </div>
       )}
       {isReadOnly && !userIsOwnerOrAdmin && <div className={styles.infobar}>{t('owner_settings_notice')}</div>}
@@ -589,7 +589,7 @@ const CommunitySettings = () => {
       <Logo isReadOnly={isReadOnly} />
       <Rules isReadOnly={isReadOnly} />
       <Moderators isReadOnly={isReadOnly} />
-      <Challenges isReadOnly={isChallengesReadOnly} readOnlyChallenges={subplebbit?.challenges} challengeNames={challengeNames} challengesSettings={rpcChallenges} />
+      <Challenges isReadOnly={isChallengesReadOnly} readOnlyChallenges={community?.challenges} challengeNames={challengeNames} challengesSettings={rpcChallenges} />
       {!isInCreateCommunityView && <JSONSettings isReadOnly={isReadOnly} />}
       <div className={styles.saveOptions}>
         {!isInCreateCommunityView && !isReadOnly && (

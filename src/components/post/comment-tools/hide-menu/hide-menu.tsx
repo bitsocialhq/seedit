@@ -12,7 +12,7 @@ type HideMenuProps = {
   cid?: string;
   isAccountMod?: boolean;
   toggleIsMenuOpen?: () => void;
-  subplebbitAddress?: string;
+  communityAddress?: string;
 };
 
 const BlockAuthorButton = ({ author, toggleIsMenuOpen }: HideMenuProps) => {
@@ -32,13 +32,13 @@ const BlockAuthorButton = ({ author, toggleIsMenuOpen }: HideMenuProps) => {
   );
 };
 
-const BlockSubplebbitButton = ({ subplebbitAddress }: HideMenuProps) => {
+const BlockCommunityButton = ({ communityAddress }: HideMenuProps) => {
   const { t } = useTranslation();
-  const { blocked, unblock, block } = useBlock({ address: subplebbitAddress });
+  const { blocked, unblock, block } = useBlock({ address: communityAddress });
 
   return (
     <div className={styles.menuItem} onClick={blocked ? unblock : block}>
-      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{subplebbitAddress && getShortAddress(subplebbitAddress)}
+      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{communityAddress && getShortAddress(communityAddress)}
     </div>
   );
 };
@@ -54,7 +54,7 @@ const BlockCommentButton = ({ cid }: HideMenuProps) => {
   );
 };
 
-const HideMenu = ({ author, cid, isAccountMod, subplebbitAddress }: HideMenuProps) => {
+const HideMenu = ({ author, cid, isAccountMod, communityAddress }: HideMenuProps) => {
   const { t } = useTranslation();
   const [isHideMenuOpen, setIsHideMenuOpen] = useState(false);
   const toggleIsMenuOpen = () => setIsHideMenuOpen(!isHideMenuOpen);
@@ -88,7 +88,7 @@ const HideMenu = ({ author, cid, isAccountMod, subplebbitAddress }: HideMenuProp
           <div className={styles.modal} ref={refs.setFloating} style={floatingStyles} aria-labelledby={headingId} {...getFloatingProps()}>
             <div className={styles.menu}>
               <BlockCommentButton cid={cid} toggleIsMenuOpen={toggleIsMenuOpen} />
-              <BlockSubplebbitButton subplebbitAddress={subplebbitAddress} />
+              <BlockCommunityButton communityAddress={communityAddress} />
               <BlockAuthorButton author={author} />
               {!isAccountMod && <div className={`${styles.menuItem} ${styles.reportButton}`}>{t('report')}</div>}
             </div>

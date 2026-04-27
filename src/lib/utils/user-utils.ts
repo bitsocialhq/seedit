@@ -13,7 +13,7 @@ export const isUserOwnerOrAdmin = (roles: Roles | undefined, userAddress: string
   return userRole === 'owner' || userRole === 'admin';
 };
 
-export const findSubplebbitCreator = (roles: Roles | undefined): string => {
+export const findCommunityCreator = (roles: Roles | undefined): string => {
   if (!roles) {
     return 'anonymous';
   }
@@ -26,20 +26,20 @@ export const findSubplebbitCreator = (roles: Roles | undefined): string => {
   return 'anonymous';
 };
 
-export const findAuthorSubplebbits = (authorAddress: string | undefined, subplebbits: (Community | undefined)[]): string[] => {
-  let authorSubplebbits: string[] = [];
+export const findAuthorCommunities = (authorAddress: string | undefined, communities: (Community | undefined)[]): string[] => {
+  let authorCommunities: string[] = [];
 
-  if (!authorAddress || !subplebbits) {
+  if (!authorAddress || !communities) {
     return [];
   }
 
-  subplebbits.forEach((subplebbit) => {
-    if (subplebbit && subplebbit.roles?.[authorAddress]) {
-      authorSubplebbits.push(subplebbit.address);
+  communities.forEach((community) => {
+    if (community && community.roles?.[authorAddress]) {
+      authorCommunities.push(community.address);
     }
   });
 
-  return authorSubplebbits;
+  return authorCommunities;
 };
 
 interface Score {

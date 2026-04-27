@@ -13,7 +13,8 @@ import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
 import useDownvote from '../../hooks/use-downvote';
 import useIsMobile from '../../hooks/use-is-mobile';
-import { useIsNsfwSubplebbit } from '../../hooks/use-is-nsfw-subplebbit';
+import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import useUpvote from '../../hooks/use-upvote';
 import useWindowWidth from '../../hooks/use-window-width';
 import CommentEditForm from '../comment-edit-form';
@@ -112,18 +113,18 @@ const Post = ({ index, post = {} }: PostProps) => {
     replyCount,
     spoiler,
     state,
-    subplebbitAddress,
     timestamp,
     title,
     upvoteCount,
   } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
 
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
-  // Check if the subplebbit is NSFW based on its tags
-  const isNsfwSubplebbit = useIsNsfwSubplebbit(subplebbitAddress);
-  const nsfw = post?.nsfw || isNsfwSubplebbit;
+  // Check if the community is NSFW based on its tags
+  const isNsfwCommunity = useIsNsfwCommunity(communityAddress || '');
+  const nsfw = post?.nsfw || isNsfwCommunity;
 
   const { displayName, shortAddress } = author || {};
   const { shortAuthorAddress, authorAddressChanged } = useAuthorAddress({ comment: post });
@@ -133,9 +134,9 @@ const Post = ({ index, post = {} }: PostProps) => {
   const postDate = formatLocalizedUTCTimestamp(timestamp, language);
   const params = useParams();
   const location = useLocation();
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
+  const community = useCommunity(communityAddress ? { community: { name: communityAddress }, onlyIfCached: true } : undefined);
 
-  const authorRole = subplebbit?.roles?.[post.author?.address]?.role;
+  const authorRole = community?.roles?.[post.author?.address]?.role;
 
   const isInAllView = isAllView(location.pathname);
   const isInPendingPostView = isPendingPostView(location.pathname, params);
@@ -176,7 +177,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const { blocked, unblock } = useBlock({ cid });
 
   const [hasClickedSubscribe, setHasClickedSubscribe] = useState(false);
-  const { subscribe, subscribed } = useSubscribe({ communityAddress: subplebbitAddress });
+  const { subscribe, subscribed } = useSubscribe({ communityAddress });
 
   // show gray dotted border around last clicked post
   const isLastClicked = sessionStorage.getItem('lastClickedPost') === cid && !isInPostPageView;
@@ -232,7 +233,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                   link={link}
                   linkHeight={linkHeight}
                   linkWidth={linkWidth}
-                  subplebbitAddress={subplebbitAddress}
+                  communityAddress={communityAddress}
                   isPdf={commentMediaInfo?.type === 'pdf'}
                 />
               )}
@@ -245,7 +246,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                       {displayedTitle}
                     </a>
                   ) : (
-                    <Link className={linkClass} to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${post?.index}`} onClick={handlePostClick}>
+                    <Link className={linkClass} to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${post?.index}`} onClick={handlePostClick}>
                       {displayedTitle}
                     </Link>
                   )}
@@ -260,7 +261,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                     {hostname ? (
                       <Link to={`/domain/${hostname}`}>{hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname}</Link>
                     ) : (
-                      <Link to={`/s/${subplebbitAddress}`}>self.{subplebbit?.shortAddress || (subplebbitAddress && getShortAddress(subplebbitAddress))}</Link>
+                      <Link to={`/s/${communityAddress}`}>self.{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}</Link>
                     )}
                     )
                   </span>
@@ -306,8 +307,8 @@ const Post = ({ index, post = {} }: PostProps) => {
                             />
                           </span>
                         )}
-                        <Link className={`${styles.subplebbit} ${subscribed && hasClickedSubscribe ? styles.greenSubplebbitAddress : ''}`} to={`/s/${subplebbitAddress}`}>
-                          s/{subplebbit?.shortAddress || (subplebbitAddress && getShortAddress(subplebbitAddress))}
+                        <Link className={`${styles.community} ${subscribed && hasClickedSubscribe ? styles.greenCommunityAddress : ''}`} to={`/s/${communityAddress}`}>
+                          s/{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}
                         </Link>
                       </span>
                     </>
@@ -326,7 +327,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                   replyCount={replyCount}
                   showCommentEditForm={showCommentEditForm}
                   spoiler={spoiler}
-                  subplebbitAddress={subplebbitAddress}
+                  communityAddress={communityAddress || ''}
                 />
               </div>
               {!(windowWidth < 770) && !(!content && !link) && (

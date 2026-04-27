@@ -1,5 +1,6 @@
 import { Comment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import { getCommentCommunityAddress } from './comment-utils';
 import React, { ReactNode, Fragment } from 'react';
 
 /**
@@ -136,15 +137,15 @@ export const displayNameMatchesPattern = (comment: Comment, pattern: string): bo
  *
  * @param comment The comment to check
  * @param role The role to check for (without the #!# prefix)
- * @param subplebbitRoles The roles object from the subplebbit
+ * @param communityRoles The roles object from the community
  * @returns True if the user has the specified role, false otherwise
  */
-export const userHasRole = (comment: Comment, role: string, subplebbitRoles?: { [key: string]: { role: string } }): boolean => {
-  if (!role || !comment?.author?.address || !subplebbitRoles) {
+export const userHasRole = (comment: Comment, role: string, communityRoles?: { [key: string]: { role: string } }): boolean => {
+  if (!role || !comment?.author?.address || !communityRoles) {
     return false;
   }
 
-  const userRole = subplebbitRoles[comment.author.address]?.role;
+  const userRole = communityRoles[comment.author.address]?.role;
 
   // Handle different role names (moderator/mod)
   if ((role.toLowerCase() === 'moderator' || role.toLowerCase() === 'mod') && userRole === 'moderator') {
@@ -196,10 +197,10 @@ export const parsePattern = (
  *
  * @param comment The comment to check
  * @param pattern The pattern to match
- * @param subplebbitRoles Optional roles object from the subplebbit (required for role filters)
+ * @param communityRoles Optional roles object from the community (required for role filters)
  * @returns True if the comment matches the pattern, false otherwise
  */
-export const commentMatchesPattern = (comment: Comment, pattern: string, subplebbitRoles?: { [key: string]: { role: string } }): boolean => {
+export const commentMatchesPattern = (comment: Comment, pattern: string, communityRoles?: { [key: string]: { role: string } }): boolean => {
   if (!pattern || !comment) return false;
 
   // Check if the pattern contains spaces, which might indicate combined filters
@@ -215,7 +216,7 @@ export const commentMatchesPattern = (comment: Comment, pattern: string, subpleb
         } else if (filter.type === 'displayName') {
           return displayNameMatchesPattern(comment, filter.value);
         } else if (filter.type === 'role') {
-          return userHasRole(comment, filter.value, subplebbitRoles);
+          return userHasRole(comment, filter.value, communityRoles);
         }
         return false;
       });
@@ -245,7 +246,7 @@ export const commentMatchesPattern = (comment: Comment, pattern: string, subpleb
   // Check for role filter (starts with #!#)
   if (pattern.startsWith('#!#')) {
     const rolePattern = pattern.substring(3);
-    return userHasRole(comment, rolePattern, subplebbitRoles);
+    return userHasRole(comment, rolePattern, communityRoles);
   }
 
   // Regular content matching
@@ -266,10 +267,11 @@ export const commentMatchesPattern = (comment: Comment, pattern: string, subpleb
  * @returns True if the comment matches the pattern, false otherwise
  */
 export const useCommentMatchesPattern = (comment: Comment, pattern: string): boolean => {
-  const communityIdentifier = getCommunityIdentifier(comment?.subplebbitAddress);
-  const subplebbit = useCommunity(communityIdentifier ? { community: communityIdentifier, onlyIfCached: true } : undefined);
+  const communityAddress = getCommentCommunityAddress(comment);
+  const communityIdentifier = getCommunityIdentifier(communityAddress);
+  const community = useCommunity(communityIdentifier ? { community: communityIdentifier, onlyIfCached: true } : undefined);
 
-  return commentMatchesPattern(comment, pattern, subplebbit?.roles);
+  return commentMatchesPattern(comment, pattern, community?.roles);
 };
 
 /**

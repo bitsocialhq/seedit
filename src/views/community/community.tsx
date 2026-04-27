@@ -11,7 +11,7 @@ import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
-import { useIsBroadlyNsfwSubplebbit } from '../../hooks/use-is-broadly-nsfw-subplebbit';
+import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -25,8 +25,8 @@ import { sortTypes } from '../../constants/sort-types';
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
 interface FooterProps {
-  subplebbitAddresses: string[];
-  subplebbitAddress: string;
+  communityAddresses: string[];
+  communityAddress: string;
   feedLength: number;
   isOnline: boolean;
   started: boolean;
@@ -40,8 +40,8 @@ interface FooterProps {
 }
 
 const Footer = ({
-  subplebbitAddresses,
-  subplebbitAddress,
+  communityAddresses,
+  communityAddress,
   feedLength,
   isOnline,
   started: _started,
@@ -56,7 +56,7 @@ const Footer = ({
   const { t } = useTranslation();
   let footerFirstLine;
   let footerSecondLine;
-  const loadingStateString = useFeedStateString(subplebbitAddresses) || t('loading');
+  const loadingStateString = useFeedStateString(communityAddresses) || t('loading');
 
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
@@ -90,7 +90,7 @@ const Footer = ({
     </>
   );
 
-  const { blocked, unblock, block } = useBlock({ address: subplebbitAddress });
+  const { blocked, unblock, block } = useBlock({ address: communityAddress });
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
   const handleBlock = () => {
     if (blocked) {
@@ -193,7 +193,7 @@ const Footer = ({
           i18nKey='show_all_instead'
           values={{ timeFilterName }}
           components={{
-            1: <Link key='show_all_instead_link' to={`/s/${subplebbitAddress}`} />,
+            1: <Link key='show_all_instead_link' to={`/s/${communityAddress}`} />,
           }}
         />
       </div>
@@ -220,14 +220,14 @@ const CommunityView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
-  const subplebbitAddress = params?.communityAddress || '';
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
+  const communityAddress = params?.communityAddress || '';
+  const subplebbit = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
   const { isOffline } = useIsCommunityOffline(subplebbit || {});
   const isOnline = !isOffline;
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
-  const subplebbitAddresses = useMemo(() => [subplebbitAddress], [subplebbitAddress]) as string[];
+  const communityAddresses = useMemo(() => [communityAddress], [communityAddress]) as string[];
   const sortType = sortTypes.includes(params?.sortType || '') ? params?.sortType : sortTypes[0];
 
   useEffect(() => {
@@ -238,7 +238,7 @@ const CommunityView = () => {
 
   useEffect(() => {
     if (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName)) {
-      console.log(`Invalid timeFilterName '${params.timeFilterName}' in Subplebbit, redirecting to /not-found`);
+      console.log(`Invalid timeFilterName '${params.timeFilterName}' in Community, redirecting to /not-found`);
       navigate('/not-found', { replace: true });
     }
   }, [params.timeFilterName, navigate]);
@@ -249,7 +249,7 @@ const CommunityView = () => {
 
   const feedOptions = useMemo(() => {
     const options: any = {
-      communities: getCommunityIdentifiers(subplebbitAddresses),
+      communities: getCommunityIdentifiers(communityAddresses),
       sortType,
       newerThan: searchQuery ? 0 : timeFilterSeconds,
     };
@@ -265,13 +265,13 @@ const CommunityView = () => {
     }
 
     return options;
-  }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
 
   const { feed, hasMore, loadMore, reset } = useFeed(feedOptions);
 
   // show account comments instantly in the feed once published (cid defined), instead of waiting for the feed to update
-  const { accountComments } = useAccountComments({ communityAddress: subplebbitAddress, newerThan: 60 * 60 });
-  const filteredComments = useMemo(() => filterOptimisticLocalPosts(accountComments, feed, subplebbitAddress), [accountComments, subplebbitAddress, feed]);
+  const { accountComments } = useAccountComments({ communityAddress, newerThan: 60 * 60 });
+  const filteredComments = useMemo(() => filterOptimisticLocalPosts(accountComments, feed, communityAddress), [accountComments, communityAddress, feed]);
 
   // reset the feed when a new account comment is published, so it shows instantly in the feed
   const setResetFunction = useFeedResetStore((state) => state.setResetFunction);
@@ -307,8 +307,8 @@ const CommunityView = () => {
   }, [feed, setPinnedPostsCount]);
 
   const footerProps: FooterProps = {
-    subplebbitAddresses,
-    subplebbitAddress,
+    communityAddresses,
+    communityAddress,
     feedLength: combinedFeed.length || 0,
     isOnline,
     started,
@@ -327,19 +327,19 @@ const CommunityView = () => {
     const setLastVirtuosoState = () => {
       virtuosoRef.current?.getState((snapshot: StateSnapshot) => {
         if (snapshot?.ranges?.length) {
-          lastVirtuosoStates[subplebbitAddress + sortType + timeFilterName + searchQuery] = snapshot;
+          lastVirtuosoStates[communityAddress + sortType + timeFilterName + searchQuery] = snapshot;
         }
       });
     };
     window.addEventListener('scroll', setLastVirtuosoState);
     return () => window.removeEventListener('scroll', setLastVirtuosoState);
-  }, [subplebbitAddress, sortType, timeFilterName, searchQuery]);
-  const lastVirtuosoState = lastVirtuosoStates?.[subplebbitAddress + sortType + timeFilterName + searchQuery];
+  }, [communityAddress, sortType, timeFilterName, searchQuery]);
+  const lastVirtuosoState = lastVirtuosoStates?.[communityAddress + sortType + timeFilterName + searchQuery];
 
-  // over 18 warning for subplebbit with nsfw tag in multisub default list
+  // over 18 warning for community with nsfw tag in multisub default list
   const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
   const hasUnhiddenAnyNsfwCommunity = !hideAdultCommunities || !hideGoreCommunities || !hideAntiCommunities || !hideVulgarCommunities;
-  const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
+  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
 
   const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
@@ -351,13 +351,13 @@ const CommunityView = () => {
 
   // page title
   useEffect(() => {
-    document.title = title ? title : shortAddress || subplebbitAddress;
-  }, [title, shortAddress, subplebbitAddress]);
+    document.title = title ? title : shortAddress || communityAddress;
+  }, [title, shortAddress, communityAddress]);
 
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);
 
-  return isBroadlyNsfwSubplebbit && !hasUnhiddenAnyNsfwCommunity ? (
+  return isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity ? (
     <Over18Warning />
   ) : (
     <div className={styles.content}>

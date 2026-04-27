@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Comment, useAccountComment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { getHostname } from '../../lib/utils/url-utils';
 import { formatScore, getReplyScore } from '../../lib/utils/post-utils';
 import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/utils';
@@ -39,7 +40,7 @@ interface ReplyAuthorProps {
   removed: boolean;
   shortAuthorAddress: string | undefined;
   submitterAddress: string;
-  subplebbitAddress: string;
+  communityAddress: string;
   postCid: string;
   pinned: boolean;
 }
@@ -56,7 +57,7 @@ const ReplyAuthor = ({
   removed,
   shortAuthorAddress,
   submitterAddress,
-  subplebbitAddress,
+  communityAddress,
   postCid,
 }: ReplyAuthorProps) => {
   const { t } = useTranslation();
@@ -100,7 +101,7 @@ const ReplyAuthor = ({
               {' '}
               [
               {isAuthorSubmitter && (
-                <Link to={`/s/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+                <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
                   S
                 </Link>
               )}
@@ -117,7 +118,7 @@ const ReplyAuthor = ({
             <span className={styles.moderatorBrackets}>
               {' '}
               [
-              <Link to={`/s/${subplebbitAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+              <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
                 S
               </Link>
               ]
@@ -205,19 +206,20 @@ type ParentLinkProps = {
   parentCid?: string;
   postCid?: string;
   shortAddress?: string;
-  subplebbitAddress?: string;
+  communityAddress?: string;
   timestamp?: number;
 };
 
 const ParentLink = ({ postCid }: ParentLinkProps) => {
   const parentComment = useComment({ commentCid: postCid });
-  const { author, cid, content, title, subplebbitAddress } = parentComment || {};
+  const { author, cid, content, title } = parentComment || {};
+  const communityAddress = getCommentCommunityAddress(parentComment);
   const { t } = useTranslation();
   const postTitle = (title?.length > 300 ? title?.slice(0, 300) + '...' : title) || (content?.length > 300 ? content?.slice(0, 300) + '...' : content);
 
   return (
     <div className={styles.parent}>
-      <Link to={`/s/${subplebbitAddress}/c/${cid}`} className={styles.parentLink}>
+      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.parentLink}>
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
@@ -225,8 +227,8 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         u/{author?.shortAddress}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={`/s/${subplebbitAddress}`} className={styles.parentSubplebbit}>
-        s/{subplebbitAddress}
+      <Link to={`/s/${communityAddress}`} className={styles.parentSubplebbit}>
+        s/{communityAddress}
       </Link>
     </div>
   );
@@ -237,7 +239,8 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
   const inboxComment = useComment({ commentCid, onlyIfCached: true });
   const { postCid, parentCid } = inboxComment || {};
   const parent = useComment({ commentCid: inboxComment?.postCid, onlyIfCached: true });
-  const { cid, content, title, subplebbitAddress } = parent || {};
+  const { cid, content, title } = parent || {};
+  const communityAddress = getCommentCommunityAddress(parent);
   const postTitle = (title?.length > 300 ? title?.slice(0, 300) + '...' : title) || (content?.length > 300 ? content?.slice(0, 300) + '...' : content);
 
   const isInboxCommentReply = postCid !== parentCid;
@@ -246,7 +249,7 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
   return (
     <div className={styles.inboxParentLinkWrapper}>
       <span className={styles.inboxParentLinkSubject}>{isInboxCommentReply ? t('comment_reply') : isInboxPostReply ? t('post_reply') : ''}</span>
-      <Link to={`/s/${subplebbitAddress}/c/${cid}`} className={styles.inboxParentLink}>
+      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.inboxParentLink}>
         {postTitle}
       </Link>
     </div>
@@ -256,11 +259,12 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
 const InboxParentComment = ({ parentCid }: { parentCid: string | undefined }) => {
   const { t } = useTranslation();
   const parentComment = useComment({ commentCid: parentCid });
-  const { content, subplebbitAddress } = parentComment || {};
+  const { content } = parentComment || {};
+  const communityAddress = getCommentCommunityAddress(parentComment);
   return (
     <>
       <Expando content={content} expanded={true} showContent={true} />
-      <Link className={styles.viewParentComment} to={`/s/${subplebbitAddress}/c/${parentCid}`}>
+      <Link className={styles.viewParentComment} to={`/s/${communityAddress}/c/${parentCid}`}>
         {t('view_parent_comment')}
       </Link>
     </>
@@ -280,9 +284,9 @@ const InboxShowParentButton = ({ parentCid }: { parentCid: string | undefined })
   );
 };
 
-const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, subplebbitAddress, timestamp }: ParentLinkProps) => {
+const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, communityAddress, timestamp }: ParentLinkProps) => {
   const { t } = useTranslation();
-  const shortSubplebbitAddress = subplebbitAddress ? (subplebbitAddress.includes('.') ? subplebbitAddress : getShortAddress(subplebbitAddress)) : '';
+  const shortCommunityAddress = communityAddress ? (communityAddress.includes('.') ? communityAddress : getShortAddress(communityAddress)) : '';
 
   return (
     <>
@@ -292,8 +296,8 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
           u/{shortAddress}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={`/s/${subplebbitAddress}`} className={styles.inboxParentSubplebbit}>
-          s/{shortSubplebbitAddress}{' '}
+        <Link to={`/s/${communityAddress}`} className={styles.inboxParentSubplebbit}>
+          s/{shortCommunityAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}
       </div>
@@ -338,11 +342,11 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
     spoiler,
     nsfw,
     state,
-    subplebbitAddress,
     timestamp,
     upvoteCount,
   } = reply || {};
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
+  const communityAddress = getCommentCommunityAddress(reply);
+  const community = useCommunity(communityAddress ? { community: { name: communityAddress }, onlyIfCached: true } : undefined);
 
   const pendingReply = useAccountComment({ commentIndex: reply?.index });
   const parentOfPendingReply = useComment({ commentCid: pendingReply?.parentCid, onlyIfCached: true });
@@ -353,7 +357,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
   const isInPostContextView = isPostContextView(location.pathname, params, location.search);
   const isInPostPageView = isPostPageView(location.pathname, params);
 
-  const authorRole = subplebbit?.roles?.[author?.address]?.role;
+  const authorRole = community?.roles?.[author?.address]?.role;
   const { shortAuthorAddress } = useAuthorAddress({ comment: reply });
   const { imageUrl } = useAuthorAvatar({ author });
   const replies = useReplies(reply);
@@ -461,7 +465,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                   removed={removed}
                   shortAuthorAddress={shortAuthorAddress}
                   submitterAddress={post?.author?.address}
-                  subplebbitAddress={subplebbitAddress}
+                  communityAddress={communityAddress || ''}
                   pinned={pinned}
                   postCid={postCid}
                 />
@@ -496,7 +500,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                 parentCid={parentCid}
                 postCid={postCid}
                 shortAddress={author?.shortAddress}
-                subplebbitAddress={subplebbitAddress}
+                communityAddress={communityAddress}
                 timestamp={timestamp}
               />
             )}
@@ -564,12 +568,12 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                 postCid={postCid}
                 removed={removed}
                 replyCount={replies.length}
-                subplebbitAddress={subplebbitAddress}
+                communityAddress={communityAddress || ''}
                 showCommentEditForm={showCommentEditForm}
                 showReplyForm={showReplyForm}
                 spoiler={spoiler}
               />
-              {isReplying && <ReplyForm cid={cid} isReplyingToReply={true} hideReplyForm={hideReplyForm} subplebbitAddress={subplebbitAddress} postCid={postCid} />}
+              {isReplying && <ReplyForm cid={cid} isReplyingToReply={true} hideReplyForm={hideReplyForm} communityAddress={communityAddress || ''} postCid={postCid} />}
               {!isSingleReply &&
                 replies.map((reply, index) => {
                   return (
@@ -583,7 +587,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                         />
                       ) : (
                         <div className={styles.continueThisThread}>
-                          <Link to={`/s/${subplebbitAddress}/c/${cid}`}>{t('continue_thread')}</Link>
+                          <Link to={`/s/${communityAddress}/c/${cid}`}>{t('continue_thread')}</Link>
                         </div>
                       )}
                     </Fragment>

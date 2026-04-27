@@ -3,7 +3,7 @@ import { useClientsStates, useCommunity, useCommunitiesStates } from '@bitsocial
 import { debounce } from 'lodash';
 import { getCommunityIdentifiers } from './use-community-identifier';
 
-interface CommentOrSubplebbit {
+interface CommentOrCommunity {
   state?: string;
   publishingState?: string;
   updatingState?: string;
@@ -26,8 +26,8 @@ const getClientHost = (clientUrl: string): string => {
   return clientHosts[clientUrl];
 };
 
-const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | undefined => {
-  const { states: rawStates } = useClientsStates({ comment: commentOrSubplebbit }) as { states: States };
+const useStateString = (commentOrCommunity: CommentOrCommunity): string | undefined => {
+  const { states: rawStates } = useClientsStates({ comment: commentOrCommunity }) as { states: States };
 
   const debouncedStates = useMemo(() => {
     const debouncedValue = debounce((value: States) => value, 300);
@@ -53,11 +53,11 @@ const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | unde
       stateString += `${formattedState} from ${clientHosts.join(', ')}`;
     }
 
-    if (!stateString && commentOrSubplebbit?.state !== 'succeeded') {
-      if (commentOrSubplebbit?.publishingState && commentOrSubplebbit?.publishingState !== 'stopped' && commentOrSubplebbit?.publishingState !== 'succeeded') {
-        stateString = commentOrSubplebbit.publishingState;
-      } else if (commentOrSubplebbit?.updatingState !== 'stopped' && commentOrSubplebbit?.updatingState !== 'succeeded') {
-        stateString = commentOrSubplebbit.updatingState;
+    if (!stateString && commentOrCommunity?.state !== 'succeeded') {
+      if (commentOrCommunity?.publishingState && commentOrCommunity?.publishingState !== 'stopped' && commentOrCommunity?.publishingState !== 'succeeded') {
+        stateString = commentOrCommunity.publishingState;
+      } else if (commentOrCommunity?.updatingState !== 'stopped' && commentOrCommunity?.updatingState !== 'succeeded') {
+        stateString = commentOrCommunity.updatingState;
       }
       if (stateString) {
         stateString = stateString.replaceAll('-', ' ').replace('subplebbit ipns', 'community').replace('fetching', 'downloading').replace('ipfs', 'post');
@@ -76,20 +76,20 @@ const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | unde
     }
 
     return stateString === '' ? undefined : stateString;
-  }, [debouncedStates, commentOrSubplebbit]);
+  }, [debouncedStates, commentOrCommunity]);
 };
 
-export const useFeedStateString = (subplebbitAddresses?: string[]): string | undefined => {
-  // single subplebbit feed state string
-  const subplebbitAddress = subplebbitAddresses?.length === 1 ? subplebbitAddresses[0] : undefined;
-  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
-  const singleSubplebbitFeedStateString = useStateString(subplebbit);
+export const useFeedStateString = (communityAddresses?: string[]): string | undefined => {
+  // single community feed state string
+  const communityAddress = communityAddresses?.length === 1 ? communityAddresses[0] : undefined;
+  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const singleCommunityFeedStateString = useStateString(community);
 
-  // multiple subplebbit feed state string
-  const { states } = useCommunitiesStates({ communities: getCommunityIdentifiers(subplebbitAddresses || []) });
+  // multiple community feed state string
+  const { states } = useCommunitiesStates({ communities: getCommunityIdentifiers(communityAddresses || []) });
 
-  const multipleSubplebbitsFeedStateString = useMemo(() => {
-    if (subplebbitAddress) {
+  const multipleCommunityFeedStateString = useMemo(() => {
+    if (communityAddress) {
       return;
     }
 
@@ -152,12 +152,12 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
 
     // if string is empty, return undefined instead
     return stateString === '' ? undefined : stateString;
-  }, [states, subplebbitAddress]);
+  }, [states, communityAddress]);
 
-  if (singleSubplebbitFeedStateString) {
-    return singleSubplebbitFeedStateString;
+  if (singleCommunityFeedStateString) {
+    return singleCommunityFeedStateString;
   }
-  return multipleSubplebbitsFeedStateString;
+  return multipleCommunityFeedStateString;
 };
 
 export default useStateString;

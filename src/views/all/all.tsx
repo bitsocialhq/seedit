@@ -18,7 +18,7 @@ import styles from '../home/home.module.css';
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
 const All = () => {
-  const subplebbitAddresses = useDefaultSubplebbitAddresses();
+  const communityAddresses = useDefaultSubplebbitAddresses();
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
@@ -55,7 +55,7 @@ const All = () => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       sortType,
-      communities: getCommunityIdentifiers(subplebbitAddresses),
+      communities: getCommunityIdentifiers(communityAddresses),
     };
 
     if (searchQuery) {
@@ -69,9 +69,9 @@ const All = () => {
     }
 
     return options;
-  }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
 
   // Reset no results state when search query changes
   useEffect(() => {
@@ -106,7 +106,7 @@ const All = () => {
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
   } = useFeed({
-    communities: getCommunityIdentifiers(subplebbitAddresses),
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
   });
@@ -115,7 +115,7 @@ const All = () => {
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
   } = useFeed({
-    communities: getCommunityIdentifiers(subplebbitAddresses),
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
   });
@@ -124,7 +124,7 @@ const All = () => {
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
   } = useFeed({
-    communities: getCommunityIdentifiers(subplebbitAddresses),
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
   });
@@ -164,8 +164,8 @@ const All = () => {
     feedLength: feed?.length,
     hasFeedLoaded: !!feed,
     hasMore,
-    subplebbitAddresses,
-    subplebbitAddressesWithNewerPosts,
+    communityAddresses,
+    communityAddressesWithNewerPosts,
     weeklyFeedLength: weeklyFeed.length,
     monthlyFeedLength: monthlyFeed.length,
     yearlyFeedLength: yearlyFeed.length,
