@@ -25,7 +25,7 @@ Read each changed file and check for these project-critical anti-patterns:
 | Violation | Fix |
 |-----------|-----|
 | `useState` for shared/global state | Move to Zustand store in `src/stores/` |
-| `useEffect` for data fetching | Replace with plebbit-react-hooks |
+| `useEffect` for data fetching | Replace with bitsocial-react-hooks |
 | `useEffect` syncing derived state | Calculate during render instead |
 | Boolean flag soup (`isLoading`, `isError`) | Use state machine in Zustand |
 | Copy-pasted logic across components | Extract to custom hook in `src/hooks/` |

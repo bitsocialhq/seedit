@@ -26,7 +26,7 @@ seedit is a serverless, adminless, decentralized Reddit-style client built on th
 
 | Situation | Required action |
 |---|---|
-| React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; run `yarn build`, `yarn lint`, and `yarn type-check` |
+| React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available; run `yarn build`, `yarn lint`, and `yarn type-check` |
 | Visible UI or interaction changed | Verify in browser with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari; test desktop and mobile viewport |
 | `package.json` changed | Run `corepack yarn install` to keep `yarn.lock` in sync |
 | Translation key/value changed | Use `docs/agent-playbooks/translations.md` |
@@ -102,6 +102,7 @@ src/
 - Treat branch and worktree as different things: the branch is the change set; the worktree is the checkout where that branch is worked on.
 - For parallel unrelated tasks, give each task its own branch from `master`, its own worktree, and its own PR into `master`.
 - After a reviewed branch is merged, prefer deleting it to keep branch drift and merge conflicts low.
+- Open PRs as ready for review, not draft. Draft PRs prevent CodeRabbit, Cursor Bugbot, and similar review bots from running.
 
 ### Bug Investigation Rules
 
@@ -136,6 +137,10 @@ src/
 - If `AGENTS.md` references a skill, agent, or hook, prefer a tracked file under `.codex/`, `.cursor/`, or `.claude/` rather than an untracked local-only instruction.
 - Review `.codex/config.toml`, `.cursor/hooks.json`, and `.claude/hooks.json` before changing agent orchestration or hook behavior, because they are the entry points contributors will actually load.
 - When a diff adds new `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useMemo`, `useCallback`, or `memo(...)` usage under `src/`, treat the repo hook reminder as mandatory and reconsider the change with `you-might-not-need-an-effect` and `vercel-react-best-practices` before finishing.
+- Before finishing any React UI logic change under `src/components`, `src/views`, `src/hooks`, or UI stores, review the changed diff with `vercel-react-best-practices` and, in Codex/Vercel-plugin sessions, `vercel:react-best-practices`. Fix valid findings before final verification.
+- Do not configure `.claude` agents to use `composer-2`; that model is Cursor-only in this repo. Keep `.claude` agent models on Claude-supported options.
+- Do not configure `.codex/agents/*.toml` with `gpt-5.3-codex` or `gpt-5.3-codex-spark`; standardize Codex agents on `gpt-5.4` unless the user explicitly requests a different model.
+- For browser automation, default to a fresh isolated `playwright-cli` session for reproducible verification. If the task depends on existing auth, cookies, extensions, open tabs, or another live browser state, explicitly confirm whether to use a fresh isolated session or the contributor's current browser session. Do not assume permission to drive the contributor's active personal browser session.
 - Directory-specific auto-loaded rules live under `src/AGENTS.md` and `scripts/AGENTS.md`; read them before editing files in those trees.
 - For work expected to span multiple sessions, keep explicit task state in a `feature-list.json` plus `progress.md` pair using `docs/agent-playbooks/long-running-agent-workflow.md`.
 - If more than one human or toolchain needs the same task state, keep it in a tracked location such as `docs/agent-runs/<slug>/` instead of burying it in a tool-specific hidden directory.

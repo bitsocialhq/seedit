@@ -28,7 +28,7 @@ For each key, check if the English value already exists in `public/translations/
 
 ### Step 3 — Spawn translator subagents
 
-For **each key**, spawn a `translator` subagent (using the Task tool with `subagent_type: "generalPurpose"` and `model: "fast"`). The prompt for each subagent must include:
+For **each key**, spawn a `translator` subagent using the Task tool with `subagent_type: "translator"`. The prompt for each subagent must include:
 - The key name
 - The English value
 - An instruction to follow the translator subagent's system prompt

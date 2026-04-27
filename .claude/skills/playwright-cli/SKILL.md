@@ -39,6 +39,34 @@ playwright-cli screenshot
 playwright-cli close
 ```
 
+## Session mode selection
+
+Default to a fresh isolated browser session for reproducible verification.
+
+Before browser work where existing state may matter, explicitly confirm the mode if the user has not already said which one they want:
+
+1. Fresh isolated `playwright-cli` session
+2. Current browser session reuse
+
+Existing state usually matters when the task depends on auth, cookies, extensions, open tabs, or reproducing something already happening in the contributor's browser.
+
+Do not attach to a live personal browser session without explicit approval.
+
+If current-session reuse is requested, prefer the supported attach path in the local setup:
+
+```bash
+# Fresh isolated browser (default)
+playwright-cli -s=verify open https://example.com
+
+# Reusable Playwright-managed profile
+playwright-cli -s=verify open https://example.com --persistent
+
+# Attach to an existing browser when the local extension bridge is set up
+playwright-cli open --extension
+```
+
+If the task requires the contributor's current browser session and the attach path is not available in the current setup, stop and ask whether to switch to a fresh session or provide an explicit CDP-based Playwright script.
+
 ## Commands
 
 ### Core

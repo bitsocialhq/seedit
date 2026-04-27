@@ -32,7 +32,14 @@ npx skills add https://github.com/vercel-labs/skills --skill find-skills
 
 Use `playwright-cli` for browser automation (navigation, interaction, screenshots, tests, extraction).
 
-When using `playwright-cli` for repo UI verification, do not stop after one engine. Run the relevant flow in all three main browser engines:
+Default to a fresh isolated browser session for normal verification. If the task depends on the contributor's existing browser state, ask whether they want:
+
+- a fresh isolated `playwright-cli` session
+- their current browser session reused
+
+Do not attach to a live personal browser session without explicit confirmation.
+
+When using `playwright-cli` for repo UI verification, run the relevant flow in all three main browser engines:
 
 - `chrome` for Blink
 - `firefox` for Gecko
@@ -47,6 +54,7 @@ playwright-cli install --skills
 
 Skill install locations:
 
+- `.codex/skills/playwright-cli/`
 - `.cursor/skills/playwright-cli/`
 - `.claude/skills/playwright-cli/`
 
@@ -56,3 +64,4 @@ Avoid GitHub MCP and browser MCP servers for this project because they add signi
 
 - GitHub operations: use `gh` CLI.
 - Browser operations: use `playwright-cli`.
+- If current browser reuse is needed, keep using Playwright-based attach paths rather than browser MCP servers.

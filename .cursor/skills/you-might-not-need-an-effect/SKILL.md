@@ -72,9 +72,9 @@ useEffect(() => {
 <CommentForm key={postCid} />
 ```
 
-### 4. Fetching data (use plebbit-react-hooks, not useEffect)
+### 4. Fetching data (use bitsocial-react-hooks, not useEffect)
 
-This project uses `plebbit-react-hooks` for all data fetching. Never use `useEffect` + `fetch`.
+This project uses `bitsocial-react-hooks` for all data fetching. Never use `useEffect` + `fetch`.
 
 ```typescript
 // ❌ Anti-pattern
@@ -134,10 +134,10 @@ if (typeof window !== 'undefined') {
 
 | useEffect pattern | Replace with |
 |-------------------|-------------|
-| Fetch data | `useComment`, `useFeed`, `useSubplebbit`, etc. from plebbit-react-hooks |
+| Fetch data | `useComment`, `useFeed`, `useCommunity`, etc. from bitsocial-react-hooks |
 | Sync shared state | Zustand store in `src/stores/` |
 | Derive values from state | Calculate during render |
-| Boolean loading/error flags | `state` field from plebbit-react-hooks, or state machine in Zustand |
+| Boolean loading/error flags | `state` field from bitsocial-react-hooks, or state machine in Zustand |
 
 ## When useEffect IS Appropriate
 

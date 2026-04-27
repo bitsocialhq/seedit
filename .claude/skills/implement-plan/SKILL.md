@@ -47,7 +47,7 @@ Each subagent prompt must include:
 - **File paths** and context needed to work independently
 - **Constraints** or edge cases from the plan
 
-Use `model: "fast"` for straightforward tasks. Omit model for complex ones.
+Use the `plan-implementer` agent's configured model unless the harness explicitly requires a supported model override for a straightforward task. Omit overrides for complex or cross-cutting tasks.
 
 Wait for all subagents in a batch to complete before starting the next batch.
 

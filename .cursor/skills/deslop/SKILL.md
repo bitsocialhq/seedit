@@ -44,7 +44,7 @@ const [count, setCount] = useState(0); // Initialize count state to 0
 const user = useComment({ commentCid });
 
 // ✅ Keep — explains non-obvious intent
-// plebbit-react-hooks returns undefined while loading, null if not found
+// bitsocial-react-hooks returns undefined while loading, null if not found
 const isLoading = comment === undefined;
 ```
 
@@ -53,15 +53,15 @@ const isLoading = comment === undefined;
 AI adds try/catch blocks and null guards everywhere, even on trusted codepaths. Remove guards that the surrounding code doesn't need.
 
 ```typescript
-// ❌ Slop — plebbit-react-hooks already handles errors internally
+// ❌ Slop — bitsocial-react-hooks already handles errors internally
 try {
-  const { feed } = useFeed({ subplebbitAddresses });
+  const { feed } = useFeed({ communities });
 } catch (error) {
   console.error('Failed to fetch feed:', error);
 }
 
 // ✅ Clean — just use the hook directly
-const { feed } = useFeed({ subplebbitAddresses });
+const { feed } = useFeed({ communities });
 ```
 
 ### `as any` casts

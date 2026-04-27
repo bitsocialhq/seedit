@@ -82,3 +82,5 @@ playwright-cli -s=verify-webkit snapshot
 - If playwright-cli is not installed, report it immediately and stop
 - If the dev server is unreachable, report the error and stop
 - Don't modify any code — you are read-only, verification only
+- Default to a fresh isolated `playwright-cli` browser session. If the requested verification depends on auth, cookies, extensions, open tabs, or other existing browser state and the parent agent did not specify session mode, stop and ask whether to use a fresh browser or the contributor's current browser session.
+- Never attach to a live personal browser session without explicit permission. If current-session reuse is requested, use the supported attach path only when available; otherwise report the limitation instead of silently switching modes.

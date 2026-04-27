@@ -41,7 +41,7 @@ For each failure:
 1. Read the affected file to understand context
 2. Check git history for the affected lines (`git log --oneline -5 -- <file>`) to avoid reverting intentional code
 3. Apply the minimal fix that resolves the error
-4. Follow project patterns from AGENTS.md (Zustand for shared state, plebbit-react-hooks for data, derive state during render)
+4. Follow project patterns from AGENTS.md (Zustand for shared state, bitsocial-react-hooks for data, derive state during render)
 
 ### Step 4: Re-verify
 

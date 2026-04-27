@@ -9,7 +9,7 @@ Two-layer profiling: browser-level symptoms (Web Vitals, long tasks, scroll jank
 
 ## Prerequisites
 
-- Dev server running at http://localhost:3000 (`yarn start`)
+- Dev server running at http://seedit.localhost:1355 (`yarn start`)
 - `playwright-cli` installed (`npm install -g @playwright/cli@latest`)
 
 **IMPORTANT:** The orchestrator (you) is responsible for ensuring exactly ONE dev server is running. Profiler subagents must NEVER start a dev server themselves.
@@ -31,7 +31,7 @@ Before spawning any profiler subagents, verify exactly one dev server is availab
 
 ```bash
 # Check if the dev server is reachable
-curl -sf http://localhost:3000 -o /dev/null && echo "OK" || echo "NOT RUNNING"
+curl -sf http://seedit.localhost:1355 -o /dev/null && echo "OK" || echo "NOT RUNNING"
 ```
 
 - If **OK**: proceed to Step 1.
@@ -54,16 +54,15 @@ Keep batches balanced. Add thread views (`/:boardIdentifier/thread/:cid`) as nee
 
 ## Step 2: Spawn Profiler Subagents
 
-Read the profiler subagent definition at `.cursor/agents/profiler.md`. Then spawn one `shell` Task per batch **in parallel** (single message, multiple Task calls):
+Read the profiler subagent definition at `.cursor/agents/profiler.md`. Then spawn one `profiler` Task per batch **in parallel** (single message, multiple Task calls):
 
 ```
 For each batch, create a Task:
-  subagent_type: "shell"
+  subagent_type: "profiler"
   prompt: |
-    You are a performance profiler. Follow the workflow in .cursor/agents/profiler.md.
     Session name: "prof-N"
     Routes to profile: /route1, /route2, ...
-    [Include the full profiler workflow from the agent file]
+    Any non-default app URL or extra profiling constraints
 ```
 
 Spawn up to 4 subagents simultaneously. Each opens its own browser session, navigates routes, scrolls, collects both Web Vitals and react-scan data per route, and returns a structured issues list.
@@ -160,5 +159,5 @@ playwright-cli -s=prof-3 close 2>/dev/null
 - **Per-route collection**: Data resets on each `goto` — the profiler collects before navigating away.
 - **addInitScript persistence**: Instrumentation re-injects automatically in each new document.
 - **Tracing**: Each subagent produces a `trace.zip` viewable in [Trace Viewer](https://trace.playwright.dev).
-- **Board codes**: `biz`, `pol`, `g`, `a`, `v`, etc. map to subplebbit addresses via the directory.
+- **Board codes**: `biz`, `pol`, `g`, `a`, `v`, etc. map to community addresses via the app's directory.
 - **Without react-scan**: If `__getReactScanReport` returns null, the profiler falls back to commit counts + render bursts (still useful, just no component names).
