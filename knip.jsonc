@@ -1,0 +1,47 @@
+{
+  "$schema": "https://unpkg.com/knip@6.1.0/schema-jsonc.json",
+  "ignoreBinaries": [
+    // These are intentionally invoked through package scripts / commit hooks rather than local package bins.
+    "cz",
+    "source-map-explorer"
+  ],
+  "ignoreFiles": [
+    // Tool-owned config and runtime entry files are resolved by Vite/Electron rather than the app import graph.
+    "electron/preload.mjs",
+    "electron/vite-config.js",
+    "electron/vite.preload.config.js",
+    "forge.config.js",
+    "src/sw.ts"
+  ],
+  "ignoreDependencies": [
+    // This package is satisfied transitively through bitsocial-react-hooks rather than listed directly.
+    "@plebbit/plebbit-js",
+    // These packages are consumed by native Capacitor/Gradle config rather than JS imports.
+    "@capacitor/status-bar",
+    "@capawesome/capacitor-android-edge-to-edge-support",
+    // These packages are used by build/config/html entrypoints Knip does not fully trace in this repo.
+    "@electron-forge/maker-dmg",
+    "@electron-forge/maker-squirrel",
+    "@electron-forge/maker-zip",
+    "@reforged/maker-appimage",
+    "assert",
+    "babel-plugin-react-compiler",
+    "buffer",
+    "crypto-browserify",
+    "cz-conventional-changelog",
+    "react-grab",
+    "stream-browserify",
+    // The PWA service worker entry is injected by vite-plugin-pwa, which Knip does not trace here.
+    "workbox-core",
+    "workbox-expiration",
+    "workbox-precaching",
+    "workbox-routing",
+    "workbox-strategies"
+  ],
+  "ignoreIssues": {
+    // This import is intentionally satisfied transitively through bitsocial-react-hooks.
+    "electron/start-plebbit-rpc.js": ["unlisted"],
+    // Knip falsely infers v8 coverage for Vitest config even though this repo uses Istanbul.
+    "vitest.config.ts": ["unlisted"]
+  }
+}

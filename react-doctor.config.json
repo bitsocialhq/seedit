@@ -1,0 +1,6 @@
+{
+  "diff": false,
+  "ignore": {
+    "files": ["**/__tests__/**", "**/*.test.*"]
+  }
+}
