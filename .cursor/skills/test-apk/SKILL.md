@@ -7,8 +7,8 @@ description: Test and debug Android APK features using a local Android emulator.
 
 ## Overview
 
-Delegates APK testing to a **shell subagent** (`model: fast`) to keep the main context clean.
-The subagent manages the emulator, builds/installs the APK, executes tests, and returns structured diagnostics.
+Delegates APK testing to the dedicated `test-apk` subagent to keep the main context clean.
+That subagent manages the emulator, builds and installs only when needed, executes the requested tests, and returns structured diagnostics.
 
 ## Workflow
 
@@ -25,14 +25,13 @@ Ask the user (or infer from context) what to test. Common scenarios:
 | Manual APK interaction | Build, install, launch, capture logcat |
 | Contract tests (fixtures) | `yarn contract:postimages` |
 
-### Step 2: Delegate to Shell Subagent
+### Step 2: Delegate to the `test-apk` Subagent
 
-Spawn a **shell** subagent with `model: fast`. Use the prompt template below, filling in `{TEST_DESCRIPTION}` with the user's requirements.
+Spawn the `test-apk` subagent with the prompt template below, filling in `{TEST_DESCRIPTION}` with the user's requirements and any exact commands or classes you want run.
 
 ```
 Use the Task tool:
-  subagent_type: "shell"
-  model: "fast"
+  subagent_type: "test-apk"
   prompt: <see Prompt Template below>
 ```
 

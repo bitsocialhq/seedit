@@ -16,7 +16,9 @@ Creates a GitHub issue, commits relevant changes on a review branch, pushes the 
 
 ### 1. Determine label(s)
 
-Ask the user using AskQuestion (multi-select):
+The agent should choose the issue label(s) itself from the conversation context and diff. Do **not** ask the user to pick labels unless the work is genuinely ambiguous after reviewing both.
+
+Default mapping:
 
 | Option | When |
 |--------|------|
@@ -24,6 +26,8 @@ Ask the user using AskQuestion (multi-select):
 | `enhancement` | New feature |
 | `bug` + `enhancement` | New feature that also fixes a bug |
 | `documentation` | README, AGENTS.md, docs-only changes |
+
+When the classification is ambiguous, make the best reasonable choice and note the reasoning in the final summary. Only ask the user if the ambiguity would materially affect tracking or triage.
 
 ### 2. Resolve the current GitHub assignee
 

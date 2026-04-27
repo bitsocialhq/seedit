@@ -30,7 +30,7 @@ Follow the plan provided by the parent agent. Apply changes using project patter
 | Concern | Avoid | Use Instead |
 |---------|-------|-------------|
 | Shared state | `useState` + prop drilling | Zustand store (`src/stores/`) |
-| Data fetching | `useEffect` + fetch | plebbit-react-hooks |
+| Data fetching | `useEffect` + fetch | bitsocial-react-hooks |
 | Derived state | `useEffect` to sync | Calculate during render |
 | Side effects | Effects without cleanup | AbortController or event handlers |
 | Complex flows | Boolean flags | State machine in Zustand |

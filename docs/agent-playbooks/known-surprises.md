@@ -81,9 +81,9 @@ If uncertain, ask the developer before adding an entry.
 ### Toolchain model names are not interchangeable
 
 - **Date:** 2026-04-08
-- **Observed by:** Codex
-- **Context:** Reviewing repo-managed agent configs under `.codex/`, `.claude/`, and `.cursor/`.
-- **What was surprising:** `composer-2` is only valid for Cursor agents, while `.codex` agents should use `gpt-5.4` instead of `gpt-5.3-codex` or `gpt-5.3-codex-spark`.
-- **Impact:** Agents can silently pick unavailable or poor-performing models when equivalent workflow files are copied across toolchains without adjusting the model field.
-- **Mitigation:** When editing shared agent definitions, keep the behavior text aligned across toolchains but set models per platform: Cursor may use `composer-2`, `.claude` must not, and `.codex` should use `gpt-5.4`.
+- **Observed by:** contributor + Codex
+- **Context:** Reviewing repo-managed agent configs under `.codex/agents`, `.cursor/agents`, and `.claude/agents`
+- **What was surprising:** `composer-2` is only available for Cursor in this repo, while Codex agents using `gpt-5.3-codex` or `gpt-5.3-codex-spark` perform poorly enough that they should not be configured by default.
+- **Impact:** Agents can silently inherit invalid or weak model settings, leading to broken subagent runs or degraded implementation quality.
+- **Mitigation:** Keep `.cursor` agent configs on Cursor-supported models only, never use `composer-2` in `.claude`, and standardize `.codex/agents/*.toml` on `gpt-5.4` unless a contributor explicitly requests an override.
 - **Status:** confirmed
