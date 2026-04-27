@@ -1,14 +1,16 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccount, useAccountComment, useAccountComments, useComment, useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
+import { Comment, useAccount, useAccountComment, useAccountComments, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import findTopParentCidOfReply from '../../lib/utils/cid-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
 import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
-import { useIsBroadlyNsfwSubplebbit } from '../../hooks/use-is-broadly-nsfw-subplebbit';
+import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useReplies from '../../hooks/use-replies';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -81,7 +83,8 @@ const Post = ({ post }: { post: Comment }) => {
   const params = useParams();
   const isInPostContextView = isPostContextView(location.pathname, params, location.search);
 
-  const { cid, deleted, depth, locked, removed, postCid, replyCount, state, subplebbitAddress, timestamp } = post || {};
+  const { cid, deleted, depth, locked, removed, postCid, replyCount, state, timestamp } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
 
   const [sortBy, setSortBy] = useState('best');
   const unsortedReplies = useReplies(post);
@@ -159,14 +162,14 @@ const Post = ({ post }: { post: Comment }) => {
             <div className={styles.menuArea}>
               <SortDropdown sortBy={sortBy} onSortChange={setSortBy} />
               <div className={styles.spacer} />
-              {subplebbitAddress && cid && <ReplyForm cid={cid} subplebbitAddress={subplebbitAddress} postCid={postCid} />}
+              {communityAddress && cid && <ReplyForm cid={cid} communityAddress={communityAddress} postCid={postCid} />}
             </div>
           )}
           {isSingleComment && (
             <div className={styles.singleCommentInfobar}>
               <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
               <div className={styles.singleCommentInfobarLink}>
-                <Link to={`/s/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+                <Link to={`/s/${communityAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
               </div>
             </div>
           )}
@@ -198,7 +201,8 @@ const Post = ({ post }: { post: Comment }) => {
 const PostWithContext = ({ post }: { post: Comment }) => {
   const { t } = useTranslation();
   const params = useParams();
-  const { deleted, locked, postCid, removed, state, subplebbitAddress } = post || {};
+  const { deleted, locked, postCid, removed, state } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
   const postComment = useComment({ commentCid: postCid });
   const topParentCid = findTopParentCidOfReply(post.cid, postComment);
   const topParentComment = useComment({ commentCid: topParentCid || undefined });
@@ -225,7 +229,7 @@ const PostWithContext = ({ post }: { post: Comment }) => {
         <div className={styles.singleCommentInfobar}>
           <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
           <div className={styles.singleCommentInfobarLink}>
-            <Link to={`/s/${subplebbitAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+            <Link to={`/s/${communityAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
           </div>
         </div>
         <div className={styles.replies}>
@@ -274,16 +278,17 @@ const PostPage = () => {
     }
   }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
 
-  const { commentCid, subplebbitAddress } = params;
-  let post = useComment({ commentCid });
+  const { commentCid, communityAddress } = params;
+  let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;
   }
-  const subplebbit = useSubplebbit({ subplebbitAddress: isInPendingPostView ? pendingPost?.subplebbitAddress : subplebbitAddress });
+  const _communityAddr = isInPendingPostView ? pendingPost?.subplebbitAddress : communityAddress;
+  const community = useCommunity(_communityAddr ? { community: getCommunityIdentifier(_communityAddr) } : undefined);
 
-  // over 18 warning for subplebbit with nsfw tag in multisub default list
+  // over 18 warning for community with nsfw tag in multisub default list
   const { hasAcceptedWarning } = useContentOptionsStore();
-  const isBroadlyNsfwSubplebbit = useIsBroadlyNsfwSubplebbit(subplebbitAddress || '');
+  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
 
   useEffect(() => {
     if (post?.error) {
@@ -292,24 +297,24 @@ const PostPage = () => {
   }, [post?.error]);
 
   const postTitle = post.title?.slice(0, 40) || post?.content?.slice(0, 40);
-  const subplebbitTitle = subplebbit?.title || subplebbit?.shortAddress;
+  const communityTitle = community?.title || community?.shortAddress;
   useEffect(() => {
-    document.title = `${postTitle || ''}${postTitle && subplebbitTitle ? ' - ' : ''}${subplebbitTitle || ''}${postTitle || subplebbitTitle ? ' - Seedit' : 'Seedit'}`;
-  }, [postTitle, subplebbitTitle]);
+    document.title = `${postTitle || ''}${postTitle && communityTitle ? ' - ' : ''}${communityTitle || ''}${postTitle || communityTitle ? ' - Seedit' : 'Seedit'}`;
+  }, [postTitle, communityTitle]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [commentCid, subplebbitAddress, accountCommentIndex]);
+  }, [commentCid, communityAddress, accountCommentIndex]);
 
   // Derive whether to show error directly from current post state
   const shouldShowErrorToUser = Boolean(post?.error && ((post?.replyCount > 0 && post?.replies?.length === 0) || post?.state === 'failed'));
 
-  return isBroadlyNsfwSubplebbit && !hasAcceptedWarning ? (
+  return isBroadlyNsfwCommunity && !hasAcceptedWarning ? (
     <Over18Warning />
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar subplebbit={subplebbit} comment={post} settings={subplebbit?.settings} />
+        <Sidebar subplebbit={community} comment={post} settings={community?.settings} />
       </div>
       {isInPendingPostView && params?.accountCommentIndex ? <Post post={pendingPost} /> : isInPostContextView ? <PostWithContext post={post} /> : <Post post={post} />}
       {shouldShowErrorToUser && (

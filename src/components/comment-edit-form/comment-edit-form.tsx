@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PublishCommentEditOptions, useComment, useEditedComment, usePublishCommentEdit } from '@bitsocialnet/bitsocial-react-hooks';
+import { PublishCommentEditOptions, useComment, useEditedComment, usePublishCommentEdit } from '@bitsocial/bitsocial-react-hooks';
 import { FormattingHelpTable } from '../reply-form';
 import styles from '../reply-form/reply-form.module.css';
 import { alertChallengeVerificationFailed } from '../../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import challengesStore from '../../stores/use-challenges-store';
 import Markdown from '../markdown';
 
@@ -31,7 +32,8 @@ const CommentEditForm = ({ commentCid, hideCommentEditForm }: CommentEditFormPro
     post = comment;
   }
 
-  const { content, reason, spoiler, nsfw, subplebbitAddress } = post || {};
+  const { content, reason, spoiler, nsfw } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
 
   const defaultPublishOptions: PublishCommentEditOptions = {
     commentCid,
@@ -39,7 +41,7 @@ const CommentEditForm = ({ commentCid, hideCommentEditForm }: CommentEditFormPro
     reason,
     spoiler,
     nsfw,
-    subplebbitAddress,
+    subplebbitAddress: communityAddress,
     onChallenge: (...args: any) => addChallenge([...args, post]),
     onChallengeVerification: alertChallengeVerificationFailed,
     onError: (error: Error) => {

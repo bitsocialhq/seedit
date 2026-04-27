@@ -3,43 +3,45 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   useAccount,
   useAccountComments,
-  useAccountSubplebbits,
-  AccountSubplebbit,
+  useAccountCommunities,
+  AccountCommunity,
+  Community,
   useAuthor,
   useAuthorAvatar,
   useAuthorComments,
   useBlock,
   useComment,
-  useSubplebbits,
-} from '@bitsocialnet/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
+  useCommunities,
+} from '@bitsocial/bitsocial-react-hooks';
 import styles from './author-sidebar.module.css';
 import { getFormattedTimeDuration } from '../../lib/utils/time-utils';
 import { getOldestAccountHistoryTimestamp } from '../../lib/utils/account-history-utils';
 import { isAuthorView, isProfileView } from '../../lib/utils/view-utils';
-import { findAuthorSubplebbits, estimateAuthorKarma } from '../../lib/utils/user-utils';
+import { findAuthorCommunities, estimateAuthorKarma } from '../../lib/utils/user-utils';
+import getShortAddress from '../../lib/utils/address-utils';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 
 interface AuthorModeratingListProps {
-  accountSubplebbits: Record<string, AccountSubplebbit>;
-  authorSubplebbits: string[];
+  accountCommunities: Record<string, AccountCommunity & Partial<Community>>;
+  authorCommunities: string[];
   isAuthor?: boolean;
 }
 
-const AuthorModeratingList = ({ accountSubplebbits, authorSubplebbits, isAuthor = false }: AuthorModeratingListProps) => {
+const AuthorModeratingList = ({ accountCommunities, authorCommunities, isAuthor = false }: AuthorModeratingListProps) => {
   const { t } = useTranslation();
-  const rawAddresses = isAuthor ? authorSubplebbits : Object.keys(accountSubplebbits);
-  const subplebbitAddresses = [...new Set(rawAddresses)];
+  const rawAddresses = isAuthor ? authorCommunities : Object.keys(accountCommunities);
+  const communityAddresses = [...new Set(rawAddresses)];
 
   return (
-    subplebbitAddresses.length > 0 && (
+    communityAddresses.length > 0 && (
       <div className={styles.modList}>
         <div className={styles.modListTitle}>{t('moderator_of')}</div>
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
-          {subplebbitAddresses.map((address, index) => (
+          {communityAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={`/s/${address}`}>s/{Plebbit.getShortAddress({ address })}</Link>
+              <Link to={`/s/${address}`}>s/{getShortAddress(address)}</Link>
             </li>
           ))}
         </ul>
@@ -65,25 +67,25 @@ const AuthorSidebar = () => {
   const userAccount = useAccount();
   const { imageUrl: profilePageAvatar } = useAuthorAvatar({ author: userAccount?.author });
   const { accountComments: oldestAccountComment } = useAccountComments({ page: 0, pageSize: 1, order: 'asc' });
-  const { accountSubplebbits } = useAccountSubplebbits();
+  const { accountCommunities } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
 
   const defaultSubplebbitAddresses = useDefaultSubplebbitAddresses();
   const accountSubscriptions = userAccount?.subscriptions || [];
   const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultSubplebbitAddresses];
 
-  const subplebbits =
-    useSubplebbits({
-      subplebbitAddresses: subscriptionsAndDefaults || [],
+  const communities =
+    useCommunities({
+      communities: getCommunityIdentifiers(subscriptionsAndDefaults || []),
       onlyIfCached: true,
-    }).subplebbits?.filter(Boolean) || [];
+    }).communities?.filter(Boolean) || [];
 
   const authorAccount = useAuthor({ authorAddress, commentCid });
   const { authorComments } = useAuthorComments({ authorAddress, commentCid });
   const authorOldestCommentTimestamp = authorComments?.length
     ? Math.min(...authorComments.filter((comment): comment is NonNullable<typeof comment> => comment != null).map((comment) => comment.timestamp))
     : Date.now();
-  const authorSubplebbits = findAuthorSubplebbits(authorAddress, Object.values(subplebbits));
+  const authorCommunities = findAuthorCommunities(authorAddress, Object.values(communities));
   const estimatedAuthorKarma = estimateAuthorKarma(authorComments);
 
   const address = isInAuthorView ? params?.authorAddress : isInProfileView ? userAccount?.author?.address : '';
@@ -166,8 +168,8 @@ const AuthorSidebar = () => {
           <span className={styles.age}>{t('user_since', { time: getFormattedTimeDuration(oldestCommentTimestamp) })}</span>
         </div>
       </div>
-      {(Object.keys(accountSubplebbits).length > 0 || authorSubplebbits.length > 0) && (
-        <AuthorModeratingList accountSubplebbits={accountSubplebbits} isAuthor={isInAuthorView} authorSubplebbits={authorSubplebbits} />
+      {(Object.keys(accountCommunities).length > 0 || authorCommunities.length > 0) && (
+        <AuthorModeratingList accountCommunities={accountCommunities} isAuthor={isInAuthorView} authorCommunities={authorCommunities} />
       )}
     </div>
   );

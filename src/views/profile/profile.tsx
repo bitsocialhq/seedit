@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { HashLink } from 'react-router-hash-link';
 import { Outlet, useParams } from 'react-router-dom';
 import { StateSnapshot, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
-import { useAccount, useAccountComments, useAccountVotes, useComment, type AccountPublicationsFilter } from '@bitsocialnet/bitsocial-react-hooks';
+import { useAccount, useAccountComments, useAccountVotes, useComment, type AccountPublicationsFilter } from '@bitsocial/bitsocial-react-hooks';
 import useWindowWidth from '../../hooks/use-window-width';
 import AuthorSidebar from '../../components/author-sidebar';
 import Post from '../../components/post';
@@ -11,6 +11,7 @@ import Reply from '../../components/reply';
 import styles from './profile.module.css';
 import ErrorDisplay from '../../components/error-display';
 import { getAccountHistoryOrder, getAccountHistoryPage } from '../../lib/utils/account-history-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 
 const pageSize = 10;
 const sortTypes: string[] = ['new', 'old'];
@@ -97,7 +98,7 @@ const PaginationControls = ({ currentPage, hasMore, onPageChange }: { currentPag
 const CommentItem = ({ cid }: { cid: string }) => {
   const comment = useComment({ commentCid: cid });
 
-  if (!comment || !comment.subplebbitAddress) return null;
+  if (!comment || !getCommentCommunityAddress(comment)) return null;
 
   return comment.parentCid ? <Reply key={comment.cid} reply={comment} isSingleReply={true} /> : <Post key={comment.cid} post={comment} />;
 };

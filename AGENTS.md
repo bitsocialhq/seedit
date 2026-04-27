@@ -47,7 +47,7 @@ seedit is a serverless, adminless, decentralized Reddit-style client built on th
 - Zustand for shared state
 - React Router v6
 - Vite
-- `@bitsocialnet/bitsocial-react-hooks`
+- `@bitsocial/bitsocial-react-hooks`
 - i18next
 - Corepack-managed Yarn 4
 - oxlint
@@ -77,7 +77,7 @@ src/
 ### React Architecture Rules
 
 - Do not use `useState` for shared/global state. Use Zustand stores in `src/stores/`.
-- Do not use `useEffect` for data fetching. Use `@bitsocialnet/bitsocial-react-hooks`.
+- Do not use `useEffect` for data fetching. Use `@bitsocial/bitsocial-react-hooks`.
 - Do not sync derived state with effects. Compute during render.
 - Avoid copy-paste logic across components. Extract custom hooks in `src/hooks/`.
 - Avoid boolean flag soup for complex flows; model state clearly in Zustand.

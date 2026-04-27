@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Author, useAccount, useComment, useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
+import { Author, useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import useScheduledReset from '../../../hooks/use-scheduled-reset';
 import styles from './comment-tools.module.css';
 import EditMenu from './edit-menu';
@@ -9,6 +9,7 @@ import HideMenu from './hide-menu';
 import Label from '../label';
 import ModMenu from './mod-menu';
 import { isInboxView } from '../../../lib/utils/view-utils';
+import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { copyShareLinkToClipboard } from '../../../lib/utils/url-utils';
 
 interface CommentToolsProps {
@@ -31,7 +32,7 @@ interface CommentToolsProps {
   removed?: boolean;
   replyCount?: number;
   spoiler?: boolean | undefined;
-  subplebbitAddress: string;
+  communityAddress: string;
   showCommentEditForm?: () => void;
   showReplyForm?: () => void;
 }
@@ -57,7 +58,7 @@ const ModOrReportButton = ({ cid, isAuthor, isAccountMod, isCommentAuthorMod }: 
   );
 };
 
-const ShareButton = ({ cid, subplebbitAddress }: { cid: string; subplebbitAddress: string }) => {
+const ShareButton = ({ cid, communityAddress }: { cid: string; communityAddress: string }) => {
   const { t } = useTranslation();
   const [hasCopied, setHasCopied] = useState(false);
 
@@ -68,7 +69,7 @@ const ShareButton = ({ cid, subplebbitAddress }: { cid: string; subplebbitAddres
     try {
       setHasCopied(true);
       scheduleReset();
-      await copyShareLinkToClipboard(subplebbitAddress, cid);
+      await copyShareLinkToClipboard(communityAddress, cid);
     } catch (error) {
       console.error('Failed to copy share link:', error);
       setHasCopied(false);
@@ -92,7 +93,7 @@ const PostTools = ({
   isAuthor,
   isAccountMod,
   isCommentAuthorMod,
-  subplebbitAddress,
+  communityAddress,
   replyCount = 0,
   showCommentEditForm,
 }: CommentToolsProps) => {
@@ -114,7 +115,7 @@ const PostTools = ({
   const commentCountButton = failed ? (
     <span>{commentCount}</span>
   ) : (
-    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
+    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
       {commentCount}
     </Link>
   );
@@ -122,14 +123,14 @@ const PostTools = ({
   return (
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{commentCountButton}</li>
-      <ShareButton cid={cid} subplebbitAddress={subplebbitAddress} />
+      <ShareButton cid={cid} communityAddress={communityAddress} />
       {/* TODO: Implement save functionality
         <li className={styles.button}>
           <span>{t('save')}</span>
         </li> 
       */}
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
-      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} subplebbitAddress={subplebbitAddress} />
+      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
       {/* TODO: Implement crosspost functionality
         <li className={`${styles.button} ${styles.crosspostButton}`}>
           <span>{t('crosspost')}</span>
@@ -150,7 +151,7 @@ const ReplyTools = ({
   isAccountMod,
   isCommentAuthorMod,
   showReplyForm,
-  subplebbitAddress,
+  communityAddress,
   showCommentEditForm,
 }: CommentToolsProps) => {
   const { t } = useTranslation();
@@ -158,7 +159,7 @@ const ReplyTools = ({
   const permalink = failed ? (
     <span>permalink</span>
   ) : (
-    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   );
@@ -166,14 +167,14 @@ const ReplyTools = ({
   return (
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{permalink}</li>
-      <ShareButton cid={cid} subplebbitAddress={subplebbitAddress} />
+      <ShareButton cid={cid} communityAddress={communityAddress} />
       {/* TODO: Implement save functionality
         <li className={styles.button}>
           <span>{t('save')}</span>
         </li> 
       */}
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
-      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} subplebbitAddress={subplebbitAddress} />
+      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
       <li className={!cid ? styles.hideReply : styles.button}>
         <span onClick={() => cid && showReplyForm?.()}>{t('reply_reply')}</span>
       </li>
@@ -193,7 +194,7 @@ const SingleReplyTools = ({
   parentCid,
   postCid,
   showReplyForm,
-  subplebbitAddress,
+  communityAddress,
   showCommentEditForm,
 }: CommentToolsProps) => {
   const { t } = useTranslation();
@@ -202,7 +203,7 @@ const SingleReplyTools = ({
   const hasContext = parentCid !== postCid;
 
   const permalinkButton = cid ? (
-    <Link to={cid ? `/s/${subplebbitAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   ) : (
@@ -210,13 +211,13 @@ const SingleReplyTools = ({
   );
 
   const contextButton = cid ? (
-    <Link to={cid ? (hasContext ? `/s/${subplebbitAddress}/c/${cid}/?context=3` : `/s/${subplebbitAddress}/c/${cid}`) : `/profile/${index}`}>{t('context')}</Link>
+    <Link to={cid ? (hasContext ? `/s/${communityAddress}/c/${cid}/?context=3` : `/s/${communityAddress}/c/${cid}`) : `/profile/${index}`}>{t('context')}</Link>
   ) : (
     <span>{t('context')}</span>
   );
 
   const fullCommentsButton = cid ? (
-    <Link to={cid ? `/s/${subplebbitAddress}/c/${postCid}` : `/profile/${index}`}>
+    <Link to={cid ? `/s/${communityAddress}/c/${postCid}` : `/profile/${index}`}>
       {t('full_comments')} {comment?.replyCount ? `(${comment?.replyCount})` : ''}
     </Link>
   ) : (
@@ -236,7 +237,7 @@ const SingleReplyTools = ({
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
       <li className={styles.button}>{contextButton}</li>
       <li className={styles.button}>{fullCommentsButton}</li>
-      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} subplebbitAddress={subplebbitAddress} />
+      <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
       <li className={!cid ? styles.hideReply : styles.button}>
         <span onClick={() => cid && showReplyForm?.()}>{t('reply_reply')}</span>
       </li>
@@ -290,15 +291,15 @@ const CommentTools = ({
   removed,
   replyCount,
   spoiler,
-  subplebbitAddress,
+  communityAddress,
   showCommentEditForm,
   showReplyForm,
 }: CommentToolsProps) => {
   const account = useAccount();
   const isAuthor = account?.author?.address === author?.address;
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
-  const accountAuthorRole = subplebbit?.roles?.[account?.author?.address]?.role;
-  const commentAuthorRole = subplebbit?.roles?.[author?.address]?.role;
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
+  const accountAuthorRole = community?.roles?.[account?.author?.address]?.role;
+  const commentAuthorRole = community?.roles?.[author?.address]?.role;
   const isAccountMod = accountAuthorRole === 'admin' || accountAuthorRole === 'owner' || accountAuthorRole === 'moderator';
   const isCommentAuthorMod = commentAuthorRole === 'admin' || commentAuthorRole === 'owner' || commentAuthorRole === 'moderator';
   const isInInboxView = isInboxView(useLocation().pathname);
@@ -322,7 +323,7 @@ const CommentTools = ({
               postCid={postCid}
               showCommentEditForm={showCommentEditForm}
               showReplyForm={showReplyForm}
-              subplebbitAddress={subplebbitAddress}
+              communityAddress={communityAddress}
             />
           ) : (
             <ReplyTools
@@ -337,7 +338,7 @@ const CommentTools = ({
               isCommentAuthorMod={isCommentAuthorMod}
               showCommentEditForm={showCommentEditForm}
               showReplyForm={showReplyForm}
-              subplebbitAddress={subplebbitAddress}
+              communityAddress={communityAddress}
             />
           )
         ) : (
@@ -351,7 +352,7 @@ const CommentTools = ({
               nsfw={nsfw}
               removed={removed}
               spoiler={spoiler}
-              subplebbitAddress={subplebbitAddress}
+              communityAddress={communityAddress}
             />
             <PostTools
               author={author}
@@ -365,7 +366,7 @@ const CommentTools = ({
               isCommentAuthorMod={isCommentAuthorMod}
               replyCount={replyCount}
               showCommentEditForm={showCommentEditForm}
-              subplebbitAddress={subplebbitAddress}
+              communityAddress={communityAddress}
             />
           </>
         )}

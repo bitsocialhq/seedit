@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { useClientsStates, useSubplebbit, useSubplebbitsStates } from '@bitsocialnet/bitsocial-react-hooks';
+import { useClientsStates, useCommunity, useCommunitiesStates } from '@bitsocial/bitsocial-react-hooks';
 import { debounce } from 'lodash';
+import { getCommunityIdentifier, getCommunityIdentifiers } from './use-community-identifier';
 
-interface CommentOrSubplebbit {
+interface CommentOrCommunity {
   state?: string;
   publishingState?: string;
   updatingState?: string;
@@ -25,8 +26,8 @@ const getClientHost = (clientUrl: string): string => {
   return clientHosts[clientUrl];
 };
 
-const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | undefined => {
-  const { states: rawStates } = useClientsStates({ comment: commentOrSubplebbit }) as { states: States };
+const useStateString = (commentOrCommunity: CommentOrCommunity): string | undefined => {
+  const { states: rawStates } = useClientsStates({ comment: commentOrCommunity }) as { states: States };
 
   const debouncedStates = useMemo(() => {
     const debouncedValue = debounce((value: States) => value, 300);
@@ -52,11 +53,11 @@ const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | unde
       stateString += `${formattedState} from ${clientHosts.join(', ')}`;
     }
 
-    if (!stateString && commentOrSubplebbit?.state !== 'succeeded') {
-      if (commentOrSubplebbit?.publishingState && commentOrSubplebbit?.publishingState !== 'stopped' && commentOrSubplebbit?.publishingState !== 'succeeded') {
-        stateString = commentOrSubplebbit.publishingState;
-      } else if (commentOrSubplebbit?.updatingState !== 'stopped' && commentOrSubplebbit?.updatingState !== 'succeeded') {
-        stateString = commentOrSubplebbit.updatingState;
+    if (!stateString && commentOrCommunity?.state !== 'succeeded') {
+      if (commentOrCommunity?.publishingState && commentOrCommunity?.publishingState !== 'stopped' && commentOrCommunity?.publishingState !== 'succeeded') {
+        stateString = commentOrCommunity.publishingState;
+      } else if (commentOrCommunity?.updatingState !== 'stopped' && commentOrCommunity?.updatingState !== 'succeeded') {
+        stateString = commentOrCommunity.updatingState;
       }
       if (stateString) {
         stateString = stateString.replaceAll('-', ' ').replace('subplebbit ipns', 'community').replace('fetching', 'downloading').replace('ipfs', 'post');
@@ -75,20 +76,20 @@ const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | unde
     }
 
     return stateString === '' ? undefined : stateString;
-  }, [debouncedStates, commentOrSubplebbit]);
+  }, [debouncedStates, commentOrCommunity]);
 };
 
-export const useFeedStateString = (subplebbitAddresses?: string[]): string | undefined => {
-  // single subplebbit feed state string
-  const subplebbitAddress = subplebbitAddresses?.length === 1 ? subplebbitAddresses[0] : undefined;
-  const subplebbit = useSubplebbit({ subplebbitAddress });
-  const singleSubplebbitFeedStateString = useStateString(subplebbit);
+export const useFeedStateString = (communityAddresses?: string[]): string | undefined => {
+  // single community feed state string
+  const communityAddress = communityAddresses?.length === 1 ? communityAddresses[0] : undefined;
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const singleCommunityFeedStateString = useStateString(community);
 
-  // multiple subplebbit feed state string
-  const { states } = useSubplebbitsStates({ subplebbitAddresses });
+  // multiple community feed state string
+  const { states } = useCommunitiesStates({ communities: getCommunityIdentifiers(communityAddresses || []) });
 
-  const multipleSubplebbitsFeedStateString = useMemo(() => {
-    if (subplebbitAddress) {
+  const multipleCommunityFeedStateString = useMemo(() => {
+    if (communityAddress) {
       return;
     }
 
@@ -96,25 +97,25 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
     let stateString = '';
 
     if (states['resolving-address']) {
-      const { subplebbitAddresses, clientUrls } = states['resolving-address'];
-      if (subplebbitAddresses.length && clientUrls.length) {
-        stateString += `resolving ${subplebbitAddresses.length} ${subplebbitAddresses.length === 1 ? 'address' : 'addresses'} from ${clientUrls
+      const { communityAddresses, clientUrls } = states['resolving-address'];
+      if (communityAddresses.length && clientUrls.length) {
+        stateString += `resolving ${communityAddresses.length} ${communityAddresses.length === 1 ? 'address' : 'addresses'} from ${clientUrls
           .map(getClientHost)
           .join(', ')}`;
       }
     }
 
-    // find all page client and sub addresses
+    // find all page client and community addresses
     const pagesStatesClientHosts = new Set();
-    const pagesStatesSubplebbitAddresses = new Set();
+    const pagesStatesCommunityAddresses = new Set();
     for (const state in states) {
       if (state.match('page')) {
         states[state].clientUrls.forEach((clientUrl) => pagesStatesClientHosts.add(getClientHost(clientUrl)));
-        states[state].subplebbitAddresses.forEach((subplebbitAddress) => pagesStatesSubplebbitAddresses.add(subplebbitAddress));
+        states[state].communityAddresses.forEach((communityAddress) => pagesStatesCommunityAddresses.add(communityAddress));
       }
     }
 
-    if (states['fetching-ipns'] || states['fetching-ipfs'] || pagesStatesSubplebbitAddresses.size) {
+    if (states['fetching-ipns'] || states['fetching-ipfs'] || pagesStatesCommunityAddresses.size) {
       // separate 2 different states using ', '
       if (stateString) {
         stateString += ', ';
@@ -128,21 +129,19 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
       if (clientHosts.size) {
         stateString += 'downloading ';
         if (states['fetching-ipns']) {
-          stateString += `${states['fetching-ipns'].subplebbitAddresses.length} ${
-            states['fetching-ipns'].subplebbitAddresses.length === 1 ? 'community' : 'communities'
-          }`;
+          stateString += `${states['fetching-ipns'].communityAddresses.length} ${states['fetching-ipns'].communityAddresses.length === 1 ? 'community' : 'communities'}`;
         }
         if (states['fetching-ipfs']) {
           if (states['fetching-ipns']) {
             stateString += ', ';
           }
-          stateString += `${states['fetching-ipfs'].subplebbitAddresses.length} ${states['fetching-ipfs'].subplebbitAddresses.length === 1 ? 'post' : 'posts'}`;
+          stateString += `${states['fetching-ipfs'].communityAddresses.length} ${states['fetching-ipfs'].communityAddresses.length === 1 ? 'post' : 'posts'}`;
         }
-        if (pagesStatesSubplebbitAddresses.size) {
+        if (pagesStatesCommunityAddresses.size) {
           if (states['fetching-ipns'] || states['fetching-ipfs']) {
             stateString += ', ';
           }
-          stateString += `${pagesStatesSubplebbitAddresses.size} ${pagesStatesSubplebbitAddresses.size === 1 ? 'page' : 'pages'}`;
+          stateString += `${pagesStatesCommunityAddresses.size} ${pagesStatesCommunityAddresses.size === 1 ? 'page' : 'pages'}`;
         }
         stateString += ` from ${[...clientHosts].join(', ')}`;
       }
@@ -153,12 +152,12 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
 
     // if string is empty, return undefined instead
     return stateString === '' ? undefined : stateString;
-  }, [states, subplebbitAddress]);
+  }, [states, communityAddress]);
 
-  if (singleSubplebbitFeedStateString) {
-    return singleSubplebbitFeedStateString;
+  if (singleCommunityFeedStateString) {
+    return singleCommunityFeedStateString;
   }
-  return multipleSubplebbitsFeedStateString;
+  return multipleCommunityFeedStateString;
 };
 
 export default useStateString;

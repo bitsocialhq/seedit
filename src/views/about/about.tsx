@@ -3,10 +3,11 @@ import { HashLink } from 'react-router-hash-link';
 import useIsMobile from '../../hooks/use-is-mobile';
 import Sidebar, { Footer } from '../../components/sidebar';
 import styles from './about.module.css';
-import { useAccount, useComment, useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
+import { useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -156,9 +157,9 @@ const About = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isInHomeAboutView = isHomeAboutView(location.pathname);
-  const { commentCid, subplebbitAddress } = useParams();
+  const { commentCid, communityAddress } = useParams();
 
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {

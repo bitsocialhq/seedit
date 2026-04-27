@@ -17,8 +17,8 @@ export const isValidURL = (url: string) => {
   }
 };
 
-export const copyShareLinkToClipboard = async (subplebbitAddress: string, cid: string) => {
-  const shareLink = `https://seedit.app/s/${subplebbitAddress}/c/${cid}`;
+export const copyShareLinkToClipboard = async (communityAddress: string, cid: string) => {
+  const shareLink = `https://seedit.app/s/${communityAddress}/c/${cid}`;
   await copyToClipboard(shareLink);
 };
 
@@ -48,13 +48,13 @@ export const isSeeditLink = (url: string): boolean => {
       if (parsedUrl.searchParams.has('redirect')) {
         return false;
       }
-      // Must match exactly: /s/{subplebbitAddress}/c/{cid}
+      // Must match exactly: /s/{communityAddress}/c/{cid}
       return /^\/s\/[^/]+\/c\/[^/]+$/.test(routePath);
     }
 
     // For other seedit hostnames, support:
-    // - /s/{subplebbitAddress}
-    // - /s/{subplebbitAddress}/c/{commentCid}
+    // - /s/{communityAddress}
+    // - /s/{communityAddress}/c/{commentCid}
     return /^\/s\/[^/]+(\/c\/[^/]+)?$/.test(routePath);
   } catch {
     return false;
@@ -94,8 +94,8 @@ const isValidDomain = (str: string): boolean => {
   return str.includes('.') && str.split('.').length >= 2 && str.split('.').every((part) => part.length > 0);
 };
 
-// Check if a plain text pattern is a valid seedit subplebbit reference
-export const isValidSubplebbitPattern = (pattern: string): boolean => {
+// Check if a plain text pattern is a valid seedit community reference
+export const isValidCommunityPattern = (pattern: string): boolean => {
   // Must start with "s/"
   if (!pattern.startsWith('s/')) {
     return false;
@@ -103,15 +103,15 @@ export const isValidSubplebbitPattern = (pattern: string): boolean => {
 
   const pathPart = pattern.substring(2); // Remove "s/"
 
-  // Check if it's a post pattern: subplebbitAddress/c/cid
+  // Check if it's a post pattern: communityAddress/c/cid
   const postMatch = pathPart.match(/^([^/]+)\/c\/([^/]+)$/);
   if (postMatch) {
-    const [, subplebbitAddress, cid] = postMatch;
+    const [, communityAddress, cid] = postMatch;
     // CID should be at least 10 characters (minimum reasonable CID length)
-    return (isValidDomain(subplebbitAddress) || isValidIPNSKey(subplebbitAddress)) && cid.length >= 10;
+    return (isValidDomain(communityAddress) || isValidIPNSKey(communityAddress)) && cid.length >= 10;
   }
 
-  // Check if it's just a subplebbit pattern: subplebbitAddress
+  // Check if it's just a community pattern: communityAddress
   return isValidDomain(pathPart) || isValidIPNSKey(pathPart);
 };
 
@@ -127,7 +127,7 @@ export const preprocessSeeditPatterns = (content: string): string => {
     const cleanPath = capturedPath.replace(/[.,:;!?]+$/, '');
     const fullPattern = `s/${cleanPath}`;
 
-    if (isValidSubplebbitPattern(fullPattern)) {
+    if (isValidCommunityPattern(fullPattern)) {
       // Get the trailing punctuation that was matched but shouldn't be part of the link
       const trailingPunctuation = match.slice(fullPattern.length);
       // Convert to markdown link format and preserve trailing punctuation

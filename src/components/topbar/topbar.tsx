@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useMemo, memo } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAccount, useAccountSubplebbits } from '@bitsocialnet/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
-import { isAllView, isDomainView, isHomeView, isModView, isSubplebbitView } from '../../lib/utils/view-utils';
+import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-hooks';
+import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useDefaultSubplebbitAddresses, useDefaultSubplebbits } from '../../hooks/use-default-subplebbits';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
@@ -42,7 +42,7 @@ const CommunitiesDropdown = () => {
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
         {reversedSubscriptions?.map((subscription: string, index: number) => (
           <Link key={index} to={`/s/${subscription}`} className={styles.dropdownItem}>
-            {Plebbit.getShortAddress({ address: subscription })}
+            {getShortAddress(subscription)}
           </Link>
         ))}
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
@@ -56,7 +56,7 @@ const CommunitiesDropdown = () => {
 const TagFilterDropdown = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultSubplebbits = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubplebbits();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
@@ -102,7 +102,7 @@ const TagFilterDropdown = () => {
     if (!newState) {
       await handleNSFWSubscriptionPrompt({
         account,
-        defaultSubplebbits,
+        defaultCommunities,
         tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
         isShowingAll: true,
       });
@@ -121,7 +121,7 @@ const TagFilterDropdown = () => {
     if (!newState) {
       await handleNSFWSubscriptionPrompt({
         account,
-        defaultSubplebbits,
+        defaultCommunities,
         tagsToShow: [tagName],
       });
     }
@@ -168,7 +168,7 @@ const SortTypesDropdown = () => {
   const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
-  const isInSubplebbitView = isSubplebbitView(location.pathname, params);
+  const isInCommunityView = isCommunityView(location.pathname, params);
   const isinAllView = isAllView(location.pathname);
   const { timeFilterName } = useTimeFilter();
 
@@ -203,7 +203,7 @@ const SortTypesDropdown = () => {
       <span className={styles.selectedTitle}>{t(getSelectedSortLabel())}</span>
       <div className={`${styles.dropChoices} ${styles.sortsDropChoices} ${sortsDropdownClass}`} ref={sortsdropdownItemsRef}>
         {sortTypes.map((sortType, index) => {
-          let dropdownLink = isInSubplebbitView ? `/s/${params.subplebbitAddress}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
+          let dropdownLink = isInCommunityView ? `/s/${params.communityAddress}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
           if (timeFilterName) {
             dropdownLink += `/${timeFilterName}`;
           }
@@ -221,12 +221,12 @@ const SortTypesDropdown = () => {
 const TimeFilterDropdown = () => {
   const params = useParams();
   const location = useLocation();
-  const isInSubplebbitView = isSubplebbitView(location.pathname, params);
+  const isInCommunityView = isCommunityView(location.pathname, params);
   const isInDomainView = isDomainView(location.pathname);
   const isinAllView = isAllView(location.pathname);
   const isInModView = isModView(location.pathname);
   const { timeFilterName, timeFilterNames, sessionKey } = useTimeFilter();
-  const selectedTimeFilter = timeFilterName || (isInSubplebbitView ? 'all' : timeFilterName);
+  const selectedTimeFilter = timeFilterName || (isInCommunityView ? 'all' : timeFilterName);
 
   const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] = useState(false);
   const toggleTimeFilterDropdown = () => setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen);
@@ -237,8 +237,8 @@ const TimeFilterDropdown = () => {
   const selectedSortType = params.sortType || 'hot';
 
   const getTimeFilterLink = (timeFilterName: string) => {
-    return isInSubplebbitView
-      ? `/s/${params.subplebbitAddress}/${selectedSortType}/${timeFilterName}`
+    return isInCommunityView
+      ? `/s/${params.communityAddress}/${selectedSortType}/${timeFilterName}`
       : isinAllView
         ? `s/all/${selectedSortType}/${timeFilterName}`
         : isInModView
@@ -291,15 +291,15 @@ const TopBar = memo(() => {
   const homeButtonClass = isInHomeView ? styles.selected : styles.choice;
 
   const { hideDefaultCommunities } = useContentOptionsStore();
-  const subplebbitAddresses = useDefaultSubplebbitAddresses();
-  const { accountSubplebbits } = useAccountSubplebbits();
-  const accountSubplebbitAddresses = useMemo(() => Object.keys(accountSubplebbits), [accountSubplebbits]);
+  const communityAddresses = useDefaultSubplebbitAddresses();
+  const { accountCommunities } = useAccountCommunities();
+  const accountCommunityAddresses = useMemo(() => Object.keys(accountCommunities), [accountCommunities]);
 
   const account = useAccount();
   const subscriptions = useMemo(() => account?.subscriptions, [account?.subscriptions]);
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
 
-  const filteredSubplebbitAddresses = useMemo(() => subplebbitAddresses?.filter((address) => !subscriptions?.includes(address)), [subplebbitAddresses, subscriptions]);
+  const filteredCommunityAddresses = useMemo(() => communityAddresses?.filter((address) => !subscriptions?.includes(address)), [communityAddresses, subscriptions]);
 
   return (
     <div className={styles.headerArea}>
@@ -321,7 +321,7 @@ const TopBar = memo(() => {
                 {t('all')}
               </Link>
             </li>
-            {accountSubplebbitAddresses.length > 0 && (
+            {accountCommunityAddresses.length > 0 && (
               <li>
                 <span className={styles.separator}>-</span>
                 <Link to='/s/mod' className={isInModView ? styles.selected : styles.choice}>
@@ -331,21 +331,21 @@ const TopBar = memo(() => {
             )}
             {subscriptions?.length > 0 && <span className={styles.separator}> | </span>}
             {reversedSubscriptions?.map((subscription: string, index: number) => {
-              const shortAddress = Plebbit.getShortAddress({ address: subscription });
+              const shortAddress = getShortAddress(subscription);
               const displayAddress = shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
               return (
                 <li key={index}>
                   {index !== 0 && <span className={styles.separator}>-</span>}
-                  <Link to={`/s/${subscription}`} className={params.subplebbitAddress === subscription ? styles.selected : styles.choice}>
+                  <Link to={`/s/${subscription}`} className={params.communityAddress === subscription ? styles.selected : styles.choice}>
                     {displayAddress}
                   </Link>
                 </li>
               );
             })}
-            {!hideDefaultCommunities && filteredSubplebbitAddresses?.length > 0 && <span className={styles.separator}> | </span>}
+            {!hideDefaultCommunities && filteredCommunityAddresses?.length > 0 && <span className={styles.separator}> | </span>}
             {!hideDefaultCommunities &&
-              filteredSubplebbitAddresses?.map((address, index) => {
-                const shortAddress = Plebbit.getShortAddress({ address });
+              filteredCommunityAddresses?.map((address, index) => {
+                const shortAddress = getShortAddress(address);
                 const displayAddress = shortAddress.includes('.eth')
                   ? shortAddress.slice(0, -4)
                   : shortAddress.includes('.sol')
@@ -354,7 +354,7 @@ const TopBar = memo(() => {
                 return (
                   <li key={index}>
                     {index !== 0 && <span className={styles.separator}>-</span>}
-                    <Link to={`/s/${address}`} className={params.subplebbitAddress === address ? styles.selected : styles.choice}>
+                    <Link to={`/s/${address}`} className={params.communityAddress === address ? styles.selected : styles.choice}>
                       {displayAddress}
                     </Link>
                   </li>

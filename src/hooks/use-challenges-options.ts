@@ -1,7 +1,7 @@
-import { usePlebbitRpcSettings } from '@bitsocialnet/bitsocial-react-hooks';
+import { usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 
 const useChallengesOptions = () => {
-  const { challenges } = usePlebbitRpcSettings().plebbitRpcSettings || {};
+  const { challenges } = usePkcRpcSettings().pkcRpcSettings || {};
 
   const options = Object.keys(challenges || {}).reduce(
     (acc, challengeName) => {

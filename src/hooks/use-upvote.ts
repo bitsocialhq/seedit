@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { ChallengeVerification, Comment, usePublishVote, useAccountVote } from '@bitsocialnet/bitsocial-react-hooks';
+import { ChallengeVerification, Comment, usePublishVote, useAccountVote } from '@bitsocial/bitsocial-react-hooks';
 import useChallengesStore from '../stores/use-challenges-store';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
 
 const useUpvote = (comment: Comment): [boolean, () => void] => {
   const { addChallenge } = useChallengesStore();
@@ -11,7 +12,7 @@ const useUpvote = (comment: Comment): [boolean, () => void] => {
     () => ({
       commentCid: comment?.cid,
       vote: vote !== 1 ? 1 : 0,
-      subplebbitAddress: comment?.subplebbitAddress,
+      subplebbitAddress: getCommentCommunityAddress(comment),
       onChallenge: (...args: any) => {
         return new Promise<void>((resolve) => {
           addChallenge([...args, comment]);

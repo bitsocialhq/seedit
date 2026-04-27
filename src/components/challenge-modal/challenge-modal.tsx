@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FloatingFocusManager, useClick, useDismiss, useFloating, useId, useInteractions, useRole } from '@floating-ui/react';
-import { Challenge as ChallengeType, useComment, useAccount } from '@bitsocialnet/bitsocial-react-hooks';
+import { Challenge as ChallengeType, useComment, useAccount } from '@bitsocial/bitsocial-react-hooks';
 import { useTranslation } from 'react-i18next';
 import useChallengesStore from '../../stores/use-challenges-store';
 import useTheme from '../../hooks/use-theme';
@@ -13,7 +13,7 @@ interface ChallengeHeaderProps {
   parentCid?: string;
   parentAddress?: string;
   publicationContent: string;
-  subplebbit?: string;
+  communityShortAddress?: string;
 }
 
 const useParentAddress = (parentCid?: string) => {
@@ -21,12 +21,12 @@ const useParentAddress = (parentCid?: string) => {
   return parentComment?.author?.shortAddress;
 };
 
-const ChallengeHeader = ({ publicationType, votePreview, parentCid, parentAddress, publicationContent, subplebbit }: ChallengeHeaderProps) => {
+const ChallengeHeader = ({ publicationType, votePreview, parentCid, parentAddress, publicationContent, communityShortAddress }: ChallengeHeaderProps) => {
   const { t } = useTranslation();
 
   return (
     <>
-      <div className={styles.title}>{t('challenge_from', { subplebbit })}</div>
+      <div className={styles.title}>{t('challenge_from', { subplebbit: communityShortAddress })}</div>
       <div className={styles.subTitle}>
         {publicationType === 'vote' && votePreview + ' '}
         {parentCid
@@ -203,7 +203,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     return () => document.removeEventListener('keydown', onEscapeKey);
   }, [isIframeChallenge, onIframeClose, closeModal]);
 
-  const subplebbit = shortSubplebbitAddress || subplebbitAddress;
+  const communityShortAddress = shortSubplebbitAddress || subplebbitAddress;
 
   // Render iframe challenge
   if (isIframeChallenge) {
@@ -215,7 +215,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
           parentCid={parentCid}
           parentAddress={parentAddress}
           publicationContent={publicationContent}
-          subplebbit={subplebbit}
+          communityShortAddress={communityShortAddress}
         />
 
         {showIframeConfirmation ? (
@@ -223,9 +223,9 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
             <div className={styles.challengeMediaWrapper}>
               <div className={`${styles.challengeMedia} ${styles.iframeChallengeWarning}`}>
                 {t('iframe_challenge_open_confirmation', {
-                  subplebbit,
+                  subplebbit: communityShortAddress,
                   url: decodeURIComponent(getChallengeUrl()),
-                  defaultValue: `s/${subplebbit} challenge wants to open ${decodeURIComponent(getChallengeUrl())}`,
+                  defaultValue: `s/${communityShortAddress} challenge wants to open ${decodeURIComponent(getChallengeUrl())}`,
                 })}
               </div>
             </div>
@@ -271,7 +271,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
         parentCid={parentCid}
         parentAddress={parentAddress}
         publicationContent={publicationContent}
-        subplebbit={subplebbit}
+        communityShortAddress={communityShortAddress}
       />
       <div className={styles.challengeMediaWrapper}>
         {isTextChallenge && <div className={styles.challengeMedia}>{currentChallenge?.challenge}</div>}

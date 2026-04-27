@@ -15,11 +15,11 @@ import PostPage from './views/post-page';
 import Profile from './views/profile';
 import Settings from './views/settings';
 import AccountDataEditor from './views/settings/account-data-editor';
-import SubplebbitDataEditor from './views/subplebbit-settings/subplebbit-data-editor';
+import CommunityDataEditor from './views/community-settings/community-data-editor';
 import SubmitPage from './views/submit-page';
-import Subplebbit from './views/subplebbit';
-import SubplebbitSettings from './views/subplebbit-settings';
-import Subplebbits from './views/subplebbits';
+import CommunityView from './views/community';
+import CommunitySettings from './views/community-settings';
+import Communities from './views/communities';
 import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
@@ -90,15 +90,15 @@ const App = () => {
             <Route path='/about' element={<AboutView />} />
             <Route path='/submit' element={<SubmitPage />} />
 
-            <Route path='/s/:subplebbitAddress/c/:commentCid' element={<PostPage />} />
-            <Route path='/s/:subplebbitAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/s/:communityAddress/c/:commentCid' element={<PostPage />} />
+            <Route path='/s/:communityAddress/c/:commentCid/about' element={<AboutView />} />
 
-            <Route path='/s/:subplebbitAddress/submit' element={<SubmitPage />} />
-            <Route path='/s/:subplebbitAddress/about' element={<AboutView />} />
+            <Route path='/s/:communityAddress/submit' element={<SubmitPage />} />
+            <Route path='/s/:communityAddress/about' element={<AboutView />} />
 
             <Route path='/settings' element={<Settings />} />
-            <Route path='/s/:subplebbitAddress/settings' element={<SubplebbitSettings />} />
-            <Route path='/s/:subplebbitAddress/settings/editor' element={<SubplebbitDataEditor />} />
+            <Route path='/s/:communityAddress/settings' element={<CommunitySettings />} />
+            <Route path='/s/:communityAddress/settings/editor' element={<CommunityDataEditor />} />
             <Route path='/settings/plebbit-options' element={<Settings />} />
             <Route path='/settings/content-options' element={<Settings />} />
             <Route path='/settings/account-data' element={<AccountDataEditor />} />
@@ -112,15 +112,15 @@ const App = () => {
             <Route path='/inbox/commentreplies' element={<Inbox />} />
             <Route path='/inbox/postreplies' element={<Inbox />} />
 
-            <Route path='/communities' element={<Subplebbits />} />
-            <Route path='/communities/subscriber' element={<Subplebbits />} />
-            <Route path='/communities/moderator' element={<Subplebbits />} />
-            <Route path='/communities/admin' element={<Subplebbits />} />
-            <Route path='/communities/owner' element={<Subplebbits />} />
-            <Route path='/communities/vote' element={<Subplebbits />} />
-            <Route path='/communities/vote/passing' element={<Subplebbits />} />
-            <Route path='/communities/vote/rejecting' element={<Subplebbits />} />
-            <Route path='/communities/create' element={<SubplebbitSettings />} />
+            <Route path='/communities' element={<Communities />} />
+            <Route path='/communities/subscriber' element={<Communities />} />
+            <Route path='/communities/moderator' element={<Communities />} />
+            <Route path='/communities/admin' element={<Communities />} />
+            <Route path='/communities/owner' element={<Communities />} />
+            <Route path='/communities/vote' element={<Communities />} />
+            <Route path='/communities/vote/passing' element={<Communities />} />
+            <Route path='/communities/vote/rejecting' element={<Communities />} />
+            <Route path='/communities/create' element={<CommunitySettings />} />
           </Route>
           <Route element={feedLayout}>
             <Route path='/:sortType?/:timeFilterName?' element={<Home />} />
@@ -129,7 +129,7 @@ const App = () => {
 
             <Route path='/s/mod/:sortType?/:timeFilterName?' element={<Mod />} />
 
-            <Route path='/s/:subplebbitAddress/:sortType?/:timeFilterName?' element={<Subplebbit />} />
+            <Route path='/s/:communityAddress/:sortType?/:timeFilterName?' element={<CommunityView />} />
 
             <Route path='/domain/:domain/:sortType?/:timeFilterName?' element={<Domain />} />
 

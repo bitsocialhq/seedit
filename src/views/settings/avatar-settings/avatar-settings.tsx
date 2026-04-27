@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { setAccount, useAccount, useAuthorAvatar } from '@bitsocialnet/bitsocial-react-hooks';
+import { setAccount, useAccount, useAuthorAvatar } from '@bitsocial/bitsocial-react-hooks';
 import styles from './avatar-settings.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 

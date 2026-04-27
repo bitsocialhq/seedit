@@ -2,22 +2,22 @@ export type ParamsType = {
   accountCommentIndex?: string;
   authorAddress?: string;
   commentCid?: string;
-  subplebbitAddress?: string;
+  communityAddress?: string;
   timeFilterName?: string;
 };
 
-export type ViewType = 'home' | 'pending' | 'post' | 'submit' | 'subplebbit' | 'subplebbit/submit';
+export type ViewType = 'home' | 'pending' | 'post' | 'submit' | 'community' | 'community/submit';
 
 const sortTypes = ['/hot', '/new', '/active', '/topAll'];
 
 export const getAboutLink = (pathname: string, params: ParamsType): string => {
-  // some subs might use emojis in their address, so we need to decode the pathname
+  // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
 
-  if (decodedPathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}`)) {
-    return `/s/${params.subplebbitAddress}/c/${params.commentCid}/about`;
-  } else if (decodedPathname.startsWith(`/s/${params.subplebbitAddress}`)) {
-    return `/s/${params.subplebbitAddress}/about`;
+  if (decodedPathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}`)) {
+    return `/s/${params.communityAddress}/c/${params.commentCid}/about`;
+  } else if (decodedPathname.startsWith(`/s/${params.communityAddress}`)) {
+    return `/s/${params.communityAddress}/about`;
   } else if (decodedPathname.startsWith('/profile')) {
     return '/profile/about';
   } else if (decodedPathname.startsWith('/u/')) {
@@ -49,7 +49,7 @@ export const isAuthorSubmittedView = (pathname: string, params: ParamsType): boo
   return pathname === `/u/${params.authorAddress}/c/${params.commentCid}/submitted`;
 };
 
-export const isCreateSubplebbitView = (pathname: string): boolean => {
+export const isCreateCommunityView = (pathname: string): boolean => {
   return pathname === '/communities/create';
 };
 
@@ -98,20 +98,20 @@ export const isPendingPostView = (pathname: string, params: ParamsType): boolean
 };
 
 export const isPostPageView = (pathname: string, params: ParamsType): boolean => {
-  // some subs might use emojis in their address, so we need to decode the pathname
+  // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
-  return params.subplebbitAddress && params.commentCid ? decodedPathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}`) : false;
+  return params.communityAddress && params.commentCid ? decodedPathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}`) : false;
 };
 
 export const isPostPageAboutView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress && params.commentCid ? pathname.startsWith(`/s/${params.subplebbitAddress}/c/${params.commentCid}/about`) : false;
+  return params.communityAddress && params.commentCid ? pathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}/about`) : false;
 };
 
 export const isPostContextView = (pathname: string, params: ParamsType, search: string): boolean => {
-  if (!params.subplebbitAddress || !params.commentCid) return false;
+  if (!params.communityAddress || !params.commentCid) return false;
 
   const decodedPathname = decodeURIComponent(pathname);
-  const expectedPathBase = `/s/${params.subplebbitAddress}/c/${params.commentCid}`;
+  const expectedPathBase = `/s/${params.communityAddress}/c/${params.commentCid}`;
 
   if (!decodedPathname.startsWith(expectedPathBase)) return false;
 
@@ -165,52 +165,52 @@ export const isSubmitView = (pathname: string): boolean => {
   return pathname.endsWith('/submit');
 };
 
-export const isSubplebbitView = (pathname: string, params: ParamsType): boolean => {
-  // some subs might use emojis in their address, so we need to decode the pathname
+export const isCommunityView = (pathname: string, params: ParamsType): boolean => {
+  // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
-  return params.subplebbitAddress ? decodedPathname.startsWith(`/s/${params.subplebbitAddress}`) : false;
+  return params.communityAddress ? decodedPathname.startsWith(`/s/${params.communityAddress}`) : false;
 };
 
-export const isSubplebbitAboutView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname.startsWith(`/s/${params.subplebbitAddress}/about`) : false;
+export const isCommunityAboutView = (pathname: string, params: ParamsType): boolean => {
+  return params.communityAddress ? pathname.startsWith(`/s/${params.communityAddress}/about`) : false;
 };
 
-export const isSubplebbitSettingsView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname === `/s/${params.subplebbitAddress}/settings` || pathname === `/s/${params.subplebbitAddress}/settings/editor` : false;
+export const isCommunitySettingsView = (pathname: string, params: ParamsType): boolean => {
+  return params.communityAddress ? pathname === `/s/${params.communityAddress}/settings` || pathname === `/s/${params.communityAddress}/settings/editor` : false;
 };
 
-export const isSubplebbitSubmitView = (pathname: string, params: ParamsType): boolean => {
-  return params.subplebbitAddress ? pathname === `/s/${params.subplebbitAddress}/submit` : false;
+export const isCommunitySubmitView = (pathname: string, params: ParamsType): boolean => {
+  return params.communityAddress ? pathname === `/s/${params.communityAddress}/submit` : false;
 };
 
-export const isSubplebbitsView = (pathname: string): boolean => {
+export const isCommunitiesView = (pathname: string): boolean => {
   return pathname.startsWith('/communities');
 };
 
-export const isSubplebbitsSubscriberView = (pathname: string): boolean => {
+export const isCommunitiesSubscriberView = (pathname: string): boolean => {
   return pathname === '/communities/subscriber';
 };
 
-export const isSubplebbitsModeratorView = (pathname: string): boolean => {
+export const isCommunitiesModeratorView = (pathname: string): boolean => {
   return pathname === '/communities/moderator';
 };
 
-export const isSubplebbitsAdminView = (pathname: string): boolean => {
+export const isCommunitiesAdminView = (pathname: string): boolean => {
   return pathname === '/communities/admin';
 };
 
-export const isSubplebbitsOwnerView = (pathname: string): boolean => {
+export const isCommunitiesOwnerView = (pathname: string): boolean => {
   return pathname === '/communities/owner';
 };
 
-export const isSubplebbitsVoteView = (pathname: string): boolean => {
+export const isCommunitiesVoteView = (pathname: string): boolean => {
   return pathname.startsWith('/communities/vote');
 };
 
-export const isSubplebbitsVotePassingView = (pathname: string): boolean => {
+export const isCommunitiesVotePassingView = (pathname: string): boolean => {
   return pathname === '/communities/vote/passing';
 };
 
-export const isSubplebbitsVoteRejectingView = (pathname: string): boolean => {
+export const isCommunitiesVoteRejectingView = (pathname: string): boolean => {
   return pathname === '/communities/vote/rejecting';
 };

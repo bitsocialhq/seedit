@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { isCreateSubplebbitView } from '../../../lib/utils/view-utils';
-import useSubplebbitSettingsStore, { SubplebbitSettingsState } from '../../../stores/use-subplebbit-settings-store';
+import { isCreateCommunityView } from '../../../lib/utils/view-utils';
+import useCommunitySettingsStore, { CommunitySettingsState } from '../../../stores/use-community-settings-store';
 import useChallengesOptions from '../../../hooks/use-challenges-options';
-import styles from '../subplebbit-settings.module.css';
+import styles from '../community-settings.module.css';
 
 interface ChallengeSettingsProps {
   challenge: any;
   index: number;
   isReadOnly: boolean;
-  setSubplebbitSettingsStore: (data: Partial<SubplebbitSettingsState>) => void;
+  setCommunitySettingsStore: (data: Partial<CommunitySettingsState>) => void;
   settings: any;
   showSettings: boolean;
   challengesSettings: any;
@@ -72,7 +72,7 @@ const ExcludeAddressesFromChallengeInput = ({
   );
 };
 
-const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, setSubplebbitSettingsStore, settings, showSettings }: ChallengeSettingsProps) => {
+const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, setCommunitySettingsStore, settings, showSettings }: ChallengeSettingsProps) => {
   const { name, options } = challenge || {};
   const challengeSettings = challengesSettings[name];
   const readOnlyFallback = isReadOnly && Object.keys(challengeSettings || {}).length === 0 && challenge;
@@ -82,18 +82,18 @@ const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, s
   const handleOptionChange = (optionName: string, newValue: string) => {
     const updatedOptions = { ...options, [optionName]: newValue };
     const updatedChallenges = settings.challenges?.map((ch: any, idx: number) => (idx === index ? { ...ch, options: updatedOptions } : ch));
-    setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+    setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
   };
 
   const addExcludeGroup = () => {
     const newExclude = { role: [], post: false, reply: false, vote: false };
     if (challenge?.exclude) {
       const updatedChallenges = settings?.challenges?.map((ch: any, idx: number) => (idx === index ? { ...ch, exclude: [...ch.exclude, newExclude] } : ch));
-      setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+      setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
       setShowExcludeSettings((oldShowExcludeSettings) => [...oldShowExcludeSettings, true]);
     } else {
       const updatedChallenges = settings?.challenges?.map((ch: any, idx: number) => (idx === index ? { ...ch, exclude: [newExclude] } : ch));
-      setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+      setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
       setShowExcludeSettings([true]);
     }
   };
@@ -102,7 +102,7 @@ const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, s
     const updatedChallenges = [...settings.challenges];
     const currentChallenge = updatedChallenges[index];
     currentChallenge.exclude.splice(excludeIndex, 1);
-    setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+    setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
   };
 
   const [showExcludeSettings, setShowExcludeSettings] = useState<boolean[]>([]);
@@ -153,7 +153,7 @@ const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, s
       return ch;
     });
 
-    setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+    setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
   };
 
   const handleExcludeAddress = (excludeIndex: number, value: string) => {
@@ -206,7 +206,7 @@ const ChallengeSettings = ({ challenge, challengesSettings, index, isReadOnly, s
             {!isReadOnly && <span className={styles.deleteButton} onClick={() => deleteExcludeGroup(excludeIndex)} title='delete group' />}
             {!isReadOnly && (
               <button className={styles.hideCombo} onClick={() => toggleExcludeSettings(excludeIndex)} disabled={isReadOnly}>
-                {showExcludeSettings?.[excludeIndex] ?? false ? 'Hide' : 'Show'} Group Settings
+                {(showExcludeSettings?.[excludeIndex] ?? false) ? 'Hide' : 'Show'} Group Settings
               </button>
             )}
             {showExcludeSettings[excludeIndex] && (
@@ -426,29 +426,29 @@ const Challenges = ({
   challengesSettings: any;
 }) => {
   const { t } = useTranslation();
-  const { settings, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { settings, setCommunitySettingsStore } = useCommunitySettingsStore();
   const location = useLocation();
-  const isInCreateSubplebbitView = isCreateSubplebbitView(location.pathname);
+  const isInCreateCommunityView = isCreateCommunityView(location.pathname);
   const challenges = settings?.challenges || readOnlyChallenges || [];
   const [showSettings, setShowSettings] = useState<boolean[]>(challenges?.map(() => false));
   const challengeOptions = useChallengesOptions();
 
   const hasSetDefaultChallenge = useRef(false);
-  const valuesRef = useRef({ settings, setSubplebbitSettingsStore });
+  const valuesRef = useRef({ settings, setCommunitySettingsStore });
 
   useEffect(() => {
-    valuesRef.current = { settings, setSubplebbitSettingsStore };
+    valuesRef.current = { settings, setCommunitySettingsStore };
   });
 
   useEffect(() => {
-    if (isInCreateSubplebbitView && !hasSetDefaultChallenge.current && challengeOptions && challengesSettings && !valuesRef.current.settings?.challenges?.length) {
+    if (isInCreateCommunityView && !hasSetDefaultChallenge.current && challengeOptions && challengesSettings && !valuesRef.current.settings?.challenges?.length) {
       const defaultChallengeName = challengesSettings?.['captcha-canvas-v3'] ? 'captcha-canvas-v3' : challengeNames?.[0] || Object.keys(challengeOptions)[0];
       const defaultChallenge = {
         name: defaultChallengeName,
         options: challengeOptions[defaultChallengeName] || {},
       };
 
-      valuesRef.current.setSubplebbitSettingsStore({
+      valuesRef.current.setCommunitySettingsStore({
         settings: {
           ...valuesRef.current.settings,
           challenges: [defaultChallenge],
@@ -457,7 +457,7 @@ const Challenges = ({
 
       hasSetDefaultChallenge.current = true;
     }
-  }, [isInCreateSubplebbitView, challengeOptions, challengesSettings, challengeNames]);
+  }, [isInCreateCommunityView, challengeOptions, challengesSettings, challengeNames]);
 
   const toggleSettings = (index: number) => {
     const newShowSettings = [...showSettings];
@@ -472,13 +472,13 @@ const Challenges = ({
       options: defaultOptions,
     };
     const updatedChallenges = [...(settings?.challenges || []), newChallenge];
-    setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+    setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
     setShowSettings((oldShowSettings) => [...oldShowSettings, true]);
   };
 
   const handleDeleteChallenge = (index: number) => {
     const updatedChallenges = settings?.challenges?.filter((_: any, idx: number) => idx !== index);
-    setSubplebbitSettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
+    setCommunitySettingsStore({ settings: { ...settings, challenges: updatedChallenges } });
     setShowSettings((oldShowSettings) => oldShowSettings.filter((_, idx) => idx !== index));
   };
 
@@ -488,7 +488,7 @@ const Challenges = ({
     const updatedChallenges = [...currentChallenges];
     updatedChallenges[index] = { ...updatedChallenges[index], name: newType, options };
 
-    setSubplebbitSettingsStore({
+    setCommunitySettingsStore({
       settings: {
         ...settings,
         challenges: updatedChallenges,
@@ -506,7 +506,7 @@ const Challenges = ({
             {t('add_a_challenge')}
           </button>
         )}
-        {challenges.length === 0 && !isInCreateSubplebbitView && <span className={styles.noChallengeWarning}>{t('warning_spam')}</span>}
+        {challenges.length === 0 && !isInCreateCommunityView && <span className={styles.noChallengeWarning}>{t('warning_spam')}</span>}
         {challenges?.map((challenge: any, index: number) => (
           <div key={index} className={styles.challenge}>
             Challenge #{index + 1}
@@ -533,7 +533,7 @@ const Challenges = ({
               challengesSettings={challengesSettings || {}}
               index={index}
               isReadOnly={isReadOnly}
-              setSubplebbitSettingsStore={setSubplebbitSettingsStore}
+              setCommunitySettingsStore={setCommunitySettingsStore}
               settings={settings}
               showSettings={showSettings[index]}
             />

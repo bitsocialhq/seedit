@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState, useRef, lazy, Suspense, Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { usePublishSubplebbitEdit, useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
+import { usePublishCommunityEdit, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import useTheme from '../../../stores/use-theme-store';
 import styles from '../../settings/account-data-editor/account-data-editor.module.css';
 import useIsMobile from '../../../hooks/use-is-mobile';
 import LoadingEllipsis from '../../../components/loading-ellipsis';
-import useSubplebbitSettingsStore from '../../../stores/use-subplebbit-settings-store';
+import useCommunitySettingsStore from '../../../stores/use-community-settings-store';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
+import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -51,22 +52,22 @@ const FallbackEditor = ({ value, onChange, height, disabled }: { value: string; 
   );
 };
 
-const SubplebbitDataEditor = () => {
+const CommunityDataEditor = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const theme = useTheme((state) => state.theme);
   const [text, setText] = useState('');
 
-  const { subplebbitAddress } = useParams<{ subplebbitAddress: string }>();
-  const subplebbit = useSubplebbit({ subplebbitAddress });
-  const { address, createdAt, description, error, rules, settings, suggested, roles, title } = subplebbit || {};
+  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const { address, createdAt, description, error, rules, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
 
   const {
-    publishSubplebbitEditOptions,
-    setSubplebbitSettingsStore,
-    resetSubplebbitSettingsStore,
+    publishCommunityEditOptions,
+    setCommunitySettingsStore,
+    resetCommunitySettingsStore,
     title: storeTitle,
     description: storeDescription,
     address: storeAddress,
@@ -74,15 +75,15 @@ const SubplebbitDataEditor = () => {
     rules: storeRules,
     roles: storeRoles,
     settings: storeSettings,
-    subplebbitAddress: storeSubplebbitAddress,
-  } = useSubplebbitSettingsStore();
+    communityAddress: storeCommunityAddress,
+  } = useCommunitySettingsStore();
 
-  const { error: publishSubplebbitEditError, publishSubplebbitEdit } = usePublishSubplebbitEdit(publishSubplebbitEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
 
-  // Use store state if available, otherwise fall back to original subplebbit data
+  // Use store state if available, otherwise fall back to original community data
   const currentSettings = useMemo(() => {
-    const { subplebbitAddress: storeAddr } = useSubplebbitSettingsStore.getState();
-    const hasStoreData = storeAddr === subplebbitAddress;
+    const { communityAddress: storeAddr } = useCommunitySettingsStore.getState();
+    const hasStoreData = storeAddr === communityAddress;
 
     return {
       title: hasStoreData ? storeTitle : title,
@@ -92,7 +93,7 @@ const SubplebbitDataEditor = () => {
       rules: hasStoreData ? storeRules : rules,
       roles: hasStoreData ? storeRoles : roles,
       settings: hasStoreData ? storeSettings : settings,
-      subplebbitAddress: hasStoreData ? storeSubplebbitAddress : subplebbitAddress,
+      communityAddress: hasStoreData ? storeCommunityAddress : communityAddress,
     };
   }, [
     storeTitle,
@@ -102,7 +103,7 @@ const SubplebbitDataEditor = () => {
     storeRules,
     storeRoles,
     storeSettings,
-    storeSubplebbitAddress,
+    storeCommunityAddress,
     title,
     description,
     address,
@@ -110,10 +111,10 @@ const SubplebbitDataEditor = () => {
     rules,
     roles,
     settings,
-    subplebbitAddress,
+    communityAddress,
   ]);
 
-  const subplebbitSettings = useMemo(() => JSON.stringify(currentSettings, null, 2), [currentSettings]);
+  const communitySettings = useMemo(() => JSON.stringify(currentSettings, null, 2), [currentSettings]);
 
   // Update text when settings change, but not when user is actively typing
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -125,7 +126,7 @@ const SubplebbitDataEditor = () => {
 
     // Debounce setting text to avoid interrupting user typing
     timeoutRef.current = setTimeout(() => {
-      setText(subplebbitSettings);
+      setText(communitySettings);
     }, 100);
 
     return () => {
@@ -133,7 +134,7 @@ const SubplebbitDataEditor = () => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [subplebbitSettings]);
+  }, [communitySettings]);
 
   // Sync editor changes to store immediately when JSON is valid
   const handleTextChange = (newText: string) => {
@@ -142,7 +143,7 @@ const SubplebbitDataEditor = () => {
     // Try to sync immediately if JSON is valid
     try {
       const parsedSettings = JSON.parse(newText);
-      setSubplebbitSettingsStore({
+      setCommunitySettingsStore({
         title: parsedSettings.title ?? '',
         description: parsedSettings.description ?? '',
         address: parsedSettings.address,
@@ -150,7 +151,7 @@ const SubplebbitDataEditor = () => {
         rules: parsedSettings.rules ?? [],
         roles: parsedSettings.roles ?? {},
         settings: parsedSettings.settings ?? {},
-        subplebbitAddress: parsedSettings.subplebbitAddress,
+        communityAddress: parsedSettings.communityAddress,
       });
     } catch {
       // Invalid JSON - don't spam console during active typing
@@ -167,16 +168,16 @@ const SubplebbitDataEditor = () => {
     if (triggerSave) {
       const performSave = async () => {
         try {
-          console.log('Performing save with options:', publishSubplebbitEditOptions);
+          console.log('Performing save with options:', publishCommunityEditOptions);
           await publishSubplebbitEdit();
           setShowSaving(false);
           setTriggerSave(false);
 
-          if (publishSubplebbitEditError) {
-            setCurrentError(publishSubplebbitEditError);
-            alert(publishSubplebbitEditError.message || 'Error: ' + publishSubplebbitEditError);
+          if (publishCommunityEditError) {
+            setCurrentError(publishCommunityEditError);
+            alert(publishCommunityEditError.message || 'Error: ' + publishCommunityEditError);
           } else {
-            alert(t('settings_saved', { subplebbitAddress }));
+            alert(t('settings_saved', { communityAddress }));
           }
         } catch (e) {
           setShowSaving(false);
@@ -184,7 +185,7 @@ const SubplebbitDataEditor = () => {
           if (e instanceof Error) {
             console.warn(e);
             setCurrentError(e);
-            alert(`failed editing subplebbit: ${e.message}`);
+            alert(`failed editing community: ${e.message}`);
           } else {
             console.error('An unknown error occurred:', e);
           }
@@ -192,11 +193,11 @@ const SubplebbitDataEditor = () => {
       };
       performSave();
     }
-    // Intentionally only depend on triggerSave to prevent multiple executions when publishSubplebbitEditOptions changes during save
+    // Intentionally only depend on triggerSave to prevent multiple executions when publishCommunityEditOptions changes during save
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerSave]);
 
-  const saveSubplebbitSettings = () => {
+  const saveCommunitySettings = () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
@@ -220,23 +221,23 @@ const SubplebbitDataEditor = () => {
       if (e instanceof Error) {
         console.warn(e);
         setCurrentError(e);
-        alert(`failed editing subplebbit: ${e.message}`);
+        alert(`failed editing community: ${e.message}`);
       } else {
         console.error('An unknown error occurred:', e);
       }
     }
   };
 
-  // Set store for loaded subplebbit settings when editing
+  // Set store for loaded community settings when editing
   useEffect(() => {
     if (hasLoaded) {
-      // Only reset if we're switching to a different subplebbit or if store is uninitialized
-      const { subplebbitAddress: storeSubplebbitAddress } = useSubplebbitSettingsStore.getState();
-      const shouldReset = !storeSubplebbitAddress || storeSubplebbitAddress !== subplebbitAddress;
+      // Only reset if we're switching to a different community or if store is uninitialized
+      const { communityAddress: storeCommunityAddress } = useCommunitySettingsStore.getState();
+      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== communityAddress;
 
       if (shouldReset) {
-        resetSubplebbitSettingsStore();
-        setSubplebbitSettingsStore({
+        resetCommunitySettingsStore();
+        setCommunitySettingsStore({
           title: title ?? '',
           description: description ?? '',
           address,
@@ -244,13 +245,13 @@ const SubplebbitDataEditor = () => {
           rules: rules ?? [],
           roles: roles ?? {},
           settings: settings ?? {},
-          subplebbitAddress,
+          communityAddress: communityAddress,
         });
       }
     }
-  }, [hasLoaded, resetSubplebbitSettingsStore, setSubplebbitSettingsStore, title, description, address, suggested, rules, roles, settings, subplebbitAddress]);
+  }, [hasLoaded, resetCommunitySettingsStore, setCommunitySettingsStore, title, description, address, suggested, rules, roles, settings, communityAddress]);
 
-  const loadingStateString = useStateString(subplebbit);
+  const loadingStateString = useStateString(community);
 
   if (!hasLoaded) {
     return (
@@ -319,13 +320,13 @@ const SubplebbitDataEditor = () => {
           <Trans
             i18nKey='save_reset_changes'
             components={{
-              1: <button key='saveSubplebbitSettingsButton' onClick={saveSubplebbitSettings} />,
-              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(subplebbitSettings)} />,
+              1: <button key='saveCommunitySettingsButton' onClick={saveCommunitySettings} />,
+              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(communitySettings)} />,
             }}
           />
           <div>
             <br />
-            <button onClick={() => navigate(`/s/${subplebbitAddress}/settings`)}>return to settings</button>
+            <button onClick={() => navigate(`/s/${communityAddress}/settings`)}>return to settings</button>
           </div>
         </div>
       )}
@@ -333,4 +334,4 @@ const SubplebbitDataEditor = () => {
   );
 };
 
-export default SubplebbitDataEditor;
+export default CommunityDataEditor;

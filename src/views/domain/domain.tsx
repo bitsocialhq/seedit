@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useFeed, Comment, CommentsFilter } from '@bitsocialnet/bitsocial-react-hooks';
+import { useFeed, Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import FeedFooter from '../../components/feed-footer';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
@@ -16,7 +17,7 @@ import { sortTypes } from '../../constants/sort-types';
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
 const Domain = () => {
-  const subplebbitAddresses = useDefaultSubplebbitAddresses();
+  const communityAddresses = useDefaultSubplebbitAddresses();
   const params = useParams<{ domain?: string; sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -67,19 +68,19 @@ const Domain = () => {
     const options: {
       newerThan: number;
       sortType: string;
-      subplebbitAddresses: string[];
+      communities: ReturnType<typeof getCommunityIdentifiers>;
       filter: CommentsFilter;
     } = {
       newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
       sortType,
-      subplebbitAddresses,
+      communities: getCommunityIdentifiers(communityAddresses),
       filter: { filter: filterFunc, key: filterKey },
     };
 
     return options;
-  }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
+  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
 
-  const { feed, hasMore, loadMore, reset, subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
 
   useEffect(() => {
     if (isSearching) {
@@ -108,21 +109,21 @@ const Domain = () => {
 
   // suggest the user to change time filter if there aren't enough posts
   const { feed: weeklyFeed } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
     filter: { filter: matchesDomain, key: `domain-filter-weekly-${domain}` },
   });
 
   const { feed: monthlyFeed } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
     filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
   });
 
   const { feed: yearlyFeed } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
     filter: { filter: matchesDomain, key: `domain-filter-yearly-${domain}` },
@@ -153,8 +154,8 @@ const Domain = () => {
     feedLength: feed?.length,
     hasFeedLoaded: !!feed,
     hasMore,
-    subplebbitAddresses,
-    subplebbitAddressesWithNewerPosts,
+    communityAddresses,
+    communityAddressesWithNewerPosts,
     weeklyFeedLength: weeklyFeed.length,
     monthlyFeedLength: monthlyFeed.length,
     yearlyFeedLength: yearlyFeed.length,

@@ -2,15 +2,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAccount, usePublishComment, useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
+import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
 import Embed from '../../components/post/embed';
@@ -304,36 +305,36 @@ const ContentField = () => {
   );
 };
 
-const SubplebbitAddressField = () => {
+const CommunityAddressField = () => {
   const { t } = useTranslation();
   const { subscriptions } = useAccount() || {};
-  const defaultSubplebbitAddresses = useDefaultSubplebbitAddresses();
-  const { subplebbitAddress: inputAddress, setPublishPostStore } = usePublishPostStore();
+  const defaultCommunityAddresses = useDefaultSubplebbitAddresses();
+  const { communityAddress: inputAddress, setPublishPostStore } = usePublishPostStore();
 
-  const filteredSubplebbitAddresses = defaultSubplebbitAddresses.filter((address) => address?.toLowerCase()?.includes(inputAddress?.toLowerCase() || '')).slice(0, 10);
+  const filteredCommunityAddresses = defaultCommunityAddresses.filter((address) => address?.toLowerCase()?.includes(inputAddress?.toLowerCase() || '')).slice(0, 10);
   const [isInputAddressFocused, setIsInputAddressFocused] = useState(false);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 
   // Generate random suggestions derived from defaults without an effect
-  const randomSubplebbitSuggestions = useMemo(() => getRandomSubplebbits(defaultSubplebbitAddresses, 10), [defaultSubplebbitAddresses]);
-  const listSource = subscriptions?.length > 5 ? subscriptions : randomSubplebbitSuggestions;
+  const randomCommunitySuggestions = useMemo(() => getRandomSubplebbits(defaultCommunityAddresses, 10), [defaultCommunityAddresses]);
+  const listSource = subscriptions?.length > 5 ? subscriptions : randomCommunitySuggestions;
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
-        setActiveDropdownIndex((prevIndex) => (prevIndex < filteredSubplebbitAddresses.length - 1 ? prevIndex + 1 : prevIndex));
+        setActiveDropdownIndex((prevIndex) => (prevIndex < filteredCommunityAddresses.length - 1 ? prevIndex + 1 : prevIndex));
       } else if (e.key === 'ArrowUp') {
         setActiveDropdownIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
       } else if (e.key === 'Enter') {
         if (activeDropdownIndex !== -1) {
-          const selectedAddress = filteredSubplebbitAddresses[activeDropdownIndex];
-          setPublishPostStore({ subplebbitAddress: selectedAddress });
+          const selectedAddress = filteredCommunityAddresses[activeDropdownIndex];
+          setPublishPostStore({ communityAddress: selectedAddress } as any);
         }
         setActiveDropdownIndex(-1);
         setIsInputAddressFocused(false);
       }
     },
-    [filteredSubplebbitAddresses, activeDropdownIndex, setPublishPostStore],
+    [filteredCommunityAddresses, activeDropdownIndex, setPublishPostStore],
   );
 
   useEffect(() => {
@@ -343,8 +344,8 @@ const SubplebbitAddressField = () => {
     };
   }, [handleKeyDown]);
 
-  const handleSubplebbitSelect = (subplebbitAddress: string) => {
-    setPublishPostStore({ subplebbitAddress: subplebbitAddress });
+  const handleCommunitySelect = (communityAddress: string) => {
+    setPublishPostStore({ communityAddress } as any);
     setIsInputAddressFocused(false);
     setActiveDropdownIndex(-1);
   };
@@ -355,16 +356,16 @@ const SubplebbitAddressField = () => {
     return shuffled.slice(0, count);
   }
 
-  const defaultSubplebbitsDropdown = (
+  const communitiesDropdown = (
     <ul className={styles.dropdown}>
-      {filteredSubplebbitAddresses.map((subplebbitAddress, index) => (
+      {filteredCommunityAddresses.map((communityAddress, index) => (
         <li
-          key={subplebbitAddress}
+          key={communityAddress}
           className={`${styles.dropdownItem} ${index === activeDropdownIndex ? styles.activeDropdownItem : ''}`}
-          onClick={() => handleSubplebbitSelect(subplebbitAddress)}
+          onClick={() => handleCommunitySelect(communityAddress)}
           onMouseEnter={() => setActiveDropdownIndex(index)}
         >
-          {subplebbitAddress}
+          {communityAddress}
         </li>
       ))}
     </ul>
@@ -380,7 +381,7 @@ const SubplebbitAddressField = () => {
           type='text'
           value={inputAddress ?? ''}
           onChange={(e) => {
-            setPublishPostStore({ subplebbitAddress: e.target.value });
+            setPublishPostStore({ communityAddress: e.target.value } as any);
           }}
           autoCorrect='off'
           autoComplete='off'
@@ -394,7 +395,7 @@ const SubplebbitAddressField = () => {
             }
           }}
         />
-        {inputAddress && isInputAddressFocused && filteredSubplebbitAddresses.length > 0 && defaultSubplebbitsDropdown}
+        {inputAddress && isInputAddressFocused && filteredCommunityAddresses.length > 0 && communitiesDropdown}
         <div className={styles.subsDescription}>{subscriptions?.length > 5 ? t('submit_subscriptions') : t('submit_subscriptions_notice')}</div>
         <div className={styles.subs}>
           {listSource.map((subscription: string) => (
@@ -402,10 +403,10 @@ const SubplebbitAddressField = () => {
               key={subscription}
               className={styles.sub}
               onClick={() => {
-                setPublishPostStore({ subplebbitAddress: subscription });
+                setPublishPostStore({ communityAddress: subscription } as any);
               }}
             >
-              {Plebbit.getShortAddress({ address: subscription })}
+              {getShortAddress(subscription)}
             </span>
           ))}
         </div>
@@ -467,16 +468,16 @@ const SubmitPage = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const { link, title, subplebbitAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
+  const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
 
   useEffect(() => {
-    setPublishPostStore({ subplebbitAddress: params.subplebbitAddress || '' });
-  }, [params.subplebbitAddress, setPublishPostStore]);
+    setPublishPostStore({ communityAddress: params.communityAddress || '' } as any);
+  }, [params.communityAddress, setPublishPostStore]);
 
-  const selectedSubplebbitData = useSubplebbit({ subplebbitAddress });
-  const { rules, title: subplebbitTitle } = selectedSubplebbitData;
-  const shortAddress = subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress });
-  const { isOffline, offlineTitle } = useIsSubplebbitOffline(selectedSubplebbitData);
+  const selectedCommunityData = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const { rules, title: communityTitle } = selectedCommunityData;
+  const shortAddress = communityAddress && getShortAddress(communityAddress);
+  const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
   const { index, publishComment } = usePublishComment(publishCommentOptions);
 
@@ -489,7 +490,7 @@ const SubmitPage = () => {
       alert(`Invalid URL`);
       return;
     }
-    if (!subplebbitAddress) {
+    if (!communityAddress) {
       alert(`Missing community address`);
       return;
     }
@@ -510,7 +511,7 @@ const SubmitPage = () => {
   }, []);
 
   const documentTitle = t('submit_to_string', {
-    string: subplebbitTitle || shortAddress || 'Seedit',
+    string: communityTitle || shortAddress || 'Seedit',
     interpolation: { escapeValue: false },
   });
 
@@ -525,21 +526,21 @@ const SubmitPage = () => {
           i18nKey='submit_to'
           shouldUnescape={true}
           values={{
-            link: subplebbitTitle || shortAddress || 'seedit',
+            link: communityTitle || shortAddress || 'seedit',
           }}
           components={{
-            1: shortAddress ? <Link key='submit_to_link' to={`/s/${subplebbitAddress}`} className={styles.location} /> : <span key='submit_to_span' />,
+            1: shortAddress ? <Link key='submit_to_link' to={`/s/${communityAddress}`} className={styles.location} /> : <span key='submit_to_span' />,
           }}
         />
       </h1>
       <div className={styles.form}>
         <div className={styles.formContent}>
-          {isOffline && subplebbitAddress && <div className={styles.infobar}>{offlineTitle}</div>}
+          {isOffline && communityAddress && <div className={styles.infobar}>{offlineTitle}</div>}
           <UrlField />
           {!link && <UploadMediaForm />}
           <TitleField />
           <ContentField />
-          <SubplebbitAddressField />
+          <CommunityAddressField />
           {rules?.length > 0 && <RulesInfo shortAddress={shortAddress || ''} rules={rules} />}
           <SubmitOptions />
           <div className={`${styles.box} ${styles.notice}`}>{t('submit_notice')}</div>

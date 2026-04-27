@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PublishCommentEditOptions, useComment, useEditedComment, usePublishCommentEdit } from '@bitsocialnet/bitsocial-react-hooks';
+import { PublishCommentEditOptions, useComment, useEditedComment, usePublishCommentEdit } from '@bitsocial/bitsocial-react-hooks';
 import styles from './edit-menu.module.css';
 import { alertChallengeVerificationFailed } from '../../../../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../../../../lib/utils/comment-utils';
 import challengesStore from '../../../../stores/use-challenges-store';
 
 const { addChallenge } = challengesStore.getState();
@@ -24,12 +25,13 @@ const EditMenu = ({ commentCid, showCommentEditForm }: EditMenuProps) => {
     post = comment;
   }
 
-  const { deleted, subplebbitAddress } = post || {};
+  const { deleted } = post || {};
+  const communityAddress = getCommentCommunityAddress(post);
 
   const defaultPublishOptions: PublishCommentEditOptions = {
     commentCid,
     deleted,
-    subplebbitAddress,
+    subplebbitAddress: communityAddress,
     onChallenge: (...args: any) => addChallenge([...args, post]),
     onChallengeVerification: alertChallengeVerificationFailed,
     onError: (error: Error) => {

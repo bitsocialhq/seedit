@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSubplebbit } from '@bitsocialnet/bitsocial-react-hooks';
+import { useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isValidURL } from '../../lib/utils/url-utils';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import usePublishReply from '../../hooks/use-publish-reply';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import Markdown from '../markdown';
 import styles from './reply-form.module.css';
 
@@ -11,7 +12,7 @@ type ReplyFormProps = {
   cid: string;
   isReplyingToReply?: boolean;
   hideReplyForm?: () => void;
-  subplebbitAddress: string;
+  communityAddress: string;
   postCid: string | undefined;
 };
 
@@ -109,21 +110,21 @@ export const FormattingHelpTable = () => {
   );
 };
 
-const ReplyForm = ({ cid, isReplyingToReply, hideReplyForm, subplebbitAddress, postCid }: ReplyFormProps) => {
+const ReplyForm = ({ cid, isReplyingToReply, hideReplyForm, communityAddress, postCid }: ReplyFormProps) => {
   const { t } = useTranslation();
   const [showOptions, setShowOptions] = useState(false);
   const [showFormattingHelp, setShowFormattingHelp] = useState(false);
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const { setPublishReplyOptions, resetPublishReplyOptions, replyIndex, publishReply, publishReplyOptions } = usePublishReply({ cid, subplebbitAddress, postCid });
+  const { setPublishReplyOptions, resetPublishReplyOptions, replyIndex, publishReply, publishReplyOptions } = usePublishReply({ cid, communityAddress, postCid });
 
   const mdContainerClass = isReplyingToReply ? `${styles.mdContainer} ${styles.mdContainerReplying}` : styles.mdContainer;
   const urlClass = showOptions ? styles.urlVisible : styles.urlHidden;
   const spoilerClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
   const nsfwClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
 
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
-  const { isOffline, offlineTitle } = useIsSubplebbitOffline(subplebbit);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
+  const { isOffline, offlineTitle } = useIsCommunityOffline(community);
 
   // focus on the textarea when replying to a reply
   const textRef = useRef<HTMLTextAreaElement>(null);

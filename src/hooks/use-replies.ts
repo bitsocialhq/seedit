@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAccountComments, type Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { useAccountComments, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { getPublishedReplies, mergeRepliesWithPendingAccountReplies } from '../lib/utils/account-history-utils';
 
 const useRepliesAndAccountReplies = (comment: Comment) => {

@@ -1,8 +1,9 @@
-import { PublishCommentOptions } from '@bitsocialnet/bitsocial-react-hooks';
-import { ChallengeVerification, Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
+import { ChallengeVerification, Comment } from '@bitsocial/bitsocial-react-hooks';
 import { create } from 'zustand';
 import useChallengesStore from './use-challenges-store';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
+import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
 
 type ReplyState = {
   content: { [parentCid: string]: string | undefined };
@@ -26,9 +27,10 @@ const usePublishReplyStore = create<ReplyState>((set) => ({
   publishReplyOptions: {},
   setReplyStore: (comment: Comment) =>
     set((state) => {
-      const { subplebbitAddress, parentCid, content, link, spoiler, nsfw } = comment;
+      const { parentCid, content, link, spoiler, nsfw } = comment;
+      const communityAddress = getCommentCommunityAddress(comment);
       const publishCommentOptions = {
-        subplebbitAddress,
+        subplebbitAddress: communityAddress,
         parentCid,
         postCid: comment?.postCid || parentCid,
         content,

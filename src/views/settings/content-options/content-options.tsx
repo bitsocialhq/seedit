@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useAccount } from '@bitsocialnet/bitsocial-react-hooks';
+import { useAccount } from '@bitsocial/bitsocial-react-hooks';
 import styles from './content-options.module.css';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
 import { useDefaultSubplebbits } from '../../../hooks/use-default-subplebbits';
@@ -138,7 +138,7 @@ const MediaOptions = () => {
 const CommunitiesOptions = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultSubplebbits = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubplebbits();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
@@ -175,7 +175,7 @@ const CommunitiesOptions = () => {
             if (!newValue) {
               await handleNSFWSubscriptionPrompt({
                 account,
-                defaultSubplebbits,
+                defaultCommunities,
                 tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
                 isShowingAll: true,
               });
@@ -201,7 +201,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['adult'],
                 });
               }
@@ -224,7 +224,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['gore'],
                 });
               }
@@ -247,7 +247,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['anti'],
                 });
               }
@@ -270,7 +270,7 @@ const CommunitiesOptions = () => {
               if (!newValue) {
                 await handleNSFWSubscriptionPrompt({
                   account,
-                  defaultSubplebbits,
+                  defaultCommunities,
                   tagsToShow: ['vulgar'],
                 });
               }

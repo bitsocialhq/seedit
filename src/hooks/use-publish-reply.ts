@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { usePublishComment } from '@bitsocialnet/bitsocial-react-hooks';
+import { usePublishComment } from '@bitsocial/bitsocial-react-hooks';
 import usePublishReplyStore from '../stores/use-publish-reply-store';
 
-const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; subplebbitAddress: string; postCid: string | undefined }) => {
+const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; communityAddress: string; postCid: string | undefined }) => {
   const parentCid = cid;
   const { content, link, spoiler, nsfw, publishCommentOptions, publishReplyOptions } = usePublishReplyStore((state) => ({
     content: state.content[parentCid],
@@ -20,7 +20,7 @@ const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; sub
     () => ({
       content: (newContent: string) =>
         setReplyStore({
-          subplebbitAddress,
+          communityAddress,
           parentCid,
           postCid: postCid ?? parentCid,
           content: newContent === '' ? undefined : newContent,
@@ -30,7 +30,7 @@ const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; sub
         }),
       link: (newLink: string) =>
         setReplyStore({
-          subplebbitAddress,
+          communityAddress,
           parentCid,
           postCid: postCid ?? parentCid,
           content: content,
@@ -40,7 +40,7 @@ const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; sub
         }),
       spoiler: (newSpoiler: boolean) =>
         setReplyStore({
-          subplebbitAddress,
+          communityAddress,
           parentCid,
           postCid: postCid ?? parentCid,
           content: content,
@@ -50,7 +50,7 @@ const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; sub
         }),
       nsfw: (newNsfw: boolean) =>
         setReplyStore({
-          subplebbitAddress,
+          communityAddress,
           parentCid,
           postCid: postCid ?? parentCid,
           content: content,
@@ -59,7 +59,7 @@ const usePublishReply = ({ cid, subplebbitAddress, postCid }: { cid: string; sub
           nsfw: newNsfw,
         }),
     }),
-    [subplebbitAddress, parentCid, setReplyStore, content, link, spoiler, nsfw, postCid],
+    [communityAddress, parentCid, setReplyStore, content, link, spoiler, nsfw, postCid],
   );
 
   const resetPublishReplyOptions = useMemo(() => () => resetReplyStore(parentCid), [parentCid, resetReplyStore]);

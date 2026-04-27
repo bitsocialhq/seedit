@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { CommentMediaInfo } from '../../../lib/utils/media-utils';
 import useFetchGifFirstFrame from '../../../hooks/use-fetch-gif-first-frame';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
-import { useIsNsfwSubplebbit } from '../../../hooks/use-is-nsfw-subplebbit';
+import { useIsNsfwCommunity } from '../../../hooks/use-is-nsfw-community';
 
 interface ThumbnailProps {
   cid?: string;
@@ -18,7 +18,7 @@ interface ThumbnailProps {
   link: string;
   linkHeight?: number;
   linkWidth?: number;
-  subplebbitAddress?: string;
+  communityAddress?: string;
   toggleExpanded?: () => void;
   isPdf?: boolean;
 }
@@ -35,7 +35,7 @@ const Thumbnail = ({
   link,
   linkHeight,
   linkWidth,
-  subplebbitAddress,
+  communityAddress,
   toggleExpanded,
   isPdf = false,
 }: ThumbnailProps) => {
@@ -45,8 +45,8 @@ const Thumbnail = ({
   const thumbnailClass = expanded ? styles.thumbnailHidden : styles.thumbnailVisible;
 
   const { blurNsfwThumbnails } = useContentOptionsStore();
-  const pageSubplebbitAddress = useParams().subplebbitAddress;
-  const isNsfwSubplebbit = useIsNsfwSubplebbit(pageSubplebbitAddress || '');
+  const pageCommunityAddress = useParams().communityAddress;
+  const isNsfwCommunity = useIsNsfwCommunity(pageCommunityAddress || '');
 
   if (linkWidth && linkHeight) {
     let scale = Math.min(1, 70 / Math.max(linkWidth, linkHeight));
@@ -59,7 +59,7 @@ const Thumbnail = ({
     hasLinkDimensions = false;
   }
 
-  if (isText || isLink || isPdf || isSpoiler || (isNsfw && !isNsfwSubplebbit) || isNotFound) {
+  if (isText || isLink || isPdf || isSpoiler || (isNsfw && !isNsfwCommunity) || isNotFound) {
     displayWidth = '50px';
     displayHeight = '50px';
     hasLinkDimensions = true;
@@ -147,7 +147,7 @@ const Thumbnail = ({
     noMediaLinkIcon = 'spoiler';
   }
 
-  if (isNsfw && blurNsfwThumbnails && !isNsfwSubplebbit) {
+  if (isNsfw && blurNsfwThumbnails && !isNsfwCommunity) {
     mediaComponent = <span className={`${styles.iconThumbnail} ${styles.nsfwIcon}`} />;
     noMediaLinkIcon = 'nsfw';
   }
@@ -179,7 +179,7 @@ const Thumbnail = ({
             {mediaComponent}
           </a>
         ) : (
-          <Link to={`/s/${subplebbitAddress}/c/${cid}`}>{mediaComponent}</Link>
+          <Link to={`/s/${communityAddress}/c/${cid}`}>{mediaComponent}</Link>
         )}
       </span>
     </span>

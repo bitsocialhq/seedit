@@ -2,18 +2,18 @@ import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFloating, autoUpdate, offset, shift, FloatingPortal } from '@floating-ui/react';
-import { useAccount } from '@bitsocialnet/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
+import { useAccount } from '@bitsocial/bitsocial-react-hooks';
 import {
   isHomeView,
   isHomeAboutView,
   isPostPageView,
   isPostPageAboutView,
-  isSubplebbitView,
+  isCommunityView,
   isAllView,
   isModView,
-  isSubplebbitAboutView,
+  isCommunityAboutView,
 } from '../../lib/utils/view-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 import styles from './search-bar.module.css';
@@ -33,14 +33,14 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
-  const isInSubplebbitView = isSubplebbitView(location.pathname, params);
-  const isInSubplebbitAboutView = isSubplebbitAboutView(location.pathname, params);
+  const isInCommunityView = isCommunityView(location.pathname, params);
+  const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInHomeView = isHomeView(location.pathname);
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInAllView = isAllView(location.pathname);
   const isInModView = isModView(location.pathname);
 
-  const isInFeedView = (isInSubplebbitView || isInHomeView || isInAllView || isInModView) && !isInPostPageView;
+  const isInFeedView = (isInCommunityView || isInHomeView || isInAllView || isInModView) && !isInPostPageView;
 
   const currentQuery = searchParams.get('q') || '';
   const [isInCommunitySearch, setIsInCommunitySearch] = useState(() => {
@@ -141,7 +141,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     }
     const searchInput = searchInputRef.current?.value;
     if (searchInput) {
-      if (searchInput.toLowerCase() === params.subplebbitAddress?.toLowerCase()) {
+      if (searchInput.toLowerCase() === params.communityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
       }
@@ -183,7 +183,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const handleCommunitySelect = useCallback(
     (address: string) => {
-      if (address.toLowerCase() === params.subplebbitAddress?.toLowerCase()) {
+      if (address.toLowerCase() === params.communityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
       }
@@ -194,7 +194,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       searchInputRef.current?.blur();
       navigate(`/s/${address}`);
     },
-    [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, params.subplebbitAddress, t],
+    [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, params.communityAddress, t],
   );
 
   const handleKeyDown = useCallback(
@@ -228,7 +228,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   );
 
   return (
-    <div ref={wrapperRef} className={`${styles.searchBarWrapper} ${isInHomeAboutView || isInSubplebbitAboutView || isInPostPageAboutView ? styles.mobileInfobar : ''}`}>
+    <div ref={wrapperRef} className={`${styles.searchBarWrapper} ${isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? styles.mobileInfobar : ''}`}>
       <form className={styles.searchBar} ref={searchBarRef} onSubmit={handleSearchSubmit}>
         <input
           type='text'
@@ -272,7 +272,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
                 onTouchEnd={() => handleCommunitySelect(address)}
                 onMouseEnter={() => setActiveDropdownIndex(index)}
               >
-                {Plebbit.getShortAddress({ address })}
+                {getShortAddress(address)}
               </li>
             ))}
           </ul>

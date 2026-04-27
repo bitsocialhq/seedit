@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSubscribe } from '@bitsocialnet/bitsocial-react-hooks';
+import { useSubscribe } from '@bitsocial/bitsocial-react-hooks';
 import styles from './subscribe-button.module.css';
 import { isAuthorView, isProfileView, isPendingPostView } from '../../lib/utils/view-utils';
 
@@ -10,7 +10,7 @@ interface subscribeButtonProps {
 }
 
 const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
-  const { subscribe, subscribed, unsubscribe } = useSubscribe({ subplebbitAddress: address });
+  const { subscribe, subscribed, unsubscribe } = useSubscribe({ communityAddress: address });
   const { t } = useTranslation();
   const location = useLocation();
   const params = useParams();

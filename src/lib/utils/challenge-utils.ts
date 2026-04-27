@@ -1,4 +1,4 @@
-import { ChallengeVerification } from '@bitsocialnet/bitsocial-react-hooks';
+import { ChallengeVerification } from '@bitsocial/bitsocial-react-hooks';
 
 export const alertChallengeVerificationFailed = (challengeVerification: ChallengeVerification, publication: any) => {
   if (challengeVerification?.challengeSuccess === false) {

@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { useEffect } from 'react';
 import { useLocation, useParams, Params } from 'react-router-dom';
-import { isSubplebbitView, isAllView, isModView, isHomeView, isDomainView } from '../lib/utils/view-utils';
+import { isCommunityView, isAllView, isModView, isHomeView, isDomainView } from '../lib/utils/view-utils';
 
 // the timestamp the last time the user visited
 const lastVisitTimestamp = localStorage.getItem('seeditLastVisitTimestamp');
@@ -85,7 +85,7 @@ const getSessionKeyForView = (pathname: string, params: Readonly<Params<string>>
   if (isAllView(pathname)) return 'sessionTimeFilter-all';
   if (isModView(pathname)) return 'sessionTimeFilter-mod';
   if (isDomainView(pathname)) return `sessionTimeFilter-domain-${params.domain}`;
-  if (isSubplebbitView(pathname, params)) return `sessionTimeFilter-subplebbit-${params.subplebbitAddress}`;
+  if (isCommunityView(pathname, params)) return `sessionTimeFilter-community-${params.communityAddress}`;
   return null;
 };
 
@@ -130,7 +130,7 @@ export const isValidTimeFilterName = (name: string | undefined | null): boolean 
 const useTimeFilter = () => {
   const params = useParams();
   const location = useLocation();
-  const isInSubplebbitView = isSubplebbitView(location.pathname, params);
+  const isInCommunityView = isCommunityView(location.pathname, params);
   const isInDomainView = Boolean(params.domain);
   const sessionKey = getSessionKeyForView(location.pathname, params);
 
@@ -152,7 +152,7 @@ const useTimeFilter = () => {
       // let the redirect logic in the component handle it.
       // Just use it for calculating initial timeFilterSeconds if needed below.
     } else {
-      if (isInSubplebbitView) {
+      if (isInCommunityView) {
         timeFilterName = 'all';
       } else if (isInDomainView) {
         timeFilterName = '1y';

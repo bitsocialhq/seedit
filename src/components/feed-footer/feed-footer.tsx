@@ -11,8 +11,8 @@ interface FeedFooterProps {
   feedLength: number;
   hasFeedLoaded: boolean;
   hasMore: boolean;
-  subplebbitAddresses: string[];
-  subplebbitAddressesWithNewerPosts: string[];
+  communityAddresses: string[];
+  communityAddressesWithNewerPosts: string[];
   weeklyFeedLength: number;
   monthlyFeedLength: number;
   yearlyFeedLength: number;
@@ -28,7 +28,7 @@ const FeedFooter = ({
   feedLength,
   hasFeedLoaded,
   hasMore,
-  subplebbitAddresses,
+  communityAddresses,
   weeklyFeedLength,
   monthlyFeedLength,
   yearlyFeedLength,
@@ -45,15 +45,15 @@ const FeedFooter = ({
   const isInModView = isModView(location.pathname);
   const isInAllView = isAllView(location.pathname);
 
-  const feedStateString = useFeedStateString(subplebbitAddresses);
+  const feedStateString = useFeedStateString(communityAddresses);
   const loadingStateString =
-    useFeedStateString(subplebbitAddresses) ||
+    useFeedStateString(communityAddresses) ||
     (!hasFeedLoaded || (feedLength === 0 && !(weeklyFeedLength > feedLength || monthlyFeedLength > feedLength || yearlyFeedLength > feedLength))
       ? t('loading_feed')
       : t('looking_for_more_posts'));
 
   // Add state to track initial loading
-  const [hasFetchedSubplebbitAddresses, setHasFetchedSubplebbitAddresses] = useState(false);
+  const [hasFetchedCommunityAddresses, setHasFetchedSubplebbitAddresses] = useState(false);
 
   // Set hasInitialized after a short delay
   useEffect(() => {
@@ -63,7 +63,7 @@ const FeedFooter = ({
     return () => clearTimeout(timer);
   }, []);
 
-  if (!hasFetchedSubplebbitAddresses) {
+  if (!hasFetchedCommunityAddresses) {
     footerContent = <LoadingEllipsis string={t('loading_feed')} />;
   }
 
@@ -110,7 +110,7 @@ const FeedFooter = ({
     !(weeklyFeedLength > feedLength || monthlyFeedLength > feedLength || yearlyFeedLength > feedLength)
   ) {
     footerContent = t('no_posts');
-  } else if (hasMore || subplebbitAddresses.length > 0 || (subplebbitAddresses && subplebbitAddresses.length === 0)) {
+  } else if (hasMore || communityAddresses.length > 0 || (communityAddresses && communityAddresses.length === 0)) {
     // Only show newer posts/weekly/monthly suggestions when not searching
     footerContent = (
       <>
@@ -146,7 +146,7 @@ const FeedFooter = ({
           </div>
         ) : null}
         <div className={styles.stateString}>
-          {subplebbitAddresses.length === 0 ? (
+          {communityAddresses.length === 0 ? (
             isInModView ? (
               <div className={styles.notModerator}>{t('not_moderator')}</div>
             ) : (
