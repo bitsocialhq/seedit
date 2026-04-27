@@ -26,9 +26,10 @@ seedit is a serverless, adminless, decentralized Reddit-style client built on th
 
 | Situation | Required action |
 |---|---|
-| React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available; run `yarn build`, `yarn lint`, and `yarn type-check` |
+| React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available; run `yarn build`, `yarn lint`, `yarn type-check`, and `yarn doctor` |
 | Visible UI or interaction changed | Verify in browser with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari; test desktop and mobile viewport |
 | `package.json` changed | Run `corepack yarn install` to keep `yarn.lock` in sync |
+| Dependencies or import graph changed | Run `yarn knip` as an advisory manifest/import audit |
 | Translation key/value changed | Use `docs/agent-playbooks/translations.md` |
 | Bug report in a specific file/line | Start with git history scan from `docs/agent-playbooks/bug-investigation.md` before editing |
 | `CHANGELOG.md`, `scripts/release-body.js`, or package version changed | Run `yarn changelog` if release notes need regeneration |
@@ -114,6 +115,8 @@ src/
 
 - Never mark work complete without verification.
 - After code changes, run: `yarn build`, `yarn lint`, `yarn type-check`.
+- After React UI logic changes, run: `yarn doctor`.
+- Treat React Doctor output as actionable guidance; prioritize `error` then `warning`.
 - After adding or changing tests, run `yarn test`.
 - Do not commit or force-add local rebuild output. `build/` is the main generated build output in this repo; remove or restore generated output directories after local verification before committing.
 - For UI/visual changes, verify with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari.
@@ -167,6 +170,7 @@ src/
   Use the format playbook: `docs/agent-playbooks/commit-issue-format.md`.
 - When stuck on a bug, search the web for recent fixes/workarounds.
 - After user corrections, identify root cause and apply the lesson in subsequent steps.
+- Use `yarn knip` when adding/removing dependencies or introducing new direct imports; treat findings as advisory, but resolve real issues before finishing.
 
 ## Local Development URL
 
@@ -185,6 +189,11 @@ yarn test
 yarn prettier
 yarn electron
 yarn changelog
+yarn knip
+yarn knip:full
+yarn doctor
+yarn doctor:score
+yarn doctor:verbose
 ./scripts/create-task-worktree.sh chore ai-workflow-improvement
 ./scripts/agent-init.sh
 ```
