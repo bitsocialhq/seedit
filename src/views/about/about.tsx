@@ -3,7 +3,7 @@ import { HashLink } from 'react-router-hash-link';
 import useIsMobile from '../../hooks/use-is-mobile';
 import Sidebar, { Footer } from '../../components/sidebar';
 import styles from './about.module.css';
-import { useAccount, useComment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
@@ -156,9 +156,9 @@ const About = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isInHomeAboutView = isHomeAboutView(location.pathname);
-  const { commentCid, subplebbitAddress } = useParams();
+  const { commentCid, communityAddress: subplebbitAddress } = useParams();
 
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { useClientsStates, useSubplebbit, useSubplebbitsStates } from '@bitsocial/bitsocial-react-hooks';
+import { useClientsStates, useCommunity, useCommunitiesStates } from '@bitsocial/bitsocial-react-hooks';
 import { debounce } from 'lodash';
+import { getCommunityIdentifiers } from './use-community-identifier';
 
 interface CommentOrSubplebbit {
   state?: string;
@@ -81,11 +82,11 @@ const useStateString = (commentOrSubplebbit: CommentOrSubplebbit): string | unde
 export const useFeedStateString = (subplebbitAddresses?: string[]): string | undefined => {
   // single subplebbit feed state string
   const subplebbitAddress = subplebbitAddresses?.length === 1 ? subplebbitAddresses[0] : undefined;
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const singleSubplebbitFeedStateString = useStateString(subplebbit);
 
   // multiple subplebbit feed state string
-  const { states } = useSubplebbitsStates({ subplebbitAddresses });
+  const { states } = useCommunitiesStates({ communities: getCommunityIdentifiers(subplebbitAddresses || []) });
 
   const multipleSubplebbitsFeedStateString = useMemo(() => {
     if (subplebbitAddress) {
@@ -96,25 +97,25 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
     let stateString = '';
 
     if (states['resolving-address']) {
-      const { subplebbitAddresses, clientUrls } = states['resolving-address'];
-      if (subplebbitAddresses.length && clientUrls.length) {
-        stateString += `resolving ${subplebbitAddresses.length} ${subplebbitAddresses.length === 1 ? 'address' : 'addresses'} from ${clientUrls
+      const { communityAddresses, clientUrls } = states['resolving-address'];
+      if (communityAddresses.length && clientUrls.length) {
+        stateString += `resolving ${communityAddresses.length} ${communityAddresses.length === 1 ? 'address' : 'addresses'} from ${clientUrls
           .map(getClientHost)
           .join(', ')}`;
       }
     }
 
-    // find all page client and sub addresses
+    // find all page client and community addresses
     const pagesStatesClientHosts = new Set();
-    const pagesStatesSubplebbitAddresses = new Set();
+    const pagesStatesCommunityAddresses = new Set();
     for (const state in states) {
       if (state.match('page')) {
         states[state].clientUrls.forEach((clientUrl) => pagesStatesClientHosts.add(getClientHost(clientUrl)));
-        states[state].subplebbitAddresses.forEach((subplebbitAddress) => pagesStatesSubplebbitAddresses.add(subplebbitAddress));
+        states[state].communityAddresses.forEach((communityAddress) => pagesStatesCommunityAddresses.add(communityAddress));
       }
     }
 
-    if (states['fetching-ipns'] || states['fetching-ipfs'] || pagesStatesSubplebbitAddresses.size) {
+    if (states['fetching-ipns'] || states['fetching-ipfs'] || pagesStatesCommunityAddresses.size) {
       // separate 2 different states using ', '
       if (stateString) {
         stateString += ', ';
@@ -128,21 +129,19 @@ export const useFeedStateString = (subplebbitAddresses?: string[]): string | und
       if (clientHosts.size) {
         stateString += 'downloading ';
         if (states['fetching-ipns']) {
-          stateString += `${states['fetching-ipns'].subplebbitAddresses.length} ${
-            states['fetching-ipns'].subplebbitAddresses.length === 1 ? 'community' : 'communities'
-          }`;
+          stateString += `${states['fetching-ipns'].communityAddresses.length} ${states['fetching-ipns'].communityAddresses.length === 1 ? 'community' : 'communities'}`;
         }
         if (states['fetching-ipfs']) {
           if (states['fetching-ipns']) {
             stateString += ', ';
           }
-          stateString += `${states['fetching-ipfs'].subplebbitAddresses.length} ${states['fetching-ipfs'].subplebbitAddresses.length === 1 ? 'post' : 'posts'}`;
+          stateString += `${states['fetching-ipfs'].communityAddresses.length} ${states['fetching-ipfs'].communityAddresses.length === 1 ? 'post' : 'posts'}`;
         }
-        if (pagesStatesSubplebbitAddresses.size) {
+        if (pagesStatesCommunityAddresses.size) {
           if (states['fetching-ipns'] || states['fetching-ipfs']) {
             stateString += ', ';
           }
-          stateString += `${pagesStatesSubplebbitAddresses.size} ${pagesStatesSubplebbitAddresses.size === 1 ? 'page' : 'pages'}`;
+          stateString += `${pagesStatesCommunityAddresses.size} ${pagesStatesCommunityAddresses.size === 1 ? 'page' : 'pages'}`;
         }
         stateString += ` from ${[...clientHosts].join(', ')}`;
       }

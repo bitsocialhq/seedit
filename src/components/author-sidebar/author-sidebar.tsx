@@ -3,26 +3,28 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   useAccount,
   useAccountComments,
-  useAccountSubplebbits,
-  AccountSubplebbit,
+  useAccountCommunities,
+  AccountCommunity,
+  Community,
   useAuthor,
   useAuthorAvatar,
   useAuthorComments,
   useBlock,
   useComment,
-  useSubplebbits,
+  useCommunities,
 } from '@bitsocial/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
 import styles from './author-sidebar.module.css';
 import { getFormattedTimeDuration } from '../../lib/utils/time-utils';
 import { getOldestAccountHistoryTimestamp } from '../../lib/utils/account-history-utils';
 import { isAuthorView, isProfileView } from '../../lib/utils/view-utils';
 import { findAuthorSubplebbits, estimateAuthorKarma } from '../../lib/utils/user-utils';
+import getShortAddress from '../../lib/utils/address-utils';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 
 interface AuthorModeratingListProps {
-  accountSubplebbits: Record<string, AccountSubplebbit>;
+  accountSubplebbits: Record<string, AccountCommunity & Partial<Community>>;
   authorSubplebbits: string[];
   isAuthor?: boolean;
 }
@@ -39,7 +41,7 @@ const AuthorModeratingList = ({ accountSubplebbits, authorSubplebbits, isAuthor 
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
           {subplebbitAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={`/s/${address}`}>s/{Plebbit.getShortAddress({ address })}</Link>
+              <Link to={`/s/${address}`}>s/{getShortAddress(address)}</Link>
             </li>
           ))}
         </ul>
@@ -65,7 +67,7 @@ const AuthorSidebar = () => {
   const userAccount = useAccount();
   const { imageUrl: profilePageAvatar } = useAuthorAvatar({ author: userAccount?.author });
   const { accountComments: oldestAccountComment } = useAccountComments({ page: 0, pageSize: 1, order: 'asc' });
-  const { accountSubplebbits } = useAccountSubplebbits();
+  const { accountCommunities: accountSubplebbits } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
 
   const defaultSubplebbitAddresses = useDefaultSubplebbitAddresses();
@@ -73,10 +75,10 @@ const AuthorSidebar = () => {
   const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultSubplebbitAddresses];
 
   const subplebbits =
-    useSubplebbits({
-      subplebbitAddresses: subscriptionsAndDefaults || [],
+    useCommunities({
+      communities: getCommunityIdentifiers(subscriptionsAndDefaults || []),
       onlyIfCached: true,
-    }).subplebbits?.filter(Boolean) || [];
+    }).communities?.filter(Boolean) || [];
 
   const authorAccount = useAuthor({ authorAddress, commentCid });
   const { authorComments } = useAuthorComments({ authorAddress, commentCid });

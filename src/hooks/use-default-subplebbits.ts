@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Subplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { Community } from '@bitsocial/bitsocial-react-hooks';
 import useContentOptionsStore from '../stores/use-content-options-store';
 
 export interface MultisubMetadata {
@@ -109,7 +109,7 @@ export const useDefaultSubplebbitAddresses = () => {
   const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
 
   const filteredSubplebbits = useMemo(() => {
-    return defaultSubplebbits.filter((subplebbit: Subplebbit) => {
+    return defaultSubplebbits.filter((subplebbit: Community) => {
       const tags = subplebbit.tags || [];
       if (hideAdultCommunities && tags.includes('adult')) return false;
       if (hideGoreCommunities && tags.includes('gore')) return false;

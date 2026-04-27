@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isValidURL } from '../../lib/utils/url-utils';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import usePublishReply from '../../hooks/use-publish-reply';
 import Markdown from '../markdown';
 import styles from './reply-form.module.css';
@@ -122,8 +122,8 @@ const ReplyForm = ({ cid, isReplyingToReply, hideReplyForm, subplebbitAddress, p
   const spoilerClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
   const nsfwClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
 
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
-  const { isOffline, offlineTitle } = useIsSubplebbitOffline(subplebbit);
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
+  const { isOffline, offlineTitle } = useIsCommunityOffline(subplebbit);
 
   // focus on the textarea when replying to a reply
   const textRef = useRef<HTMLTextAreaElement>(null);

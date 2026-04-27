@@ -2,20 +2,20 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  deleteSubplebbit,
+  deleteCommunity,
   Role,
   useAccount,
-  useCreateSubplebbit,
-  usePlebbitRpcSettings,
-  usePublishSubplebbitEdit,
-  useSubplebbit,
+  useCreateCommunity,
+  usePkcRpcSettings,
+  usePublishCommunityEdit,
+  useCommunity,
   useSubscribe,
 } from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
-import { isCreateSubplebbitView, isSubplebbitSettingsView } from '../../lib/utils/view-utils';
-import useSubplebbitSettingsStore from '../../stores/use-subplebbit-settings-store';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
+import useCommunitySettingsStore from '../../stores/use-community-settings-store';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -23,19 +23,19 @@ import Markdown from '../../components/markdown';
 import Sidebar from '../../components/sidebar';
 import Challenges from './challenge-settings';
 import { FormattingHelpTable } from '../../components/reply-form';
-import styles from './subplebbit-settings.module.css';
+import styles from './community-settings.module.css';
 import _ from 'lodash';
 
 const Title = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { title, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { title, setCommunitySettingsStore } = useCommunitySettingsStore();
 
   return (
     <div className={`${styles.box} ${isReadOnly && !title ? styles.hidden : styles.visible}`}>
       <div className={styles.boxTitle}>{t('title')}</div>
       <div className={styles.boxSubtitle}>{t('a_short_title')}</div>
       <div className={styles.boxInput}>
-        {isReadOnly ? <span>{title}</span> : <input type='text' value={title ?? ''} onChange={(e) => setSubplebbitSettingsStore({ title: e.target.value })} />}
+        {isReadOnly ? <span>{title}</span> : <input type='text' value={title ?? ''} onChange={(e) => setCommunitySettingsStore({ title: e.target.value })} />}
       </div>
     </div>
   );
@@ -43,7 +43,7 @@ const Title = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
 const Description = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { description, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { description, setCommunitySettingsStore } = useCommunitySettingsStore();
   const [showFormattingHelp, setShowFormattingHelp] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -57,7 +57,7 @@ const Description = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
         ) : (
           <>
             {!showPreview ? (
-              <textarea value={description ?? ''} onChange={(e) => setSubplebbitSettingsStore({ description: e.target.value })} />
+              <textarea value={description ?? ''} onChange={(e) => setCommunitySettingsStore({ description: e.target.value })} />
             ) : (
               <div className={styles.preview}>
                 <Markdown content={description ?? ''} />
@@ -96,7 +96,7 @@ const Description = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
 const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { address, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { address, setCommunitySettingsStore } = useCommunitySettingsStore();
 
   const alertCryptoAddressInfo = () => {
     alert(`steps to set a .eth community address:\n1. go to app.ens.domains and search the address\n2.  once you own the address, go to its page, click on "records", then "edit records"\n3. add a new text record with name "subplebbit-address" and value: ${address}\n\n steps to set a .sol community address:\n1. go to v1.sns.id and search the address\n2. once you own the address, go to your profile, click the address menu "...", then "create subdomain"\n3. enter subdomain "subplebbit-address" and create\n4. go to subdomain, "content", change content to: ${address}
@@ -114,7 +114,7 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
         {isReadOnly ? (
           <span className={styles.readOnlyAddress}>{address}</span>
         ) : (
-          <input type='text' value={address ?? ''} onChange={(e) => setSubplebbitSettingsStore({ address: e.target.value })} />
+          <input type='text' value={address ?? ''} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
         )}
       </div>
     </div>
@@ -123,7 +123,7 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
 const Logo = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { suggested, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { suggested, setCommunitySettingsStore } = useCommunitySettingsStore();
 
   const [logoUrl, setLogoUrl] = useState(suggested?.avatarUrl);
   const [imageError, setImageError] = useState(false);
@@ -147,7 +147,7 @@ const Logo = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
             onChange={(e) => {
               setLogoUrl(e.target.value.trim());
               setImageError(false);
-              setSubplebbitSettingsStore({ suggested: { ...suggested, avatarUrl: e.target.value.trim() || undefined } });
+              setCommunitySettingsStore({ suggested: { ...suggested, avatarUrl: e.target.value.trim() || undefined } });
             }}
           />
         )}
@@ -164,20 +164,20 @@ const Logo = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
 const Rules = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { rules, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { rules, setCommunitySettingsStore } = useCommunitySettingsStore();
   const lastRuleRef = useRef(null);
 
   const handleRuleChange = (index: number, newRule: string) => {
     if (!rules) return;
     const updatedRules = [...(rules ?? [])];
     updatedRules[index] = newRule;
-    setSubplebbitSettingsStore({ rules: updatedRules });
+    setCommunitySettingsStore({ rules: updatedRules });
   };
 
   const addedRuleRef = useRef(false);
   const addRule = () => {
     const newRules = rules ? [...rules, ''] : [''];
-    setSubplebbitSettingsStore({ rules: newRules });
+    setCommunitySettingsStore({ rules: newRules });
     addedRuleRef.current = true;
   };
 
@@ -191,7 +191,7 @@ const Rules = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const deleteRule = (index: number) => {
     if (rules) {
       const filteredRules = rules.filter((_, i) => i !== index);
-      setSubplebbitSettingsStore({ rules: filteredRules });
+      setCommunitySettingsStore({ rules: filteredRules });
     }
   };
 
@@ -224,17 +224,17 @@ const Rules = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
 const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
-  const { roles, setSubplebbitSettingsStore } = useSubplebbitSettingsStore();
+  const { roles, setCommunitySettingsStore } = useCommunitySettingsStore();
   const lastModeratorRef = useRef(null);
 
   const addedModeratorRef = useRef(false);
   const handleAddModerator = () => {
     if (roles) {
       const newRoles: Roles = { ...roles, '': { role: 'moderator' } };
-      setSubplebbitSettingsStore({ roles: newRoles });
+      setCommunitySettingsStore({ roles: newRoles });
       addedModeratorRef.current = true;
     } else {
-      setSubplebbitSettingsStore({ roles: { '': { role: 'moderator' } } });
+      setCommunitySettingsStore({ roles: { '': { role: 'moderator' } } });
       addedModeratorRef.current = true;
     }
   };
@@ -250,14 +250,14 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
     if (roles) {
       const updatedRole: Role = { role: newRole };
       const updatedRoles: Roles = { ...roles, [address]: updatedRole };
-      setSubplebbitSettingsStore({ roles: updatedRoles });
+      setCommunitySettingsStore({ roles: updatedRoles });
     }
   };
 
   const handleDeleteModerator = (address: string) => {
     if (roles) {
       const { [address]: _, ...remainingRoles } = roles;
-      setSubplebbitSettingsStore({ roles: remainingRoles });
+      setCommunitySettingsStore({ roles: remainingRoles });
     }
   };
 
@@ -265,7 +265,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
     const rolesArray = Object.entries(roles || {});
     rolesArray[index] = [newAddress, rolesArray[index][1]];
     const updatedRoles = Object.fromEntries(rolesArray);
-    setSubplebbitSettingsStore({ roles: updatedRoles });
+    setCommunitySettingsStore({ roles: updatedRoles });
   };
 
   return (
@@ -325,7 +325,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { subplebbitAddress } = useParams<{ subplebbitAddress: string }>();
+  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
 
   return (
     <div className={`${styles.box}`}>
@@ -338,63 +338,63 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
   );
 };
 
-const SubplebbitSettings = () => {
+const CommunitySettings = () => {
   const { t } = useTranslation();
-  const { subplebbitAddress } = useParams<{ subplebbitAddress: string }>();
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = subplebbit || {};
   const hasLoaded = !!createdAt;
 
-  const { challenges: rpcChallenges } = usePlebbitRpcSettings().plebbitRpcSettings || {};
+  const { challenges: rpcChallenges } = usePkcRpcSettings().pkcRpcSettings || {};
   const challengeNames = Object.keys(rpcChallenges || {});
 
   const account = useAccount();
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
-  const isInCreateSubplebbitView = isCreateSubplebbitView(location.pathname);
-  const isInSubplebbitSettingsView = isSubplebbitSettingsView(location.pathname, params);
-  const isConnectedToRpc = usePlebbitRpcSettings()?.state === 'connected';
+  const isInCreateCommunityView = isCreateCommunityView(location.pathname);
+  const isInCommunitySettingsView = isCommunitySettingsView(location.pathname, params);
+  const isConnectedToRpc = usePkcRpcSettings()?.state === 'connected';
 
-  if (isInCreateSubplebbitView && !isConnectedToRpc) {
+  if (isInCreateCommunityView && !isConnectedToRpc) {
     navigate('/', { replace: true });
   }
 
   const userAddress = account?.author?.address;
   const userIsOwnerOrAdmin = isUserOwnerOrAdmin(roles, userAddress);
 
-  const { isOffline, offlineTitle } = useIsSubplebbitOffline(subplebbit || {});
+  const { isOffline, offlineTitle } = useIsCommunityOffline(subplebbit || {});
 
   // General fields can be edited by owners/admins even without RPC connection
-  const isReadOnly = (!settings && isInSubplebbitSettingsView && !userIsOwnerOrAdmin) || (!isConnectedToRpc && isInCreateSubplebbitView && !userIsOwnerOrAdmin);
+  const isReadOnly = (!settings && isInCommunitySettingsView && !userIsOwnerOrAdmin) || (!isConnectedToRpc && isInCreateCommunityView && !userIsOwnerOrAdmin);
 
   // Challenges are always read-only when not connected to RPC
-  const isChallengesReadOnly = (!isConnectedToRpc || !settings) && !isInCreateSubplebbitView;
+  const isChallengesReadOnly = (!isConnectedToRpc || !settings) && !isInCreateCommunityView;
 
-  const { publishSubplebbitEditOptions, resetSubplebbitSettingsStore, setSubplebbitSettingsStore, title: storeTitle } = useSubplebbitSettingsStore();
-  const { error: publishSubplebbitEditError, publishSubplebbitEdit } = usePublishSubplebbitEdit(publishSubplebbitEditOptions);
-  const { error: createSubplebbitError, createdSubplebbit, createSubplebbit } = useCreateSubplebbit(publishSubplebbitEditOptions);
+  const { publishCommunityEditOptions, resetCommunitySettingsStore, setCommunitySettingsStore, title: storeTitle } = useCommunitySettingsStore();
+  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
+  const { error: createCommunityError, createdCommunity, createCommunity: createSubplebbit } = useCreateCommunity(publishCommunityEditOptions);
 
   const [showSaving, setShowSaving] = useState(false);
   const [currentError, setCurrentError] = useState<Error | undefined>(undefined);
 
   useEffect(() => {
-    if (publishSubplebbitEditError || createSubplebbitError) {
-      setCurrentError(publishSubplebbitEditError || createSubplebbitError);
+    if (publishCommunityEditError || createCommunityError) {
+      setCurrentError(publishCommunityEditError || createCommunityError);
     }
-  }, [publishSubplebbitEditError, createSubplebbitError]);
+  }, [publishCommunityEditError, createCommunityError]);
 
   const saveSubplebbit = async () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
-      console.log('Saving subplebbit with options:', publishSubplebbitEditOptions);
+      console.log('Saving subplebbit with options:', publishCommunityEditOptions);
       await publishSubplebbitEdit();
       setShowSaving(false);
 
-      if (publishSubplebbitEditError) {
-        setCurrentError(publishSubplebbitEditError);
-        alert(publishSubplebbitEditError.message || 'Error: ' + publishSubplebbitEditError);
+      if (publishCommunityEditError) {
+        setCurrentError(publishCommunityEditError);
+        alert(publishCommunityEditError.message || 'Error: ' + publishCommunityEditError);
       } else {
         alert(t('settings_saved', { subplebbitAddress }));
       }
@@ -411,12 +411,12 @@ const SubplebbitSettings = () => {
   };
 
   const [showDeleting, setShowDeleting] = useState(false);
-  const _deleteSubplebbit = async () => {
+  const _deleteCommunity = async () => {
     if (subplebbitAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
       if (window.confirm(t('double_confirm'))) {
         try {
           setShowDeleting(true);
-          await deleteSubplebbit(subplebbitAddress);
+          await deleteCommunity(subplebbitAddress);
           setShowDeleting(false);
           alert(t('community_deleted'));
           navigate('/', { replace: true });
@@ -432,17 +432,17 @@ const SubplebbitSettings = () => {
     }
   };
 
-  const _createSubplebbit = async () => {
+  const _createCommunity = async () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
-      console.log('Creating subplebbit with settings:', publishSubplebbitEditOptions);
+      console.log('Creating subplebbit with settings:', publishCommunityEditOptions);
       await createSubplebbit();
       setShowSaving(false);
 
-      if (createSubplebbitError) {
-        setCurrentError(createSubplebbitError);
-        alert(createSubplebbitError.message || 'Error: ' + createSubplebbitError);
+      if (createCommunityError) {
+        setCurrentError(createCommunityError);
+        alert(createCommunityError.message || 'Error: ' + createCommunityError);
       }
     } catch (e) {
       setShowSaving(false);
@@ -456,30 +456,30 @@ const SubplebbitSettings = () => {
     }
   };
 
-  const { subscribe } = useSubscribe({ subplebbitAddress: createdSubplebbit?.address });
+  const { subscribe } = useSubscribe({ communityAddress: createdCommunity?.address });
 
   useEffect(() => {
-    if (createdSubplebbit) {
-      console.log('createdSubplebbit', createdSubplebbit);
-      alert(`community created, address: ${createdSubplebbit?.address}`);
+    if (createdCommunity) {
+      console.log('createdCommunity', createdCommunity);
+      alert(`community created, address: ${createdCommunity?.address}`);
 
-      if (account && createdSubplebbit.address) {
+      if (account && createdCommunity.address) {
         subscribe();
       }
 
-      resetSubplebbitSettingsStore();
-      navigate(`/s/${createdSubplebbit?.address}/`);
+      resetCommunitySettingsStore();
+      navigate(`/s/${createdCommunity?.address}/`);
     }
-  }, [createdSubplebbit, navigate, resetSubplebbitSettingsStore, account, subscribe]);
+  }, [createdCommunity, navigate, resetCommunitySettingsStore, account, subscribe]);
 
   const lastViewType = useRef<'create' | 'settings' | 'other' | undefined>(undefined);
 
   // Initialize store for create view only on first entry or when switching from settings view
   useEffect(() => {
-    if (isInCreateSubplebbitView && lastViewType.current === 'settings') {
-      resetSubplebbitSettingsStore();
+    if (isInCreateCommunityView && lastViewType.current === 'settings') {
+      resetCommunitySettingsStore();
       const initialRoles: Roles = account?.author?.address ? { [account.author.address]: { role: 'owner' as const } } : {};
-      setSubplebbitSettingsStore({
+      setCommunitySettingsStore({
         title: '',
         description: '',
         address: undefined,
@@ -488,28 +488,28 @@ const SubplebbitSettings = () => {
         roles: initialRoles,
         settings: {},
         challenges: [],
-        subplebbitAddress: undefined,
+        communityAddress: undefined,
       });
     }
-    if (isInCreateSubplebbitView) {
+    if (isInCreateCommunityView) {
       lastViewType.current = 'create';
-    } else if (isInSubplebbitSettingsView) {
+    } else if (isInCommunitySettingsView) {
       lastViewType.current = 'settings';
     } else {
       lastViewType.current = 'other';
     }
-  }, [isInCreateSubplebbitView, storeTitle, resetSubplebbitSettingsStore, setSubplebbitSettingsStore, account, isInSubplebbitSettingsView]);
+  }, [isInCreateCommunityView, storeTitle, resetCommunitySettingsStore, setCommunitySettingsStore, account, isInCommunitySettingsView]);
 
   // Set store for loaded subplebbit settings when editing
   useEffect(() => {
-    if (!isInCreateSubplebbitView && hasLoaded) {
+    if (!isInCreateCommunityView && hasLoaded) {
       // Only reset if we're switching to a different subplebbit or if store is uninitialized
-      const { subplebbitAddress: storeSubplebbitAddress } = useSubplebbitSettingsStore.getState();
-      const shouldReset = !storeSubplebbitAddress || storeSubplebbitAddress !== subplebbitAddress;
+      const { communityAddress: storeCommunityAddress } = useCommunitySettingsStore.getState();
+      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== subplebbitAddress;
 
       if (shouldReset) {
-        resetSubplebbitSettingsStore();
-        setSubplebbitSettingsStore({
+        resetCommunitySettingsStore();
+        setCommunitySettingsStore({
           title: title ?? '',
           description: description ?? '',
           address,
@@ -518,15 +518,15 @@ const SubplebbitSettings = () => {
           roles: roles ?? {},
           settings: settings ?? {},
           challenges: challenges ?? [],
-          subplebbitAddress,
+          communityAddress: subplebbitAddress,
         });
       }
     }
   }, [
-    isInCreateSubplebbitView,
+    isInCreateCommunityView,
     hasLoaded,
-    resetSubplebbitSettingsStore,
-    setSubplebbitSettingsStore,
+    resetCommunitySettingsStore,
+    setCommunitySettingsStore,
     title,
     description,
     address,
@@ -540,13 +540,13 @@ const SubplebbitSettings = () => {
 
   const documentTitle = useMemo(() => {
     let title;
-    if (isInSubplebbitSettingsView) {
+    if (isInCommunitySettingsView) {
       title = _.startCase(t('community_settings', { interpolation: { escapeValue: false } }));
-    } else if (isInCreateSubplebbitView) {
+    } else if (isInCreateCommunityView) {
       title = _.startCase(t('create_community', { interpolation: { escapeValue: false } }));
     }
     return `${title} - Seedit`;
-  }, [isInCreateSubplebbitView, isInSubplebbitSettingsView, t]);
+  }, [isInCreateCommunityView, isInCommunitySettingsView, t]);
 
   useEffect(() => {
     document.title = documentTitle;
@@ -558,7 +558,7 @@ const SubplebbitSettings = () => {
 
   const loadingStateString = useStateString(subplebbit);
 
-  if (!hasLoaded && !isInCreateSubplebbitView) {
+  if (!hasLoaded && !isInCreateCommunityView) {
     return (
       <>
         {error?.message && (
@@ -575,7 +575,7 @@ const SubplebbitSettings = () => {
 
   return (
     <div className={styles.content}>
-      {!isInCreateSubplebbitView && (
+      {!isInCreateCommunityView && (
         <div className={styles.sidebar}>
           <Sidebar subplebbit={subplebbit} />
         </div>
@@ -585,20 +585,20 @@ const SubplebbitSettings = () => {
       {isChallengesReadOnly && <div className={styles.infobar}>cannot read or write challenges, community node isn't reachable.</div>}
       <Title isReadOnly={isReadOnly} />
       <Description isReadOnly={isReadOnly} />
-      {!isInCreateSubplebbitView && <Address isReadOnly={isReadOnly} />}
+      {!isInCreateCommunityView && <Address isReadOnly={isReadOnly} />}
       <Logo isReadOnly={isReadOnly} />
       <Rules isReadOnly={isReadOnly} />
       <Moderators isReadOnly={isReadOnly} />
       <Challenges isReadOnly={isChallengesReadOnly} readOnlyChallenges={subplebbit?.challenges} challengeNames={challengeNames} challengesSettings={rpcChallenges} />
-      {!isInCreateSubplebbitView && <JSONSettings isReadOnly={isReadOnly} />}
+      {!isInCreateCommunityView && <JSONSettings isReadOnly={isReadOnly} />}
       <div className={styles.saveOptions}>
-        {!isInCreateSubplebbitView && !isReadOnly && (
+        {!isInCreateCommunityView && !isReadOnly && (
           <div className={`${styles.box} ${styles.deleteCommunity}`}>
             <div className={styles.boxTitle}>{t('delete_community')}</div>
             <div className={styles.boxSubtitle}>{t('delete_community_description')}</div>
             <div className={styles.boxInput}>
               <div className={styles.deleteSubplebbit}>
-                <button onClick={_deleteSubplebbit} disabled={showDeleting || showSaving}>
+                <button onClick={_deleteCommunity} disabled={showDeleting || showSaving}>
                   {t('delete')}
                 </button>
                 <span className={styles.deletingString}>{showDeleting && <LoadingEllipsis string={t('deleting')} />}</span>
@@ -607,8 +607,8 @@ const SubplebbitSettings = () => {
           </div>
         )}
         {!isReadOnly && (
-          <button onClick={() => (isInCreateSubplebbitView ? _createSubplebbit() : saveSubplebbit())} disabled={showSaving || showDeleting}>
-            {isInCreateSubplebbitView ? t('create_community') : t('save_options')}
+          <button onClick={() => (isInCreateCommunityView ? _createCommunity() : saveSubplebbit())} disabled={showSaving || showDeleting}>
+            {isInCreateCommunityView ? t('create_community') : t('save_options')}
           </button>
         )}
         {showSaving && <LoadingEllipsis string={t('saving')} />}
@@ -622,4 +622,4 @@ const SubplebbitSettings = () => {
   );
 };
 
-export default SubplebbitSettings;
+export default CommunitySettings;

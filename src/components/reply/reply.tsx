@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Plebbit from '@plebbit/plebbit-js';
-import { Comment, useAccountComment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAccountComment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import { getHostname } from '../../lib/utils/url-utils';
 import { formatScore, getReplyScore } from '../../lib/utils/post-utils';
 import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/utils';
@@ -282,7 +282,7 @@ const InboxShowParentButton = ({ parentCid }: { parentCid: string | undefined })
 
 const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, subplebbitAddress, timestamp }: ParentLinkProps) => {
   const { t } = useTranslation();
-  const shortSubplebbitAddress = subplebbitAddress ? (subplebbitAddress.includes('.') ? subplebbitAddress : Plebbit.getShortAddress({ address: subplebbitAddress })) : '';
+  const shortSubplebbitAddress = subplebbitAddress ? (subplebbitAddress.includes('.') ? subplebbitAddress : getShortAddress(subplebbitAddress)) : '';
 
   return (
     <>
@@ -342,7 +342,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
     timestamp,
     upvoteCount,
   } = reply || {};
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
 
   const pendingReply = useAccountComment({ commentIndex: reply?.index });
   const parentOfPendingReply = useComment({ commentCid: pendingReply?.parentCid, onlyIfCached: true });

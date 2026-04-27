@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState, useRef, lazy, Suspense, Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { usePublishSubplebbitEdit, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { usePublishCommunityEdit, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import useTheme from '../../../stores/use-theme-store';
 import styles from '../../settings/account-data-editor/account-data-editor.module.css';
 import useIsMobile from '../../../hooks/use-is-mobile';
 import LoadingEllipsis from '../../../components/loading-ellipsis';
-import useSubplebbitSettingsStore from '../../../stores/use-subplebbit-settings-store';
+import useCommunitySettingsStore from '../../../stores/use-community-settings-store';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
@@ -51,22 +51,22 @@ const FallbackEditor = ({ value, onChange, height, disabled }: { value: string; 
   );
 };
 
-const SubplebbitDataEditor = () => {
+const CommunityDataEditor = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const theme = useTheme((state) => state.theme);
   const [text, setText] = useState('');
 
-  const { subplebbitAddress } = useParams<{ subplebbitAddress: string }>();
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const { communityAddress: subplebbitAddress } = useParams<{ communityAddress: string }>();
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const { address, createdAt, description, error, rules, settings, suggested, roles, title } = subplebbit || {};
   const hasLoaded = !!createdAt;
 
   const {
-    publishSubplebbitEditOptions,
-    setSubplebbitSettingsStore,
-    resetSubplebbitSettingsStore,
+    publishCommunityEditOptions,
+    setCommunitySettingsStore,
+    resetCommunitySettingsStore,
     title: storeTitle,
     description: storeDescription,
     address: storeAddress,
@@ -74,14 +74,14 @@ const SubplebbitDataEditor = () => {
     rules: storeRules,
     roles: storeRoles,
     settings: storeSettings,
-    subplebbitAddress: storeSubplebbitAddress,
-  } = useSubplebbitSettingsStore();
+    communityAddress: storeCommunityAddress,
+  } = useCommunitySettingsStore();
 
-  const { error: publishSubplebbitEditError, publishSubplebbitEdit } = usePublishSubplebbitEdit(publishSubplebbitEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
 
   // Use store state if available, otherwise fall back to original subplebbit data
   const currentSettings = useMemo(() => {
-    const { subplebbitAddress: storeAddr } = useSubplebbitSettingsStore.getState();
+    const { communityAddress: storeAddr } = useCommunitySettingsStore.getState();
     const hasStoreData = storeAddr === subplebbitAddress;
 
     return {
@@ -92,7 +92,7 @@ const SubplebbitDataEditor = () => {
       rules: hasStoreData ? storeRules : rules,
       roles: hasStoreData ? storeRoles : roles,
       settings: hasStoreData ? storeSettings : settings,
-      subplebbitAddress: hasStoreData ? storeSubplebbitAddress : subplebbitAddress,
+      communityAddress: hasStoreData ? storeCommunityAddress : subplebbitAddress,
     };
   }, [
     storeTitle,
@@ -102,7 +102,7 @@ const SubplebbitDataEditor = () => {
     storeRules,
     storeRoles,
     storeSettings,
-    storeSubplebbitAddress,
+    storeCommunityAddress,
     title,
     description,
     address,
@@ -142,7 +142,7 @@ const SubplebbitDataEditor = () => {
     // Try to sync immediately if JSON is valid
     try {
       const parsedSettings = JSON.parse(newText);
-      setSubplebbitSettingsStore({
+      setCommunitySettingsStore({
         title: parsedSettings.title ?? '',
         description: parsedSettings.description ?? '',
         address: parsedSettings.address,
@@ -150,7 +150,7 @@ const SubplebbitDataEditor = () => {
         rules: parsedSettings.rules ?? [],
         roles: parsedSettings.roles ?? {},
         settings: parsedSettings.settings ?? {},
-        subplebbitAddress: parsedSettings.subplebbitAddress,
+        communityAddress: parsedSettings.communityAddress,
       });
     } catch {
       // Invalid JSON - don't spam console during active typing
@@ -167,14 +167,14 @@ const SubplebbitDataEditor = () => {
     if (triggerSave) {
       const performSave = async () => {
         try {
-          console.log('Performing save with options:', publishSubplebbitEditOptions);
+          console.log('Performing save with options:', publishCommunityEditOptions);
           await publishSubplebbitEdit();
           setShowSaving(false);
           setTriggerSave(false);
 
-          if (publishSubplebbitEditError) {
-            setCurrentError(publishSubplebbitEditError);
-            alert(publishSubplebbitEditError.message || 'Error: ' + publishSubplebbitEditError);
+          if (publishCommunityEditError) {
+            setCurrentError(publishCommunityEditError);
+            alert(publishCommunityEditError.message || 'Error: ' + publishCommunityEditError);
           } else {
             alert(t('settings_saved', { subplebbitAddress }));
           }
@@ -192,11 +192,11 @@ const SubplebbitDataEditor = () => {
       };
       performSave();
     }
-    // Intentionally only depend on triggerSave to prevent multiple executions when publishSubplebbitEditOptions changes during save
+    // Intentionally only depend on triggerSave to prevent multiple executions when publishCommunityEditOptions changes during save
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerSave]);
 
-  const saveSubplebbitSettings = () => {
+  const saveCommunitySettings = () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
@@ -231,12 +231,12 @@ const SubplebbitDataEditor = () => {
   useEffect(() => {
     if (hasLoaded) {
       // Only reset if we're switching to a different subplebbit or if store is uninitialized
-      const { subplebbitAddress: storeSubplebbitAddress } = useSubplebbitSettingsStore.getState();
-      const shouldReset = !storeSubplebbitAddress || storeSubplebbitAddress !== subplebbitAddress;
+      const { communityAddress: storeCommunityAddress } = useCommunitySettingsStore.getState();
+      const shouldReset = !storeCommunityAddress || storeCommunityAddress !== subplebbitAddress;
 
       if (shouldReset) {
-        resetSubplebbitSettingsStore();
-        setSubplebbitSettingsStore({
+        resetCommunitySettingsStore();
+        setCommunitySettingsStore({
           title: title ?? '',
           description: description ?? '',
           address,
@@ -244,11 +244,11 @@ const SubplebbitDataEditor = () => {
           rules: rules ?? [],
           roles: roles ?? {},
           settings: settings ?? {},
-          subplebbitAddress,
+          communityAddress: subplebbitAddress,
         });
       }
     }
-  }, [hasLoaded, resetSubplebbitSettingsStore, setSubplebbitSettingsStore, title, description, address, suggested, rules, roles, settings, subplebbitAddress]);
+  }, [hasLoaded, resetCommunitySettingsStore, setCommunitySettingsStore, title, description, address, suggested, rules, roles, settings, subplebbitAddress]);
 
   const loadingStateString = useStateString(subplebbit);
 
@@ -319,7 +319,7 @@ const SubplebbitDataEditor = () => {
           <Trans
             i18nKey='save_reset_changes'
             components={{
-              1: <button key='saveSubplebbitSettingsButton' onClick={saveSubplebbitSettings} />,
+              1: <button key='saveCommunitySettingsButton' onClick={saveCommunitySettings} />,
               2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(subplebbitSettings)} />,
             }}
           />
@@ -333,4 +333,4 @@ const SubplebbitDataEditor = () => {
   );
 };
 
-export default SubplebbitDataEditor;
+export default CommunityDataEditor;

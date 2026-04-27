@@ -1,7 +1,7 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { setAccount, useAccount, usePlebbitRpcSettings } from '@bitsocial/bitsocial-react-hooks';
+import { setAccount, useAccount, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import styles from './plebbit-options.module.css';
 
 interface SettingsProps {
@@ -159,10 +159,10 @@ const PlebbitRPCSettings = ({ plebbitRpcRef }: SettingsProps) => {
 };
 
 const PlebbitDataPathSettings = ({ plebbitDataPathRef }: SettingsProps) => {
-  const plebbitRpc = usePlebbitRpcSettings();
-  const { plebbitRpcSettings } = plebbitRpc || {};
+  const plebbitRpc = usePkcRpcSettings();
+  const { pkcRpcSettings } = plebbitRpc || {};
   const isConnectedToRpc = plebbitRpc?.state === 'connected';
-  const path = plebbitRpcSettings?.plebbitOptions?.dataPath || '';
+  const path = pkcRpcSettings?.plebbitOptions?.dataPath || '';
 
   return (
     <div className={styles.plebbitDataPathSettings}>

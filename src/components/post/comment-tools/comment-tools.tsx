@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Author, useAccount, useComment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { Author, useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import useScheduledReset from '../../../hooks/use-scheduled-reset';
 import styles from './comment-tools.module.css';
 import EditMenu from './edit-menu';
@@ -296,7 +296,7 @@ const CommentTools = ({
 }: CommentToolsProps) => {
   const account = useAccount();
   const isAuthor = account?.author?.address === author?.address;
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
   const accountAuthorRole = subplebbit?.roles?.[account?.author?.address]?.role;
   const commentAuthorRole = subplebbit?.roles?.[author?.address]?.role;
   const isAccountMod = accountAuthorRole === 'admin' || accountAuthorRole === 'owner' || accountAuthorRole === 'moderator';

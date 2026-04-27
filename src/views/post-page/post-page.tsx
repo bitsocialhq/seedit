@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccount, useAccountComment, useAccountComments, useComment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAccount, useAccountComment, useAccountComments, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import findTopParentCidOfReply from '../../lib/utils/cid-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
 import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
@@ -274,12 +274,13 @@ const PostPage = () => {
     }
   }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
 
-  const { commentCid, subplebbitAddress } = params;
-  let post = useComment({ commentCid });
+  const { commentCid, communityAddress: subplebbitAddress } = params;
+  let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;
   }
-  const subplebbit = useSubplebbit({ subplebbitAddress: isInPendingPostView ? pendingPost?.subplebbitAddress : subplebbitAddress });
+  const _communityAddr = isInPendingPostView ? pendingPost?.subplebbitAddress : subplebbitAddress;
+  const subplebbit = useCommunity(_communityAddr ? { community: { name: _communityAddr } } : undefined);
 
   // over 18 warning for subplebbit with nsfw tag in multisub default list
   const { hasAcceptedWarning } = useContentOptionsStore();

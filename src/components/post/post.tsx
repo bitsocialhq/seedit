@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
-import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useSubplebbit, useSubscribe } from '@bitsocial/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
+import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useCommunity, useSubscribe } from '@bitsocial/bitsocial-react-hooks';
 import { getHasThumbnail } from '../../lib/utils/media-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import { getPostScore, formatScore } from '../../lib/utils/post-utils';
 import { getFormattedTimeAgo, formatLocalizedUTCTimestamp } from '../../lib/utils/time-utils';
 import { getHostname } from '../../lib/utils/url-utils';
-import { isAllView, isAuthorView, isPendingPostView, isPostPageView, isProfileHiddenView, isProfileView, isSubplebbitView } from '../../lib/utils/view-utils';
+import { isAllView, isAuthorView, isPendingPostView, isPostPageView, isProfileHiddenView, isProfileView, isCommunityView } from '../../lib/utils/view-utils';
 import { highlightMatchedText } from '../../lib/utils/pattern-utils';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
@@ -133,7 +133,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const postDate = formatLocalizedUTCTimestamp(timestamp, language);
   const params = useParams();
   const location = useLocation();
-  const subplebbit = useSubplebbit({ subplebbitAddress, onlyIfCached: true });
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress }, onlyIfCached: true } : undefined);
 
   const authorRole = subplebbit?.roles?.[post.author?.address]?.role;
 
@@ -143,7 +143,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const isInProfileView = isProfileView(location.pathname);
   const isInAuthorView = isAuthorView(location.pathname);
   const isInProfileHiddenView = isProfileHiddenView(location.pathname);
-  const isInSubplebbitView = isSubplebbitView(location.pathname, params);
+  const isInCommunityView = isCommunityView(location.pathname, params);
 
   const commentMediaInfo = useCommentMediaInfo(post);
 
@@ -176,7 +176,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const { blocked, unblock } = useBlock({ cid });
 
   const [hasClickedSubscribe, setHasClickedSubscribe] = useState(false);
-  const { subscribe, subscribed } = useSubscribe({ subplebbitAddress });
+  const { subscribe, subscribed } = useSubscribe({ communityAddress: subplebbitAddress });
 
   // show gray dotted border around last clicked post
   const isLastClicked = sessionStorage.getItem('lastClickedPost') === cid && !isInPostPageView;
@@ -194,7 +194,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const windowWidth = useWindowWidth();
   const pinnedPostsCount = usePinnedPostsStore((state) => state.pinnedPostsCount);
   let rank = (index ?? 0) + 1;
-  if (isInSubplebbitView) {
+  if (isInCommunityView) {
     rank = rank - pinnedPostsCount;
   }
 
@@ -260,9 +260,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                     {hostname ? (
                       <Link to={`/domain/${hostname}`}>{hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname}</Link>
                     ) : (
-                      <Link to={`/s/${subplebbitAddress}`}>
-                        self.{subplebbit?.shortAddress || (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress }))}
-                      </Link>
+                      <Link to={`/s/${subplebbitAddress}`}>self.{subplebbit?.shortAddress || (subplebbitAddress && getShortAddress(subplebbitAddress))}</Link>
                     )}
                     )
                   </span>
@@ -293,7 +291,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                     shortAuthorAddress={shortAuthorAddress}
                     authorAddressChanged={authorAddressChanged}
                   />
-                  {!isInSubplebbitView && (
+                  {!isInCommunityView && (
                     <>
                        {t('post_to')}
                       <span className={styles.subscribeHoverGroup}>
@@ -309,7 +307,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                           </span>
                         )}
                         <Link className={`${styles.subplebbit} ${subscribed && hasClickedSubscribe ? styles.greenSubplebbitAddress : ''}`} to={`/s/${subplebbitAddress}`}>
-                          s/{subplebbit?.shortAddress || (subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress }))}
+                          s/{subplebbit?.shortAddress || (subplebbitAddress && getShortAddress(subplebbitAddress))}
                         </Link>
                       </span>
                     </>

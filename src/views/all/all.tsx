@@ -8,6 +8,7 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import FeedFooter from '../../components/feed-footer';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
@@ -54,7 +55,7 @@ const All = () => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       sortType,
-      subplebbitAddresses,
+      communities: getCommunityIdentifiers(subplebbitAddresses),
     };
 
     if (searchQuery) {
@@ -70,7 +71,7 @@ const All = () => {
     return options;
   }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
 
   // Reset no results state when search query changes
   useEffect(() => {
@@ -105,7 +106,7 @@ const All = () => {
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
   } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(subplebbitAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
   });
@@ -114,7 +115,7 @@ const All = () => {
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
   } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(subplebbitAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
   });
@@ -123,7 +124,7 @@ const All = () => {
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
   } = useFeed({
-    subplebbitAddresses,
+    communities: getCommunityIdentifiers(subplebbitAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
   });

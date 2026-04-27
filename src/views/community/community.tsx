@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAccountComments, useBlock, useFeed, useSubplebbit, type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { useAccountComments, useBlock, useFeed, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Trans, useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';
@@ -12,8 +12,9 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsBroadlyNsfwSubplebbit } from '../../hooks/use-is-broadly-nsfw-subplebbit';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
@@ -213,16 +214,16 @@ const Footer = ({
   );
 };
 
-const Subplebbit = () => {
+const CommunityView = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
-  const subplebbitAddress = params?.subplebbitAddress || '';
-  const subplebbit = useSubplebbit({ subplebbitAddress });
+  const subplebbitAddress = params?.communityAddress || '';
+  const subplebbit = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
-  const { isOffline } = useIsSubplebbitOffline(subplebbit || {});
+  const { isOffline } = useIsCommunityOffline(subplebbit || {});
   const isOnline = !isOffline;
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
@@ -248,7 +249,7 @@ const Subplebbit = () => {
 
   const feedOptions = useMemo(() => {
     const options: any = {
-      subplebbitAddresses,
+      communities: getCommunityIdentifiers(subplebbitAddresses),
       sortType,
       newerThan: searchQuery ? 0 : timeFilterSeconds,
     };
@@ -392,4 +393,4 @@ const Subplebbit = () => {
   );
 };
 
-export default Subplebbit;
+export default CommunityView;

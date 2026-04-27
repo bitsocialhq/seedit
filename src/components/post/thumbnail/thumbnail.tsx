@@ -45,7 +45,7 @@ const Thumbnail = ({
   const thumbnailClass = expanded ? styles.thumbnailHidden : styles.thumbnailVisible;
 
   const { blurNsfwThumbnails } = useContentOptionsStore();
-  const pageSubplebbitAddress = useParams().subplebbitAddress;
+  const pageSubplebbitAddress = useParams().communityAddress;
   const isNsfwSubplebbit = useIsNsfwSubplebbit(pageSubplebbitAddress || '');
 
   if (linkWidth && linkHeight) {

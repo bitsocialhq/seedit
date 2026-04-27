@@ -79,7 +79,7 @@ const Expando = ({
     mediaComponent = <Embed url={commentMediaInfo.url} />;
   }
 
-  const pageSubplebbitAddress = useParams().subplebbitAddress;
+  const pageSubplebbitAddress = useParams().communityAddress;
   const isNsfwSubplebbit = useIsNsfwSubplebbit(pageSubplebbitAddress || '');
 
   return (

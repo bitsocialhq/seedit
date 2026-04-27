@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Author, useBlock } from '@bitsocial/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useClick, useDismiss, useFloating, useId, useInteractions, useRole } from '@floating-ui/react';
 import { isProfileHiddenView } from '../../../../lib/utils/view-utils';
+import getShortAddress from '../../../../lib/utils/address-utils';
 import styles from './hide-menu.module.css';
 
 type HideMenuProps = {
@@ -38,7 +38,7 @@ const BlockSubplebbitButton = ({ subplebbitAddress }: HideMenuProps) => {
 
   return (
     <div className={styles.menuItem} onClick={blocked ? unblock : block}>
-      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress })}
+      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{subplebbitAddress && getShortAddress(subplebbitAddress)}
     </div>
   );
 };

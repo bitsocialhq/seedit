@@ -1,4 +1,5 @@
-import { Comment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import React, { ReactNode, Fragment } from 'react';
 
 /**
@@ -265,10 +266,8 @@ export const commentMatchesPattern = (comment: Comment, pattern: string, subpleb
  * @returns True if the comment matches the pattern, false otherwise
  */
 export const useCommentMatchesPattern = (comment: Comment, pattern: string): boolean => {
-  const subplebbit = useSubplebbit({
-    subplebbitAddress: comment?.subplebbitAddress,
-    onlyIfCached: true,
-  });
+  const communityIdentifier = getCommunityIdentifier(comment?.subplebbitAddress);
+  const subplebbit = useCommunity(communityIdentifier ? { community: communityIdentifier, onlyIfCached: true } : undefined);
 
   return commentMatchesPattern(comment, pattern, subplebbit?.roles);
 };

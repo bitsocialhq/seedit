@@ -1,4 +1,4 @@
-import { Role, Subplebbit, Comment } from '@bitsocial/bitsocial-react-hooks';
+import { Role, Community, Comment } from '@bitsocial/bitsocial-react-hooks';
 
 export type Roles = { [address: string]: Role };
 
@@ -26,7 +26,7 @@ export const findSubplebbitCreator = (roles: Roles | undefined): string => {
   return 'anonymous';
 };
 
-export const findAuthorSubplebbits = (authorAddress: string | undefined, subplebbits: (Subplebbit | undefined)[]): string[] => {
+export const findAuthorSubplebbits = (authorAddress: string | undefined, subplebbits: (Community | undefined)[]): string[] => {
   let authorSubplebbits: string[] = [];
 
   if (!authorAddress || !subplebbits) {

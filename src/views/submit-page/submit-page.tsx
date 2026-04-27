@@ -2,15 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAccount, usePublishComment, useSubplebbit } from '@bitsocial/bitsocial-react-hooks';
-import Plebbit from '@plebbit/plebbit-js';
+import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
+import getShortAddress from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
-import useIsSubplebbitOffline from '../../hooks/use-is-subplebbit-offline';
+import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
 import Embed from '../../components/post/embed';
@@ -405,7 +405,7 @@ const SubplebbitAddressField = () => {
                 setPublishPostStore({ subplebbitAddress: subscription });
               }}
             >
-              {Plebbit.getShortAddress({ address: subscription })}
+              {getShortAddress(subscription)}
             </span>
           ))}
         </div>
@@ -470,13 +470,13 @@ const SubmitPage = () => {
   const { link, title, subplebbitAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
 
   useEffect(() => {
-    setPublishPostStore({ subplebbitAddress: params.subplebbitAddress || '' });
-  }, [params.subplebbitAddress, setPublishPostStore]);
+    setPublishPostStore({ subplebbitAddress: params.communityAddress || '' });
+  }, [params.communityAddress, setPublishPostStore]);
 
-  const selectedSubplebbitData = useSubplebbit({ subplebbitAddress });
+  const selectedSubplebbitData = useCommunity(subplebbitAddress ? { community: { name: subplebbitAddress } } : undefined);
   const { rules, title: subplebbitTitle } = selectedSubplebbitData;
-  const shortAddress = subplebbitAddress && Plebbit.getShortAddress({ address: subplebbitAddress });
-  const { isOffline, offlineTitle } = useIsSubplebbitOffline(selectedSubplebbitData);
+  const shortAddress = subplebbitAddress && getShortAddress(subplebbitAddress);
+  const { isOffline, offlineTitle } = useIsCommunityOffline(selectedSubplebbitData);
 
   const { index, publishComment } = usePublishComment(publishCommentOptions);
 

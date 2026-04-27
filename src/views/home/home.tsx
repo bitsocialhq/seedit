@@ -8,6 +8,7 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
+import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import FeedFooter from '../../components/feed-footer';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
@@ -75,7 +76,7 @@ const Home = () => {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: 10,
       sortType,
-      subplebbitAddresses,
+      communities: getCommunityIdentifiers(subplebbitAddresses),
     };
 
     if (searchQuery) {
@@ -88,7 +89,7 @@ const Home = () => {
     return options;
   }, [subplebbitAddresses, sortType, timeFilterSeconds, searchQuery, commentFilter]);
 
-  const { feed, hasMore, loadMore, reset, subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: subplebbitAddressesWithNewerPosts } = useFeed(feedOptions);
 
   useEffect(() => {
     startTransition(() => {
@@ -126,7 +127,7 @@ const Home = () => {
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
   } = useFeed({
-    subplebbitAddresses: shouldLoadAdditionalFeeds ? subplebbitAddresses : [],
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
   });
@@ -135,7 +136,7 @@ const Home = () => {
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
   } = useFeed({
-    subplebbitAddresses: shouldLoadAdditionalFeeds ? subplebbitAddresses : [],
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
   });
@@ -144,7 +145,7 @@ const Home = () => {
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
   } = useFeed({
-    subplebbitAddresses: shouldLoadAdditionalFeeds ? subplebbitAddresses : [],
+    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? subplebbitAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
   });

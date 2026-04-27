@@ -10,7 +10,7 @@ interface subscribeButtonProps {
 }
 
 const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
-  const { subscribe, subscribed, unsubscribe } = useSubscribe({ subplebbitAddress: address });
+  const { subscribe, subscribed, unsubscribe } = useSubscribe({ communityAddress: address });
   const { t } = useTranslation();
   const location = useLocation();
   const params = useParams();
