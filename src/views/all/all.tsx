@@ -5,7 +5,7 @@ import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { useFeed } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
-import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import FeedFooter from '../../components/feed-footer';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -18,7 +18,7 @@ import styles from '../home/home.module.css';
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
 const All = () => {
-  const communityAddresses = useDefaultSubplebbitAddresses();
+  const communityAddresses = useDefaultSubscriptionAddresses();
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';

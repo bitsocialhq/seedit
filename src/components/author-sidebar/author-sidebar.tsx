@@ -21,7 +21,7 @@ import { findAuthorCommunities, estimateAuthorKarma } from '../../lib/utils/user
 import getShortAddress from '../../lib/utils/address-utils';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
-import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 
 interface AuthorModeratingListProps {
   accountCommunities: Record<string, AccountCommunity & Partial<Community>>;
@@ -70,7 +70,7 @@ const AuthorSidebar = () => {
   const { accountCommunities } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
 
-  const defaultSubplebbitAddresses = useDefaultSubplebbitAddresses();
+  const defaultSubplebbitAddresses = useDefaultSubscriptionAddresses();
   const accountSubscriptions = userAccount?.subscriptions || [];
   const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultSubplebbitAddresses];
 

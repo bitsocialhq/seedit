@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { Community } from '@bitsocial/bitsocial-react-hooks';
 import useContentOptionsStore from '../stores/use-content-options-store';
 
-export interface MultisubMetadata {
+export interface DefaultSubscriptionsMetadata {
   title: string;
   description: string;
   createdAt: number;
   updatedAt: number;
 }
 
-export interface MultisubSubplebbit {
+export interface DefaultSubscription {
   title?: string;
   address: string;
   tags?: string[];
@@ -19,8 +19,8 @@ export interface MultisubSubplebbit {
   lowUptime?: boolean;
 }
 
-let cacheSubplebbits: MultisubSubplebbit[] | null = null;
-let cacheMetadata: MultisubMetadata | null = null;
+let cacheSubscriptions: DefaultSubscription[] | null = null;
+let cacheMetadata: DefaultSubscriptionsMetadata | null = null;
 let cacheAutoSubscribeAddresses: string[] | null = null;
 let pending = false;
 
@@ -32,26 +32,33 @@ const notifySubscribers = () => {
 };
 
 // Shared fetch function to avoid duplication
-const fetchMultisubData = async () => {
+const fetchDefaultSubscriptionsData = async () => {
   if (pending) {
     return;
   }
   pending = true;
 
   try {
-    const multisub = await fetch(
-      'https://raw.githubusercontent.com/plebbit/lists/master/default-multisub.json',
-      // { cache: 'no-cache' }
-    ).then((res) => res.json());
+    const res = await fetch('https://raw.githubusercontent.com/bitsocialnet/lists/master/seedit-default-subscriptions.json');
 
-    const filteredSubplebbits = multisub.subplebbits.filter((sub: MultisubSubplebbit) => !sub.lowUptime);
+    if (!res.ok) {
+      cacheSubscriptions = [];
+      cacheAutoSubscribeAddresses = [];
+      cacheMetadata = null;
+      notifySubscribers();
+      return;
+    }
 
-    cacheSubplebbits = filteredSubplebbits;
+    const multisub = await res.json();
 
-    // Cache auto-subscribe addresses when we fetch subplebbits
-    cacheAutoSubscribeAddresses = filteredSubplebbits
-      .filter((sub: MultisubSubplebbit) => sub.seeditAutoSubscribe && sub.address)
-      .map((sub: MultisubSubplebbit) => sub.address);
+    const filteredSubscriptions = multisub.subplebbits.filter((sub: DefaultSubscription) => !sub.lowUptime);
+
+    cacheSubscriptions = filteredSubscriptions;
+
+    // Cache auto-subscribe addresses when we fetch subscriptions
+    cacheAutoSubscribeAddresses = filteredSubscriptions
+      .filter((sub: DefaultSubscription) => sub.seeditAutoSubscribe && sub.address)
+      .map((sub: DefaultSubscription) => sub.address);
 
     // Also cache metadata since we have the full response
     const { title, description, createdAt, updatedAt } = multisub;
@@ -60,7 +67,7 @@ const fetchMultisubData = async () => {
     // Notify all subscribers that cache has been updated
     notifySubscribers();
 
-    return { subplebbits: filteredSubplebbits, metadata: cacheMetadata };
+    return { subscriptions: filteredSubscriptions, metadata: cacheMetadata };
   } catch (e) {
     console.warn(e);
     return null;
@@ -69,20 +76,20 @@ const fetchMultisubData = async () => {
   }
 };
 
-export const useDefaultSubplebbits = () => {
-  const [subplebbits, setSubplebbits] = useState<MultisubSubplebbit[]>(cacheSubplebbits || []);
+export const useDefaultSubscriptions = () => {
+  const [subscriptions, setSubscriptions] = useState<DefaultSubscription[]>(cacheSubscriptions || []);
 
   useEffect(() => {
     // If we already have cached data, use it immediately
-    if (cacheSubplebbits) {
-      setSubplebbits(cacheSubplebbits);
+    if (cacheSubscriptions) {
+      setSubscriptions(cacheSubscriptions);
       return;
     }
 
     // Subscribe to cache updates
     const handleCacheUpdate = () => {
-      if (cacheSubplebbits) {
-        setSubplebbits(cacheSubplebbits);
+      if (cacheSubscriptions) {
+        setSubscriptions(cacheSubscriptions);
       }
     };
 
@@ -90,7 +97,7 @@ export const useDefaultSubplebbits = () => {
 
     // Trigger fetch if no cache and not pending
     if (!pending) {
-      fetchMultisubData();
+      fetchDefaultSubscriptionsData();
     }
 
     // Cleanup subscription
@@ -99,31 +106,31 @@ export const useDefaultSubplebbits = () => {
     };
   }, []);
 
-  return subplebbits;
+  return subscriptions;
 };
 
 export const getAutoSubscribeAddresses = () => cacheAutoSubscribeAddresses || [];
 
-export const useDefaultSubplebbitAddresses = () => {
-  const defaultSubplebbits = useDefaultSubplebbits();
+export const useDefaultSubscriptionAddresses = () => {
+  const defaultSubscriptions = useDefaultSubscriptions();
   const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
 
-  const filteredSubplebbits = useMemo(() => {
-    return defaultSubplebbits.filter((subplebbit: Community) => {
-      const tags = subplebbit.tags || [];
+  const filteredSubscriptions = useMemo(() => {
+    return defaultSubscriptions.filter((subscription: Community) => {
+      const tags = subscription.tags || [];
       if (hideAdultCommunities && tags.includes('adult')) return false;
       if (hideGoreCommunities && tags.includes('gore')) return false;
       if (hideAntiCommunities && tags.includes('anti')) return false;
       if (hideVulgarCommunities && tags.includes('vulgar')) return false;
       return true;
     });
-  }, [defaultSubplebbits, hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities]);
+  }, [defaultSubscriptions, hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities]);
 
-  return useMemo(() => filteredSubplebbits.map((subplebbit) => subplebbit.address), [filteredSubplebbits]);
+  return useMemo(() => filteredSubscriptions.map((subscription) => subscription.address), [filteredSubscriptions]);
 };
 
-export const useMultisubMetadata = () => {
-  const [metadata, setMetadata] = useState<MultisubMetadata | null>(cacheMetadata || null);
+export const useDefaultSubscriptionsMetadata = () => {
+  const [metadata, setMetadata] = useState<DefaultSubscriptionsMetadata | null>(cacheMetadata || null);
 
   useEffect(() => {
     // If we already have cached data, use it immediately
@@ -143,7 +150,7 @@ export const useMultisubMetadata = () => {
 
     // Trigger fetch if no cache and not pending
     if (!pending) {
-      fetchMultisubData();
+      fetchDefaultSubscriptionsData();
     }
 
     // Cleanup subscription
@@ -165,6 +172,6 @@ const getUniqueTags = (multisub: any) => {
   return Array.from(allTags).sort();
 };
 
-export const useDefaultSubplebbitTags = (subplebbits: any) => {
-  return useMemo(() => getUniqueTags(subplebbits), [subplebbits]);
+export const useDefaultSubscriptionTags = (subscriptions: any) => {
+  return useMemo(() => getUniqueTags(subscriptions), [subscriptions]);
 };
