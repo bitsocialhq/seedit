@@ -5,7 +5,7 @@ import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-ho
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import { useDefaultSubplebbitAddresses, useDefaultSubplebbits } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses, useDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
@@ -56,7 +56,7 @@ const CommunitiesDropdown = () => {
 const TagFilterDropdown = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
@@ -291,7 +291,7 @@ const TopBar = memo(() => {
   const homeButtonClass = isInHomeView ? styles.selected : styles.choice;
 
   const { hideDefaultCommunities } = useContentOptionsStore();
-  const communityAddresses = useDefaultSubplebbitAddresses();
+  const communityAddresses = useDefaultSubscriptionAddresses();
   const { accountCommunities } = useAccountCommunities();
   const accountCommunityAddresses = useMemo(() => Object.keys(accountCommunities), [accountCommunities]);
 

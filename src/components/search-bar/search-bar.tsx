@@ -15,7 +15,7 @@ import {
 } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
-import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import styles from './search-bar.module.css';
 import _ from 'lodash';
 
@@ -60,7 +60,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const account = useAccount();
   const subplebbitAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
-  const defaultSubplebbitAddresses = useDefaultSubplebbitAddresses();
+  const defaultSubplebbitAddresses = useDefaultSubscriptionAddresses();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 

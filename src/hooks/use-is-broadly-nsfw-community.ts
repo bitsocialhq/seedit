@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { useDefaultSubplebbits } from './use-default-subplebbits';
+import { useDefaultSubscriptions } from './use-default-subscriptions';
 
 const SENSITIVE_TAGS = ['adult', 'gore', 'anti', 'vulgar'];
 
 export const useIsBroadlyNsfwCommunity = (communityAddress: string) => {
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
 
   return useMemo(() => {
     if (!communityAddress || !defaultCommunities) return false;

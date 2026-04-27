@@ -9,7 +9,7 @@ import { getLinkMediaInfo } from '../../lib/utils/media-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
-import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -308,7 +308,7 @@ const ContentField = () => {
 const CommunityAddressField = () => {
   const { t } = useTranslation();
   const { subscriptions } = useAccount() || {};
-  const defaultCommunityAddresses = useDefaultSubplebbitAddresses();
+  const defaultCommunityAddresses = useDefaultSubscriptionAddresses();
   const { communityAddress: inputAddress, setPublishPostStore } = usePublishPostStore();
 
   const filteredCommunityAddresses = defaultCommunityAddresses.filter((address) => address?.toLowerCase()?.includes(inputAddress?.toLowerCase() || '')).slice(0, 10);

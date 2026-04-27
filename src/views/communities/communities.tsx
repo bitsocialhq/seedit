@@ -16,7 +16,7 @@ import {
 } from '../../lib/utils/view-utils';
 import useErrorStore from '../../stores/use-error-store';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
-import { useDefaultSubplebbitAddresses, useDefaultSubplebbits } from '../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptionAddresses, useDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
 import useDisplayedSubscriptions from '../../hooks/use-displayed-subscriptions';
 import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
@@ -314,7 +314,7 @@ const AccountSubplebbits = ({ viewRole }: { viewRole: string }) => {
   const { accountCommunities, error: accountCommunitiesError } = useAccountCommunities();
   const { setError } = useErrorStore();
   const location = useLocation();
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
 
   useEffect(() => {
     setError('AccountSubplebbits_useAccountCommunities', accountCommunitiesError);
@@ -356,7 +356,7 @@ const SubscriberSubplebbits = () => {
   const account = useAccount();
   const { setError } = useErrorStore();
   const location = useLocation();
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
 
   const urlParams = new URLSearchParams(location.search);
   const currentTag = urlParams.get('tag');
@@ -416,8 +416,8 @@ const SubscriberSubplebbits = () => {
 };
 
 const AllDefaultSubplebbits = () => {
-  const defaultCommunitiesList = useDefaultSubplebbits();
-  const communityAddresses = useDefaultSubplebbitAddresses();
+  const defaultCommunitiesList = useDefaultSubscriptions();
+  const communityAddresses = useDefaultSubscriptionAddresses();
   const location = useLocation();
 
   const urlParams = new URLSearchParams(location.search);
@@ -460,7 +460,7 @@ const AllAccountSubplebbits = () => {
   const { accountCommunities, error: accountCommunitiesError } = useAccountCommunities();
   const { setError } = useErrorStore();
   const location = useLocation();
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
 
   useEffect(() => {
     setError('AllAccountSubplebbits_useAccountCommunities', accountCommunitiesError);

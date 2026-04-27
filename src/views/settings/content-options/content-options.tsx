@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount } from '@bitsocial/bitsocial-react-hooks';
 import styles from './content-options.module.css';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
-import { useDefaultSubplebbits } from '../../../hooks/use-default-subplebbits';
+import { useDefaultSubscriptions } from '../../../hooks/use-default-subscriptions';
 import { handleNSFWSubscriptionPrompt } from '../../../lib/utils/nsfw-subscription-utils';
 
 const MediaOptions = () => {
@@ -138,7 +138,7 @@ const MediaOptions = () => {
 const CommunitiesOptions = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
   const {
     hideAdultCommunities,
     hideGoreCommunities,
