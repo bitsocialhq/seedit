@@ -254,7 +254,7 @@
   "more_posts_last_month": "{{count}} postingan di {{currentTimeFilterName}}: <1>tampilkan lebih banyak postingan dari bulan lalu</1>",
   "profile_info": "Akun Anda u/{{shortAddress}} dibuat. <1>Atur nama tampilan</1>, <2>ekspor cadangan</2>, <3>pelajari lebih lanjut</3>.",
   "show_all_instead": "Menampilkan pos sejak {{timeFilterName}}, <1>tampilkan semua sebagai gantinya</1>",
-  "subplebbit_offline_info": "Subplebbit mungkin offline dan penerbitan mungkin gagal.",
+  "subplebbit_offline_info": "Komunitas mungkin offline dan penerbitan mungkin gagal.",
   "posts_last_synced_info": "Posting terakhir disinkronkan {{time}}, subplebbit mungkin offline dan penerbitan mungkin gagal.",
   "import_account_backup": "<1>impor</1> cadangan akun",
   "export_account_backup": "<1>ekspor</1> cadangan akun",
