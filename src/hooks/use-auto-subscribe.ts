@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAccount, setAccount } from '@bitsocial/bitsocial-react-hooks';
-import { getAutoSubscribeAddresses, useDefaultSubplebbits } from './use-default-subplebbits';
+import { getAutoSubscribeAddresses, useDefaultSubscriptions } from './use-default-subscriptions';
 import { useAutoSubscribeStore } from '../stores/use-auto-subscribe-store';
 
 const AUTO_SUBSCRIBE_KEY_PREFIX = 'seedit-auto-subscribe-done-';
@@ -11,7 +11,7 @@ const processedAccounts = new Set<string>();
 export const useAutoSubscribe = () => {
   const account = useAccount();
   const accountAddress = account?.author?.address;
-  const defaultCommunities = useDefaultSubplebbits();
+  const defaultCommunities = useDefaultSubscriptions();
   const { addCheckingAccount, removeCheckingAccount, isCheckingAccount } = useAutoSubscribeStore();
 
   useEffect(() => {
@@ -21,7 +21,10 @@ export const useAutoSubscribe = () => {
     addCheckingAccount(accountAddress);
 
     const processAutoSubscribe = async () => {
-      if (!account || !defaultCommunities?.length) return;
+      if (!account || !defaultCommunities?.length) {
+        removeCheckingAccount(accountAddress);
+        return;
+      }
 
       if (processedAccounts.has(accountAddress)) {
         removeCheckingAccount(accountAddress);
