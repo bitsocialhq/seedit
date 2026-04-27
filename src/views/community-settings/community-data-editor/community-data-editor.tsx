@@ -9,6 +9,7 @@ import useCommunitySettingsStore from '../../../stores/use-community-settings-st
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
+import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -59,7 +60,7 @@ const CommunityDataEditor = () => {
   const [text, setText] = useState('');
 
   const { communityAddress } = useParams<{ communityAddress: string }>();
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, createdAt, description, error, rules, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
 

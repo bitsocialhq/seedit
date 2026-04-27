@@ -15,6 +15,7 @@ import useDownvote from '../../hooks/use-downvote';
 import useIsMobile from '../../hooks/use-is-mobile';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useUpvote from '../../hooks/use-upvote';
 import useWindowWidth from '../../hooks/use-window-width';
 import CommentEditForm from '../comment-edit-form';
@@ -134,7 +135,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const postDate = formatLocalizedUTCTimestamp(timestamp, language);
   const params = useParams();
   const location = useLocation();
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress }, onlyIfCached: true } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
 
   const authorRole = community?.roles?.[post.author?.address]?.role;
 

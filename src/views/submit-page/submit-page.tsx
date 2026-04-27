@@ -11,6 +11,7 @@ import { isValidURL } from '../../lib/utils/url-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
 import { useDefaultSubplebbitAddresses } from '../../hooks/use-default-subplebbits';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
 import Embed from '../../components/post/embed';
@@ -473,7 +474,7 @@ const SubmitPage = () => {
     setPublishPostStore({ communityAddress: params.communityAddress || '' } as any);
   }, [params.communityAddress, setPublishPostStore]);
 
-  const selectedCommunityData = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const selectedCommunityData = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { rules, title: communityTitle } = selectedCommunityData;
   const shortAddress = communityAddress && getShortAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);

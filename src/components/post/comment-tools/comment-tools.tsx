@@ -9,6 +9,7 @@ import HideMenu from './hide-menu';
 import Label from '../label';
 import ModMenu from './mod-menu';
 import { isInboxView } from '../../../lib/utils/view-utils';
+import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { copyShareLinkToClipboard } from '../../../lib/utils/url-utils';
 
 interface CommentToolsProps {
@@ -296,7 +297,7 @@ const CommentTools = ({
 }: CommentToolsProps) => {
   const account = useAccount();
   const isAuthor = account?.author?.address === author?.address;
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress }, onlyIfCached: true } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
   const accountAuthorRole = community?.roles?.[account?.author?.address]?.role;
   const commentAuthorRole = community?.roles?.[author?.address]?.role;
   const isAccountMod = accountAuthorRole === 'admin' || accountAuthorRole === 'owner' || accountAuthorRole === 'moderator';

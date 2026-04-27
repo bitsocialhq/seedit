@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useClientsStates, useCommunity, useCommunitiesStates } from '@bitsocial/bitsocial-react-hooks';
 import { debounce } from 'lodash';
-import { getCommunityIdentifiers } from './use-community-identifier';
+import { getCommunityIdentifier, getCommunityIdentifiers } from './use-community-identifier';
 
 interface CommentOrCommunity {
   state?: string;
@@ -82,7 +82,7 @@ const useStateString = (commentOrCommunity: CommentOrCommunity): string | undefi
 export const useFeedStateString = (communityAddresses?: string[]): string | undefined => {
   // single community feed state string
   const communityAddress = communityAddresses?.length === 1 ? communityAddresses[0] : undefined;
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const singleCommunityFeedStateString = useStateString(community);
 
   // multiple community feed state string

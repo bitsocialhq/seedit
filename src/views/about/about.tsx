@@ -7,6 +7,7 @@ import { useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react
 import { Capacitor } from '@capacitor/core';
 import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -158,7 +159,7 @@ const About = () => {
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const { commentCid, communityAddress } = useParams();
 
-  const subplebbit = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {

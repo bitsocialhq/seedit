@@ -14,7 +14,7 @@ import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
-import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
+import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
@@ -221,7 +221,7 @@ const CommunityView = () => {
   const searchQuery = searchParams.get('q') || '';
 
   const communityAddress = params?.communityAddress || '';
-  const subplebbit = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
   const { isOffline } = useIsCommunityOffline(subplebbit || {});
   const isOnline = !isOffline;

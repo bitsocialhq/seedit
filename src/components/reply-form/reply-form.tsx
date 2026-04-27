@@ -4,6 +4,7 @@ import { useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isValidURL } from '../../lib/utils/url-utils';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import usePublishReply from '../../hooks/use-publish-reply';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import Markdown from '../markdown';
 import styles from './reply-form.module.css';
 
@@ -122,7 +123,7 @@ const ReplyForm = ({ cid, isReplyingToReply, hideReplyForm, communityAddress, po
   const spoilerClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
   const nsfwClass = showOptions ? styles.spoilerVisible : styles.spoilerHidden;
 
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress }, onlyIfCached: true } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
   const { isOffline, offlineTitle } = useIsCommunityOffline(community);
 
   // focus on the textarea when replying to a reply

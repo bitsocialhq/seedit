@@ -23,6 +23,7 @@ import {
 import useCommunitySubtitles from '../../hooks/use-community-subtitles';
 import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
 import Markdown from '../markdown';
@@ -173,7 +174,7 @@ export const Footer = () => {
 const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit, reset }: SidebarProps) => {
   const { t } = useTranslation();
   const { address, createdAt, description, roles, rules, title, updatedAt } = subplebbit || {};
-  const { allActiveUserCount, hourActiveUserCount } = useCommunityStats(address ? { community: { name: address } } : undefined);
+  const { allActiveUserCount, hourActiveUserCount } = useCommunityStats(address ? { community: getCommunityIdentifier(address) } : undefined);
   const { isOffline, offlineTitle } = useIsCommunityOffline(subplebbit || {});
   const onlineNotice = t('users_online', { count: hourActiveUserCount || 0 });
   const offlineNotice = updatedAt ? t('posts_last_synced', { dateAgo: getFormattedTimeAgo(updatedAt) }) : offlineTitle;

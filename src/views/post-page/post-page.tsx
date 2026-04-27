@@ -10,6 +10,7 @@ import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useReplies from '../../hooks/use-replies';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -283,7 +284,7 @@ const PostPage = () => {
     post = pendingPost;
   }
   const _communityAddr = isInPendingPostView ? pendingPost?.subplebbitAddress : communityAddress;
-  const community = useCommunity(_communityAddr ? { community: { name: _communityAddr } } : undefined);
+  const community = useCommunity(_communityAddr ? { community: getCommunityIdentifier(_communityAddr) } : undefined);
 
   // over 18 warning for community with nsfw tag in multisub default list
   const { hasAcceptedWarning } = useContentOptionsStore();

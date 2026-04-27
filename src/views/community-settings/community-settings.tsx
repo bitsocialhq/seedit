@@ -15,6 +15,7 @@ import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
 import useCommunitySettingsStore from '../../stores/use-community-settings-store';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
@@ -341,7 +342,7 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
 const CommunitySettings = () => {
   const { t } = useTranslation();
   const { communityAddress } = useParams<{ communityAddress: string }>();
-  const community = useCommunity(communityAddress ? { community: { name: communityAddress } } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
 
@@ -356,9 +357,11 @@ const CommunitySettings = () => {
   const isInCommunitySettingsView = isCommunitySettingsView(location.pathname, params);
   const isConnectedToRpc = usePkcRpcSettings()?.state === 'connected';
 
-  if (isInCreateCommunityView && !isConnectedToRpc) {
-    navigate('/', { replace: true });
-  }
+  useEffect(() => {
+    if (isInCreateCommunityView && !isConnectedToRpc) {
+      navigate('/', { replace: true });
+    }
+  }, [isInCreateCommunityView, isConnectedToRpc, navigate]);
 
   const userAddress = account?.author?.address;
   const userIsOwnerOrAdmin = isUserOwnerOrAdmin(roles, userAddress);

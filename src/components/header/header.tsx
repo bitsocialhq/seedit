@@ -47,6 +47,7 @@ import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import styles from './header.module.css';
 
 const AboutButton = () => {
@@ -383,7 +384,7 @@ const Header = () => {
   const [theme] = useTheme();
   const location = useLocation();
   const params = useParams();
-  const community = useCommunity(params?.communityAddress ? { community: { name: params?.communityAddress }, onlyIfCached: true } : undefined);
+  const community = useCommunity(params?.communityAddress ? { community: getCommunityIdentifier(params.communityAddress), onlyIfCached: true } : undefined);
   const { suggested, title } = community || {};
 
   const commentIndex = params?.accountCommentIndex ? parseInt(params?.accountCommentIndex) : undefined;
@@ -459,7 +460,7 @@ const Header = () => {
       >
         <div className={styles.logoContainer}>
           <Link to={logoLink} className={styles.logoLink}>
-            {(logoIsAvatar || (!isInCommunityView && !isInProfileView && !isInAuthorView) || !logoIsAvatar) && (
+            {(logoIsAvatar || (!isInCommunityView && !isInProfileView && !isInAuthorView)) && (
               <img className={`${logoIsAvatar ? styles.avatar : styles.logo}`} src={logoSrc} alt='' />
             )}
             {((!isInCommunityView && !isInProfileView && !isInAuthorView) || !logoIsAvatar) && (
