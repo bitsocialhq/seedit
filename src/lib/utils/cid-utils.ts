@@ -1,4 +1,4 @@
-import { Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { Comment } from '@bitsocial/bitsocial-react-hooks';
 
 export const findTopParentCidOfReply = (replyCid: string, post: Comment): string | null => {
   if (!post?.replyCount || post?.replyCount === 0) {

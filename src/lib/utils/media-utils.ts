@@ -1,5 +1,5 @@
-import localForageLru from '@bitsocialnet/bitsocial-react-hooks/dist/lib/localforage-lru/index.js';
-import { Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import localForageLru from '@bitsocial/bitsocial-react-hooks/dist/lib/localforage-lru/index.js';
+import { Comment } from '@bitsocial/bitsocial-react-hooks';
 import extName from 'ext-name';
 import { canEmbed } from '../../components/post/embed';
 import memoize from 'memoizee';

@@ -1,4 +1,4 @@
-import { usePlebbitRpcSettings } from '@bitsocialnet/bitsocial-react-hooks';
+import { usePlebbitRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 
 const useChallengesOptions = () => {
   const { challenges } = usePlebbitRpcSettings().plebbitRpcSettings || {};

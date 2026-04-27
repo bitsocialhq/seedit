@@ -1,4 +1,4 @@
-import { type Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { type Comment } from '@bitsocial/bitsocial-react-hooks';
 
 export const getAccountHistoryOrder = (sortType: string): 'asc' | 'desc' => (sortType === 'new' ? 'desc' : 'asc');
 

@@ -11,7 +11,7 @@ import {
   useBlock,
   useComment,
   useSubplebbits,
-} from '@bitsocialnet/bitsocial-react-hooks';
+} from '@bitsocial/bitsocial-react-hooks';
 import Plebbit from '@plebbit/plebbit-js';
 import styles from './author-sidebar.module.css';
 import { getFormattedTimeDuration } from '../../lib/utils/time-utils';

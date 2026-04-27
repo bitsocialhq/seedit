@@ -10,7 +10,7 @@ import {
   usePublishSubplebbitEdit,
   useSubplebbit,
   useSubscribe,
-} from '@bitsocialnet/bitsocial-react-hooks';
+} from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import { isCreateSubplebbitView, isSubplebbitSettingsView } from '../../lib/utils/view-utils';

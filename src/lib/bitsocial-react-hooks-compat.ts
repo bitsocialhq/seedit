@@ -12,7 +12,7 @@ import {
   useFeed as useFeedBase,
   usePublishCommunityEdit as usePublishCommunityEditBase,
   useSubscribe as useSubscribeBase,
-} from '@bitsocialnet/bitsocial-react-hooks/dist/index.js';
+} from '@bitsocial/bitsocial-react-hooks/dist/index.js';
 import type {
   Account,
   AccountCommunity,
@@ -37,10 +37,10 @@ import type {
   UsePublishCommunityEditOptions,
   UsePublishCommunityEditResult,
   UseSubscribeOptions as BaseUseSubscribeOptions,
-} from '@bitsocialnet/bitsocial-react-hooks/dist/index.js';
-import accountsStore from '@bitsocialnet/bitsocial-react-hooks/dist/stores/accounts/index.js';
+} from '@bitsocial/bitsocial-react-hooks/dist/index.js';
+import accountsStore from '@bitsocial/bitsocial-react-hooks/dist/stores/accounts/index.js';
 
-export * from '@bitsocialnet/bitsocial-react-hooks/dist/index.js';
+export * from '@bitsocial/bitsocial-react-hooks/dist/index.js';
 
 type AliasAddresses<T extends { address?: string; subplebbitAddress?: string } | undefined> = T;
 

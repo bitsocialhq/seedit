@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAccountComments, useBlock, useFeed, useSubplebbit, type Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { useAccountComments, useBlock, useFeed, useSubplebbit, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Trans, useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';

@@ -1,4 +1,4 @@
-import { Role, Subplebbit, Comment } from '@bitsocialnet/bitsocial-react-hooks';
+import { Role, Subplebbit, Comment } from '@bitsocial/bitsocial-react-hooks';
 
 export type Roles = { [address: string]: Role };
 

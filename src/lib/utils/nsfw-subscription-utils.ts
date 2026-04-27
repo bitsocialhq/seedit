@@ -1,4 +1,4 @@
-import { setAccount } from '@bitsocialnet/bitsocial-react-hooks';
+import { setAccount } from '@bitsocial/bitsocial-react-hooks';
 
 const NSFW_SUBSCRIPTION_PROMPT_KEY_PREFIX = 'seedit-nsfw-subscription-prompt-shown-';
 
