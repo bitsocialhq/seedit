@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, useAccountComment, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import { getPostScore } from '../../lib/utils/post-utils';
 import { getFormattedDate, getFormattedTimeDuration, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { findCommunityCreator } from '../../lib/utils/user-utils';
@@ -24,6 +24,7 @@ import useCommunitySubtitles from '../../hooks/use-community-subtitles';
 import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
 import Markdown from '../markdown';
@@ -44,6 +45,15 @@ const RulesList = ({ rules }: { rules: string[] }) => {
       <Markdown content={markdownRules} />
     </div>
   );
+};
+
+const getRandomSubtitleIndexes = (subtitleCount: number): [number | undefined, number | undefined] => {
+  if (subtitleCount < 1) return [undefined, undefined];
+  if (subtitleCount === 1) return [0, undefined];
+
+  const firstIndex = Math.floor(Math.random() * subtitleCount);
+  const secondIndex = (firstIndex + 1 + Math.floor(Math.random() * (subtitleCount - 1))) % subtitleCount;
+  return [firstIndex, secondIndex];
 };
 
 const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
@@ -196,7 +206,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
 
-  const pendingPost = useAccountComment({ commentIndex: params?.accountCommentIndex as any });
+  const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);
 
   const communityCreator = findCommunityCreator(roles);
   const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : `${getShortAddress(communityCreator)}`;
@@ -235,26 +245,11 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const moderatorRole = roles?.[account.author?.address]?.role;
   const isOwner = !!settings;
 
-  const [subtitle1, setSubtitle1] = useState('');
-  const [subtitle2, setSubtitle2] = useState('');
-
   const communitySubtitles = useCommunitySubtitles();
-
-  useEffect(() => {
-    if (communitySubtitles.length >= 2) {
-      const indices = new Set<number>();
-      while (indices.size < 2) {
-        const randomIndex = Math.floor(Math.random() * communitySubtitles.length);
-        indices.add(randomIndex);
-      }
-      const [index1, index2] = Array.from(indices);
-      setSubtitle1(communitySubtitles[index1]);
-      setSubtitle2(communitySubtitles[index2]);
-    } else if (communitySubtitles.length === 1) {
-      setSubtitle1(communitySubtitles[0]);
-      setSubtitle2('');
-    }
-  }, [communitySubtitles]);
+  const [subtitleIndexes] = useState(() => getRandomSubtitleIndexes(communitySubtitles.length));
+  const [subtitleIndex1, subtitleIndex2] = subtitleIndexes;
+  const subtitle1 = subtitleIndex1 === undefined ? '' : communitySubtitles[subtitleIndex1] || '';
+  const subtitle2 = subtitleIndex2 === undefined ? '' : communitySubtitles[subtitleIndex2] || '';
 
   const isConnectedToRpc = usePkcRpcSettings()?.state === 'connected';
   const navigate = useNavigate();
@@ -274,14 +269,10 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const isMobile = useIsMobile();
   const [showExpando, setShowExpando] = useState(false);
 
-  const handleSearchBarExpandoChange = (expanded: boolean) => {
-    setShowExpando(expanded);
-  };
-
   return (
     <div className={`${isMobile ? styles.mobileSidebar : styles.sidebar}`}>
       <div className={styles.searchBarWrapper}>
-        <SearchBar onExpandoChange={handleSearchBarExpandoChange} />
+        <SearchBar onExpandoChange={setShowExpando} />
       </div>
       <div
         className={styles.contentWrapper}

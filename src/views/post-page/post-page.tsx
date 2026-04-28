@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccount, useAccountComment, useAccountComments, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAccount, useAccountComments, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import findTopParentCidOfReply from '../../lib/utils/cid-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
@@ -11,6 +11,7 @@ import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useReplies from '../../hooks/use-replies';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import useOptionalAccountComment from '../../hooks/use-account-comment';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -266,7 +267,7 @@ const PostPage = () => {
     }
   }, [isValidAccountCommentIndex, navigate]);
 
-  const accountComment = useAccountComment({ commentIndex });
+  const accountComment = useOptionalAccountComment(commentIndex);
   const pendingPost = accountComment;
 
   // in pending post route, redirect to post page route when post is published (cid is defined)

@@ -1,6 +1,6 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAccount, useAccountComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import {
@@ -48,6 +48,7 @@ import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-commu
 import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import useOptionalAccountComment from '../../hooks/use-account-comment';
 import styles from './header.module.css';
 
 const AboutButton = () => {
@@ -387,8 +388,7 @@ const Header = () => {
   const community = useCommunity(params?.communityAddress ? { community: getCommunityIdentifier(params.communityAddress), onlyIfCached: true } : undefined);
   const { suggested, title } = community || {};
 
-  const commentIndex = params?.accountCommentIndex ? parseInt(params?.accountCommentIndex) : undefined;
-  const accountComment = useAccountComment({ commentIndex });
+  const accountComment = useOptionalAccountComment(params?.accountCommentIndex);
 
   const isMobile = useWindowWidth() < 640;
   const isInAllAboutView = isAllAboutView(location.pathname);

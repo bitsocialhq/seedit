@@ -80,6 +80,12 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     middleware: [offset(5), shift()],
     whileElementsMounted: autoUpdate,
   });
+  const setFloatingReferenceRef = useRef(refs.setReference);
+  setFloatingReferenceRef.current = refs.setReference;
+  const setSearchInputReference = useCallback((instance: HTMLInputElement | null) => {
+    searchInputRef.current = instance;
+    setFloatingReferenceRef.current(instance);
+  }, []);
 
   useEffect(() => {
     setInputValue(searchParams.get('q') || '');
@@ -237,10 +243,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
           spellCheck='false'
           autoCapitalize='off'
           placeholder={placeholder}
-          ref={(instance) => {
-            searchInputRef.current = instance;
-            refs.setReference(instance);
-          }}
+          ref={setSearchInputReference}
           onFocus={() => {
             setShowExpando(true);
             setIsInputFocused(true);

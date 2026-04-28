@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccountComment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { getHostname } from '../../lib/utils/url-utils';
 import { formatScore, getReplyScore } from '../../lib/utils/post-utils';
 import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/utils';
@@ -349,7 +350,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
   const communityAddress = getCommentCommunityAddress(reply);
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
 
-  const pendingReply = useAccountComment({ commentIndex: reply?.index });
+  const pendingReply = useOptionalAccountComment(reply?.index);
   const parentOfPendingReply = useComment({ commentCid: pendingReply?.parentCid, onlyIfCached: true });
 
   const location = useLocation();
