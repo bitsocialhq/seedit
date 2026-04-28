@@ -14,6 +14,13 @@ const viteBin = join(binDir, `vite${executableSuffix}`);
 const fallbackHost = '127.0.0.1';
 const fallbackUrlHost = 'localhost';
 const fallbackRequestedPort = Number(process.env.PORT) || 3000;
+const portlessProxyPort = process.env.PORTLESS_PORT || '443';
+const portlessEnv = {
+  ...process.env,
+  PORTLESS_PORT: portlessProxyPort,
+  PORTLESS_HTTPS: process.env.PORTLESS_HTTPS ?? '1',
+  PORTLESS_LAN: process.env.PORTLESS_LAN ?? '0',
+};
 
 function sanitizeLabel(value) {
   return value
@@ -90,11 +97,24 @@ function getPortlessAppName() {
   return `${preferredAppName}-${Date.now()}`;
 }
 
+function ensurePortlessProxy() {
+  const result = spawnSync(portlessBin, ['proxy', 'start', '--port', portlessProxyPort, '--https'], {
+    cwd: process.cwd(),
+    env: portlessEnv,
+    stdio: 'inherit',
+  });
+
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
+}
+
 const command = usePortless && existsSync(portlessBin) ? portlessBin : viteBin;
 let args;
 let publicUrl = null;
 
 if (command === portlessBin) {
+  ensurePortlessProxy();
   const appName = getPortlessAppName();
 
   publicUrl = `https://${appName}.localhost`;
@@ -122,7 +142,7 @@ if (command === portlessBin) {
 
 const child = spawn(command, args, {
   stdio: 'inherit',
-  env: process.env,
+  env: command === portlessBin ? portlessEnv : process.env,
 });
 
 if (publicUrl && process.env.BROWSER !== 'none') {

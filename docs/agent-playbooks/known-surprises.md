@@ -28,6 +28,16 @@ If uncertain, ask the developer before adding an entry.
 
 ## Entries
 
+### Portless 0.11 reuses legacy proxy state unless the launcher forces HTTPS
+
+- **Date:** 2026-04-28
+- **Observed by:** Tommaso + Codex
+- **Context:** Upgrading the normal `yarn start` flow from the old `http://seedit.localhost:1355` proxy URL to `https://seedit.localhost`.
+- **What was surprising:** Even with `portless@0.11.1` installed, Portless reused the existing `~/.portless/proxy.port = 1355` HTTP proxy and printed the legacy `:1355` URL.
+- **Impact:** Updating package versions and docs is not enough; `yarn start` can still advertise and use the old URL when a contributor has legacy Portless state running.
+- **Mitigation:** Keep `scripts/start-dev.js` explicitly starting the Portless HTTPS proxy on port `443` before registering the app route, so the runtime flow migrates away from persisted `1355` state instead of inheriting it.
+- **Status:** confirmed
+
 ### `.vercel` output is local-only
 
 - **Date:** 2026-03-19
