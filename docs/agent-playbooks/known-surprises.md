@@ -63,9 +63,9 @@ If uncertain, ask the developer before adding an entry.
 - **Date:** 2026-03-30
 - **Observed by:** Codex
 - **Context:** Normal `yarn start` runs alongside other local Bitsocial projects
-- **What was surprising:** The repo historically assumed `http://localhost:3000`, but the normal web dev flow now runs through Portless at `http://seedit.localhost:1355` so multiple Bitsocial apps can coexist without raw-port collisions.
+- **What was surprising:** The repo historically assumed `http://localhost:3000`, but the normal web dev flow now runs through Portless at `https://seedit.localhost` so multiple Bitsocial apps can coexist without raw-port collisions.
 - **Impact:** Agents can point browser automation, health checks, or local smoke scripts at the wrong URL and conclude the app is down when it is healthy.
-- **Mitigation:** Use `http://seedit.localhost:1355` for standard web dev and agent smoke flows. Only rely on `http://localhost:3000` when a script intentionally forces both `PORTLESS=0` and `PORT=3000`, such as the combined Electron dev commands.
+- **Mitigation:** Use `https://seedit.localhost` for standard web dev and agent smoke flows. Only rely on `http://localhost:3000` when a script intentionally forces both `PORTLESS=0` and `PORT=3000`, such as the combined Electron dev commands.
 - **Status:** confirmed
 
 ### Fixed Portless app names collide across seedit worktrees
@@ -75,7 +75,7 @@ If uncertain, ask the developer before adding an entry.
 - **Context:** Starting `yarn start` in one seedit worktree while another seedit worktree was already serving through Portless
 - **What was surprising:** Using the literal Portless app name `seedit` in every worktree makes the route itself collide, even when the backing ports are different, so the second process fails because `seedit.localhost` is already registered.
 - **Impact:** Parallel seedit branches can block each other even though Portless is meant to let them coexist safely.
-- **Mitigation:** Keep Portless startup behind `scripts/start-dev.js`, which now uses a branch-scoped `*.seedit.localhost:1355` route outside the canonical case, suffixes repeated branch routes (`-2`, `-3`, ...) until it finds a free Portless name, and falls back to the next free direct-Vite port when `PORTLESS=0` is used without an explicit `PORT`.
+- **Mitigation:** Keep Portless startup behind `scripts/start-dev.js`, which now uses a branch-scoped `*.seedit.localhost` route outside the canonical case, suffixes repeated branch routes (`-2`, `-3`, ...) until it finds a free Portless name, and falls back to the next free direct-Vite port when `PORTLESS=0` is used without an explicit `PORT`.
 - **Status:** confirmed
 
 ### Toolchain model names are not interchangeable

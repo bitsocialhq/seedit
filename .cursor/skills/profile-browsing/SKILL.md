@@ -9,7 +9,7 @@ Two-layer profiling: browser-level symptoms (Web Vitals, long tasks, scroll jank
 
 ## Prerequisites
 
-- Dev server running at http://seedit.localhost:1355 (`yarn start`)
+- Dev server running at https://seedit.localhost (`yarn start`)
 - `playwright-cli` installed (`npm install -g @playwright/cli@latest`)
 
 **IMPORTANT:** The orchestrator (you) is responsible for ensuring exactly ONE dev server is running. Profiler subagents must NEVER start a dev server themselves.
@@ -31,7 +31,7 @@ Before spawning any profiler subagents, verify exactly one dev server is availab
 
 ```bash
 # Check if the dev server is reachable
-curl -sf http://seedit.localhost:1355 -o /dev/null && echo "OK" || echo "NOT RUNNING"
+curl -sf https://seedit.localhost -o /dev/null && echo "OK" || echo "NOT RUNNING"
 ```
 
 - If **OK**: proceed to Step 1.

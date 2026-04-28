@@ -174,14 +174,14 @@ src/
 
 ## Local Development URL
 
-This project uses [Portless](https://github.com/vercel-labs/portless) for the normal web dev flow. The canonical web dev URL is `http://seedit.localhost:1355`, and non-`master` branches can automatically fall back to a branch-scoped `*.seedit.localhost:1355` route when needed so parallel worktrees do not collide. Browser automation and local smoke/bootstrap helpers should target that URL unless the caller explicitly bypasses Portless with `PORTLESS=0`.
+This project uses [Portless](https://github.com/vercel-labs/portless) for the normal web dev flow. The canonical web dev URL is `https://seedit.localhost`, and non-`master` branches can automatically fall back to a branch-scoped `*.seedit.localhost` route when needed so parallel worktrees do not collide. Browser automation and local smoke/bootstrap helpers should target that URL unless the caller explicitly bypasses Portless with `PORTLESS=0`.
 
 ## Common Commands
 
 ```bash
 corepack enable
 corepack yarn install
-yarn start                # http://seedit.localhost:1355
+yarn start                # https://seedit.localhost
 yarn build
 yarn lint
 yarn type-check

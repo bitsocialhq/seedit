@@ -8,7 +8,7 @@ if [ "$#" -ne 0 ]; then
 fi
 
 wait_timeout="${AGENT_INIT_TIMEOUT_SECONDS:-60}"
-app_url="${AGENT_APP_URL:-http://seedit.localhost:1355}"
+app_url="${AGENT_APP_URL:-https://seedit.localhost}"
 
 repo_root="$(git rev-parse --show-toplevel)"
 log_dir="$repo_root/.playwright-cli"
@@ -18,7 +18,7 @@ mkdir -p "$log_dir"
 cd "$repo_root"
 
 is_server_up() {
-  curl -fsS "$app_url" >/dev/null 2>&1
+  curl -fsSk "$app_url" >/dev/null 2>&1
 }
 
 wait_for_server() {

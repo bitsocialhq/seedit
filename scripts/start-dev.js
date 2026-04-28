@@ -1,7 +1,8 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
-import { get } from 'node:http';
+import { get as httpGet } from 'node:http';
+import { get as httpsGet } from 'node:https';
 import { resolvePort } from './dev-server-utils.mjs';
 
 const isWindows = process.platform === 'win32';
@@ -35,7 +36,7 @@ function getCurrentBranch() {
   return result.stdout.trim() || null;
 }
 
-function getActivePortlessRoutes() {
+function getActivePortlessRouteHosts() {
   const result = spawnSync(portlessBin, ['list'], {
     cwd: process.cwd(),
     encoding: 'utf8',
@@ -46,16 +47,16 @@ function getActivePortlessRoutes() {
     return new Set();
   }
 
-  const matches = result.stdout.match(/http:\/\/[a-z0-9.-]+\.localhost:1355/g) || [];
+  const matches = result.stdout.match(/https?:\/\/[a-z0-9.-]+\.localhost(?::\d+)?/g) || [];
 
-  return new Set(matches);
+  return new Set(matches.map((url) => new URL(url).hostname));
 }
 
-function isRouteBusy(activeRoutes, appName) {
-  return activeRoutes.has(`http://${appName}.localhost:1355`);
+function isRouteBusy(activeRouteHosts, appName) {
+  return activeRouteHosts.has(`${appName}.localhost`);
 }
 
-function getPreferredPortlessAppName(activeRoutes) {
+function getPreferredPortlessAppName(activeRouteHosts) {
   const branch = getCurrentBranch();
   const branchLabel = sanitizeLabel(branch || 'current');
 
@@ -63,7 +64,7 @@ function getPreferredPortlessAppName(activeRoutes) {
     return `${branchLabel}.seedit`;
   }
 
-  if (isRouteBusy(activeRoutes, 'seedit')) {
+  if (isRouteBusy(activeRouteHosts, 'seedit')) {
     return `${branchLabel}.seedit`;
   }
 
@@ -71,17 +72,17 @@ function getPreferredPortlessAppName(activeRoutes) {
 }
 
 function getPortlessAppName() {
-  const activeRoutes = getActivePortlessRoutes();
-  const preferredAppName = getPreferredPortlessAppName(activeRoutes);
+  const activeRouteHosts = getActivePortlessRouteHosts();
+  const preferredAppName = getPreferredPortlessAppName(activeRouteHosts);
 
-  if (!isRouteBusy(activeRoutes, preferredAppName)) {
+  if (!isRouteBusy(activeRouteHosts, preferredAppName)) {
     return preferredAppName;
   }
 
   for (let suffix = 2; suffix < 1000; suffix += 1) {
     const candidate = `${preferredAppName}-${suffix}`;
 
-    if (!isRouteBusy(activeRoutes, candidate)) {
+    if (!isRouteBusy(activeRouteHosts, candidate)) {
       return candidate;
     }
   }
@@ -96,7 +97,7 @@ let publicUrl = null;
 if (command === portlessBin) {
   const appName = getPortlessAppName();
 
-  publicUrl = `http://${appName}.localhost:1355`;
+  publicUrl = `https://${appName}.localhost`;
   args = [appName, 'vite'];
 
   if (appName !== 'seedit') {
@@ -125,7 +126,7 @@ const child = spawn(command, args, {
 });
 
 if (publicUrl && process.env.BROWSER !== 'none') {
-  waitForHttpReady(publicUrl, 30_000)
+  waitForUrlReady(publicUrl, 30_000)
     .then(() => {
       console.log(`Opening ${publicUrl} in browser...`);
       openInBrowser(publicUrl);
@@ -144,16 +145,19 @@ child.on('exit', (code, signal) => {
   process.exit(code ?? 0);
 });
 
-async function waitForHttpReady(url, timeoutMs) {
+async function waitForUrlReady(url, timeoutMs) {
   const startedAt = Date.now();
 
   while (Date.now() - startedAt < timeoutMs) {
     const ready = await new Promise((resolve) => {
-      const request = get(url, (response) => {
+      const parsedUrl = new URL(url);
+      const getUrl = parsedUrl.protocol === 'https:' ? httpsGet : httpGet;
+      const onResponse = (response) => {
         response.resume();
         const statusCode = response.statusCode ?? 500;
         resolve(statusCode >= 200 && statusCode < 400);
-      });
+      };
+      const request = parsedUrl.protocol === 'https:' ? getUrl(parsedUrl, { rejectUnauthorized: false }, onResponse) : getUrl(parsedUrl, onResponse);
 
       request.on('error', () => resolve(false));
       request.setTimeout(2_000, () => {
@@ -174,9 +178,11 @@ async function waitForHttpReady(url, timeoutMs) {
 
 function openInBrowser(url) {
   const opener =
-    process.platform === 'darwin' ? { cmd: 'open', args: [url] }
-    : process.platform === 'win32' ? { cmd: 'cmd', args: ['/c', 'start', '""', url] }
-    : { cmd: 'xdg-open', args: [url] };
+    process.platform === 'darwin'
+      ? { cmd: 'open', args: [url] }
+      : process.platform === 'win32'
+        ? { cmd: 'cmd', args: ['/c', 'start', '""', url] }
+        : { cmd: 'xdg-open', args: [url] };
 
   spawn(opener.cmd, opener.args, { stdio: 'ignore', detached: true }).unref();
 }

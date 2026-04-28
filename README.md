@@ -43,11 +43,11 @@ The default list of communities, used on s/all on Seedit, is bitsocial's [defaul
 1. `yarn install` to install Seedit dependencies
 2. `yarn start` to run the web client
 
-The default web dev server runs at `http://seedit.localhost:1355` via [Portless](https://port1355.dev/), so it can share the same proxy as other Bitsocial projects without colliding on raw Vite ports. On non-`master` branches, or when another legacy process is already holding the canonical route, `yarn start` automatically uses a branch-scoped `*.seedit.localhost:1355` URL instead of failing, and repeated branch-scoped runs keep suffixing (`-2`, `-3`, ...) until they find a free route. To bypass Portless and use plain Vite directly, run `PORTLESS=0 yarn start`; it will probe from port `3000` unless you pin `PORT` yourself.
+The default web dev server runs at `https://seedit.localhost` via [Portless](https://github.com/vercel-labs/portless), so it can share the same proxy as other Bitsocial projects without colliding on raw Vite ports. On non-`master` branches, or when another legacy process is already holding the canonical route, `yarn start` automatically uses a branch-scoped `*.seedit.localhost` URL instead of failing, and repeated branch-scoped runs keep suffixing (`-2`, `-3`, ...) until they find a free route. To bypass Portless and use plain Vite directly, run `PORTLESS=0 yarn start`; it will probe from port `3000` unless you pin `PORT` yourself.
 
 ### Scripts:
 
-- Web client: `yarn start` (`http://seedit.localhost:1355`)
+- Web client: `yarn start` (`https://seedit.localhost`)
 - Electron client (must start web client first): `yarn electron`
 - Electron client and don't delete data: `yarn electron:no-delete-data`
 - Web client and electron client: `yarn electron:start` (forces `PORTLESS=0 PORT=3000` and uses `http://localhost:3000`)

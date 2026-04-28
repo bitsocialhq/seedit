@@ -16517,11 +16517,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"portless@npm:0.7.0":
-  version: 0.7.0
-  resolution: "portless@npm:0.7.0"
-  dependencies:
-    chalk: "npm:^5.3.0"
+"portless@npm:0.11.1":
+  version: 0.11.1
+  resolution: "portless@npm:0.11.1"
   bin:
     portless: dist/cli.js
   conditions: (os=darwin | os=linux | os=win32)
@@ -18004,7 +18002,7 @@ __metadata:
     node-fetch: "npm:2"
     oxfmt: "npm:0.24.0"
     oxlint: "npm:1.39.0"
-    portless: "npm:0.7.0"
+    portless: "npm:0.11.1"
     progress: "npm:2.0.3"
     react: "npm:19.1.2"
     react-ace: "npm:14.0.1"
