@@ -42,6 +42,22 @@ jobs:
       - name: Build Electron app for Linux (x64)
         if: ${{ matrix.arch == 'x64' }}
         run: yarn electron:build:linux:x64
+      - name: Create signed release manifest
+        if: ${{ matrix.arch == 'x64' }}
+        env:
+          RELEASE_MANIFEST_PRIVATE_KEY_PEM: ${{ secrets.RELEASE_MANIFEST_PRIVATE_KEY_PEM }}
+          RELEASE_MANIFEST_KEY_ID: seedit-release-p256-2026-05
+        run: |
+          VERSION=$(node -e "console.log(require('./package.json').version)")
+          HTML_ARCHIVE_DIR="seedit-html-$VERSION"
+          rm -rf "$HTML_ARCHIVE_DIR"
+          yarn release:manifest --build-dir build --out-dir dist
+          cp -R build "$HTML_ARCHIVE_DIR"
+          cp dist/seedit-release-manifest.json "$HTML_ARCHIVE_DIR/seedit-release-manifest.json"
+          cp dist/seedit-release-manifest.sig.json "$HTML_ARCHIVE_DIR/seedit-release-manifest.sig.json"
+          rm -f "dist/${HTML_ARCHIVE_DIR}.zip"
+          zip -r "dist/${HTML_ARCHIVE_DIR}.zip" "$HTML_ARCHIVE_DIR"
+          rm -rf "$HTML_ARCHIVE_DIR"
       - name: List dist directory
         run: ls dist
 
@@ -49,8 +65,17 @@ jobs:
       - name: Generate release body
         run: node scripts/release-body > release-body.txt
       - uses: ncipollo/release-action@v1
+        if: ${{ matrix.arch == 'x64' }}
         with:
-          artifacts: 'dist/seedit*.AppImage,dist/seedit*-arm64.AppImage,dist/seedit-html*.zip'
+          artifacts: 'dist/seedit*.AppImage,dist/seedit-html*.zip,dist/seedit-release-manifest.json,dist/seedit-release-manifest.sig.json'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          replacesArtifacts: true
+          omitBody: true
+          allowUpdates: true
+      - uses: ncipollo/release-action@v1
+        if: ${{ matrix.arch == 'arm64' }}
+        with:
+          artifacts: 'dist/seedit*-arm64.AppImage'
           token: ${{ secrets.GITHUB_TOKEN }}
           replacesArtifacts: true
           omitBody: true
