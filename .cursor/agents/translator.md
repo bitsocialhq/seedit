@@ -1,6 +1,6 @@
 ---
 name: translator
-model: composer-2
+model: composer-2.5-fast
 description: Translates a single i18next key into all 35 supported languages, creates a dictionary file, and runs the update script. Use proactively when the parent agent needs to translate one translation key.
 ---
 

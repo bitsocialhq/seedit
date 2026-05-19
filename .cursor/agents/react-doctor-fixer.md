@@ -1,6 +1,6 @@
 ---
 name: react-doctor-fixer
-model: composer-2
+model: composer-2.5-fast
 description: Fixes validated React architecture issues from a parent-agent plan. Use when the parent agent has identified a concrete React issue and provided a detailed fix plan.
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: browser-check
-model: composer-2
+model: composer-2.5-fast
 description: Verifies UI changes in the browser using playwright-cli across Blink, Gecko, and WebKit. Use after making visual or interaction changes to React components, CSS, layouts, or routing to confirm they render and behave correctly.
 ---
 
