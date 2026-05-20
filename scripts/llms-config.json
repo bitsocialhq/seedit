@@ -1,0 +1,33 @@
+{
+  "title": "Seedit",
+  "summary": "Seedit is a static, serverless, adminless, decentralized old.reddit-style client built on the Bitsocial protocol.",
+  "repoUrl": "https://github.com/bitsocialnet/seedit",
+  "llmsUrl": "https://seedit.app/llms.txt",
+  "llmsFullUrl": "https://seedit.app/llms-full.txt",
+  "shortOutputs": ["public/llms.txt"],
+  "fullOutputs": ["public/llms-full.txt"],
+  "links": [
+    ["App", "https://seedit.app"],
+    ["Repository", "https://github.com/bitsocialnet/seedit"],
+    ["Releases", "https://github.com/bitsocialnet/seedit/releases/latest"],
+    ["Bitsocial protocol", "https://bitsocial.net"]
+  ],
+  "notes": [
+    "Seedit is a client for Bitsocial communities, not a centralized forum backend.",
+    "Community owners create, host, and moderate their own communities.",
+    "The web app uses hash routing and a static app-shell deployment model.",
+    "For code contributions, AGENTS.md and directory-specific AGENTS.md files are the source of truth."
+  ],
+  "docs": [
+    "README.md",
+    "AGENTS.md",
+    "src/AGENTS.md",
+    "scripts/AGENTS.md",
+    "docs/agent-playbooks/known-surprises.md",
+    "docs/agent-playbooks/long-running-agent-workflow.md",
+    "docs/agent-playbooks/bug-investigation.md",
+    "docs/agent-playbooks/translations.md",
+    "docs/agent-playbooks/skills-and-tools.md"
+  ],
+  "optionalDocs": ["CHANGELOG.md"]
+}
