@@ -11,6 +11,7 @@ i18next
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
+    showSupportNotice: false,
     supportedLngs: [
       'ar',
       'bn',
