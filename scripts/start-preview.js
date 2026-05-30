@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import {
   ensurePortlessProxy,
   fallbackHost,
@@ -9,13 +9,24 @@ import {
   openInBrowser,
   portlessBin,
   portlessEnv,
+  usePortless,
   waitForUrlReady,
 } from './local-server-utils.mjs';
 import { resolvePort } from './dev-server-utils.mjs';
 
-const fallbackRequestedPort = Number(process.env.PORT) || 3000;
+const fallbackRequestedPort = Number(process.env.PORT) || 4173;
 
-console.log('Note: yarn start runs Vite/React in development mode. Use yarn start:preview for production-like local performance checks.');
+console.log('Building production preview with corepack yarn build...');
+
+const build = spawnSync('corepack', ['yarn', 'build'], {
+  cwd: process.cwd(),
+  env: process.env,
+  stdio: 'inherit',
+});
+
+if (build.status !== 0) {
+  process.exit(build.status ?? 1);
+}
 
 const command = getLocalServerCommand();
 let args;
@@ -26,25 +37,23 @@ if (command === portlessBin) {
   const appName = getPortlessAppName();
 
   publicUrl = `https://${appName}.localhost`;
-  args = [appName, 'vite'];
+  args = [appName, 'vite', 'preview'];
 
-  if (appName !== 'seedit') {
-    console.log(`Starting Portless dev server at ${publicUrl}`);
-  }
+  console.log(`Starting Portless production preview at ${publicUrl}`);
 } else {
   const port = await resolvePort(fallbackRequestedPort, fallbackHost);
   const fallbackUrl = `http://${fallbackUrlHost}:${port}`;
 
-  args = ['--host', fallbackHost, '--port', String(port), '--strictPort'];
+  args = ['preview', '--host', fallbackHost, '--port', String(port), '--strictPort'];
 
-  if (command !== portlessBin && process.env.PORTLESS !== '0') {
-    console.warn(`portless unavailable on this platform, using vite directly on ${fallbackUrl}`);
+  if (usePortless) {
+    console.warn(`portless unavailable on this platform, using vite preview directly on ${fallbackUrl}`);
   } else {
-    console.log(`Starting Vite directly at ${fallbackUrl}`);
+    console.log(`Starting Vite production preview directly at ${fallbackUrl}`);
   }
 
   if (port !== fallbackRequestedPort) {
-    console.log(`Preferred port ${fallbackRequestedPort} is busy, so this run will use ${fallbackUrl}.`);
+    console.log(`Preferred preview port ${fallbackRequestedPort} is busy, so this run will use ${fallbackUrl}.`);
   }
 }
 
