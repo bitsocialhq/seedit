@@ -1,6 +1,6 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/bitsocialhq/seedit/test.yml?branch=master)](https://github.com/bitsocialhq/seedit/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/bitsocialhq/seedit)](https://github.com/bitsocialhq/seedit/releases/latest)
-[![License](https://img.shields.io/badge/license-GPL--2.0--only-red.svg)](https://github.com/bitsocialhq/seedit/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](https://github.com/bitsocialhq/seedit/blob/master/LICENSE)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 <img src="https://github.com/plebeius-eth/assets/blob/main/seedit-logo.png" width="302" height="111">
