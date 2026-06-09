@@ -79,7 +79,7 @@ export const FAQ = () => {
           content of each community, and it can be much faster and cheaper, scaling to millions of communities and users.
           <br />
           <br />
-          Seedit is free and open source software under GPL-2.0 license, you can check the source code{' '}
+          Seedit is free and open source software under the GPL-3.0-or-later license, you can check the source code{' '}
           <a href='https://github.com/bitsocialhq/seedit' target='_blank' rel='noopener noreferrer'>
             here
           </a>
