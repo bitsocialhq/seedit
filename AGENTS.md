@@ -44,6 +44,7 @@ Compiled context:
 - `docs/agent-playbooks/**`, `docs/agent-runs/**`, `docs/agent-playbooks/known-surprises.md`, and tracked `llms.txt` / `llms-full.txt` files when present.
 
 Agents may use compiled context to navigate quickly, but must verify against source files before making behavioral claims or edits. External code graph, RAG, MCP, or wiki tools are optional local accelerators unless the developer explicitly asks to make one part of the committed workflow.
+For very large non-source artifacts such as CI logs, debug traces, generated JSON, or massive tool output, contributors may optionally use `chopratejas/headroom` or a similar local compression tool as a navigation aid, but agents must verify conclusions against the original uncompressed artifact before editing code or making final claims.
 When CodeGraph MCP tools are available and `.codegraph/` exists, prefer them for initial symbol lookup, caller/callee tracing, and impact analysis before broad `rg` or file-reading sweeps; still verify important claims against source files before editing or reporting conclusions.
 
 ## Task Router (Read First)

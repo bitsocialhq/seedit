@@ -9656,9 +9656,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deslop-js@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "deslop-js@npm:0.0.14"
+"deslop-js@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "deslop-js@npm:0.0.19"
   dependencies:
     "@oxc-project/types": "npm:^0.132.0"
     fast-glob: "npm:^3.3.3"
@@ -9666,7 +9666,7 @@ __metadata:
     oxc-parser: "npm:^0.132.0"
     oxc-resolver: "npm:^11.19.1"
     typescript: "npm:^6.0.3"
-  checksum: 10c0/21f5d00c7d46032059756b1a7ebd99b560b67ca557646677b4c2c2a5a9f0ff19eb90a53f538edda9692faeb9f6c3afcbf856f669ac5037889319fd3c1c9fe32f
+  checksum: 10c0/79e1da39b79d68e0f4531c00ccfc1577991c211994b31688e3d8b06ca2b7928859f6947b4e37297dbfc1d29159cf55dd914a987ae404703657e6af207c865fdc
   languageName: node
   linkType: hard
 
@@ -16776,15 +16776,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxlint-plugin-react-doctor@npm:0.2.16":
-  version: 0.2.16
-  resolution: "oxlint-plugin-react-doctor@npm:0.2.16"
+"oxlint-plugin-react-doctor@npm:0.4.0":
+  version: 0.4.0
+  resolution: "oxlint-plugin-react-doctor@npm:0.4.0"
   dependencies:
     "@typescript-eslint/types": "npm:^8.59.3"
     eslint-scope: "npm:^9.1.2"
     eslint-visitor-keys: "npm:^5.0.1"
     oxc-parser: "npm:^0.132.0"
-  checksum: 10c0/5abfe3cd6b295f235efee4fff89ff4dc99c50569e23e89b403c71cf3aeb1f563aa5a8244acff02990e215b50eae0bba46a53781454da697d2085c9844b65b943
+  checksum: 10c0/eaee9bd75aaf75c855d06af4ab3196b6388fc6f8e73cb4725e4f816c0e9a8e2f078adf02e5f99e6733e81df98dce75118140c962d27a16671c687cbaa94d1bfc
   languageName: node
   linkType: hard
 
@@ -17960,9 +17960,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-doctor@npm:0.2.16":
-  version: 0.2.16
-  resolution: "react-doctor@npm:0.2.16"
+"react-doctor@npm:0.4.0":
+  version: 0.4.0
+  resolution: "react-doctor@npm:0.4.0"
   dependencies:
     "@babel/code-frame": "npm:^7.29.0"
     "@effect/platform-node-shared": "npm:4.0.0-beta.70"
@@ -17970,18 +17970,21 @@ __metadata:
     agent-install: "npm:0.0.5"
     conf: "npm:^15.1.0"
     confbox: "npm:^0.2.4"
-    deslop-js: "npm:^0.0.14"
+    deslop-js: "npm:^0.0.19"
     effect: "npm:4.0.0-beta.70"
     eslint-plugin-react-hooks: "npm:^7.1.1"
     jiti: "npm:^2.7.0"
     magicast: "npm:^0.5.3"
     oxlint: "npm:^1.66.0"
-    oxlint-plugin-react-doctor: "npm:0.2.16"
+    oxlint-plugin-react-doctor: "npm:0.4.0"
     prompts: "npm:^2.4.2"
     typescript: "npm:>=5.0.4 <7"
+    vscode-languageserver: "npm:^9.0.1"
+    vscode-languageserver-textdocument: "npm:^1.0.12"
+    vscode-uri: "npm:^3.1.0"
   bin:
     react-doctor: bin/react-doctor.js
-  checksum: 10c0/118f0fc7660697e50155145b24c213cba5a320cde488c2166ac9836fdce564c3f4e273943938584e04c5bca6d3a21a9213b19e597c0717642eb1610c3eb6defd
+  checksum: 10c0/db7f773e3eb7d165b95f5f8f1388176f2a0065341219a38938648bf795bdf041c0264b8ffa72a4b7943c640ccf8169764f8988084c5997f67735cd67f1a66a45
   languageName: node
   linkType: hard
 
@@ -19022,7 +19025,7 @@ __metadata:
     progress: "npm:2.0.3"
     react: "npm:19.1.2"
     react-ace: "npm:14.0.1"
-    react-doctor: "npm:0.2.16"
+    react-doctor: "npm:0.4.0"
     react-dom: "npm:19.1.2"
     react-dropzone: "npm:14.3.8"
     react-grab: "npm:0.1.37"
@@ -21483,6 +21486,55 @@ __metadata:
   version: 3.1.0
   resolution: "void-elements@npm:3.1.0"
   checksum: 10c0/0b8686f9f9aa44012e9bd5eabf287ae0cde409b9a2854c5a2335cb83920c957668ac5876e3f0d158dd424744ac411a7270e64128556b451ed3bec875ef18534d
+  languageName: node
+  linkType: hard
+
+"vscode-jsonrpc@npm:8.2.0":
+  version: 8.2.0
+  resolution: "vscode-jsonrpc@npm:8.2.0"
+  checksum: 10c0/0789c227057a844f5ead55c84679206227a639b9fb76e881185053abc4e9848aa487245966cc2393fcb342c4541241b015a1a2559fddd20ac1e68945c95344e6
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver-protocol@npm:3.17.5":
+  version: 3.17.5
+  resolution: "vscode-languageserver-protocol@npm:3.17.5"
+  dependencies:
+    vscode-jsonrpc: "npm:8.2.0"
+    vscode-languageserver-types: "npm:3.17.5"
+  checksum: 10c0/5f38fd80da9868d706eaa4a025f4aff9c3faad34646bcde1426f915cbd8d7e8b6c3755ce3fef6eebd256ba3145426af1085305f8a76e34276d2e95aaf339a90b
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver-textdocument@npm:^1.0.12":
+  version: 1.0.13
+  resolution: "vscode-languageserver-textdocument@npm:1.0.13"
+  checksum: 10c0/1de174f1de3bfa9e1660a4b3c1b1c711497196d761e33f4d00785fdbfc556ae5a1f440db04771cbc0f6bd66c2a6f303062bc17d8dc46e76820e39fa2d5626564
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver-types@npm:3.17.5":
+  version: 3.17.5
+  resolution: "vscode-languageserver-types@npm:3.17.5"
+  checksum: 10c0/1e1260de79a2cc8de3e46f2e0182cdc94a7eddab487db5a3bd4ee716f67728e685852707d72c059721ce500447be9a46764a04f0611e94e4321ffa088eef36f8
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "vscode-languageserver@npm:9.0.1"
+  dependencies:
+    vscode-languageserver-protocol: "npm:3.17.5"
+  bin:
+    installServerIntoExtension: bin/installServerIntoExtension
+  checksum: 10c0/8a0838d77c98a211c76e54bd3a6249fc877e4e1a73322673fb0e921168d8e91de4f170f1d4ff7e8b6289d0698207afc6aba6662d4c1cd8e4bd7cae96afd6b0c2
+  languageName: node
+  linkType: hard
+
+"vscode-uri@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "vscode-uri@npm:3.1.0"
+  checksum: 10c0/5f6c9c10fd9b1664d71fab4e9fbbae6be93c7f75bb3a1d9d74399a88ab8649e99691223fd7cef4644376cac6e94fa2c086d802521b9a8e31c5af3e60f0f35624
   languageName: node
   linkType: hard
 

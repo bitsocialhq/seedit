@@ -4,7 +4,7 @@
   "description": "A bitsocial client with an old.reddit UI",
   "author": "Bitsocial Labs",
   "type": "module",
-  "license": "GPL-2.0-only",
+  "license": "GPL-3.0-or-later",
   "private": true,
   "packageManager": "yarn@4.13.0",
   "dependencies": {
@@ -141,7 +141,7 @@
     "oxfmt": "0.24.0",
     "oxlint": "1.39.0",
     "progress": "2.0.3",
-    "react-doctor": "0.2.16",
+    "react-doctor": "0.4.0",
     "react-grab": "0.1.37",
     "react-scan": "0.5.3",
     "stream-browserify": "3.0.0",
