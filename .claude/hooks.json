@@ -31,6 +31,10 @@
         "timeout": 10
       },
       {
+        "command": ".claude/hooks/code-quality-review-reminder.sh",
+        "timeout": 10
+      },
+      {
         "command": ".claude/hooks/verify.sh",
         "timeout": 60
       }

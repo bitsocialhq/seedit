@@ -25,6 +25,10 @@
         "timeout": 10
       },
       {
+        "command": ".codex/hooks/code-quality-review-reminder.sh",
+        "timeout": 10
+      },
+      {
         "command": ".codex/hooks/verify.sh",
         "timeout": 60
       }
