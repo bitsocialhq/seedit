@@ -1,36 +1,51 @@
 {
-  "version": 1,
   "hooks": {
-    "afterFileEdit": [
+    "PostToolUse": [
       {
-        "command": ".codex/hooks/format.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".codex/hooks/yarn-install.sh",
-        "timeout": 120
-      },
-      {
-        "command": ".codex/hooks/react-pattern-review.sh",
-        "timeout": 10
+        "matcher": "Edit|Write|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/format.sh\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/yarn-install.sh\"",
+            "timeout": 120
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/react-pattern-review.sh\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
-    "stop": [
+    "Stop": [
       {
-        "command": ".codex/hooks/sync-git-branches.sh",
-        "timeout": 60
-      },
-      {
-        "command": ".codex/hooks/react-pattern-review.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".codex/hooks/code-quality-review-reminder.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".codex/hooks/verify.sh",
-        "timeout": 60
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/sync-git-branches.sh\"",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/react-pattern-review.sh\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/code-quality-review-reminder.sh\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/verify.sh\"",
+            "timeout": 60
+          }
+        ]
       }
     ]
   }
