@@ -2,18 +2,7 @@
 // used as /s/<code> routes. They resolve at read time to the winning candidate community
 // of the matching seedit directory list; the stored subscription is never rewritten.
 
-export const SEEDIT_DIRECTORY_CODES = [
-  'askseedit',
-  'memes',
-  'news',
-  'pics',
-  'todayilearned',
-  'interestingasfuck',
-  'gaming',
-  'videos',
-  'funny',
-  'aww',
-] as const;
+export const SEEDIT_DIRECTORY_CODES = ['askseedit', 'memes', 'news', 'pics', 'todayilearned', 'interestingasfuck', 'gaming', 'videos', 'funny', 'aww'] as const;
 
 const DIRECTORY_CODES_SET: ReadonlySet<string> = new Set(SEEDIT_DIRECTORY_CODES);
 

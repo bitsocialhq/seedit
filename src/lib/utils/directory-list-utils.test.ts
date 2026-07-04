@@ -11,11 +11,7 @@ const neverOffline = () => false;
 
 describe('sortDirectoryCommunitiesByRank', () => {
   it('sorts by score descending first', () => {
-    const communities: DirectoryListCommunity[] = [
-      { address: 'low.eth', score: 1 },
-      { address: 'high.eth', score: 10 },
-      { address: 'unscored.eth' },
-    ];
+    const communities: DirectoryListCommunity[] = [{ address: 'low.eth', score: 1 }, { address: 'high.eth', score: 10 }, { address: 'unscored.eth' }];
     expect(sortDirectoryCommunitiesByRank(communities).map((community) => community.address)).toEqual(['high.eth', 'low.eth', 'unscored.eth']);
   });
 
