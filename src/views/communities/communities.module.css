@@ -186,7 +186,7 @@
   font-size: x-small;
   color: var(--text);
   text-transform: lowercase;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .moderatorIcon {

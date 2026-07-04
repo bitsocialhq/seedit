@@ -52,7 +52,7 @@ a {
   margin-top: 2px;
   font-size: 11px;
   color: var(--text);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .directorySubscribeOnly {
