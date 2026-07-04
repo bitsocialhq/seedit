@@ -1,4 +1,5 @@
-# plebbit temp files
+# local pkc temp files (and legacy plebbit dir)
+.pkc
 .plebbit
 bin
 .env
