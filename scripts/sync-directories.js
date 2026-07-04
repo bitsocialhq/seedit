@@ -18,7 +18,10 @@ const DIRECTORIES_SOURCE_PATH = process.env.DIRECTORIES_SOURCE_PATH;
 const OUTPUT_DIR = join(__dirname, '..', 'src', 'data', 'seedit-directories');
 const TIMEOUT_MS = 5000;
 
-const isJsonFile = (fileName) => typeof fileName === 'string' && fileName.endsWith('.json');
+// Only accept flat *.json basenames: names come from the remote GitHub listing and are
+// joined into OUTPUT_DIR writes, so reject anything with path separators or traversal.
+const isJsonFile = (fileName) =>
+  typeof fileName === 'string' && fileName.endsWith('.json') && !fileName.includes('/') && !fileName.includes('\\') && !fileName.includes('..');
 const isRecord = (value) => typeof value === 'object' && value !== null;
 const getErrorMessage = (error) => (error instanceof Error ? error.message : String(error));
 const getSourceLabel = () => {
