@@ -48,6 +48,22 @@ a {
   margin-top: 5px;
 }
 
+.directoryNotice {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text);
+  word-wrap: break-word;
+}
+
+.directorySubscribeOnly {
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.directorySubscribeOnly:hover {
+  text-decoration: underline;
+}
+
 .subscribeButton {
   margin-right: 5px;
 }

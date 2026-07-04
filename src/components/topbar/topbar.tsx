@@ -5,12 +5,23 @@ import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-ho
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import { useDefaultSubscriptionAddresses, useDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
+import { useDefaultSubscriptions, useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
+import { isDirectoryCode, isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import { handleNSFWSubscriptionPrompt } from '../../lib/utils/nsfw-subscription-utils';
 import styles from './topbar.module.css';
+
+// Directory-code subscriptions (e.g. "memes") have no dot and are shorter than raw public
+// keys, so getShortAddress would return an empty string for them; show the code itself.
+const getSubscriptionDisplayName = (subscription: string) => {
+  if (isDirectoryCode(subscription)) {
+    return subscription;
+  }
+  const shortAddress = getShortAddress(subscription);
+  return shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
+};
 
 const CommunitiesDropdown = () => {
   const { t } = useTranslation();
@@ -42,7 +53,7 @@ const CommunitiesDropdown = () => {
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
         {reversedSubscriptions?.map((subscription: string, index: number) => (
           <Link key={index} to={`/s/${subscription}`} className={styles.dropdownItem}>
-            {getShortAddress(subscription)}
+            {getSubscriptionDisplayName(subscription)}
           </Link>
         ))}
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
@@ -291,7 +302,7 @@ const TopBar = memo(() => {
   const homeButtonClass = isInHomeView ? styles.selected : styles.choice;
 
   const { hideDefaultCommunities } = useContentOptionsStore();
-  const communityAddresses = useDefaultSubscriptionAddresses();
+  const defaultCommunities = useFilteredDefaultSubscriptions();
   const { accountCommunities } = useAccountCommunities();
   const accountCommunityAddresses = useMemo(() => Object.keys(accountCommunities), [accountCommunities]);
 
@@ -299,7 +310,20 @@ const TopBar = memo(() => {
   const subscriptions = useMemo(() => account?.subscriptions, [account?.subscriptions]);
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
 
-  const filteredCommunityAddresses = useMemo(() => communityAddresses?.filter((address) => !subscriptions?.includes(address)), [communityAddresses, subscriptions]);
+  // Hide defaults the user already follows, either by direct address or via the
+  // matching directory-code subscription (which resolves to the same community).
+  const filteredCommunityAddresses = useMemo(
+    () =>
+      defaultCommunities
+        .filter(
+          (defaultCommunity) =>
+            isResolvableCommunityAddress(defaultCommunity.address) &&
+            !subscriptions?.includes(defaultCommunity.address) &&
+            !(defaultCommunity.directoryCode && subscriptions?.includes(defaultCommunity.directoryCode)),
+        )
+        .map((defaultCommunity) => defaultCommunity.address),
+    [defaultCommunities, subscriptions],
+  );
 
   return (
     <div className={styles.headerArea}>
@@ -331,8 +355,7 @@ const TopBar = memo(() => {
             )}
             {subscriptions?.length > 0 && <span className={styles.separator}> | </span>}
             {reversedSubscriptions?.map((subscription: string, index: number) => {
-              const shortAddress = getShortAddress(subscription);
-              const displayAddress = shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
+              const displayAddress = getSubscriptionDisplayName(subscription);
               return (
                 <li key={index}>
                   {index !== 0 && <span className={styles.separator}>-</span>}

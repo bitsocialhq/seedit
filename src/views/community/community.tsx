@@ -13,6 +13,8 @@ import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
+import { useResolvedCommunityAddress } from '../../hooks/use-resolved-community-address';
+import { isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
@@ -220,14 +222,21 @@ const CommunityView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
-  const communityAddress = params?.communityAddress || '';
-  const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  // /s/<code> directory routes resolve to the winning candidate community's address;
+  // /s/<address> routes pass through unchanged.
+  const rawCommunityIdentifier = params?.communityAddress || '';
+  const { communityAddress: resolvedCommunityAddress, isDirectory } = useResolvedCommunityAddress();
+  const communityAddress = (isDirectory ? resolvedCommunityAddress : rawCommunityIdentifier) || '';
+  // Placeholder candidates from not-yet-populated directory lists cannot be loaded; skip
+  // loading so the page degrades to the offline state instead of erroring.
+  const canLoadCommunity = !!communityAddress && isResolvableCommunityAddress(communityAddress);
+  const subplebbit = useCommunity(canLoadCommunity ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
   const { isOffline } = useIsCommunityOffline(subplebbit || {});
   const isOnline = !isOffline;
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
-  const communityAddresses = useMemo(() => [communityAddress], [communityAddress]) as string[];
+  const communityAddresses = useMemo(() => (canLoadCommunity ? [communityAddress] : []), [canLoadCommunity, communityAddress]) as string[];
   const sortType = sortTypes.includes(params?.sortType || '') ? params?.sortType : sortTypes[0];
 
   useEffect(() => {
@@ -351,8 +360,8 @@ const CommunityView = () => {
 
   // page title
   useEffect(() => {
-    document.title = title ? title : shortAddress || communityAddress;
-  }, [title, shortAddress, communityAddress]);
+    document.title = title ? title : shortAddress || rawCommunityIdentifier || communityAddress;
+  }, [title, shortAddress, rawCommunityIdentifier, communityAddress]);
 
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);

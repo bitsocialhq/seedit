@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
+import { useExpandedSubscriptions } from '../../hooks/use-expanded-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -23,10 +24,12 @@ type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
 const Home = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const communityAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
+  // Directory-code subscriptions resolve to their winning community's address at read time;
+  // plain address subscriptions pass through. The raw entries drive the empty-state logic.
+  const { subscriptions, addresses: communityAddresses, isResolvingDirectories } = useExpandedSubscriptions();
   const { isCheckingAccount } = useAutoSubscribeStore();
   const accountAddress = account?.author?.address;
-  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress);
+  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress) || isResolvingDirectories;
 
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -263,7 +266,10 @@ const Home = () => {
       return;
     }
 
-    if (communityAddresses.length > 0 || feed?.length > 0) {
+    // Base the empty state on the raw subscription entries (codes included), not the
+    // expanded addresses: a subscribed directory whose candidates are all unresolvable
+    // still counts as a subscription and must not flash the "no subscriptions" state.
+    if (subscriptions.length > 0 || feed?.length > 0) {
       setSubscriptionState('hasSubscriptions');
       return;
     }
@@ -273,12 +279,12 @@ const Home = () => {
       return;
     }
 
-    if (!isCheckingSubscriptions && feed?.length === 0 && communityAddresses.length === 0 && safeToShowNoSubscriptions) {
+    if (!isCheckingSubscriptions && feed?.length === 0 && subscriptions.length === 0 && safeToShowNoSubscriptions) {
       setSubscriptionState('noSubscriptions');
     } else {
       setSubscriptionState('loading');
     }
-  }, [isCheckingSubscriptions, communityAddresses, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
+  }, [isCheckingSubscriptions, subscriptions, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
 
   return (
     <div>
