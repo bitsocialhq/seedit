@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { SEEDIT_DIRECTORY_CODES, expandSubscriptionAddresses, isDirectoryCode, isResolvableCommunityAddress } from './directory-codes';
+import vendoredDirectoryDefaults from '../../data/seedit-directories/seedit-directories-defaults.json';
 
 describe('isDirectoryCode', () => {
   it('accepts every known directory code', () => {
     for (const code of SEEDIT_DIRECTORY_CODES) {
       expect(isDirectoryCode(code)).toBe(true);
     }
+  });
+
+  it('stays in sync with the vendored directory defaults (guards against drift)', () => {
+    expect([...SEEDIT_DIRECTORY_CODES].sort()).toEqual(Object.keys(vendoredDirectoryDefaults.directories).sort());
   });
 
   it('rejects reserved route words', () => {
