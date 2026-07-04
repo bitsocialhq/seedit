@@ -4,9 +4,10 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
+      "address": "funny-posting.bso",
       "addedAt": 1783123200,
-      "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP"
+      "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
+      "owner": "plebeius.bso"
     }
   ]
 }

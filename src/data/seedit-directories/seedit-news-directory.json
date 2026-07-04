@@ -4,9 +4,10 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5",
+      "address": "news-posting.bso",
       "addedAt": 1783123200,
-      "publicKey": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5"
+      "publicKey": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5",
+      "owner": "plebeius.bso"
     }
   ]
 }
