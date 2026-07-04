@@ -201,50 +201,49 @@ export const useDirectoryList = (directoryCode: string | undefined): DirectoryLi
   return state;
 };
 
+// Seed synchronously from cache/localStorage/vendored data so consumers (e.g.
+// useDirectoryWinners) never see an empty first render: only the network fetch is async.
+const computeInitialDirectoryListsState = (directoryCodesKey: string): DirectoryListsState => {
+  const codes = directoryCodesKey ? directoryCodesKey.split('\0') : [];
+  return codes.reduce<DirectoryListsState>(
+    (acc, directoryCode) => {
+      const cached = moduleCaches.get(directoryCode);
+      const local = cached ? null : getFromLocalStorage(directoryCode);
+      const list = cached ?? local ?? getVendoredDirectoryList(directoryCode);
+
+      if (local) {
+        moduleCaches.set(directoryCode, local);
+      }
+
+      acc.listsByCode[directoryCode] = list;
+      acc.loadingByCode[directoryCode] = !cached && !local;
+      acc.errorsByCode[directoryCode] = null;
+      return acc;
+    },
+    {
+      listsByCode: {},
+      loadingByCode: {},
+      errorsByCode: {},
+    },
+  );
+};
+
 export const useDirectoryLists = (directoryCodes: string[] | undefined): DirectoryListsState => {
   const directoryCodesKey = useMemo(() => [...new Set(directoryCodes ?? [])].join('\0'), [directoryCodes]);
 
-  const [state, setState] = useState<DirectoryListsState>({
-    listsByCode: {},
-    loadingByCode: {},
-    errorsByCode: {},
-  });
+  const [state, setState] = useState<DirectoryListsState>(() => computeInitialDirectoryListsState(directoryCodesKey));
 
   useEffect(() => {
     const normalizedDirectoryCodes = directoryCodesKey ? directoryCodesKey.split('\0') : [];
+
+    // Re-seed for the current codes (no-op on first mount, where useState already seeded).
+    setState(computeInitialDirectoryListsState(directoryCodesKey));
+
     if (normalizedDirectoryCodes.length === 0) {
-      setState({
-        listsByCode: {},
-        loadingByCode: {},
-        errorsByCode: {},
-      });
       return;
     }
 
     let isMounted = true;
-    const initialState = normalizedDirectoryCodes.reduce<DirectoryListsState>(
-      (acc, directoryCode) => {
-        const cached = moduleCaches.get(directoryCode);
-        const local = cached ? null : getFromLocalStorage(directoryCode);
-        const list = cached ?? local ?? getVendoredDirectoryList(directoryCode);
-
-        if (local) {
-          moduleCaches.set(directoryCode, local);
-        }
-
-        acc.listsByCode[directoryCode] = list;
-        acc.loadingByCode[directoryCode] = !cached && !local;
-        acc.errorsByCode[directoryCode] = null;
-        return acc;
-      },
-      {
-        listsByCode: {},
-        loadingByCode: {},
-        errorsByCode: {},
-      },
-    );
-
-    setState(initialState);
 
     normalizedDirectoryCodes.forEach((directoryCode) => {
       fetchDirectoryListDeduped(directoryCode)
