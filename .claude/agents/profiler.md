@@ -17,7 +17,7 @@ You receive from the parent agent:
 
 ## How It Works
 
-The app loads `react-scan` in dev mode via the Vite plugin in `vite.config.js`. When the report API is available, `window.__getReactScanReport()` returns per-component render counts and times: `{ ComponentName: { count, time } }`; if it is not exposed, fall back to commit counts.
+The app loads `react-scan` in dev mode via `src/lib/react-scan.ts`, imported in the entry file `src/index.tsx`. When the report API is available, `window.__getReactScanReport()` returns per-component render counts and times: `{ ComponentName: { count, time } }`; if it is not exposed, fall back to commit counts.
 
 The profiler's `addInitScript` also intercepts `__REACT_DEVTOOLS_GLOBAL_HOOK__` to count React commits independently (works even if react-scan is not loaded).
 

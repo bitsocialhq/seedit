@@ -16,7 +16,7 @@ Two-layer profiling: browser-level symptoms (Web Vitals, long tasks, scroll jank
 
 ### react-scan (already configured)
 
-The app has `react-scan` set up in `src/lib/react-scan.ts` with `report: true`. In dev mode it:
+The app has `react-scan` set up in `src/lib/react-scan.ts`, imported in the entry file `src/index.tsx`. In dev mode it:
 - Highlights rerendering components visually (toolbar + overlay)
 - Tracks per-component render counts and times internally
 - Exposes `window.__getReactScanReport()` for programmatic collection
