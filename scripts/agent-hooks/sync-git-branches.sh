@@ -45,6 +45,7 @@ branch_has_live_upstream() {
 merged_pr_number_for_branch() {
   local branch="$1"
   local pr_number=""
+  local merged_at=""
 
   if ! command -v gh >/dev/null 2>&1; then
     return 0
@@ -60,7 +61,10 @@ merged_pr_number_for_branch() {
   esac
 
   if [ -n "$pr_number" ]; then
-    gh pr view "$pr_number" --repo bitsocialnet/seedit --json mergedAt --jq 'select(.mergedAt != null) | .mergedAt' >/dev/null 2>&1 || return 0
+    # gh exits 0 even when the PR exists but is unmerged (the jq select just
+    # produces no output), so test the output instead of the exit code.
+    merged_at="$(gh pr view "$pr_number" --repo bitsocialnet/seedit --json mergedAt --jq 'select(.mergedAt != null) | .mergedAt' 2>/dev/null || true)"
+    [ -n "$merged_at" ] || return 0
     echo "$pr_number"
     return 0
   fi
