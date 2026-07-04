@@ -1,0 +1,96 @@
+{
+  "title": "Seedit Directory Defaults",
+  "description": "Expected Seedit UX defaults by directory code. These defaults apply to the directory, not to individual candidate communities.",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "directories": {
+    "askseedit": {
+      "directoryCode": "askseedit",
+      "title": "AskSeedit",
+      "description": "Ask the Seedit community anything: thought-provoking and open-ended questions.",
+      "tags": [
+        "questions",
+        "discussion"
+      ]
+    },
+    "memes": {
+      "directoryCode": "memes",
+      "title": "Memes",
+      "description": "Memes of all kinds. A way of describing cultural information being shared.",
+      "tags": [
+        "memes",
+        "humor"
+      ]
+    },
+    "news": {
+      "directoryCode": "news",
+      "title": "News",
+      "description": "News from around the world: current events, politics and everything in between.",
+      "tags": [
+        "news",
+        "world"
+      ]
+    },
+    "pics": {
+      "directoryCode": "pics",
+      "title": "Pics",
+      "description": "A place for photographs, pictures, and other images.",
+      "tags": [
+        "pictures",
+        "photography"
+      ]
+    },
+    "todayilearned": {
+      "directoryCode": "todayilearned",
+      "title": "Today I Learned",
+      "description": "You learn something new every day; what did you learn today?",
+      "tags": [
+        "learning",
+        "facts"
+      ]
+    },
+    "interestingasfuck": {
+      "directoryCode": "interestingasfuck",
+      "title": "Interesting As Fuck",
+      "description": "For anything that is InterestingAsFuck.",
+      "tags": [
+        "interesting"
+      ]
+    },
+    "gaming": {
+      "directoryCode": "gaming",
+      "title": "Gaming",
+      "description": "A community for (almost) anything related to games: video games, board games, card games, and so on.",
+      "tags": [
+        "gaming",
+        "videogames"
+      ]
+    },
+    "videos": {
+      "directoryCode": "videos",
+      "title": "Videos",
+      "description": "The best place for video content of all kinds.",
+      "tags": [
+        "videos"
+      ]
+    },
+    "funny": {
+      "directoryCode": "funny",
+      "title": "Funny",
+      "description": "Seedit's largest humour depository.",
+      "tags": [
+        "humor",
+        "funny"
+      ]
+    },
+    "aww": {
+      "directoryCode": "aww",
+      "title": "Aww",
+      "description": "Things that make you go AWW! Like puppies, bunnies, babies, and so on.",
+      "tags": [
+        "animals",
+        "cute"
+      ]
+    }
+  }
+}
