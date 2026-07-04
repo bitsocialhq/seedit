@@ -1,6 +1,38 @@
 # Skills and Tools
 
-Use this playbook when setting up/adjusting skills and external tooling.
+Use this playbook when setting up/adjusting skills and external tooling, or to discover what is already committed.
+
+## Committed Skills Index
+
+These live in `.claude/skills/`, `.cursor/skills/`, and `.codex/skills/` (mirrored; run `yarn ai-workflow:check` after edits). No install needed — prefer them over re-implementing the flow by hand.
+
+| Skill | Use when |
+|---|---|
+| `commit` | Committing current work (splits into logical scoped commits) |
+| `commit-format` / `issue-format` | Formatting commit/issue *suggestions* in chat output |
+| `make-closed-issue` | Creating an issue + branch + PR into `master` for already-done work |
+| `review-and-merge-pr` | Triaging bot/human PR feedback, fixing, merging, finalizing issues |
+| `fix-merge-conflicts` | Resolving merge conflicts non-interactively and validating the build |
+| `release` / `release-description` | Cutting a release / updating the release one-liner |
+| `code-quality-review` | Advisory pre-push/pre-PR quality pass on the current diff |
+| `refactor-pass` | Simplicity-focused refactor of recent changes |
+| `deslop` | Removing AI-generated slop from the branch diff |
+| `debug-agent` | Evidence-based debugging with runtime NDJSON logs |
+| `you-might-not-need-an-effect` | Auditing/refactoring `useEffect` anti-patterns |
+| `vercel-react-best-practices` | React performance review rules (vendored from Vercel) |
+| `translate` | i18next key changes across all 35 languages (spawns `translator` subagents) |
+| `playwright-cli` | Browser automation and cross-engine UI verification |
+| `inspect-elements` | Mapping a live DOM node to its React source file/component stack |
+| `profile-browsing` | Web Vitals + react-scan rerender profiling (spawns `profiler` subagents) |
+| `test-apk` | Android emulator APK testing (spawns the `test-apk` subagent) |
+| `implement-plan` | Executing a multi-task plan via parallel `plan-implementer` subagents |
+| `readme` | Creating/updating README.md |
+| `context7` | Fetching up-to-date library docs |
+| `find-skills` | Discovering/installing ecosystem skills |
+
+## Committed Subagents
+
+Defined in `.claude/agents/*.md`, `.cursor/agents/*.md`, `.codex/agents/*.toml` (+ `.codex/config.toml` entries): `browser-check`, `code-quality`, `plan-implementer`, `profiler`, `react-doctor-fixer`, `react-patterns-enforcer`, `test-apk`, `translator`. Most are driven by the skills above; read the agent file before spawning one directly.
 
 ## Recommended Skills
 

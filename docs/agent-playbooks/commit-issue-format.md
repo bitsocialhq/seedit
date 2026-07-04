@@ -2,6 +2,8 @@
 
 Use this when proposing or implementing meaningful code changes.
 
+The committed `commit-format` and `issue-format` skills are the canonical, stricter templates (with self-checks); prefer them when the harness loads skills. This playbook is the short fallback summary — keep the two in sync.
+
 ## Commit Suggestion Format
 
 - **Title:** Conventional Commits style, short, wrapped in backticks.
