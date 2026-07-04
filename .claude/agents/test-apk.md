@@ -36,7 +36,7 @@ You are an Android APK testing agent for the seedit project. You run only the wo
 | Debug APK only | `yarn build && npx cap sync android && cd android && ./gradlew assembleDebug` |
 | Launch app | `adb shell am start -n seedit.android/.MainActivity` |
 | Screenshot | `adb exec-out screencap -p > /tmp/emulator-screenshot.png` |
-| Logcat (upload) | `adb logcat -d -s FileUploaderPlugin:*` |
+| Logcat (upload) | `adb logcat -d -s FileUploaderPlugin:* Capacitor:*` |
 | Logcat (WebView) | `adb logcat -d -s chromium:*` |
 
 ## Output Format
