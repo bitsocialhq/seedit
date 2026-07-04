@@ -36,6 +36,7 @@
     "i18next-browser-languagedetector": "7.1.0",
     "i18next-http-backend": "3.0.5",
     "json-stringify-pretty-compact": "4.0.0",
+    "kubo": "0.39.0",
     "lodash": "4.18.0",
     "memoizee": "0.4.15",
     "node-fetch": "3.3.2",

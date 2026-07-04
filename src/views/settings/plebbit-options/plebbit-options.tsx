@@ -137,8 +137,18 @@ const PlebbitRPCSettings = ({ plebbitRpcRef }: SettingsProps) => {
   return (
     <div className={styles.plebbitRPCSettings}>
       <div>
-        <input autoCorrect='off' autoCapitalize='off' spellCheck='false' type='text' defaultValue={pkcRpcClientsOptions} ref={plebbitRpcRef} />
-        <button onClick={() => setShowInfo(!showInfo)}>{showInfo ? 'X' : '?'}</button>
+        <input
+          aria-label='PKC RPC websocket URL'
+          autoCorrect='off'
+          autoCapitalize='off'
+          spellCheck='false'
+          type='text'
+          defaultValue={pkcRpcClientsOptions}
+          ref={plebbitRpcRef}
+        />
+        <button type='button' aria-label={showInfo ? 'Hide PKC RPC information' : 'Show PKC RPC information'} onClick={() => setShowInfo(!showInfo)}>
+          {showInfo ? 'X' : '?'}
+        </button>
       </div>
       {showInfo && (
         <div className={styles.plebbitRpcSettingsInfo}>

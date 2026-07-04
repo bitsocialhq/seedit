@@ -35,16 +35,22 @@ const CommunitiesDropdown = () => {
   const subsdropdownItemsRef = useRef<HTMLDivElement>(null);
   const subsDropdownClass = isSubsDropdownOpen ? styles.visible : styles.hidden;
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (subsDropdownRef.current && !subsDropdownRef.current.contains(event.target as Node)) {
-      setIsSubsDropdownOpen(false);
-    }
-  };
-
   useEffect(() => {
-    if (isSubsDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+    if (!isSubsDropdownOpen) {
+      return;
     }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (subsDropdownRef.current && !subsDropdownRef.current.contains(event.target as Node)) {
+        setIsSubsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [isSubsDropdownOpen]);
 
   return (
@@ -312,18 +318,18 @@ const TopBar = memo(() => {
 
   // Hide defaults the user already follows, either by direct address or via the
   // matching directory-code subscription (which resolves to the same community).
-  const filteredCommunityAddresses = useMemo(
-    () =>
-      defaultCommunities
-        .filter(
-          (defaultCommunity) =>
-            isResolvableCommunityAddress(defaultCommunity.address) &&
-            !subscriptions?.includes(defaultCommunity.address) &&
-            !(defaultCommunity.directoryCode && subscriptions?.includes(defaultCommunity.directoryCode)),
-        )
-        .map((defaultCommunity) => defaultCommunity.address),
-    [defaultCommunities, subscriptions],
-  );
+  const filteredCommunityAddresses = defaultCommunities.reduce<string[]>((addresses, defaultCommunity) => {
+    if (
+      !isResolvableCommunityAddress(defaultCommunity.address) ||
+      subscriptions?.includes(defaultCommunity.address) ||
+      (defaultCommunity.directoryCode && subscriptions?.includes(defaultCommunity.directoryCode))
+    ) {
+      return addresses;
+    }
+
+    addresses.push(defaultCommunity.address);
+    return addresses;
+  }, []);
 
   return (
     <div className={styles.headerArea}>

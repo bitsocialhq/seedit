@@ -38,13 +38,17 @@ Follow the plan provided by the parent agent. Apply changes using project patter
 
 ### Step 3: Verify the Fix
 
-Run react-doctor scoped to check whether the specific issue is resolved:
+Run the repo-standard verification commands, including react-doctor to check whether the specific issue is resolved:
 
 ```bash
+yarn build 2>&1
+yarn lint 2>&1
+yarn type-check 2>&1
 yarn doctor 2>&1
 ```
 
 Parse the output and check:
+- Did build, lint, or type-check fail?
 - Is the original diagnostic still present?
 - Did the fix introduce any NEW diagnostics?
 - What is the overall result?
@@ -66,6 +70,7 @@ Return a structured report to the parent agent:
 <concise description of what was changed and why>
 
 ### Verification
+- **Build/lint/type-check:** PASS/FAIL
 - **Original issue resolved:** YES/NO
 - **New issues introduced:** YES (list them) / NO
 - **react-doctor output (relevant lines):** <paste relevant output>
@@ -106,7 +111,7 @@ Extract logical sections into focused sub-components in separate files.
 
 - Follow the plan from the parent agent — don't freelance unrelated fixes
 - Only fix the targeted diagnostic(s), don't refactor unrelated code
-- Always verify with react-doctor before reporting back
+- Always verify with build, lint, type-check, and react-doctor before reporting back
 - Report which files changed and any remaining risk
 - If the fix is unclear or risky, report back with concerns instead of guessing
 - Pin exact package versions if any dependency changes are needed

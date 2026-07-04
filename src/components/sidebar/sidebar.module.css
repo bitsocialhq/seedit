@@ -56,8 +56,14 @@ a {
 }
 
 .directorySubscribeOnly {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--text-primary);
   cursor: pointer;
+  font: inherit;
+  text-align: left;
 }
 
 .directorySubscribeOnly:hover {

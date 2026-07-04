@@ -49,7 +49,7 @@ const getKuboPath = async () => {
       const kuboModule = await import(kuboUrl);
       const { path: getKuboBinaryPath } = kuboModule;
       return getKuboBinaryPath();
-    } catch (err) {
+    } catch {
       // Fallback: try to find the binary directly in kubo module
       const kuboBinPath = path.join(kuboModulePath, 'kubo', binaryName);
       if (fs.existsSync(kuboBinPath)) {

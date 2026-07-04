@@ -46,10 +46,12 @@ For each violation:
 
 ```bash
 yarn build 2>&1
+yarn lint 2>&1
+yarn type-check 2>&1
 yarn doctor 2>&1
 ```
 
-If the build or doctor check breaks due to your changes, fix and re-run.
+If build, lint, type-check, or doctor breaks due to your changes, fix and re-run.
 
 ### Step 5: Report Back
 
@@ -65,7 +67,7 @@ If the build or doctor check breaks due to your changes, fix and re-run.
 ### Violations Found (unfixed)
 - `file.tsx:100` — description and why it wasn't auto-fixed
 
-### Build: PASS/FAIL
+### Build/lint/type-check: PASS/FAIL
 ### Doctor: PASS/FAIL
 ### Status: SUCCESS / PARTIAL / FAILED
 ```

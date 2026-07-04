@@ -316,9 +316,9 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
                 <div className={styles.directoryNotice}>
                   s/{directoryCode} — {t('directory_served_by', { community: title || (address ? getShortAddress(address) : '...') })}
                   {address && !subscribedToResolvedCommunity && (
-                    <div className={styles.directorySubscribeOnly} onClick={() => subscribeToResolvedCommunity()}>
+                    <button type='button' className={styles.directorySubscribeOnly} onClick={() => subscribeToResolvedCommunity()}>
                       {t('subscribe_to_this_community_only')}
-                    </div>
+                    </button>
                   )}
                 </div>
               )}
