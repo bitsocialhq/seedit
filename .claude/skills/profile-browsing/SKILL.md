@@ -31,7 +31,7 @@ Before spawning any profiler subagents, verify exactly one dev server is availab
 
 ```bash
 # Check if the dev server is reachable
-curl -sf http://localhost:3000 -o /dev/null && echo "OK" || echo "NOT RUNNING"
+curl -sf https://seedit.localhost -o /dev/null && echo "OK" || echo "NOT RUNNING"
 ```
 
 - If **OK**: proceed to Step 1.

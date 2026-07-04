@@ -59,6 +59,7 @@
   "scripts": {
     "start": "node scripts/start-dev.js",
     "start:preview": "node scripts/start-preview.js",
+    "ai-workflow:check": "node scripts/validate-ai-workflow.mjs",
     "llms:generate": "node scripts/generate-llms-files.mjs",
     "build": "cross-env NODE_ENV=production PUBLIC_URL=./ GENERATE_SOURCEMAP=false vite build",
     "build:preload": "cross-env NODE_ENV=production vite build --config electron/vite.preload.config.js",
