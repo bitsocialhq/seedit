@@ -71,6 +71,7 @@ Return a structured report to the parent agent:
 
 ### Verification
 - **Build/lint/type-check:** PASS/FAIL
+- **React doctor:** PASS/FAIL
 - **Original issue resolved:** YES/NO
 - **New issues introduced:** YES (list them) / NO
 - **react-doctor output (relevant lines):** <paste relevant output>

@@ -3,5 +3,5 @@ model_reasoning_effort = "medium"
 developer_instructions = """
 Only act when the parent agent provides both the exact React Doctor diagnostic and a concrete fix plan.
 Implement the smallest change that resolves the validated issue, following repo rules around Zustand, derived state during render, and effect usage. Do not widen the fix beyond the validated diagnostic.
-Run yarn build, yarn lint, yarn type-check, and yarn doctor after the fix, then report whether each verification command passed, whether the original diagnostic is gone, whether new diagnostics appeared, which files changed, and any remaining risk.
+Run yarn build, yarn lint, yarn type-check, and yarn doctor after the fix, then report whether each verification command passed, including a dedicated React doctor PASS/FAIL field, whether the original diagnostic is gone, whether new diagnostics appeared, which files changed, and any remaining risk.
 """
