@@ -1,7 +1,7 @@
-interface PlebbitOptions {
+interface PkcOptions {
   ipfsGatewayUrls?: string[];
   pubsubKuboRpcClientsOptions?: string[];
-  plebbitRpcClientsOptions?: string[];
+  pkcRpcClientsOptions?: string[];
   httpRoutersOptions?: string[];
   chainProviders?: {
     [key: string]: {
@@ -15,14 +15,14 @@ interface PlebbitOptions {
 
 interface ImportedAccount {
   account?: {
-    plebbitOptions?: PlebbitOptions;
+    pkcOptions?: PkcOptions;
     [key: string]: any;
   };
   [key: string]: any;
 }
 
 // Default configuration for web/mobile platforms
-export const getDefaultWebConfig = (): PlebbitOptions => ({
+export const getDefaultWebConfig = (): PkcOptions => ({
   ipfsGatewayUrls: ['https://ipfsgateway.xyz', 'https://gateway.plebpubsub.xyz', 'https://gateway.forumindex.com'],
   pubsubKuboRpcClientsOptions: ['https://pubsubprovider.xyz/api/v0', 'https://plebpubsub.xyz/api/v0', 'https://rannithepleb.com/api/v0'],
   httpRoutersOptions: ['https://routing.lol', 'https://peers.pleb.bot', 'https://peers.plebpubsub.xyz', 'https://peers.forumindex.com'],
@@ -49,8 +49,8 @@ export const getDefaultWebConfig = (): PlebbitOptions => ({
 });
 
 // Default configuration for Electron platform
-export const getDefaultElectronConfig = (): PlebbitOptions => ({
-  plebbitRpcClientsOptions: ['ws://localhost:9138'],
+export const getDefaultElectronConfig = (): PkcOptions => ({
+  pkcRpcClientsOptions: ['ws://localhost:9138'],
   httpRoutersOptions: ['https://peers.pleb.bot', 'https://routing.lol', 'https://peers.forumindex.com', 'https://peers.plebpubsub.xyz'],
   chainProviders: {
     eth: {
@@ -80,24 +80,24 @@ const isLocalhostRpc = (url: string): boolean => {
 };
 
 // Check if account has non-localhost RPC configuration
-const hasNonLocalhostRpc = (options: PlebbitOptions): boolean => {
-  const hasRpcOptions = (options.plebbitRpcClientsOptions?.length ?? 0) > 0;
-  return hasRpcOptions && !options.plebbitRpcClientsOptions?.some(isLocalhostRpc);
+const hasNonLocalhostRpc = (options: PkcOptions): boolean => {
+  const hasRpcOptions = (options.pkcRpcClientsOptions?.length ?? 0) > 0;
+  return hasRpcOptions && !options.pkcRpcClientsOptions?.some(isLocalhostRpc);
 };
 
 // Check if account has pubsub providers configured
-const hasPubsubProviders = (options: PlebbitOptions): boolean => {
+const hasPubsubProviders = (options: PkcOptions): boolean => {
   return (options.pubsubKuboRpcClientsOptions?.length ?? 0) > 0 || (options.ipfsGatewayUrls?.length ?? 0) > 0;
 };
 
 // Check if account has localhost RPC configured
-const hasLocalhostRpc = (options: PlebbitOptions): boolean => {
-  const hasRpcOptions = (options.plebbitRpcClientsOptions?.length ?? 0) > 0;
-  return hasRpcOptions && (options.plebbitRpcClientsOptions?.some(isLocalhostRpc) ?? false);
+const hasLocalhostRpc = (options: PkcOptions): boolean => {
+  const hasRpcOptions = (options.pkcRpcClientsOptions?.length ?? 0) > 0;
+  return hasRpcOptions && (options.pkcRpcClientsOptions?.some(isLocalhostRpc) ?? false);
 };
 
 /**
- * Transforms plebbit options for imported accounts based on platform and existing configuration
+ * Transforms PKC options for imported accounts based on platform and existing configuration
  *
  * Logic:
  * - Preserves non-localhost RPC configurations
@@ -105,8 +105,8 @@ const hasLocalhostRpc = (options: PlebbitOptions): boolean => {
  * - On Web: replaces localhost RPC with pubsub providers
  * - Sets platform-appropriate defaults for missing configurations
  */
-export const transformPlebbitOptionsForImport = (importedAccount: ImportedAccount, isElectron: boolean): PlebbitOptions => {
-  const currentOptions = importedAccount.account?.plebbitOptions || {};
+export const transformPkcOptionsForImport = (importedAccount: ImportedAccount, isElectron: boolean): PkcOptions => {
+  const currentOptions = importedAccount.account?.pkcOptions || {};
 
   // Don't overwrite non-localhost RPC configurations
   if (hasNonLocalhostRpc(currentOptions)) {
@@ -119,7 +119,7 @@ export const transformPlebbitOptionsForImport = (importedAccount: ImportedAccoun
       return getDefaultElectronConfig();
     }
     // If already has localhost RPC or no providers, use electron defaults
-    return (currentOptions.plebbitRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getDefaultElectronConfig();
+    return (currentOptions.pkcRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getDefaultElectronConfig();
   } else {
     // On web: if account has localhost RPC, replace with pubsub providers
     if (hasLocalhostRpc(currentOptions)) {
@@ -131,7 +131,7 @@ export const transformPlebbitOptionsForImport = (importedAccount: ImportedAccoun
 };
 
 /**
- * Processes an imported account by transforming its plebbit options
+ * Processes an imported account by transforming its PKC options
  * Returns the modified account as a JSON string ready for import
  */
 export const processImportedAccount = (accountJson: string, isElectron: boolean): string => {
@@ -148,12 +148,18 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean)
     importedAccount.account = {};
   }
 
-  // Transform plebbitOptions based on platform and existing config
-  if (importedAccount.account.plebbitOptions) {
-    importedAccount.account.plebbitOptions = transformPlebbitOptionsForImport(importedAccount, isElectron);
+  // Support accounts exported by older versions that used the legacy field name
+  if (!importedAccount.account.pkcOptions && importedAccount.account.plebbitOptions) {
+    importedAccount.account.pkcOptions = importedAccount.account.plebbitOptions;
+    delete importedAccount.account.plebbitOptions;
+  }
+
+  // Transform pkcOptions based on platform and existing config
+  if (importedAccount.account.pkcOptions) {
+    importedAccount.account.pkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);
   } else {
-    // If no plebbitOptions exist, set defaults based on platform
-    importedAccount.account.plebbitOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
+    // If no pkcOptions exist, set defaults based on platform
+    importedAccount.account.pkcOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
   }
 
   return JSON.stringify(importedAccount);

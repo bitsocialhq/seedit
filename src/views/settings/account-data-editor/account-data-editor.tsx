@@ -60,7 +60,7 @@ const AccountDataEditor = () => {
   const [showEditor, setShowEditor] = useState(false);
   const [currentError, setCurrentError] = useState<Error | undefined>(undefined);
 
-  const accountJson = useMemo(() => stringify({ account: { ...account, plebbit: undefined, karma: undefined, unreadNotificationCount: undefined } }), [account]);
+  const accountJson = useMemo(() => stringify({ account: { ...account, pkc: undefined, karma: undefined, unreadNotificationCount: undefined } }), [account]);
 
   useEffect(() => {
     setText(accountJson);

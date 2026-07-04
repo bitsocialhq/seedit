@@ -17,7 +17,7 @@ const isVercelDeployment =
   typeof window !== 'undefined' && (window.location.hostname === 'seedit.app' || window.location.hostname === 'www.seedit.app') && !window.isElectron;
 
 if (window.location.hostname.startsWith('p2p.')) {
-  (window as any).defaultPlebbitOptions = {
+  (window as any).defaultPkcOptions = {
     libp2pJsClientsOptions: [{ key: 'libp2pjs' }],
     httpsRoutersOptions: ['https://peers.pleb.bot', 'https://peers.forumindex.com'],
   };

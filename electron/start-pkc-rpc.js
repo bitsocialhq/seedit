@@ -23,7 +23,7 @@ const pkcRpcAuthKeyPath = path.join(defaultPkcOptions.dataPath, 'auth-key');
 let pkcRpcAuthKey;
 try {
   pkcRpcAuthKey = fs.readFileSync(pkcRpcAuthKeyPath, 'utf8');
-} catch (e) {
+} catch {
   pkcRpcAuthKey = randomBytes(32).toString('base64').replace(/[/+=]/g, '').substring(0, 40);
   fs.ensureFileSync(pkcRpcAuthKeyPath);
   fs.writeFileSync(pkcRpcAuthKeyPath, pkcRpcAuthKey);
