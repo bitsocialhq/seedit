@@ -4,8 +4,9 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "PLACEHOLDER-funny",
-      "addedAt": 1783123200
+      "address": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP"
     }
   ]
 }

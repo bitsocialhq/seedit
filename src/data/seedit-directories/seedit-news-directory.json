@@ -4,8 +4,9 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "PLACEHOLDER-news",
-      "addedAt": 1783123200
+      "address": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5"
     }
   ]
 }

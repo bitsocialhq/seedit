@@ -4,8 +4,9 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "PLACEHOLDER-memes",
-      "addedAt": 1783123200
+      "address": "12D3KooWFkZorC92RxQAwMBYMido8xBM88ghpLWA26mrE9W9Xmxd",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWFkZorC92RxQAwMBYMido8xBM88ghpLWA26mrE9W9Xmxd"
     }
   ]
 }

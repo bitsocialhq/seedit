@@ -4,8 +4,9 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "PLACEHOLDER-interestingasfuck",
-      "addedAt": 1783123200
+      "address": "12D3KooWDexsEFuP8wt4vPKjLn3ZaxEyQJv4EWMU3abnLk7NxEhd",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWDexsEFuP8wt4vPKjLn3ZaxEyQJv4EWMU3abnLk7NxEhd"
     }
   ]
 }

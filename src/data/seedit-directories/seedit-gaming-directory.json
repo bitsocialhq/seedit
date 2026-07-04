@@ -4,8 +4,9 @@
   "updatedAt": 1783123200,
   "communities": [
     {
-      "address": "PLACEHOLDER-gaming",
-      "addedAt": 1783123200
+      "address": "12D3KooWRHbY2AS9oComoTVpMF4iF33d3GPzKCW7MSfHEJT8qeZc",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWRHbY2AS9oComoTVpMF4iF33d3GPzKCW7MSfHEJT8qeZc"
     }
   ]
 }
