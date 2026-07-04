@@ -6,19 +6,19 @@ disable-model-invocation: true
 
 # Remove AI Code Slop
 
-Scan the diff against main and remove AI-generated slop introduced in this branch.
+Scan the diff against master and remove AI-generated slop introduced in this branch.
 
 ## Workflow
 
 1. **Get the diff**
 
    ```bash
-   git diff main...HEAD
+   git diff master...HEAD
    ```
 
    If there are also uncommitted changes, include them:
    ```bash
-   git diff main
+   git diff master
    ```
 
 2. **Scan each changed file** for the slop categories below

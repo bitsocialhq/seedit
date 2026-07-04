@@ -45,7 +45,7 @@ Follow your system prompt for the full workflow (create dictionary file, dry run
 ```
 
 **Parallelism rules:**
-- Spawn up to 4 subagents concurrently (Task tool limit).
+- Spawn up to 4 subagents concurrently.
 - If there are more than 4 keys, batch them: spawn 4, wait for completion, then spawn the next batch.
 
 ### Step 4 — Report results

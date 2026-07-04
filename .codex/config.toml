@@ -19,7 +19,7 @@ description = "Performance profiling agent that inspects seedit routes with play
 config_file = "agents/profiler.toml"
 
 [agents.react-doctor-fixer]
-description = "React issue remediation agent for a validated issue plus an explicit fix plan."
+description = "React Doctor remediation agent for a validated diagnostic plus an explicit fix plan."
 config_file = "agents/react-doctor-fixer.toml"
 
 [agents.react-patterns-enforcer]

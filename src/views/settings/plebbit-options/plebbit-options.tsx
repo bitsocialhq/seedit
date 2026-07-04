@@ -19,8 +19,8 @@ interface SettingsProps {
 
 const IPFSGatewaysSettings = ({ ipfsGatewayUrlsRef, mediaIpfsGatewayUrlRef }: SettingsProps) => {
   const account = useAccount();
-  const { plebbitOptions, mediaIpfsGatewayUrl } = account || {};
-  const { ipfsGatewayUrls } = plebbitOptions || {};
+  const { pkcOptions, mediaIpfsGatewayUrl } = account || {};
+  const { ipfsGatewayUrls } = pkcOptions || {};
   const ipfsGatewayUrlsDefaultValue = ipfsGatewayUrls?.join('\n');
 
   return (
@@ -45,8 +45,8 @@ const IPFSGatewaysSettings = ({ ipfsGatewayUrlsRef, mediaIpfsGatewayUrlRef }: Se
 
 const PubsubProvidersSettings = ({ pubsubProvidersRef }: SettingsProps) => {
   const account = useAccount();
-  const { plebbitOptions } = account || {};
-  const { pubsubKuboRpcClientsOptions } = plebbitOptions || {};
+  const { pkcOptions } = account || {};
+  const { pubsubKuboRpcClientsOptions } = pkcOptions || {};
   const pubsubProvidersDefaultValue = pubsubKuboRpcClientsOptions?.join('\n');
 
   return (
@@ -65,8 +65,8 @@ const PubsubProvidersSettings = ({ pubsubProvidersRef }: SettingsProps) => {
 
 const HttpRoutersSettings = ({ httpRoutersRef }: SettingsProps) => {
   const account = useAccount();
-  const { plebbitOptions } = account || {};
-  const { httpRoutersOptions } = plebbitOptions || {};
+  const { pkcOptions } = account || {};
+  const { httpRoutersOptions } = pkcOptions || {};
   const httpRoutersDefaultValue = httpRoutersOptions?.join('\n');
 
   return (
@@ -85,8 +85,8 @@ const HttpRoutersSettings = ({ httpRoutersRef }: SettingsProps) => {
 
 const BlockchainProvidersSettings = ({ ethRpcRef, solRpcRef, maticRpcRef, avaxRpcRef }: SettingsProps) => {
   const account = useAccount();
-  const { plebbitOptions } = account || {};
-  const { chainProviders } = plebbitOptions || {};
+  const { pkcOptions } = account || {};
+  const { chainProviders } = pkcOptions || {};
   const ethRpcDefaultValue = chainProviders?.['eth']?.urls.join('\n');
   const solRpcDefaultValue = chainProviders?.['sol']?.urls.join('\n');
   const maticRpcDefaultValue = chainProviders?.['matic']?.urls.join('\n');
@@ -131,14 +131,24 @@ const BlockchainProvidersSettings = ({ ethRpcRef, solRpcRef, maticRpcRef, avaxRp
 const PlebbitRPCSettings = ({ plebbitRpcRef }: SettingsProps) => {
   const [showInfo, setShowInfo] = useState(false);
   const account = useAccount();
-  const { plebbitOptions } = account || {};
-  const { plebbitRpcClientsOptions } = plebbitOptions || {};
+  const { pkcOptions } = account || {};
+  const { pkcRpcClientsOptions } = pkcOptions || {};
 
   return (
     <div className={styles.plebbitRPCSettings}>
       <div>
-        <input autoCorrect='off' autoCapitalize='off' spellCheck='false' type='text' defaultValue={plebbitRpcClientsOptions} ref={plebbitRpcRef} />
-        <button onClick={() => setShowInfo(!showInfo)}>{showInfo ? 'X' : '?'}</button>
+        <input
+          aria-label='PKC RPC websocket URL'
+          autoCorrect='off'
+          autoCapitalize='off'
+          spellCheck='false'
+          type='text'
+          defaultValue={pkcRpcClientsOptions}
+          ref={plebbitRpcRef}
+        />
+        <button type='button' aria-label={showInfo ? 'Hide PKC RPC information' : 'Show PKC RPC information'} onClick={() => setShowInfo(!showInfo)}>
+          {showInfo ? 'X' : '?'}
+        </button>
       </div>
       {showInfo && (
         <div className={styles.plebbitRpcSettingsInfo}>
@@ -159,10 +169,10 @@ const PlebbitRPCSettings = ({ plebbitRpcRef }: SettingsProps) => {
 };
 
 const PlebbitDataPathSettings = ({ plebbitDataPathRef }: SettingsProps) => {
-  const plebbitRpc = usePkcRpcSettings();
-  const { pkcRpcSettings } = plebbitRpc || {};
-  const isConnectedToRpc = plebbitRpc?.state === 'connected';
-  const path = pkcRpcSettings?.plebbitOptions?.dataPath || '';
+  const pkcRpc = usePkcRpcSettings();
+  const { pkcRpcSettings } = pkcRpc || {};
+  const isConnectedToRpc = pkcRpc?.state === 'connected';
+  const path = pkcRpcSettings?.pkcOptions?.dataPath || '';
 
   return (
     <div className={styles.plebbitDataPathSettings}>
@@ -179,7 +189,7 @@ const PlebbitOptions = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const account = useAccount();
-  const { plebbitOptions } = account || {};
+  const { pkcOptions } = account || {};
 
   const ipfsGatewayUrlsRef = useRef<HTMLTextAreaElement>(null);
   const mediaIpfsGatewayUrlRef = useRef<HTMLInputElement>(null);
@@ -231,7 +241,7 @@ const PlebbitOptions = () => {
       .filter((url) => url !== '');
 
     const plebbitRpcValue = plebbitRpcRef.current?.value.trim();
-    const plebbitRpcClientsOptions = plebbitRpcValue ? [plebbitRpcValue] : undefined;
+    const pkcRpcClientsOptions = plebbitRpcValue ? [plebbitRpcValue] : undefined;
     const dataPath = plebbitDataPathRef.current?.value.trim() || undefined;
 
     const chainProviders: any = {};
@@ -240,15 +250,15 @@ const PlebbitOptions = () => {
     if (maticRpcUrls?.length) chainProviders.matic = { urls: maticRpcUrls, chainId: 137 };
     if (avaxRpcUrls?.length) chainProviders.avax = { urls: avaxRpcUrls, chainId: 43114 };
 
-    const newPlebbitOptions: any = {};
-    if (ipfsGatewayUrls?.length) newPlebbitOptions.ipfsGatewayUrls = ipfsGatewayUrls;
-    if (pubsubKuboRpcClientsOptions?.length) newPlebbitOptions.pubsubKuboRpcClientsOptions = pubsubKuboRpcClientsOptions;
-    if (httpRoutersOptions?.length) newPlebbitOptions.httpRoutersOptions = httpRoutersOptions;
-    if (plebbitRpcClientsOptions) newPlebbitOptions.plebbitRpcClientsOptions = plebbitRpcClientsOptions;
-    if (dataPath) newPlebbitOptions.dataPath = dataPath;
-    if (Object.keys(chainProviders)?.length) newPlebbitOptions.chainProviders = chainProviders;
+    const newPkcOptions: any = {};
+    if (ipfsGatewayUrls?.length) newPkcOptions.ipfsGatewayUrls = ipfsGatewayUrls;
+    if (pubsubKuboRpcClientsOptions?.length) newPkcOptions.pubsubKuboRpcClientsOptions = pubsubKuboRpcClientsOptions;
+    if (httpRoutersOptions?.length) newPkcOptions.httpRoutersOptions = httpRoutersOptions;
+    if (pkcRpcClientsOptions) newPkcOptions.pkcRpcClientsOptions = pkcRpcClientsOptions;
+    if (dataPath) newPkcOptions.dataPath = dataPath;
+    if (Object.keys(chainProviders)?.length) newPkcOptions.chainProviders = chainProviders;
 
-    const updatedPlebbitOptions = { ...plebbitOptions, ...newPlebbitOptions };
+    const updatedPkcOptions = { ...pkcOptions, ...newPkcOptions };
 
     const updatedAccount: any = { ...account };
     if (mediaIpfsGatewayUrl) {
@@ -257,7 +267,7 @@ const PlebbitOptions = () => {
       delete updatedAccount.mediaIpfsGatewayUrl;
     }
 
-    updatedAccount.plebbitOptions = updatedPlebbitOptions;
+    updatedAccount.pkcOptions = updatedPkcOptions;
 
     try {
       await setAccount(updatedAccount);

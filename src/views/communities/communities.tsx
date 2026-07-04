@@ -17,7 +17,9 @@ import {
 import useErrorStore from '../../stores/use-error-store';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useDefaultSubscriptionAddresses, useDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
+import { useDirectoryWinners } from '../../hooks/use-directory-winners';
 import useDisplayedSubscriptions from '../../hooks/use-displayed-subscriptions';
+import { isDirectoryCode, isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
 import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import ErrorDisplay from '../../components/error-display';
@@ -34,7 +36,49 @@ interface SubplebbitProps {
   tags?: string[];
   isUnsubscribed?: boolean;
   onUnsubscribe?: (address: string) => void;
+  // Set when this row represents a directory subscription (e.g. "memes"): the row renders
+  // as s/<code> and the subscribe button targets the code instead of the resolved address.
+  directoryCode?: string;
 }
+
+interface ResolvedSubscriptionEntry {
+  entry: string;
+  directoryCode?: string;
+  address?: string;
+}
+
+// Resolve a mixed list of subscription entries (directory codes + community addresses) to
+// loadable communities. Directory codes resolve to their current winner's address; entries
+// without a loadable address (e.g. placeholder candidates) get no community data.
+const useResolvedSubscriptionEntries = (entries: string[]) => {
+  const directoryCodes = useMemo(() => entries.filter((entry) => isDirectoryCode(entry)), [entries]);
+  const { winnerAddressByCode } = useDirectoryWinners(directoryCodes);
+
+  const resolvedEntries: ResolvedSubscriptionEntry[] = useMemo(
+    () => entries.map((entry) => (isDirectoryCode(entry) ? { entry, directoryCode: entry, address: winnerAddressByCode[entry] } : { entry, address: entry })),
+    [entries, winnerAddressByCode],
+  );
+
+  const loadableAddresses = useMemo(
+    () => resolvedEntries.map(({ address }) => address).filter((address): address is string => isResolvableCommunityAddress(address)),
+    [resolvedEntries],
+  );
+
+  const { communities, error } = useCommunities({ communities: getCommunityIdentifiers(loadableAddresses) });
+
+  const communityByAddress = useMemo(() => {
+    const byAddress: Record<string, CommunityType> = {};
+    loadableAddresses.forEach((address, index) => {
+      const community = communities?.[index];
+      if (community) {
+        byAddress[address] = community;
+      }
+    });
+    return byAddress;
+  }, [loadableAddresses, communities]);
+
+  return { resolvedEntries, communityByAddress, error };
+};
 
 const NoCommunitiesMessage = () => {
   const { t } = useTranslation();
@@ -171,7 +215,7 @@ const Infobar = () => {
   );
 };
 
-const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe }: SubplebbitProps) => {
+const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe, directoryCode }: SubplebbitProps) => {
   const { t } = useTranslation();
   const { address, createdAt, description, roles, shortAddress, settings, suggested, title } = subplebbit || {};
   const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
@@ -199,7 +243,9 @@ const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe 
   const downvoteCount = 0;
 
   const postScore = upvoteCount === 0 && downvoteCount === 0 ? '•' : upvoteCount - downvoteCount || '•';
-  const { allActiveUserCount } = useCommunityStats(address ? { community: getCommunityIdentifier(address) } : undefined);
+  // Placeholder candidates of not-yet-populated directories are not loadable; skip stats.
+  const canLoadCommunity = !!address && isResolvableCommunityAddress(address);
+  const { allActiveUserCount } = useCommunityStats(canLoadCommunity ? { community: getCommunityIdentifier(address) } : undefined);
   const { isOffline, isOnlineStatusLoading, offlineTitle } = useIsCommunityOffline(subplebbit);
 
   const isNsfw = tags?.some((tag) => nsfwTags.includes(tag));
@@ -244,7 +290,7 @@ const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe 
             </div>
           </div>
           <div className={`${styles.avatar} ${showSprout ? styles.defaultAvatar : ''}`}>
-            <Link to={`/s/${address}`}>
+            <Link to={`/s/${directoryCode ?? address}`}>
               {suggested?.avatarUrl ? (
                 <img
                   key={suggested.avatarUrl}
@@ -264,17 +310,21 @@ const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe 
         <div className={styles.entry}>
           <div className={styles.title}>
             <div className={styles.titleWrapper}>
-              <Link to={`/s/${address}`}>
-                s/{address?.includes('.') ? address : shortAddress}
+              <Link to={`/s/${directoryCode ?? address}`}>
+                s/{directoryCode ?? (address?.includes('.') ? address : shortAddress)}
                 {title && `: ${title}`}
               </Link>
+              {directoryCode && <span className={styles.directoryMarker}>({t('directory')})</span>}
             </div>
           </div>
+          {directoryCode && canLoadCommunity && (
+            <div className={styles.directoryServedBy}>{t('directory_served_by', { community: address?.includes('.') ? address : shortAddress || address })}</div>
+          )}
           <div className={styles.tagline}>
             {t('members_count', { count: allActiveUserCount })}, {t('community_for', { date: getFormattedTimeDuration(createdAt) })}
             <div className={styles.taglineSecondLine}>
               <span className={styles.subscribeButton}>
-                <SubscribeButton address={address} onUnsubscribe={onUnsubscribe} />
+                <SubscribeButton address={directoryCode ?? address} onUnsubscribe={onUnsubscribe} />
               </span>
               {(userRole || isUserOwner) && (
                 <Link to={`/s/${address}/settings`}>
@@ -374,40 +424,43 @@ const SubscriberSubplebbits = () => {
     [account?.author?.address], // Reset dependencies
   );
 
-  const { communities, error: communitiesError } = useCommunities({ communities: getCommunityIdentifiers(displayedSubscriptions) });
+  const { resolvedEntries, communityByAddress, error: communitiesError } = useResolvedSubscriptionEntries(displayedSubscriptions);
 
   useEffect(() => {
     setError('SubscriberSubplebbits_useCommunities', communitiesError);
   }, [communitiesError, setError]);
 
-  const communityElements = Object.values(communities ?? {})
-    .filter((community): community is CommunityType => Boolean(community))
-    .filter((communityData) => {
+  const communityElements = resolvedEntries
+    .filter(({ directoryCode, address }) => {
+      const communityData = address ? communityByAddress[address] : undefined;
+      // Directory subscriptions always render (even while their winner is unloadable) so
+      // the user can still see and unsubscribe them; plain addresses wait for community data.
+      if (!communityData && !directoryCode) return false;
       if (currentTag) {
-        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-
+        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
         if (currentTag === 'nsfw') {
-          return tags?.some((tag) => nsfwTags.includes(tag));
-        } else {
-          return tags?.includes(currentTag);
+          return Boolean(tags?.some((tag) => nsfwTags.includes(tag)));
         }
+        return Boolean(tags?.includes(currentTag));
       }
       return true;
     })
-    .map((communityData, index) => {
-      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-      return communityData ? (
+    .map(({ entry, directoryCode, address }, index) => {
+      const communityData = address ? communityByAddress[address] : undefined;
+      const subplebbit = communityData ?? ({ address: address ?? entry } as CommunityType);
+      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+      return (
         <CommunityItem
-          key={communityData.address || index}
-          subplebbit={communityData}
+          key={entry}
+          subplebbit={subplebbit}
+          directoryCode={directoryCode}
           tags={tags}
           index={index}
-          isUnsubscribed={isUnsubscribed(communityData.address)}
+          isUnsubscribed={isUnsubscribed(entry)}
           onUnsubscribe={handleUnsubscribe}
         />
-      ) : null;
-    })
-    .filter(Boolean);
+      );
+    });
 
   if (communityElements.length === 0) {
     return <NoCommunitiesMessage />;
@@ -477,40 +530,41 @@ const AllAccountSubplebbits = () => {
 
   const { list: displayedAddresses, isUnsubscribed, handleUnsubscribe } = useDisplayedSubscriptions(getAllAccountRelatedAddresses, [account?.author?.address]);
 
-  const { communities, error: communitiesError } = useCommunities({ communities: getCommunityIdentifiers(displayedAddresses) });
+  const { resolvedEntries, communityByAddress, error: communitiesError } = useResolvedSubscriptionEntries(displayedAddresses);
 
   useEffect(() => {
     setError('AllAccountSubplebbits_useCommunities', communitiesError);
   }, [communitiesError, setError]);
 
-  const communityElements = Object.values(communities ?? {})
-    .filter((community): community is CommunityType => Boolean(community))
-    .filter((communityData) => {
+  const communityElements = resolvedEntries
+    .filter(({ directoryCode, address }) => {
+      const communityData = address ? communityByAddress[address] : undefined;
+      if (!communityData && !directoryCode) return false;
       if (currentTag) {
-        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-
+        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
         if (currentTag === 'nsfw') {
-          return tags?.some((tag) => nsfwTags.includes(tag));
-        } else {
-          return tags?.includes(currentTag);
+          return Boolean(tags?.some((tag) => nsfwTags.includes(tag)));
         }
+        return Boolean(tags?.includes(currentTag));
       }
       return true;
     })
-    .map((communityData, index) => {
-      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-      return communityData ? (
+    .map(({ entry, directoryCode, address }, index) => {
+      const communityData = address ? communityByAddress[address] : undefined;
+      const subplebbit = communityData ?? ({ address: address ?? entry } as CommunityType);
+      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+      return (
         <CommunityItem
-          key={communityData.address || index}
-          subplebbit={communityData}
+          key={entry}
+          subplebbit={subplebbit}
+          directoryCode={directoryCode}
           tags={tags}
           index={index}
-          isUnsubscribed={isUnsubscribed(communityData.address)}
+          isUnsubscribed={isUnsubscribed(entry)}
           onUnsubscribe={handleUnsubscribe}
         />
-      ) : null;
-    })
-    .filter(Boolean);
+      );
+    });
 
   if (communityElements.length === 0) {
     return <NoCommunitiesMessage />;

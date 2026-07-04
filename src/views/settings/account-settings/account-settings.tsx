@@ -134,13 +134,13 @@ const ExportAccountButton = () => {
       const accountString = await exportAccount();
       const exportedAccount = JSON.parse(accountString);
 
-      // exportAccount might not include plebbitOptions, so we need to include it from useAccount()
+      // exportAccount might not include pkcOptions, so we need to include it from useAccount()
       let accountDataToInclude;
       if (includePlebbitOptions) {
-        const { plebbit: _plebbit, ...completeAccountData } = account;
+        const { pkc: _pkc, ...completeAccountData } = account;
         accountDataToInclude = completeAccountData;
       } else {
-        const { plebbit: _plebbit, plebbitOptions: _plebbitOptions, ...completeAccountData } = account;
+        const { pkc: _pkc, pkcOptions: _pkcOptions, ...completeAccountData } = account;
         accountDataToInclude = completeAccountData;
       }
       exportedAccount.account = accountDataToInclude;

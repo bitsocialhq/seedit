@@ -20,6 +20,8 @@ const config = {
       /^\/\.github$/,
       /^\/scripts$/,
       /^\/\.git/,
+      // exclude both the new (.pkc) and legacy (.plebbit) local data dirs
+      /^\/\.pkc$/,
       /^\/\.plebbit$/,
       /^\/out$/,
       /^\/dist$/,

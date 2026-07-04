@@ -2,36 +2,15 @@
   "version": 1,
   "hooks": {
     "afterFileEdit": [
-      {
-        "command": ".cursor/hooks/format.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".cursor/hooks/yarn-install.sh",
-        "timeout": 120
-      },
-      {
-        "command": ".cursor/hooks/react-pattern-review.sh",
-        "timeout": 10
-      }
+      { "command": "./.cursor/hooks/format.sh" },
+      { "command": "./.cursor/hooks/yarn-install.sh" },
+      { "command": "./.cursor/hooks/react-pattern-review.sh" }
     ],
     "stop": [
-      {
-        "command": ".cursor/hooks/sync-git-branches.sh",
-        "timeout": 60
-      },
-      {
-        "command": ".cursor/hooks/react-pattern-review.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".cursor/hooks/code-quality-review-reminder.sh",
-        "timeout": 10
-      },
-      {
-        "command": ".cursor/hooks/verify.sh",
-        "timeout": 60
-      }
+      { "command": "./.cursor/hooks/sync-git-branches.sh" },
+      { "command": "./.cursor/hooks/react-pattern-review.sh" },
+      { "command": "./.cursor/hooks/code-quality-review-reminder.sh" },
+      { "command": "./.cursor/hooks/verify.sh" }
     ]
   }
 }

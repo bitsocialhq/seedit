@@ -11,9 +11,23 @@ if [ "${1:-}" = "--advisory" ]; then
   shift
 fi
 
-cat > /dev/null
+input="$(cat)"
+
+# Avoid infinite stop loops: when a previous blocking verify already forced the
+# agent to continue, Claude Code/Codex set stop_hook_active on the next Stop.
+if command -v jq >/dev/null 2>&1; then
+  if [ "$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)" = "true" ]; then
+    exit 0
+  fi
+fi
 
 cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)" || exit 0
+
+# Read-only sessions change nothing; skip the expensive full verification.
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -z "$(git status --porcelain 2>/dev/null)" ]; then
+  echo "Working tree clean; skipping verification."
+  exit 0
+fi
 
 cleanup_generated_dir() {
   local path="$1"
@@ -76,8 +90,11 @@ if [ "$failures" -ne 0 ]; then
     exit 0
   fi
 
-  echo "Verification failed."
-  exit 1
+  # Exit 2 is the only exit code that blocks the stop and feeds the reason back
+  # to the agent in Claude Code and Codex; exit 1 would be a silent, non-blocking
+  # error. The full logs are on stdout above; keep the stderr reason short.
+  echo "Verification failed: build, lint, or type-check reported errors (see hook output). Fix them before finishing, or rerun with AGENT_VERIFY_MODE=advisory to intentionally stop on a broken tree." >&2
+  exit 2
 fi
 
 echo "Verification complete."

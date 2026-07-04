@@ -1,4 +1,5 @@
-# plebbit temp files
+# local pkc temp files (and legacy plebbit dir)
+.pkc
 .plebbit
 bin
 .env
@@ -189,7 +190,7 @@ yarn-error.log*
 !.claude/agents/**
 !.claude/hooks/
 !.claude/hooks/**
-!.claude/hooks.json
+!.claude/settings.json
 !.claude/skills/
 !.claude/skills/**
 .claude/**/.DS_Store

@@ -1,0 +1,13 @@
+{
+  "description": "Communities competing to host the askseedit directory on Seedit. The highest-scoring community resolves the directory code; if it goes offline, Seedit rotates to the next-highest. Anyone can open a PR on this file to add their community.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-askseedit-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "askseedit.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWNv5HzmkcKZkxMn1SrfMyozTdTJSr7kA1bzEKKa7PTS5N",
+      "owner": "plebeius.bso"
+    }
+  ]
+}

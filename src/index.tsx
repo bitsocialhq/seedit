@@ -1,4 +1,5 @@
 import './polyfills.js';
+import './lib/react-scan';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';
@@ -17,7 +18,7 @@ const isVercelDeployment =
   typeof window !== 'undefined' && (window.location.hostname === 'seedit.app' || window.location.hostname === 'www.seedit.app') && !window.isElectron;
 
 if (window.location.hostname.startsWith('p2p.')) {
-  (window as any).defaultPlebbitOptions = {
+  (window as any).defaultPkcOptions = {
     libp2pJsClientsOptions: [{ key: 'libp2pjs' }],
     httpsRoutersOptions: ['https://peers.pleb.bot', 'https://peers.forumindex.com'],
   };

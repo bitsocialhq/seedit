@@ -12,7 +12,7 @@ Based on https://react.dev/learn/you-might-not-need-an-effect
 
 ## Arguments
 
-- **scope**: what to analyze (default: uncommitted changes). Examples: `diff to main`, `src/components/`, `whole codebase`
+- **scope**: what to analyze (default: uncommitted changes). Examples: `diff to master`, `src/components/`, `whole codebase`
 - **fix**: whether to apply fixes (default: `true`). Set to `false` to only propose changes.
 
 ## Workflow

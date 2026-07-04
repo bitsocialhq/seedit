@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
-import reactScan from '@react-scan/vite-plugin-react-scan';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -22,12 +21,6 @@ export default defineConfig({
         ],
       },
     }),
-    // Only include React Scan in development mode - never in production builds
-    !isProduction &&
-      reactScan({
-        showToolbar: true,
-        playSound: true,
-      }),
     nodePolyfills({
       globals: {
         Buffer: true,

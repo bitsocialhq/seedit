@@ -32,7 +32,7 @@ Batch 3 (parallel): [tasks that depend on batch 2]
 
 **Rules:**
 
-- Max 4 concurrent subagents (tool limitation)
+- Max 4 concurrent subagents, to bound machine load and coordination overhead
 - Tasks touching the same file(s) go in the same subagent or sequential batches — never parallel
 - Small related tasks can be grouped into one subagent to reduce overhead
 - Large independent tasks get their own subagent

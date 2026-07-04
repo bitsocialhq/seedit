@@ -5,10 +5,10 @@ import fs from 'fs-extra';
 import ps from 'node:process';
 import proxyServer from './proxy-server.js';
 import tcpPortUsed from 'tcp-port-used';
-import EnvPaths from 'env-paths';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { getPkcDataPath } from './pkc-paths.js';
 const dirname = path.join(path.dirname(fileURLToPath(import.meta.url)));
-const envPaths = EnvPaths('plebbit', { suffix: false });
+const projectRoot = path.join(dirname, '..');
 
 // Get platform-specific binary name
 const getIpfsBinaryName = () => (process.platform === 'win32' ? 'ipfs.exe' : 'ipfs');
@@ -49,7 +49,7 @@ const getKuboPath = async () => {
       const kuboModule = await import(kuboUrl);
       const { path: getKuboBinaryPath } = kuboModule;
       return getKuboBinaryPath();
-    } catch (err) {
+    } catch {
       // Fallback: try to find the binary directly in kubo module
       const kuboBinPath = path.join(kuboModulePath, 'kubo', binaryName);
       if (fs.existsSync(kuboBinPath)) {
@@ -91,7 +91,7 @@ const spawnAsync = (...args) =>
 
 const startIpfs = async () => {
   const ipfsPath = await getKuboPath();
-  const ipfsDataPath = isDev ? path.join(dirname, '..', '.plebbit', 'ipfs') : path.join(envPaths.data, 'ipfs');
+  const ipfsDataPath = path.join(getPkcDataPath({ isDev, projectRoot }), 'ipfs');
 
   if (!fs.existsSync(ipfsPath)) {
     throw Error(`ipfs binary '${ipfsPath}' doesn't exist`);

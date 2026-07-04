@@ -63,6 +63,7 @@ Rules:
 
 - Never merge with unresolved `must-fix` findings.
 - Do not accept a bot finding without reading the relevant code and diff.
+- When delegating verification of a finding or a fix to a subagent, give it only the artifact (the diff, function, or claim) and the contract it must satisfy — not your triage verdict or reasoning — so its conclusion stays independent.
 - `should-fix` and `defer` findings are not merge blockers by default; use judgment and prefer merging once the branch is safe, verified, and the remaining comments are low-value or future work.
 - If a finding is ambiguous but high-risk, ask the user before merging.
 - If a comment is wrong, stale, or intentionally deferred, explain that briefly in the PR or merge summary rather than silently ignoring it.

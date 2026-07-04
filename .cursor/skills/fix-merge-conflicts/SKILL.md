@@ -56,7 +56,7 @@ If `package.json` was modified, run `corepack yarn install` first.
 ### 4. Verify no remaining markers
 
 ```bash
-rg '<<<<<<<|=======|>>>>>>>' --type ts --type tsx --type json
+git grep -n -I -E '^(<{7} |={7}$|>{7} )' -- .
 ```
 
 If any markers remain, go back and resolve them.

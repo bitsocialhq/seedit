@@ -16,7 +16,7 @@ Two-layer profiling: browser-level symptoms (Web Vitals, long tasks, scroll jank
 
 ### react-scan (already configured)
 
-The app has `react-scan` set up in `src/lib/react-scan.ts` with `report: true`. In dev mode it:
+The app has `react-scan` set up in `src/lib/react-scan.ts`, imported in the entry file `src/index.tsx`. In dev mode it:
 - Highlights rerendering components visually (toolbar + overlay)
 - Tracks per-component render counts and times internally
 - Exposes `window.__getReactScanReport()` for programmatic collection
@@ -31,7 +31,7 @@ Before spawning any profiler subagents, verify exactly one dev server is availab
 
 ```bash
 # Check if the dev server is reachable
-curl -sf http://localhost:3000 -o /dev/null && echo "OK" || echo "NOT RUNNING"
+curl -sf https://seedit.localhost -o /dev/null && echo "OK" || echo "NOT RUNNING"
 ```
 
 - If **OK**: proceed to Step 1.
@@ -159,5 +159,5 @@ playwright-cli -s=prof-3 close 2>/dev/null
 - **Per-route collection**: Data resets on each `goto` — the profiler collects before navigating away.
 - **addInitScript persistence**: Instrumentation re-injects automatically in each new document.
 - **Tracing**: Each subagent produces a `trace.zip` viewable in [Trace Viewer](https://trace.playwright.dev).
-- **Board codes**: `biz`, `pol`, `g`, `a`, `v`, etc. map to community addresses via the app's directory.
+- **Routes**: communities are addressed directly as `/s/<community-address>`; `/s/all` aggregates the default communities.
 - **Without react-scan**: If `__getReactScanReport` returns null, the profiler falls back to commit counts + render bursts (still useful, just no component names).

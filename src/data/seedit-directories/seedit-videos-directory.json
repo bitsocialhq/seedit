@@ -1,0 +1,13 @@
+{
+  "description": "Communities competing to host the videos directory on Seedit. The highest-scoring community resolves the directory code; if it goes offline, Seedit rotates to the next-highest. Anyone can open a PR on this file to add their community.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-videos-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "videos-posting.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWQt3UJ6A3AeZxJSFJnspVmYQK1Epj8VeSzrFG1tHiZC9o",
+      "owner": "plebeius.bso"
+    }
+  ]
+}

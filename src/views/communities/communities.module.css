@@ -177,6 +177,18 @@
   margin-top: 2px;
 }
 
+.directoryMarker {
+  font-size: x-small;
+  color: var(--text);
+}
+
+.directoryServedBy {
+  font-size: x-small;
+  color: var(--text);
+  text-transform: lowercase;
+  overflow-wrap: break-word;
+}
+
 .moderatorIcon {
   background-image: url('/assets/moderator.png');
   background-size: 100%;

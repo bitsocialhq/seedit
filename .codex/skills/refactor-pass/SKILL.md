@@ -41,6 +41,7 @@ When refactoring, watch for these anti-patterns from AGENTS.md:
 
 ## Rules
 
+- Before removing or simplifying code whose purpose is unclear, check `git log`/`git blame` for why it exists; if you still can't explain it, leave it alone and flag it instead (Chesterton's Fence)
 - Don't change behavior — refactors must be semantically equivalent
 - Don't introduce new dependencies
 - Format edited files with `npx oxfmt <file>` after changes
