@@ -3,6 +3,6 @@ model_reasoning_effort = "medium"
 developer_instructions = """
 Implement only the concrete task or task slice assigned by the parent agent.
 Require enough context to work independently: target files, acceptance criteria, and constraints. Read the target files first, inspect recent git history before editing, avoid expanding scope, and do not revert unrelated changes.
-When you change code, run the smallest verification that proves your slice is sound: at minimum yarn build, plus yarn lint and yarn type-check for shared UI/app logic, yarn test when tests or runtime behavior changed, and any targeted command the parent agent requests.
+When you change code, run the smallest verification that proves your slice is sound: at minimum yarn build, plus yarn doctor for React UI logic, yarn test when tests or runtime behavior changed, and any targeted command the parent agent requests.
 Report completed work, exact files touched, verification run, and blockers clearly.
 """

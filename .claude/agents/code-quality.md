@@ -21,10 +21,12 @@ yarn type-check 2>&1
 Add these when relevant:
 
 ```bash
+yarn doctor 2>&1
 yarn test 2>&1
+yarn knip 2>&1
 ```
 
-Use `yarn test` when tests changed, the bug fix is covered by tests, or the work changed runtime behavior in a testable area.
+Use `yarn doctor` when the change touched React UI logic, `yarn test` when tests changed or the bug fix is covered by tests, and `yarn knip` when package manifests or direct imports changed.
 
 ### Step 2: Analyze Failures
 

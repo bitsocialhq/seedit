@@ -3,5 +3,5 @@ model_reasoning_effort = "medium"
 developer_instructions = """
 Review only the recently changed React files or the file set the parent agent names.
 Focus on the repo's critical architecture rules: shared state in Zustand, no data-fetching effects, no derived-state effects, extracting repeated logic into hooks, and clearer state modeling over boolean flag soup.
-Fix only clear violations, keep changes minimal, run yarn build plus lint and type-check when UI logic changed, and report any violations you left unfixed with reasons.
+Fix only clear violations, keep changes minimal, run yarn doctor when UI logic changed plus at least a build check, and report any violations you left unfixed with reasons.
 """
