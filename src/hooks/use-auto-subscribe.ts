@@ -59,6 +59,10 @@ export const useAutoSubscribe = () => {
           localStorage.setItem(storageKey, 'true');
         } catch (error) {
           console.error('Directory subscriptions migration error:', error);
+          // Don't mark the account as processed: a transient setAccount failure
+          // should retry on the next effect run instead of waiting for a reload.
+          removeCheckingAccount(accountAddress);
+          return;
         }
       } else {
         localStorage.setItem(storageKey, 'true');
