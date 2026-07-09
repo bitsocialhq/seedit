@@ -14,7 +14,10 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "types": [
+      "node"
+    ],
     "paths": {
       "@bitsocialnet/bitsocial-react-hooks": [
         "./src/lib/bitsocial-react-hooks-compat.ts"

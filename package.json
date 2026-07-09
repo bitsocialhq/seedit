@@ -6,7 +6,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "private": true,
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.17.1",
   "dependencies": {
     "@bitsocial/bitsocial-react-hooks": "0.1.26",
     "@bitsocial/bso-resolver": "0.0.8",
@@ -54,7 +54,7 @@
     "remark-gfm": "3.0.1",
     "remark-supersub": "1.0.0",
     "tcp-port-used": "1.0.2",
-    "typescript": "6.0.2",
+    "typescript": "7.0.2",
     "zustand": "4.4.3"
   },
   "scripts": {
