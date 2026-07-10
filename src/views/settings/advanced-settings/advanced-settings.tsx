@@ -199,7 +199,7 @@ const FullNodeRpcSettings = ({ fullNodeRpcRef }: SettingsProps) => {
       <input
         type='text'
         aria-label='Full node WebSocket RPC URL'
-        defaultValue={pkcRpcClientsOptions}
+        defaultValue={pkcRpcClientsOptions?.[0]}
         placeholder='ws://<IP>:<port>/<secretAuthKey>'
         ref={fullNodeRpcRef}
         autoCorrect='off'
