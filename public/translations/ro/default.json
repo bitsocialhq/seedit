@@ -248,7 +248,6 @@
   "downloading_comments": "se descarcă comentarii",
   "you_blocked_community": "Ați blocat această comunitate",
   "show": "arată",
-  "plebbit_options": "opțiuni plebbit",
   "general": "general",
   "more_posts_last_week": "{{count}} postări săptămâna trecută {{currentTimeFilterName}}: <1>arata mai multe postări de săptămâna trecută</1>",
   "more_posts_last_month": "{{count}} postări în {{currentTimeFilterName}}: <1>arată mai multe postări din luna trecută</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Vizualizezi deja această comunitate"
+  "already_in_community": "Vizualizezi deja această comunitate",
+  "advanced": "avansat",
+  "p2p_stats": "statistici p2p"
 }

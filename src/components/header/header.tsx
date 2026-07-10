@@ -35,7 +35,8 @@ import {
   isCommunitiesOwnerView,
   isProfileUpvotedView,
   isSettingsContentOptionsView,
-  isSettingsPlebbitOptionsView,
+  isSettingsAdvancedView,
+  isSettingsP2pStatsView,
   isCommunityAboutView,
   isDomainView,
   isPostPageAboutView,
@@ -232,20 +233,28 @@ const CommunitiesHeaderTabs = () => {
 const SettingsHeaderTabs = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const isInSettingsPlebbitOptionsView = isSettingsPlebbitOptionsView(location.pathname);
+  const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
+  const isInSettingsP2pStatsView = isSettingsP2pStatsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
   const isInSettingsAccountDataView = isSettingsAccountDataView(location.pathname);
 
   return (
     <>
-      <li className={isInSettingsPlebbitOptionsView || isInSettingsContentOptionsView || isInSettingsAccountDataView ? styles.choice : styles.selected}>
+      <li
+        className={
+          isInSettingsAdvancedView || isInSettingsP2pStatsView || isInSettingsContentOptionsView || isInSettingsAccountDataView ? styles.choice : styles.selected
+        }
+      >
         <Link to={'/settings'}>{t('general')}</Link>
       </li>
       <li className={isInSettingsContentOptionsView ? styles.selected : styles.choice}>
         <Link to={'/settings/content-options'}>{t('content_options')}</Link>
       </li>
-      <li className={isInSettingsPlebbitOptionsView ? styles.selected : styles.choice}>
-        <Link to={'/settings/plebbit-options'}>{t('plebbit_options')}</Link>
+      <li className={isInSettingsAdvancedView ? styles.selected : styles.choice}>
+        <Link to={'/settings/advanced'}>{t('advanced')}</Link>
+      </li>
+      <li className={isInSettingsP2pStatsView ? styles.selected : styles.choice}>
+        <Link to={'/settings/p2p-stats'}>{t('p2p_stats')}</Link>
       </li>
     </>
   );
@@ -272,7 +281,7 @@ const HeaderTabs = () => {
   const isInCreateCommunityView = isCreateCommunityView(location.pathname);
   const isInSettingsView = isSettingsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
-  const isInSettingsPlebbitOptionsView = isSettingsPlebbitOptionsView(location.pathname);
+  const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
 
   if (isInPostPageView || isInPendingPostView) {
     return <CommentsButton />;
@@ -292,7 +301,7 @@ const HeaderTabs = () => {
     return <InboxHeaderTabs />;
   } else if (isInCommunitiesView && !isInCreateCommunityView) {
     return <CommunitiesHeaderTabs />;
-  } else if (isInSettingsView || isInSettingsPlebbitOptionsView || isInSettingsContentOptionsView) {
+  } else if (isInSettingsView || isInSettingsAdvancedView || isInSettingsContentOptionsView) {
     return <SettingsHeaderTabs />;
   }
   return null;
@@ -313,7 +322,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const isInProfileView = isProfileView(location.pathname);
   const isInSettingsView = isSettingsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
-  const isInSettingsPlebbitOptionsView = isSettingsPlebbitOptionsView(location.pathname);
+  const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
   const isInSubmitView = isSubmitView(location.pathname);
   const isInCommunityView = isCommunityView(location.pathname, params);
   const isInCommunitySubmitView = isCommunitySubmitView(location.pathname, params);
@@ -353,7 +362,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
     );
   } else if (isInSubmitView) {
     return submitTitle;
-  } else if (isInSettingsView || isInSettingsPlebbitOptionsView || isInSettingsContentOptionsView) {
+  } else if (isInSettingsView || isInSettingsAdvancedView || isInSettingsContentOptionsView) {
     return t('preferences');
   } else if (isInProfileView && !isInPendingPostView) {
     return profileTitle;

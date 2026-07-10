@@ -1304,12 +1304,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bitsocial-react-hooks@npm:0.1.26":
-  version: 0.1.26
-  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.26"
+"@bitsocial/bitsocial-react-hooks@npm:0.1.27":
+  version: 0.1.27
+  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.27"
   dependencies:
     "@bitsocial/bso-resolver": "npm:0.0.8"
-    "@pkcprotocol/pkc-js": "npm:0.0.62"
+    "@pkcprotocol/pkc-js": "npm:0.0.65"
     "@pkcprotocol/pkc-logger": "npm:0.1.0"
     assert: "npm:2.0.0"
     ethers: "npm:5.8.0"
@@ -1325,7 +1325,7 @@ __metadata:
     zustand: "npm:4.0.0"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/d6b2d08e4815e49c17775a4ff4a2850af1daea8da638f5d88408e5e168ea9dc27bbdd4f71712c70149073c05eef1a0e577faeae6b068e784cf88f191dce97cff
+  checksum: 10c0/1d97abf6983420e127ddcb63b716d990ba137c71454ac616706a6c6f50a87e193f2ce09d4e3acccc5149524a71efa706432e221bdce674ea4db3634390eb078e
   languageName: node
   linkType: hard
 
@@ -6021,9 +6021,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pkcprotocol/pkc-js@npm:0.0.62":
-  version: 0.0.62
-  resolution: "@pkcprotocol/pkc-js@npm:0.0.62"
+"@pkcprotocol/pkc-js@npm:0.0.65":
+  version: 0.0.65
+  resolution: "@pkcprotocol/pkc-js@npm:0.0.65"
   dependencies:
     "@enhances/with-resolvers": "npm:0.0.5"
     "@helia/block-brokers": "npm:5.2.4"
@@ -6070,7 +6070,7 @@ __metadata:
     p-timeout: "npm:7.0.1"
     probe-image-size: "npm:7.2.3"
     quick-lru: "npm:5.1.1"
-    remeda: "npm:1.57.0"
+    remeda: "npm:2.39.0"
     retry: "npm:0.13.1"
     rpc-websockets: "npm:9.3.8"
     safe-stable-stringify: "npm:2.4.3"
@@ -6084,7 +6084,7 @@ __metadata:
     uuid: "npm:13.0.0"
     ws: "npm:8.20.0"
     zod: "npm:4.3.6"
-  checksum: 10c0/c55f2b5e3d52a4716124228bf9fc51cb949aff44a8d9404b4bd870367ef5c27d4cc98a2521054f2d8d008fc90977ac9a74d44e6cc619d4c4280c12128dabce9a
+  checksum: 10c0/5cb8f6545ea53d48a7092c644a968ccfc1fcc07894245d5bb20a94b8fdd6735c8232546de9706cc207e5d69cca912f780ca539e1ef6cac21969d00a400e4a3d4
   languageName: node
   linkType: hard
 
@@ -19182,10 +19182,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remeda@npm:1.57.0":
-  version: 1.57.0
-  resolution: "remeda@npm:1.57.0"
-  checksum: 10c0/d5b455ee854ddf83dbf30fff279edf6c1e5a89885bfdf89a383ec003a9ecf6076be8d9d784d8ad0689bc129ba7480b308ae0cd8acfc85666d7df6d441dcca9ab
+"remeda@npm:2.39.0":
+  version: 2.39.0
+  resolution: "remeda@npm:2.39.0"
+  checksum: 10c0/5891871c93b47c501937d6e4a1c05d0b199b4402a8eb3a7a08653e81acc4ce45ae3cff4c90785d867f5e9b5f75e27b5120f0240e8ce490fbf2ab8c48013cc8af
   languageName: node
   linkType: hard
 
@@ -19678,7 +19678,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "seedit@workspace:."
   dependencies:
-    "@bitsocial/bitsocial-react-hooks": "npm:0.1.26"
+    "@bitsocial/bitsocial-react-hooks": "npm:0.1.27"
     "@bitsocial/bso-resolver": "npm:0.0.8"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"
@@ -19696,7 +19696,7 @@ __metadata:
     "@electron-forge/plugin-auto-unpack-natives": "npm:7.8.0"
     "@electron/rebuild": "npm:3.7.2"
     "@floating-ui/react": "npm:0.26.1"
-    "@pkcprotocol/pkc-js": "npm:0.0.62"
+    "@pkcprotocol/pkc-js": "npm:0.0.65"
     "@reforged/maker-appimage": "npm:5.1.1"
     "@types/memoizee": "npm:0.4.9"
     "@types/node": "npm:20.19.37"

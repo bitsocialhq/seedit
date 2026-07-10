@@ -290,7 +290,6 @@
   "downloading_comments": "downloading comments",
   "you_blocked_community": "You blocked this community",
   "show": "show",
-  "plebbit_options": "plebbit options",
   "general": "general",
   "more_posts_last_week": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last week</1>",
   "more_posts_last_month": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last month</1>",
@@ -383,5 +382,7 @@
   "moderator_of": "moderator of",
   "not_subscriber_nor_moderator": "You are not a subscriber nor a moderator of any community.",
   "more_posts_last_year": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last year</1>",
-  "already_in_community": "You're already viewing this community"
+  "already_in_community": "You're already viewing this community",
+  "advanced": "advanced",
+  "p2p_stats": "p2p stats"
 }

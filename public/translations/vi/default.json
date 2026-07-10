@@ -248,7 +248,6 @@
   "downloading_comments": "đang tải xuống bình luận",
   "you_blocked_community": "Bạn đã chặn cộng đồng này",
   "show": "hiển thị",
-  "plebbit_options": "tùy chọn plebbit",
   "general": "chung",
   "more_posts_last_week": "{{count}} bài viết tuần trước {{currentTimeFilterName}}: <1>hiển thị thêm bài viết từ tuần trước</1>",
   "more_posts_last_month": "{{count}} bài đăng trong {{currentTimeFilterName}}: <1>hiển thị thêm bài đăng từ tháng trước</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Bạn đã đang xem cộng đồng này"
+  "already_in_community": "Bạn đã đang xem cộng đồng này",
+  "advanced": "nâng cao",
+  "p2p_stats": "thống kê p2p"
 }

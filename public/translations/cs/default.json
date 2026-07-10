@@ -248,7 +248,6 @@
   "downloading_comments": "stahování komentářů",
   "you_blocked_community": "Zablokovali jste tuto komunitu",
   "show": "ukázat",
-  "plebbit_options": "plebbit možnosti",
   "general": "obecné",
   "more_posts_last_week": "{{count}} příspěvků minulý {{currentTimeFilterName}}: <1>zobrazit více příspěvků z minulého týdne</1>",
   "more_posts_last_month": "{{count}} příspěvků v {{currentTimeFilterName}}: <1>zobrazit více příspěvků z minulého měsíce</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Tuto komunitu již prohlížíte"
+  "already_in_community": "Tuto komunitu již prohlížíte",
+  "advanced": "pokročilé",
+  "p2p_stats": "statistiky p2p"
 }

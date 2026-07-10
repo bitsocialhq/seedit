@@ -248,7 +248,6 @@
   "downloading_comments": "กำลังดาวน์โหลดความคิดเห็น",
   "you_blocked_community": "คุณบล็อกชุมชนนี้แล้ว",
   "show": "แสดง",
-  "plebbit_options": "ตัวเลือก plebbit",
   "general": "ทั่วไป",
   "more_posts_last_week": "{{count}} โพสต์เมื่อสัปดาห์ที่แล้ว {{currentTimeFilterName}}: <1>แสดงโพสต์เพิ่มเติมจากสัปดาห์ที่แล้ว</1>",
   "more_posts_last_month": "{{count}} โพสต์ใน {{currentTimeFilterName}}: <1>แสดงโพสต์เพิ่มเติมจากเดือนที่แล้ว</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "คุณกำลังดูชุมชนนี้อยู่แล้ว"
+  "already_in_community": "คุณกำลังดูชุมชนนี้อยู่แล้ว",
+  "advanced": "ขั้นสูง",
+  "p2p_stats": "สถิติ p2p"
 }

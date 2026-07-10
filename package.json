@@ -8,7 +8,7 @@
   "private": true,
   "packageManager": "yarn@4.17.1",
   "dependencies": {
-    "@bitsocial/bitsocial-react-hooks": "0.1.26",
+    "@bitsocial/bitsocial-react-hooks": "0.1.27",
     "@bitsocial/bso-resolver": "0.0.8",
     "@capacitor/app": "7.0.1",
     "@capacitor/filesystem": "7.1.4",
@@ -17,7 +17,7 @@
     "@capacitor/status-bar": "7.0.1",
     "@capawesome/capacitor-android-edge-to-edge-support": "7.2.2",
     "@floating-ui/react": "0.26.1",
-    "@pkcprotocol/pkc-js": "0.0.62",
+    "@pkcprotocol/pkc-js": "0.0.65",
     "@types/node": "20.19.37",
     "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",

@@ -248,7 +248,6 @@
   "downloading_comments": "mengunduh komentar",
   "you_blocked_community": "Anda telah memblokir komunitas ini",
   "show": "menunjukkan",
-  "plebbit_options": "opsi plebbit",
   "general": "umum",
   "more_posts_last_week": "{{count}} pos terakhir {{currentTimeFilterName}}: <1>tampilkan lebih banyak pos dari minggu lalu</1>",
   "more_posts_last_month": "{{count}} postingan di {{currentTimeFilterName}}: <1>tampilkan lebih banyak postingan dari bulan lalu</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Anda sudah melihat komunitas ini"
+  "already_in_community": "Anda sudah melihat komunitas ini",
+  "advanced": "lanjutan",
+  "p2p_stats": "statistik p2p"
 }

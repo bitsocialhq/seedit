@@ -3,6 +3,7 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
 import { useAutoSubscribe } from './hooks/use-auto-subscribe';
+import { useBrowserPureP2PAccountUpgrade } from './hooks/use-browser-pure-p2p-account-upgrade';
 import AboutView from './views/about';
 import All from './views/all';
 import Author from './views/author';
@@ -32,6 +33,7 @@ initializeNotificationSystem();
 
 const App = () => {
   useAutoSubscribe();
+  useBrowserPureP2PAccountUpgrade();
 
   const globalLayout = (
     <>
@@ -99,7 +101,8 @@ const App = () => {
             <Route path='/settings' element={<Settings />} />
             <Route path='/s/:communityAddress/settings' element={<CommunitySettings />} />
             <Route path='/s/:communityAddress/settings/editor' element={<CommunityDataEditor />} />
-            <Route path='/settings/plebbit-options' element={<Settings />} />
+            <Route path='/settings/advanced' element={<Settings />} />
+            <Route path='/settings/p2p-stats' element={<Settings />} />
             <Route path='/settings/content-options' element={<Settings />} />
             <Route path='/settings/account-data' element={<AccountDataEditor />} />
 

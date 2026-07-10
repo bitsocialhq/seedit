@@ -248,7 +248,6 @@
   "downloading_comments": "মন্তব্য ডাউনলোড হচ্ছে",
   "you_blocked_community": "আপনি এই সম্প্রদায়টি ব্লক করেছেন",
   "show": "দেখান",
-  "plebbit_options": "প্লেবিট বিকল্প",
   "general": "সাধারণ",
   "more_posts_last_week": "{{count}} পোস্ট গত {{currentTimeFilterName}}: <1>গত সপ্তাহ থেকে আরও পোস্ট দেখান</1>",
   "more_posts_last_month": "{{count}} পোস্ট {{currentTimeFilterName}}-এ: <1>গত মাসের আরও পোস্ট দেখান</1>",
@@ -380,5 +379,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "আপনি ইতিমধ্যে এই সম্প্রদায়টি দেখছেন"
+  "already_in_community": "আপনি ইতিমধ্যে এই সম্প্রদায়টি দেখছেন",
+  "advanced": "উন্নত",
+  "p2p_stats": "p2p পরিসংখ্যান"
 }

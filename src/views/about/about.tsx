@@ -97,8 +97,8 @@ export const FAQ = () => {
             Seedit desktop
           </a>
           , which automatically runs a full node and lets you create communities with the ease of a reddit-like graphical user interface. You can also open a remote
-          connection to an <HashLink to='/settings/plebbit-options#plebbitRpc'>RPC node</HashLink> to create communities even on web and on mobile devices. In the near
-          future, we plan to include a public RPC connection turned on by default, so you can create communities on any device without running your own node.
+          connection to an <HashLink to='/settings/advanced#fullNodeRpc'>RPC node</HashLink> to create communities even on web and on mobile devices. In the near future,
+          we plan to include a public RPC connection turned on by default, so you can create communities on any device without running your own node.
         </p>
         <hr />
         <h3 id='defaultList'>How can others find my community?</h3>
