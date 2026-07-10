@@ -248,7 +248,6 @@
   "downloading_comments": "댓글을 다운로드하는 중",
   "you_blocked_community": "이 커뮤니티를 차단했습니다",
   "show": "보여주다",
-  "plebbit_options": "plebbit 옵션",
   "general": "일반",
   "more_posts_last_week": "{{count}} 게시물 지난 {{currentTimeFilterName}}: <1>지난 주의 게시물을 더 보기</1>",
   "more_posts_last_month": "{{count}}개의 게시물 {{currentTimeFilterName}}: <1>지난 달의 더 많은 게시물 보기</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "이미 이 커뮤니티를 보고 있습니다"
+  "already_in_community": "이미 이 커뮤니티를 보고 있습니다",
+  "advanced": "고급",
+  "p2p_stats": "p2p 통계"
 }

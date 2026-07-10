@@ -248,7 +248,6 @@
   "downloading_comments": "descargando comentarios",
   "you_blocked_community": "Has bloqueado esta comunidad",
   "show": "mostrar",
-  "plebbit_options": "opciones plebbit",
   "general": "general",
   "more_posts_last_week": "{{count}} publicaciones la última {{currentTimeFilterName}}: <1>ver más publicaciones de la semana pasada</1>",
   "more_posts_last_month": "{{count}} publicaciones en {{currentTimeFilterName}}: <1>mostrar más publicaciones del mes pasado</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Ya estás viendo esta comunidad"
+  "already_in_community": "Ya estás viendo esta comunidad",
+  "advanced": "avanzado",
+  "p2p_stats": "estadísticas p2p"
 }

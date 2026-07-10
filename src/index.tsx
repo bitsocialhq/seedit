@@ -1,5 +1,6 @@
 import './polyfills.js';
 import './lib/react-scan';
+import { configureP2PBrowserPkcOptions } from './lib/p2p-browser-config';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';
@@ -17,12 +18,9 @@ import { Analytics } from '@vercel/analytics/react';
 const isVercelDeployment =
   typeof window !== 'undefined' && (window.location.hostname === 'seedit.app' || window.location.hostname === 'www.seedit.app') && !window.isElectron;
 
-if (window.location.hostname.startsWith('p2p.')) {
-  (window as any).defaultPkcOptions = {
-    libp2pJsClientsOptions: [{ key: 'libp2pjs' }],
-    httpsRoutersOptions: ['https://peers.pleb.bot', 'https://peers.forumindex.com'],
-  };
-}
+// Must run before the bitsocial-react-hooks accounts store generates the default
+// account, which reads window.defaultPkcOptions.
+configureP2PBrowserPkcOptions();
 
 registerSW({
   immediate: true,

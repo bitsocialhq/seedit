@@ -248,7 +248,6 @@
   "downloading_comments": "po shkarkohen komentet",
   "you_blocked_community": "Ju keni bllokuar këtë komunitet",
   "show": "shfaq",
-  "plebbit_options": "opsione plebbit",
   "general": "i përgjithshëm",
   "more_posts_last_week": "{{count}} postime javën {{currentTimeFilterName}}: <1>shiko postime më shumë nga java e kaluar</1>",
   "more_posts_last_month": "{{count}} postime në {{currentTimeFilterName}}: <1>shiko postime më shumë nga muaji i kaluar</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Ju po shikoni tashmë këtë komunitet"
+  "already_in_community": "Ju po shikoni tashmë këtë komunitet",
+  "advanced": "e përparuar",
+  "p2p_stats": "statistika p2p"
 }

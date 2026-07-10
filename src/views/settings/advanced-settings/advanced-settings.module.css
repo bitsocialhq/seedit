@@ -52,18 +52,22 @@
   margin-bottom: 5px;
 }
 
-.blockchainProvidersSettings input[type="text"] {
-  margin-bottom: 5px;
+.fullNodeRpcSettings input[type="text"] {
+  width: 250px;
 }
 
-.plebbitRpcSettingsInfo {
-  padding: 5px 20px 0 0;
-  word-break: break-word;
+.pureP2PSettings label {
+  cursor: pointer;
 }
 
-.plebbitRpcSettingsInfo ol {
-  padding-bottom: 5px;
-  padding-left: 40px;
+.pureP2PCheckbox {
+  margin-right: 5px;
+  vertical-align: text-bottom;
+}
+
+.pureP2PSettings .settingTitle {
+  display: block;
+  margin-top: 2px;
 }
 
 .saveOptions {

@@ -248,7 +248,6 @@
   "downloading_comments": "正在下载评论",
   "you_blocked_community": "您已封锁了此社区",
   "show": "显示",
-  "plebbit_options": "plebbit选项",
   "general": "一般",
   "more_posts_last_week": "{{count}} 帖子上个 {{currentTimeFilterName}}: <1>显示更多上周的帖子</1>",
   "more_posts_last_month": "{{count}} 帖子在 {{currentTimeFilterName}}：<1>显示更多来自上个月的帖子</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "您已经在查看此社区"
+  "already_in_community": "您已经在查看此社区",
+  "advanced": "高级",
+  "p2p_stats": "p2p统计"
 }

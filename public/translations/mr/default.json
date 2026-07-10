@@ -248,7 +248,6 @@
   "downloading_comments": "टिप्पणी डाऊनलोड करत आहे",
   "you_blocked_community": "तुम्ही ह्या समुदायाला ब्लॉक केलं आहे",
   "show": "दाखवा",
-  "plebbit_options": "प्लेबिट पर्याय",
   "general": "सामान्य",
   "more_posts_last_week": "{{count}} पोस्ट मागील {{currentTimeFilterName}}: <1>गेल्या आठवड्यातील अधिक पोस्ट दर्शवा</1>",
   "more_posts_last_month": "{{count}} पोस्ट {{currentTimeFilterName}} मध्ये: <1>गत महिन्याचे अधिक पोस्ट दर्शवा</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "तुम्ही आधीच हे समुदाय पाहत आहात"
+  "already_in_community": "तुम्ही आधीच हे समुदाय पाहत आहात",
+  "advanced": "उन्नत",
+  "p2p_stats": "p2p आकडे"
 }

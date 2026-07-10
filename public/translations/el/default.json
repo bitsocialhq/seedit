@@ -248,7 +248,6 @@
   "downloading_comments": "κατέβασμα σχολίων",
   "you_blocked_community": "Έχετε αποκλείσει αυτή την κοινότητα",
   "show": "εμφάνιση",
-  "plebbit_options": "επιλογές plebbit",
   "general": "γενικός",
   "more_posts_last_week": "{{count}} αναρτήσεις την περασμένη {{currentTimeFilterName}}: <1>δείτε περισσότερες αναρτήσεις από την περασμένη εβδομάδα</1>",
   "more_posts_last_month": "{{count}} δημοσιεύσεις στο {{currentTimeFilterName}}: <1>δείτε περισσότερες δημοσιεύσεις από τον τελευταίο μήνα</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Εμφανίζετε ήδη αυτήν την κοινότητα"
+  "already_in_community": "Εμφανίζετε ήδη αυτήν την κοινότητα",
+  "advanced": "προχωρημένα",
+  "p2p_stats": "στατιστικά p2p"
 }

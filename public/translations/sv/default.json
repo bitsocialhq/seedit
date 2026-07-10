@@ -248,7 +248,6 @@
   "downloading_comments": "hämtar kommentarer",
   "you_blocked_community": "Du har blockerat den här gemenskapen",
   "show": "visa",
-  "plebbit_options": "plebbit-alternativ",
   "general": "allmän",
   "more_posts_last_week": "{{count}} inlägg senaste {{currentTimeFilterName}}: <1>visa fler inlägg från förra veckan</1>",
   "more_posts_last_month": "{{count}} inlägg i {{currentTimeFilterName}}: <1>visa fler inlägg från förra månaden</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "Du visar redan denna gemenskap"
+  "already_in_community": "Du visar redan denna gemenskap",
+  "advanced": "avancerat",
+  "p2p_stats": "p2p-statistik"
 }

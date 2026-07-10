@@ -146,11 +146,21 @@ export const isProfileHiddenView = (pathname: string): boolean => {
 };
 
 export const isSettingsView = (pathname: string): boolean => {
-  return pathname === '/settings' || pathname === '/settings/plebbit-options' || pathname === '/settings/content-options' || pathname === '/settings/account-data';
+  return (
+    pathname === '/settings' ||
+    pathname === '/settings/advanced' ||
+    pathname === '/settings/p2p-stats' ||
+    pathname === '/settings/content-options' ||
+    pathname === '/settings/account-data'
+  );
 };
 
-export const isSettingsPlebbitOptionsView = (pathname: string): boolean => {
-  return pathname === '/settings/plebbit-options';
+export const isSettingsAdvancedView = (pathname: string): boolean => {
+  return pathname === '/settings/advanced';
+};
+
+export const isSettingsP2pStatsView = (pathname: string): boolean => {
+  return pathname === '/settings/p2p-stats';
 };
 
 export const isSettingsContentOptionsView = (pathname: string): boolean => {

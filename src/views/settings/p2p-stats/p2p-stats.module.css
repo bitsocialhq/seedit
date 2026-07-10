@@ -1,0 +1,197 @@
+.content {
+  margin: 7px 5px 40px 0;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stats {
+  margin: 6px 0 0;
+  width: calc(100% - 8px);
+  border-collapse: collapse;
+}
+
+.stats th {
+  text-align: left;
+  font-weight: 700;
+}
+
+.stats th,
+.stats td {
+  padding: 2px 4px 3px 0;
+  vertical-align: top;
+}
+
+.statName {
+  width: 34%;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.statValue {
+  word-break: break-word;
+}
+
+.statValue a {
+  color: var(--link-primary);
+}
+
+.statValue a:hover {
+  text-decoration: underline;
+}
+
+/* Connected peers span the full panel width instead of the narrow value column. */
+.stats td.connectedPeersCell {
+  padding: 4px 4px 5px 0;
+}
+
+.connectedPeersSummary {
+  display: inline-block;
+  cursor: pointer;
+  padding: 1px 0;
+  font-weight: bold;
+}
+
+.connectedPeerList {
+  display: grid;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.connectedPeer {
+  display: grid;
+  gap: 3px;
+  padding: 4px 6px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.connectedPeerMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85em;
+}
+
+.connectionTransport {
+  font-weight: 700;
+}
+
+.connectionTransferStats,
+.connectionRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.85;
+}
+
+.connectionRole {
+  text-transform: capitalize;
+}
+
+.connectionRole[data-peer-role='leecher'] {
+  color: red;
+}
+
+.peerId {
+  overflow: hidden;
+  font-family: monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connectionAddressRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nodeEndpoint {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nodeIp {
+  overflow-wrap: anywhere;
+}
+
+.peerFlag {
+  flex-shrink: 0;
+  width: 16px;
+  height: 11px;
+  background-image: url('/assets/flags-1.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.connectionAddress {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.85em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.connectedPeerEmpty {
+  padding: 6px 8px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.peerWorldMap {
+  margin-top: 6px;
+  max-width: 500px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.peerWorldMapSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.landDot {
+  fill: currentColor;
+  opacity: 0.28;
+}
+
+.peerMarker {
+  fill: #3fb950;
+}
+
+.peerMarker[data-peer-role='leecher'] {
+  fill: red;
+}
+
+.peerWorldMapCaption {
+  padding: 1px 4px 2px;
+  font-size: 0.8em;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.statsMeta {
+  margin-top: 5px;
+  font-size: 0.85em;
+}
+
+.statsLoading {
+  margin: 8px 0 16px;
+  padding-bottom: 8px;
+  font-size: 10pt;
+}
+
+.error {
+  color: red;
+  word-break: break-word;
+}

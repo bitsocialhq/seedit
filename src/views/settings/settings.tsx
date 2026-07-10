@@ -3,13 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Capacitor } from '@capacitor/core';
 import { setAccount, useAccount } from '@bitsocial/bitsocial-react-hooks';
-import { isSettingsPlebbitOptionsView, isSettingsContentOptionsView } from '../../lib/utils/view-utils';
+import { isSettingsAdvancedView, isSettingsP2pStatsView, isSettingsContentOptionsView } from '../../lib/utils/view-utils';
 import useTheme from '../../hooks/use-theme';
 import { VersionWithCommit } from '../../components/version';
 import AccountSettings from './account-settings';
 import AddressSettings from './address-settings';
 import AvatarSettings from './avatar-settings';
-import PlebbitOptions from './plebbit-options';
+import AdvancedSettings from './advanced-settings';
+import P2pStats from './p2p-stats';
 import ContentOptions from './content-options';
 import WalletSettings from './wallet-settings';
 import NotificationsSettings from './notifications-settings';
@@ -234,7 +235,8 @@ const GeneralSettings = () => {
 const Settings = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const isInSettingsPlebbitOptionsView = isSettingsPlebbitOptionsView(location.pathname);
+  const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
+  const isInSettingsP2pStatsView = isSettingsP2pStatsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
   const account = useAccount();
 
@@ -249,7 +251,15 @@ const Settings = () => {
 
   return (
     <div className={styles.content}>
-      {isInSettingsPlebbitOptionsView ? <PlebbitOptions /> : isInSettingsContentOptionsView ? <ContentOptions /> : <GeneralSettings key={account?.id} />}
+      {isInSettingsAdvancedView ? (
+        <AdvancedSettings />
+      ) : isInSettingsP2pStatsView ? (
+        <P2pStats />
+      ) : isInSettingsContentOptionsView ? (
+        <ContentOptions />
+      ) : (
+        <GeneralSettings key={account?.id} />
+      )}
     </div>
   );
 };

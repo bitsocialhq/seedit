@@ -248,7 +248,6 @@
   "downloading_comments": "تحميل التعليقات",
   "you_blocked_community": "لقد حظرت هذه المجتمعة",
   "show": "اظهر",
-  "plebbit_options": "خيارات plebbit",
   "general": "عام",
   "more_posts_last_week": "{{count}} منشورات في الأسبوع {{currentTimeFilterName}}: <1>عرض المزيد من المنشورات من الأسبوع الماضي</1>",
   "more_posts_last_month": "{{count}} منشورات في {{currentTimeFilterName}}: <1>عرض المزيد من المشاركات من الشهر الماضي</1>",
@@ -387,5 +386,7 @@
   "for_reddits_downfall": "...for Reddit's downfall.",
   "evil_corp_cant_stop_us": "...Evil Corp™ can't stop us.",
   "no_gods_no_global_admins": "...no gods, no global admins.",
-  "already_in_community": "أنت تشاهد هذه المجموعة بالفعل"
+  "already_in_community": "أنت تشاهد هذه المجموعة بالفعل",
+  "advanced": "متقدم",
+  "p2p_stats": "إحصائيات p2p"
 }
