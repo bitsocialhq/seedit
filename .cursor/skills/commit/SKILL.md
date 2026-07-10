@@ -28,7 +28,11 @@ disable-model-invocation: true
 
    These should be two separate commits, not one.
 
-3. **Stage and commit each group**
+3. **Run the final advisory review**
+
+   Before committing, run the repo-managed `code-quality-review` skill on the final intended diff, including staged, unstaged, and untracked files. Consider only high-confidence findings. Apply them only when the active task authorizes edits; otherwise report them and continue with the requested commit. This review is advisory and must not become a hard gate.
+
+4. **Stage and commit each group**
 
    For each logical group:
    ```bash
@@ -36,7 +40,7 @@ disable-model-invocation: true
    git commit -m "title here"
    ```
 
-4. **Display the commit title to the user** wrapped in backticks (inline code).
+5. **Display the commit title to the user** wrapped in backticks (inline code).
 
 ## Commit Message Rules
 

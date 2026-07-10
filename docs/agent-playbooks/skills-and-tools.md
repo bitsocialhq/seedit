@@ -14,7 +14,7 @@ These live in `.claude/skills/`, `.cursor/skills/`, and `.codex/skills/` (mirror
 | `review-and-merge-pr` | Triaging bot/human PR feedback, fixing, merging, finalizing issues |
 | `fix-merge-conflicts` | Resolving merge conflicts non-interactively and validating the build |
 | `release` / `release-description` | Cutting a release / updating the release one-liner |
-| `code-quality-review` | Advisory pre-push/pre-PR quality pass on the current diff |
+| `code-quality-review` | Advisory final-diff quality pass before finishing, committing, pushing, or opening a PR |
 | `refactor-pass` | Simplicity-focused refactor of recent changes |
 | `deslop` | Removing AI-generated slop from the branch diff |
 | `debug-agent` | Evidence-based debugging with runtime NDJSON logs |

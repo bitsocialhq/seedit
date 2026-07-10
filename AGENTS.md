@@ -25,7 +25,7 @@ seedit is a serverless, adminless, decentralized Reddit-style client built on th
 ## Agent Operating Principles
 
 - Before editing, state important assumptions when the task is ambiguous. Ask instead of silently choosing between materially different interpretations.
-- Prefer the smallest implementation that solves the requested problem. Do not add speculative abstractions, configurability, or features.
+- After understanding the affected flow, apply the [Ponytail](https://github.com/DietrichGebert/ponytail) solution ladder: skip work that is not required; reuse repository code; prefer the standard library, native platform features, then installed dependencies; only then write the minimum new code. Never trade away explicit requirements, correctness, clarity, validation, error handling, security, accessibility, or necessary tests.
 - Keep diffs surgical. Do not refactor, reformat, rename, or "improve" adjacent code unless it is necessary for the task.
 - Clean up only artifacts created by the current change, such as newly unused imports or dead helper code.
 - For non-trivial work, define success criteria and verify them with the narrowest reliable checks before marking the task complete.
@@ -63,7 +63,7 @@ When CodeGraph MCP tools are available and `.codegraph/` exists, prefer them for
 | New reviewable feature/fix started while on `master` | Create a short-lived `codex/feature/*`, `codex/fix/*`, `codex/docs/*`, or `codex/chore/*` branch from `master` before editing; use a separate worktree only for parallel tasks |
 | New unrelated task started while another task branch is already checked out or being worked on by another agent | Create a separate worktree from `master`, create a new short-lived task branch there, and keep each agent on its own worktree/branch/PR |
 | Open PR needs feedback triage or merge readiness check | Use the `review-and-merge-pr` skill to inspect bot/human feedback, fix valid findings, and merge only after verification |
-| Before pushing or opening a PR with code, docs, or AI workflow changes | Run the advisory `code-quality-review` skill on the current diff; treat findings as suggestions, not blockers, and address only high-confidence improvements |
+| Before finishing or committing code, docs, or AI workflow changes, and before pushing/opening a PR | Run the advisory `code-quality-review` skill on the current diff; treat findings as suggestions, not blockers, and address only high-confidence improvements |
 | Repo AI workflow files changed (`.codex/**`, `.cursor/**`, `.claude/**`) | Keep the Codex, Cursor, and Claude copies aligned when they represent the same workflow; run `yarn ai-workflow:check` to catch parity and drift issues; update `AGENTS.md` if the default agent policy changes |
 | GitHub operation needed | Use `gh` CLI, not GitHub MCP |
 | User asks for commit/issue phrasing | Use `docs/agent-playbooks/commit-issue-format.md` |

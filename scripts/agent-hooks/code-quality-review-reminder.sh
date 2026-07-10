@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# stop hook: remind agents to run the advisory code-quality review before push/PR
+# stop hook: remind agents to run the advisory code-quality review before finish/commit/push/PR
 
 set -u
 
@@ -114,9 +114,9 @@ if [ "$file_count" -gt 10 ]; then
   echo "- ... and $((file_count - 10)) more"
 fi
 
-echo "Before pushing or opening a PR, run the advisory review:"
+echo "Before finishing, committing, pushing, or opening a PR, run the advisory review:"
 echo "- $skill_ref"
-echo "Use it for documented standards, avoidable complexity, structure, interface/testability, and scope control."
+echo "Use it for documented standards, the Ponytail simplicity pass, structure, interface/testability, and scope control."
 echo "Advisory only; not a blocker."
 
 exit 0

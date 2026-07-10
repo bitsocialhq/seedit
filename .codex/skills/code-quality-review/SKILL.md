@@ -1,11 +1,11 @@
 ---
 name: code-quality-review
-description: Advisory pre-push/pre-PR code quality review for current diffs. Use when asked to review code quality, run a pre-PR or pre-push quality pass, inspect AI-generated changes, check for over-engineering, or before pushing/opening a PR. Reports actionable suggestions only; does not block or edit unless explicitly asked.
+description: Advisory code quality review for current diffs before finishing, committing, pushing, or opening a PR. Use when asked to review code quality, run a final quality pass, inspect AI-generated changes, or check for over-engineering. Reports actionable suggestions only; does not block or edit unless explicitly asked.
 ---
 
 # Code Quality Review
 
-Run an advisory review of the current diff. This is a suggestion pass for the author before push or PR, not a blocking CI gate.
+Run an advisory review of the current diff. This is a suggestion pass for the author before finishing, committing, pushing, or opening a PR, not a blocking CI gate.
 
 ## Scope
 
@@ -23,11 +23,25 @@ Run an advisory review of the current diff. This is a suggestion pass for the au
 4. Verify the verification story. Note missing tests, build checks, screenshots, or manual checks only when their absence leaves concrete risk.
 5. Try to disprove non-trivial claims before accepting them: edge cases, error paths, trust boundaries, state transitions, ordering, idempotence, and rollback behavior.
 
+## Ponytail Simplicity Pass
+
+After understanding intent and tracing the affected flow, run this ordered pass, adapted from [Ponytail](https://github.com/DietrichGebert/ponytail). Stop at the first safe replacement that fully preserves the requested behavior:
+
+1. Is the change necessary? Suggest deleting unrequested or speculative work.
+2. Does the repository already solve it? Reuse an existing helper, type, component, or pattern.
+3. Does the standard library solve it? Prefer that over custom code.
+4. Does a native platform feature solve it? Prefer that over code or a dependency.
+5. Does an already-installed dependency solve it? Reuse it before adding another dependency.
+6. Can the same behavior be expressed more directly without hiding intent or edge cases?
+7. Otherwise, keep only the minimum new code that works.
+
+Use this as a focused delete-or-replace pass, not line golf. A small diff in the wrong layer, or one that drops clarity, validation, error handling, security, accessibility, or necessary tests, is not simpler.
+
 ## Review Lenses
 
 1. **Correctness**: check whether the change matches the requested behavior. Look for null, empty, boundary, race, async ordering, state consistency, error-path, and regression-test gaps.
 2. **Documented standards**: flag clear drift from repo policy, directory rules, design rules, or known-surprises guidance.
-3. **Simplicity**: look for speculative abstractions, wrappers with one caller, new configuration nobody sets, boilerplate, or code that a native platform feature, standard library, or existing dependency already covers.
+3. **Simplicity**: apply the Ponytail pass to speculative abstractions, wrappers with one caller, new configuration nobody sets, boilerplate, or code that repository patterns, the standard library, a native platform feature, or an existing dependency already cover.
 4. **Structure**: look for wrong-layer logic, conditionals growing into state machines, duplicated helpers, file-size sprawl, unclear ownership, or casts and optionality that blur trust boundaries.
 5. **Interface and tests**: prefer deep modules with small useful interfaces over shallow pass-through modules. Tests should exercise public behavior and survive internal refactors. Risky logic should have a fast feedback loop.
 6. **Security and performance**: treat user input, external service responses, config, and LLM output as untrusted at boundaries. Check auth, secrets/logging, injection/XSS/SSRF, N+1 queries, unbounded fetches, expensive rerenders, bundle growth, layout shift, and missing pagination only when touched by the diff.
