@@ -5,12 +5,11 @@ import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-ho
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import { useDefaultSubscriptions, useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
+import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
 import { isDirectoryCode, isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
-import { handleNSFWSubscriptionPrompt } from '../../lib/utils/nsfw-subscription-utils';
 import styles from './topbar.module.css';
 
 // Directory-code subscriptions (e.g. "memes") have no dot and are shorter than raw public
@@ -64,117 +63,6 @@ const CommunitiesDropdown = () => {
         ))}
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
           {t('edit_subscriptions')}
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-const TagFilterDropdown = () => {
-  const { t } = useTranslation();
-  const account = useAccount();
-  const defaultCommunities = useDefaultSubscriptions();
-  const {
-    hideAdultCommunities,
-    hideGoreCommunities,
-    hideAntiCommunities,
-    hideVulgarCommunities,
-    setHideAdultCommunities,
-    setHideGoreCommunities,
-    setHideAntiCommunities,
-    setHideVulgarCommunities,
-  } = useContentOptionsStore();
-
-  const tags = useMemo(
-    () => [
-      { name: 'adult', isHidden: hideAdultCommunities, setter: setHideAdultCommunities },
-      { name: 'gore', isHidden: hideGoreCommunities, setter: setHideGoreCommunities },
-      { name: 'vulgar', isHidden: hideVulgarCommunities, setter: setHideVulgarCommunities },
-      { name: 'anti', isHidden: hideAntiCommunities, setter: setHideAntiCommunities },
-    ],
-    [
-      hideAdultCommunities,
-      hideGoreCommunities,
-      hideAntiCommunities,
-      hideVulgarCommunities,
-      setHideAdultCommunities,
-      setHideGoreCommunities,
-      setHideAntiCommunities,
-      setHideVulgarCommunities,
-    ],
-  );
-
-  const [isTagFilterDropdownOpen, setIsTagFilterDropdownOpen] = useState(false);
-  const toggleTagFilterDropdown = () => setIsTagFilterDropdownOpen(!isTagFilterDropdownOpen);
-  const tagFilterDropdownRef = useRef<HTMLDivElement>(null);
-  const tagFilterdropdownItemsRef = useRef<HTMLDivElement>(null);
-  const tagFilterDropdownClass = isTagFilterDropdownOpen ? styles.visible : styles.hidden;
-
-  const allHidden = hideAdultCommunities && hideGoreCommunities && hideAntiCommunities && hideVulgarCommunities;
-
-  const handleToggleAll = async (event: React.MouseEvent) => {
-    event.stopPropagation();
-    const newState = !allHidden;
-
-    if (!newState) {
-      await handleNSFWSubscriptionPrompt({
-        account,
-        defaultCommunities,
-        tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
-        isShowingAll: true,
-      });
-    }
-
-    setHideAdultCommunities(newState);
-    setHideGoreCommunities(newState);
-    setHideAntiCommunities(newState);
-    setHideVulgarCommunities(newState);
-  };
-
-  const handleToggleTag = async (event: React.MouseEvent, setter: (hide: boolean) => void, currentState: boolean, tagName: string) => {
-    event.stopPropagation();
-    const newState = !currentState;
-
-    if (!newState) {
-      await handleNSFWSubscriptionPrompt({
-        account,
-        defaultCommunities,
-        tagsToShow: [tagName],
-      });
-    }
-
-    setter(newState);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (tagFilterDropdownRef.current && !tagFilterDropdownRef.current.contains(event.target as Node)) {
-        setIsTagFilterDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  return (
-    <div className={styles.dropdown} ref={tagFilterDropdownRef} onClick={toggleTagFilterDropdown}>
-      <span className={styles.selectedTitle}>{t('tags')}</span>
-      <div className={`${styles.dropChoices} ${styles.filterDropChoices} ${tagFilterDropdownClass}`} ref={tagFilterdropdownItemsRef}>
-        <div className={styles.dropdownItem} onClick={handleToggleAll} style={{ cursor: 'pointer' }}>
-          <span className={styles.dropdownItemText}>{allHidden ? t('show_all_nsfw') : t('hide_all_nsfw')}</span>
-        </div>
-        {tags.map((tag, index) => (
-          <div key={index} className={styles.dropdownItem} onClick={(e) => handleToggleTag(e, tag.setter, tag.isHidden, tag.name)} style={{ cursor: 'pointer' }}>
-            <span className={styles.dropdownItemText}>
-              {tag.isHidden ? t('show') : t('hide')} <i>{tag.name}</i>
-            </span>
-          </div>
-        ))}
-        <Link to='/settings/content-options' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
-          {t('content_options')}
         </Link>
       </div>
     </div>
@@ -335,7 +223,6 @@ const TopBar = memo(() => {
     <div className={styles.headerArea}>
       <div className={styles.widthClip}>
         <CommunitiesDropdown />
-        <TagFilterDropdown />
         <SortTypesDropdown />
         <TimeFilterDropdown />
         <div className={styles.srList}>

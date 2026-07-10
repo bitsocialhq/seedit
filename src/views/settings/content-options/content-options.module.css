@@ -42,10 +42,6 @@
   margin-right: 5px;
 }
 
-.contentOptions .nsfwTag {
-  padding-left: 20px;
-}
-
 @media (max-width: 640px) {
   .categoryTitle {
     flex: 0 0 65px;

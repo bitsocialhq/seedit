@@ -3,15 +3,9 @@ import { persist } from 'zustand/middleware';
 
 interface ContentOptionsState {
   blurNsfwThumbnails: boolean;
-  hideAdultCommunities: boolean;
-  hideGoreCommunities: boolean;
-  hideAntiCommunities: boolean;
-  hideVulgarCommunities: boolean;
+  hideNsfwCommunities: boolean;
   setBlurNsfwThumbnails: (blur: boolean) => void;
-  setHideAdultCommunities: (hide: boolean) => void;
-  setHideGoreCommunities: (hide: boolean) => void;
-  setHideAntiCommunities: (hide: boolean) => void;
-  setHideVulgarCommunities: (hide: boolean) => void;
+  setHideNsfwCommunities: (hide: boolean) => void;
   thumbnailDisplayOption: 'show' | 'hide' | 'community';
   setThumbnailDisplayOption: (option: 'show' | 'hide' | 'community') => void;
   mediaPreviewOption: 'autoExpandAll' | 'autoExpandExceptComments' | 'community';
@@ -37,10 +31,7 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
   persist(
     (set) => ({
       blurNsfwThumbnails: true,
-      hideAdultCommunities: true,
-      hideGoreCommunities: true,
-      hideAntiCommunities: true,
-      hideVulgarCommunities: true,
+      hideNsfwCommunities: true,
       hasAcceptedWarning: false,
       hideDefaultCommunities: false,
       enableLocalNotifications: false,
@@ -50,10 +41,7 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
       autoplayVideosOnComments: true,
       muteVideosOnComments: true,
       setBlurNsfwThumbnails: (blur) => set({ blurNsfwThumbnails: blur }),
-      setHideAdultCommunities: (hide) => set({ hideAdultCommunities: hide }),
-      setHideGoreCommunities: (hide) => set({ hideGoreCommunities: hide }),
-      setHideAntiCommunities: (hide) => set({ hideAntiCommunities: hide }),
-      setHideVulgarCommunities: (hide) => set({ hideVulgarCommunities: hide }),
+      setHideNsfwCommunities: (hide) => set({ hideNsfwCommunities: hide }),
       setHasAcceptedWarning: (value) => set({ hasAcceptedWarning: value }),
       setHideDefaultCommunities: (hide) => set({ hideDefaultCommunities: hide }),
       setEnableLocalNotifications: (enable) => set({ enableLocalNotifications: enable }),
@@ -65,6 +53,21 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
     }),
     {
       name: 'content-options',
+      version: 1,
+      migrate: (persistedState, version) => {
+        const state = persistedState as Record<string, unknown>;
+        if (version === 0) {
+          // Collapse the retired per-tag booleans (adult/gore/anti/vulgar) into the single
+          // NSFW toggle: stay hidden only if the user still had every tag hidden.
+          state.hideNsfwCommunities =
+            state.hideAdultCommunities !== false && state.hideGoreCommunities !== false && state.hideAntiCommunities !== false && state.hideVulgarCommunities !== false;
+          delete state.hideAdultCommunities;
+          delete state.hideGoreCommunities;
+          delete state.hideAntiCommunities;
+          delete state.hideVulgarCommunities;
+        }
+        return state as unknown as ContentOptionsStore;
+      },
     },
   ),
 );

@@ -44,7 +44,7 @@ import {
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
-import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
+import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
@@ -324,9 +324,8 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
 
   const communityAddress = params.communityAddress;
 
-  const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
-  const hasUnhiddenAnyNsfwCommunity = !hideAdultCommunities || !hideGoreCommunities || !hideAntiCommunities || !hideVulgarCommunities;
-  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
+  const { hideNsfwCommunities } = useContentOptionsStore();
+  const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
   const communityTitle = (
     <Link to={`/s/${isInPendingPostView ? pendingPostCommunityAddress : communityAddress}`}>
@@ -338,7 +337,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
   const authorTitle = <Link to={`/u/${params.authorAddress}/c/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
 
-  if (isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) {
+  if (isHiddenNsfwCommunity) {
     return <span>{t('over_18')}</span>;
   } else if (isInCommunitySubmitView) {
     return (
@@ -430,15 +429,10 @@ const Header = () => {
 
   const communityAddress = params.communityAddress;
 
-  const contentOptionsStore = useContentOptionsStore();
-  const hasUnhiddenAnyNsfwCommunity =
-    !contentOptionsStore.hideAdultCommunities ||
-    !contentOptionsStore.hideGoreCommunities ||
-    !contentOptionsStore.hideAntiCommunities ||
-    !contentOptionsStore.hideVulgarCommunities;
-  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
+  const { hideNsfwCommunities } = useContentOptionsStore();
+  const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
-  const logoIsAvatar = isInCommunityView && suggested?.avatarUrl && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity);
+  const logoIsAvatar = isInCommunityView && suggested?.avatarUrl && !isHiddenNsfwCommunity;
   const logoSrc = logoIsAvatar ? suggested?.avatarUrl : 'assets/sprout/sprout.png';
   const logoLink = '/';
 
@@ -478,14 +472,14 @@ const Header = () => {
             <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
           </div>
         )}
-        {!isMobile && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) && (
+        {!isMobile && !isHiddenNsfwCommunity && (
           <ul className={styles.tabMenu}>
             <HeaderTabs />
             {(isInHomeView || isInHomeAboutView) && <AboutButton />}
           </ul>
         )}
       </div>
-      {isMobile && !isInCommunitySubmitView && !(isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity) && (
+      {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
         <ul className={`${styles.tabMenu} ${isInProfileView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />
           {(isInHomeView || isInHomeAboutView || isInCommunityView || isInHomeAboutView || isInPostPageView) && <AboutButton />}

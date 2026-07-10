@@ -139,146 +139,28 @@ const CommunitiesOptions = () => {
   const { t } = useTranslation();
   const account = useAccount();
   const defaultCommunities = useDefaultSubscriptions();
-  const {
-    hideAdultCommunities,
-    hideGoreCommunities,
-    hideAntiCommunities,
-    hideVulgarCommunities,
-    setHideAdultCommunities,
-    setHideGoreCommunities,
-    setHideAntiCommunities,
-    setHideVulgarCommunities,
-    hideDefaultCommunities,
-    setHideDefaultCommunities,
-  } = useContentOptionsStore();
+  const { hideNsfwCommunities, setHideNsfwCommunities, hideDefaultCommunities, setHideDefaultCommunities } = useContentOptionsStore();
 
   return (
     <div className={styles.contentOptions}>
       <div className={styles.contentOptionTitle}>{t('default_communities')}</div>
       <div>
-        <input
-          type='checkbox'
-          id='hideAdultCommunities'
-          ref={(el) => {
-            if (el) {
-              const allHidden = hideAdultCommunities && hideGoreCommunities && hideAntiCommunities && hideVulgarCommunities;
-              const someHidden = hideAdultCommunities || hideGoreCommunities || hideAntiCommunities || hideVulgarCommunities;
-
-              el.checked = allHidden;
-              el.indeterminate = someHidden && !allHidden;
-            }
-          }}
-          onChange={async (e) => {
-            const newValue = e.target.checked;
-
-            // If showing (newValue = false), handle subscription prompt
-            if (!newValue) {
-              await handleNSFWSubscriptionPrompt({
-                account,
-                defaultCommunities,
-                tagsToShow: ['adult', 'gore', 'anti', 'vulgar'],
-                isShowingAll: true,
-              });
-            }
-
-            setHideAdultCommunities(newValue);
-            setHideGoreCommunities(newValue);
-            setHideAntiCommunities(newValue);
-            setHideVulgarCommunities(newValue);
-          }}
-        />
-        <label htmlFor='hideAdultCommunities'>{t('hide_communities_tagged_as_nsfw')}</label>
-      </div>
-      <div className={styles.nsfwTag}>
         <label>
           <input
             type='checkbox'
-            checked={hideAdultCommunities}
+            checked={hideNsfwCommunities}
             onChange={async (e) => {
               const newValue = e.target.checked;
 
               // If showing (newValue = false), handle subscription prompt
               if (!newValue) {
-                await handleNSFWSubscriptionPrompt({
-                  account,
-                  defaultCommunities,
-                  tagsToShow: ['adult'],
-                });
+                await handleNSFWSubscriptionPrompt({ account, defaultCommunities });
               }
 
-              setHideAdultCommunities(newValue);
+              setHideNsfwCommunities(newValue);
             }}
           />
-          {t('tagged_as_adult')}
-        </label>
-      </div>
-      <div className={styles.nsfwTag}>
-        <label>
-          <input
-            type='checkbox'
-            checked={hideGoreCommunities}
-            onChange={async (e) => {
-              const newValue = e.target.checked;
-
-              // If showing (newValue = false), handle subscription prompt
-              if (!newValue) {
-                await handleNSFWSubscriptionPrompt({
-                  account,
-                  defaultCommunities,
-                  tagsToShow: ['gore'],
-                });
-              }
-
-              setHideGoreCommunities(newValue);
-            }}
-          />
-          {t('tagged_as_gore')}
-        </label>
-      </div>
-      <div className={styles.nsfwTag}>
-        <label>
-          <input
-            type='checkbox'
-            checked={hideAntiCommunities}
-            onChange={async (e) => {
-              const newValue = e.target.checked;
-
-              // If showing (newValue = false), handle subscription prompt
-              if (!newValue) {
-                await handleNSFWSubscriptionPrompt({
-                  account,
-                  defaultCommunities,
-                  tagsToShow: ['anti'],
-                });
-              }
-
-              setHideAntiCommunities(newValue);
-            }}
-          />
-          {t('tagged_as_anti')}
-        </label>
-      </div>
-      <div className={styles.nsfwTag}>
-        <label>
-          <input
-            type='checkbox'
-            checked={hideVulgarCommunities}
-            onChange={async (e) => {
-              const newValue = e.target.checked;
-
-              // If showing (newValue = false), handle subscription prompt
-              if (!newValue) {
-                await handleNSFWSubscriptionPrompt({
-                  account,
-                  defaultCommunities,
-                  tagsToShow: ['vulgar'],
-                });
-              }
-
-              setHideVulgarCommunities(newValue);
-            }}
-          />
-          {t('tagged_as_vulgar')}
+          {t('hide_communities_tagged_as_nsfw')}
         </label>
       </div>
       <br />

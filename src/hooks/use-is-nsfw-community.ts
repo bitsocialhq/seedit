@@ -1,16 +1,18 @@
 import { useMemo } from 'react';
 import { useDefaultSubscriptions } from './use-default-subscriptions';
 
+/**
+ * Whether the community is the winner of a directory marked `nsfw: true` (e.g. "nsfw").
+ * Non-directory communities have no NSFW metadata, so they return false.
+ */
 export const useIsNsfwCommunity = (communityAddress: string) => {
   const defaultCommunities = useDefaultSubscriptions();
 
   return useMemo(() => {
     if (!communityAddress || !defaultCommunities) return false;
 
-    // Find the community in the default list
     const community = defaultCommunities.find((sub) => sub.address === communityAddress);
 
-    // Check if the community has adult or gore tags
-    return Boolean(community?.tags?.includes('adult') || community?.tags?.includes('gore'));
+    return Boolean(community?.nsfw);
   }, [communityAddress, defaultCommunities]);
 };

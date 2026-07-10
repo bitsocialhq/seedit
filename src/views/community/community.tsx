@@ -11,7 +11,7 @@ import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
-import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
+import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { useResolvedCommunityAddress } from '../../hooks/use-resolved-community-address';
 import { isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
@@ -345,10 +345,9 @@ const CommunityView = () => {
   }, [communityAddress, sortType, timeFilterName, searchQuery]);
   const lastVirtuosoState = lastVirtuosoStates?.[communityAddress + sortType + timeFilterName + searchQuery];
 
-  // over 18 warning for community with nsfw tag in multisub default list
-  const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
-  const hasUnhiddenAnyNsfwCommunity = !hideAdultCommunities || !hideGoreCommunities || !hideAntiCommunities || !hideVulgarCommunities;
-  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
+  // over 18 warning for community served by a directory marked nsfw
+  const { hideNsfwCommunities } = useContentOptionsStore();
+  const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
   const prevErrorMessageRef = useRef<string | undefined>(undefined);
   useEffect(() => {
@@ -366,7 +365,7 @@ const CommunityView = () => {
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);
 
-  return isBroadlyNsfwCommunity && !hasUnhiddenAnyNsfwCommunity ? (
+  return isHiddenNsfwCommunity ? (
     <Over18Warning />
   ) : (
     <div className={styles.content}>

@@ -74,6 +74,25 @@ describe('normalizeDirectoryList', () => {
     expect(list?.communities.map((community) => community.address)).toEqual(['g-board.eth']);
   });
 
+  it('merges the nsfw boolean, preferring the defaults entry over the raw list', () => {
+    const defaults = normalizeDirectoryDefaultsData({
+      directories: { nsfw: { directoryCode: 'nsfw', nsfw: true } },
+    });
+    const fromDefaults = normalizeDirectoryList({ communities: [{ address: 'nsfw-winner.eth' }] }, 'nsfw', defaults);
+    expect(fromDefaults?.nsfw).toBe(true);
+
+    const fromRaw = normalizeDirectoryList({ nsfw: true, communities: [{ address: 'raw-winner.eth' }] }, 'raw');
+    expect(fromRaw?.nsfw).toBe(true);
+
+    const defaultsOverrideRaw = normalizeDirectoryList({ nsfw: true, communities: [{ address: 'sfw-winner.eth' }] }, 'nsfw', {
+      directories: { nsfw: { directoryCode: 'nsfw', nsfw: false } },
+    });
+    expect(defaultsOverrideRaw?.nsfw).toBe(false);
+
+    const absent = normalizeDirectoryList({ communities: [{ address: 'plain-winner.eth' }] }, 'memes');
+    expect(absent?.nsfw).toBeUndefined();
+  });
+
   it('rejects payloads without valid candidates', () => {
     expect(normalizeDirectoryList({ communities: [] }, 'memes')).toBeNull();
     expect(normalizeDirectoryList({ communities: [{ score: 1 }] }, 'memes')).toBeNull();

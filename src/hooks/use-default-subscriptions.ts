@@ -6,6 +6,7 @@ import { SEEDIT_DIRECTORY_CODES, isResolvableCommunityAddress } from '../lib/uti
 export interface DefaultSubscription {
   title?: string;
   address: string;
+  nsfw?: boolean;
   tags?: string[];
   directoryCode?: string;
 }
@@ -14,8 +15,8 @@ const DIRECTORY_CODES: string[] = [...SEEDIT_DIRECTORY_CODES];
 
 /**
  * Default communities derived from the seedit directories: each default directory code
- * resolves to its highest-ranked online candidate community, with title/tags coming from
- * the shared seedit-directories-defaults.json metadata. Replaces the retired
+ * resolves to its highest-ranked online candidate community, with title/nsfw/tags coming
+ * from the shared seedit-directories-defaults.json metadata. Replaces the retired
  * seedit-default-subscriptions.json multisub.
  */
 export const useDefaultSubscriptions = (): DefaultSubscription[] => {
@@ -32,6 +33,7 @@ export const useDefaultSubscriptions = (): DefaultSubscription[] => {
             address,
             directoryCode: code,
             ...(list?.title ? { title: list.title } : {}),
+            ...(list?.nsfw ? { nsfw: list.nsfw } : {}),
             ...(list?.tags ? { tags: list.tags } : {}),
           },
         ];
@@ -41,23 +43,19 @@ export const useDefaultSubscriptions = (): DefaultSubscription[] => {
 };
 
 /**
- * Default communities filtered by the user's content options (NSFW tag filtering against
- * the directory tags).
+ * Default communities filtered by the user's content options (NSFW directories hidden
+ * unless the user opted in).
  */
 export const useFilteredDefaultSubscriptions = (): DefaultSubscription[] => {
   const defaultSubscriptions = useDefaultSubscriptions();
-  const { hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities } = useContentOptionsStore();
+  const { hideNsfwCommunities } = useContentOptionsStore();
 
   return useMemo(() => {
-    return defaultSubscriptions.filter((subscription) => {
-      const tags = subscription.tags || [];
-      if (hideAdultCommunities && tags.includes('adult')) return false;
-      if (hideGoreCommunities && tags.includes('gore')) return false;
-      if (hideAntiCommunities && tags.includes('anti')) return false;
-      if (hideVulgarCommunities && tags.includes('vulgar')) return false;
-      return true;
-    });
-  }, [defaultSubscriptions, hideAdultCommunities, hideGoreCommunities, hideAntiCommunities, hideVulgarCommunities]);
+    if (!hideNsfwCommunities) {
+      return defaultSubscriptions;
+    }
+    return defaultSubscriptions.filter((subscription) => !subscription.nsfw);
+  }, [defaultSubscriptions, hideNsfwCommunities]);
 };
 
 /**

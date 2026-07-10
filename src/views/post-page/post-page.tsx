@@ -8,7 +8,7 @@ import { sortRepliesByBest } from '../../lib/utils/post-utils';
 import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
-import { useIsBroadlyNsfwCommunity } from '../../hooks/use-is-broadly-nsfw-community';
+import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useReplies from '../../hooks/use-replies';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
@@ -287,9 +287,9 @@ const PostPage = () => {
   const _communityAddr = isInPendingPostView ? pendingPost?.subplebbitAddress : communityAddress;
   const community = useCommunity(_communityAddr ? { community: getCommunityIdentifier(_communityAddr) } : undefined);
 
-  // over 18 warning for community with nsfw tag in multisub default list
+  // over 18 warning for community served by a directory marked nsfw
   const { hasAcceptedWarning } = useContentOptionsStore();
-  const isBroadlyNsfwCommunity = useIsBroadlyNsfwCommunity(communityAddress || '');
+  const isNsfwCommunity = useIsNsfwCommunity(communityAddress || '');
 
   useEffect(() => {
     if (post?.error) {
@@ -310,7 +310,7 @@ const PostPage = () => {
   // Derive whether to show error directly from current post state
   const shouldShowErrorToUser = Boolean(post?.error && ((post?.replyCount > 0 && post?.replies?.length === 0) || post?.state === 'failed'));
 
-  return isBroadlyNsfwCommunity && !hasAcceptedWarning ? (
+  return isNsfwCommunity && !hasAcceptedWarning ? (
     <Over18Warning />
   ) : (
     <div className={styles.content}>

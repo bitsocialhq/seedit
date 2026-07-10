@@ -27,12 +27,12 @@ import Markdown from '../../components/markdown';
 import Label from '../../components/post/label';
 import Sidebar from '../../components/sidebar';
 import SubscribeButton from '../../components/subscribe-button';
-import { nsfwTags } from '../../constants/nsfw-tags';
 import _ from 'lodash';
 
 interface SubplebbitProps {
   index?: number;
   subplebbit: CommunityType;
+  nsfw?: boolean;
   tags?: string[];
   isUnsubscribed?: boolean;
   onUnsubscribe?: (address: string) => void;
@@ -205,7 +205,7 @@ const Infobar = () => {
       </div>
       {currentTag && (
         <div className={styles.infobar}>
-          {currentTag === 'nsfw' ? t('filtering_by_nsfw') + ' ("adult", "gore", "vulgar", "anti") —' : t('filtering_by_tag', { tag: currentTag }) + ' —'}{' '}
+          {currentTag === 'nsfw' ? t('filtering_by_nsfw') + ' —' : t('filtering_by_tag', { tag: currentTag }) + ' —'}{' '}
           <Link className={styles.undoLink} to={basePath}>
             {t('undo')}
           </Link>
@@ -215,7 +215,7 @@ const Infobar = () => {
   );
 };
 
-const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe, directoryCode }: SubplebbitProps) => {
+const CommunityItem = ({ subplebbit, nsfw, tags, index, isUnsubscribed, onUnsubscribe, directoryCode }: SubplebbitProps) => {
   const { t } = useTranslation();
   const { address, createdAt, description, roles, shortAddress, settings, suggested, title } = subplebbit || {};
   const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
@@ -247,8 +247,6 @@ const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe,
   const canLoadCommunity = !!address && isResolvableCommunityAddress(address);
   const { allActiveUserCount } = useCommunityStats(canLoadCommunity ? { community: getCommunityIdentifier(address) } : undefined);
   const { isOffline, isOnlineStatusLoading, offlineTitle } = useIsCommunityOffline(subplebbit);
-
-  const isNsfw = tags?.some((tag) => nsfwTags.includes(tag));
 
   const isMobile = useIsMobile();
   const descriptionText =
@@ -328,10 +326,10 @@ const CommunityItem = ({ subplebbit, tags, index, isUnsubscribed, onUnsubscribe,
               </span>
               {(userRole || isUserOwner) && (
                 <Link to={`/s/${address}/settings`}>
-                  <span className={`${styles.moderatorIcon} ${isNsfw ? styles.addMarginRight : ''}`} title={userRole || 'owner'} />
+                  <span className={`${styles.moderatorIcon} ${nsfw ? styles.addMarginRight : ''}`} title={userRole || 'owner'} />
                 </Link>
               )}
-              {isNsfw && (
+              {nsfw && (
                 <Link to={getTagFilterRoute('nsfw')}>
                   <span className={styles.over18icon} title='Filter NSFW communities' />
                 </Link>
@@ -381,19 +379,18 @@ const AccountSubplebbits = ({ viewRole }: { viewRole: string }) => {
     })
     .filter((communityData: any) => {
       if (currentTag) {
-        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
+        const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address);
 
         if (currentTag === 'nsfw') {
-          return tags?.some((tag) => nsfwTags.includes(tag));
-        } else {
-          return tags?.includes(currentTag);
+          return Boolean(defaultCommunity?.nsfw);
         }
+        return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
       return true;
     })
     .map((communityData, index) => {
-      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-      return <CommunityItem key={index} subplebbit={communityData} tags={tags} index={index} />;
+      const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address);
+      return <CommunityItem key={index} subplebbit={communityData} nsfw={defaultCommunity?.nsfw} tags={defaultCommunity?.tags} index={index} />;
     });
 
   if (communityElements.length === 0) {
@@ -437,24 +434,25 @@ const SubscriberSubplebbits = () => {
       // the user can still see and unsubscribe them; plain addresses wait for community data.
       if (!communityData && !directoryCode) return false;
       if (currentTag) {
-        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+        const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === address);
         if (currentTag === 'nsfw') {
-          return Boolean(tags?.some((tag) => nsfwTags.includes(tag)));
+          return Boolean(defaultCommunity?.nsfw);
         }
-        return Boolean(tags?.includes(currentTag));
+        return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
       return true;
     })
     .map(({ entry, directoryCode, address }, index) => {
       const communityData = address ? communityByAddress[address] : undefined;
       const subplebbit = communityData ?? ({ address: address ?? entry } as CommunityType);
-      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+      const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === address);
       return (
         <CommunityItem
           key={entry}
           subplebbit={subplebbit}
           directoryCode={directoryCode}
-          tags={tags}
+          nsfw={defaultCommunity?.nsfw}
+          tags={defaultCommunity?.tags}
           index={index}
           isUnsubscribed={isUnsubscribed(entry)}
           onUnsubscribe={handleUnsubscribe}
@@ -487,19 +485,18 @@ const AllDefaultSubplebbits = () => {
     .filter((community): community is CommunityType => Boolean(community))
     .filter((communityData) => {
       if (currentTag) {
-        const tags = defaultCommunitiesList.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
+        const defaultCommunity = defaultCommunitiesList.find((defaultSub) => defaultSub.address === (communityData as any).address);
 
         if (currentTag === 'nsfw') {
-          return tags?.some((tag) => nsfwTags.includes(tag));
-        } else {
-          return tags?.includes(currentTag);
+          return Boolean(defaultCommunity?.nsfw);
         }
+        return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
       return true;
     })
     .map((communityData, index) => {
-      const tags = defaultCommunitiesList.find((defaultSub) => defaultSub.address === (communityData as any).address)?.tags;
-      return <CommunityItem key={communityData.address || index} subplebbit={communityData} tags={tags} index={index} />;
+      const defaultCommunity = defaultCommunitiesList.find((defaultSub) => defaultSub.address === (communityData as any).address);
+      return <CommunityItem key={communityData.address || index} subplebbit={communityData} nsfw={defaultCommunity?.nsfw} tags={defaultCommunity?.tags} index={index} />;
     });
 
   if (communityElements.length === 0) {
@@ -541,24 +538,25 @@ const AllAccountSubplebbits = () => {
       const communityData = address ? communityByAddress[address] : undefined;
       if (!communityData && !directoryCode) return false;
       if (currentTag) {
-        const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+        const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === address);
         if (currentTag === 'nsfw') {
-          return Boolean(tags?.some((tag) => nsfwTags.includes(tag)));
+          return Boolean(defaultCommunity?.nsfw);
         }
-        return Boolean(tags?.includes(currentTag));
+        return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
       return true;
     })
     .map(({ entry, directoryCode, address }, index) => {
       const communityData = address ? communityByAddress[address] : undefined;
       const subplebbit = communityData ?? ({ address: address ?? entry } as CommunityType);
-      const tags = defaultCommunities.find((defaultSub) => defaultSub.address === address)?.tags;
+      const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === address);
       return (
         <CommunityItem
           key={entry}
           subplebbit={subplebbit}
           directoryCode={directoryCode}
-          tags={tags}
+          nsfw={defaultCommunity?.nsfw}
+          tags={defaultCommunity?.tags}
           index={index}
           isUnsubscribed={isUnsubscribed(entry)}
           onUnsubscribe={handleUnsubscribe}

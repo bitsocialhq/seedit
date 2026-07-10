@@ -16,6 +16,7 @@ export interface DirectoryList {
   directoryCode: string;
   title?: string;
   description?: string;
+  nsfw?: boolean;
   tags?: string[];
   createdAt?: number;
   updatedAt?: number;
@@ -26,6 +27,7 @@ export interface DirectoryDefaultsEntry {
   directoryCode?: string;
   title?: string;
   description?: string;
+  nsfw?: boolean;
   tags?: string[];
 }
 
@@ -66,6 +68,7 @@ const normalizeDirectoryDefaultsEntry = (code: string, raw: unknown): DirectoryD
     directoryCode: toString(raw.directoryCode) ?? code,
     ...(toString(raw.title) ? { title: toString(raw.title)! } : {}),
     ...(toString(raw.description) ? { description: toString(raw.description)! } : {}),
+    ...(typeof raw.nsfw === 'boolean' ? { nsfw: raw.nsfw } : {}),
     ...(tags ? { tags } : {}),
   };
 };
@@ -115,11 +118,13 @@ export const normalizeDirectoryList = (raw: unknown, fallbackCode: string, defau
   const title = toString(defaultEntry?.title) ?? toString(raw.title);
   const description = toString(defaultEntry?.description) ?? toString(raw.description);
   const tags = toTags(defaultEntry?.tags) ?? toTags(raw.tags);
+  const nsfw = typeof defaultEntry?.nsfw === 'boolean' ? defaultEntry.nsfw : typeof raw.nsfw === 'boolean' ? raw.nsfw : undefined;
 
   return {
     directoryCode,
     ...(title ? { title } : {}),
     ...(description ? { description } : {}),
+    ...(nsfw !== undefined ? { nsfw } : {}),
     ...(tags ? { tags } : {}),
     ...(toNumber(raw.createdAt) !== undefined ? { createdAt: toNumber(raw.createdAt) } : {}),
     ...(toNumber(raw.updatedAt) !== undefined ? { updatedAt: toNumber(raw.updatedAt) } : {}),
