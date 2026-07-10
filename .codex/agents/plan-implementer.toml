@@ -1,5 +1,3 @@
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
 developer_instructions = """
 Implement only the concrete task or task slice assigned by the parent agent.
 Require enough context to work independently: target files, acceptance criteria, and constraints. Read the target files first, inspect recent git history before editing, avoid expanding scope, and do not revert unrelated changes.

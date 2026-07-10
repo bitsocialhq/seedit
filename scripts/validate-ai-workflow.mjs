@@ -13,8 +13,8 @@
  *     .cursor/hooks.json, .codex/hooks.json) wire the same hook scripts
  *   - SKILL.md frontmatter has a name matching its directory and a
  *     non-empty description
- *   - agent model rules: no composer-* models in .claude agents, no
- *     gpt-5.3-codex* models in .codex agents
+ *   - agent model rules: no composer-* models in .claude agents, no pinned
+ *     model or reasoning-effort settings in Codex custom-agent TOMLs
  *
  * Exemptions live HERE in validator-owned allowlists, not in the exempted
  * files, so a drifted copy cannot silently exempt itself. Every entry needs
@@ -204,11 +204,17 @@ for (const agent of agentSets.get('.claude')) {
     errors.push(`banned model "${fm.model}" (Cursor-only) in .claude/agents/${agent}.md`);
   }
 }
-for (const agent of agentSets.get('.codex')) {
-  const toml = read(path.join(repoRoot, '.codex', 'agents', `${agent}.toml`));
-  const model = toml.match(/^model\s*=\s*"([^"]*)"/m)?.[1];
-  if (model === 'gpt-5.3-codex' || model === 'gpt-5.3-codex-spark') {
-    errors.push(`banned model "${model}" in .codex/agents/${agent}.toml (standardize on gpt-5.4)`);
+const codexAgentTomls = listFilesRecursive(path.join(repoRoot, '.codex')).filter((file) =>
+  /(^|\/)agents\/[^/]+\.toml$/.test(file),
+);
+for (const file of codexAgentTomls) {
+  const toml = read(path.join(repoRoot, '.codex', file));
+  for (const field of ['model', 'model_reasoning_effort']) {
+    if (new RegExp(`^${field}\\s*=`, 'm').test(toml)) {
+      errors.push(
+        `pinned Codex setting "${field}" in .codex/${file} (omit it so the agent inherits from its parent)`,
+      );
+    }
   }
 }
 

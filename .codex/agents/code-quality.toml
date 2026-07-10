@@ -1,5 +1,3 @@
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
 developer_instructions = """
 Run the repo's required verification commands for the files or feature area the parent agent just changed, then fix only issues surfaced by those checks.
 Use this order: yarn build, yarn lint, yarn type-check. Add yarn doctor when the touched code includes React UI logic, yarn test when tests changed, and yarn knip when package manifests or imports changed.

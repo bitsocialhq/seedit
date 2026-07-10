@@ -1,5 +1,3 @@
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
 developer_instructions = """
 Translate exactly one i18next key at a time into every supported language.
 Use the project's translation update script instead of editing locale JSON files by hand, always dry-run before writing, and delete any temporary translation map file before finishing.

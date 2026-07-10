@@ -1,5 +1,3 @@
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
 developer_instructions = """
 Review only the recently changed React files or the file set the parent agent names.
 Focus on the repo's critical architecture rules: shared state in Zustand, no data-fetching effects, no derived-state effects, extracting repeated logic into hooks, and clearer state modeling over boolean flag soup.

@@ -88,12 +88,13 @@ If uncertain, ask the developer before adding an entry.
 - **Mitigation:** Keep Portless startup behind `scripts/start-dev.js`, which now uses a branch-scoped `*.seedit.localhost` route outside the canonical case, suffixes repeated branch routes (`-2`, `-3`, ...) until it finds a free Portless name, and falls back to the next free direct-Vite port when `PORTLESS=0` is used without an explicit `PORT`.
 - **Status:** confirmed
 
-### Toolchain model names are not interchangeable
+### Toolchain model names are not interchangeable or automatically current
 
 - **Date:** 2026-04-08
+- **Updated:** 2026-07-10
 - **Observed by:** contributor + Codex
 - **Context:** Reviewing repo-managed agent configs under `.codex/agents`, `.cursor/agents`, and `.claude/agents`
-- **What was surprising:** `composer-2` is only available for Cursor in this repo, while Codex agents using `gpt-5.3-codex` or `gpt-5.3-codex-spark` perform poorly enough that they should not be configured by default.
-- **Impact:** Agents can silently inherit invalid or weak model settings, leading to broken subagent runs or degraded implementation quality.
-- **Mitigation:** Keep `.cursor` agent configs on Cursor-supported models only, never use `composer-2` in `.claude`, and standardize `.codex/agents/*.toml` on `gpt-5.4` unless a contributor explicitly requests an override.
+- **What was surprising:** Model names are harness-specific, and Codex does not document a `latest` alias that automatically tracks the current parent session.
+- **Impact:** Pinned Codex agent models or reasoning levels silently become stale and can diverge from the parent session a contributor intentionally selected.
+- **Mitigation:** Keep Cursor and Claude model controls harness-specific. In every committed Codex custom-agent TOML under `.codex/**/agents/*.toml`, omit both `model` and `model_reasoning_effort` so the agent inherits the current parent session settings.
 - **Status:** confirmed
