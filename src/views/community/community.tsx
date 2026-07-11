@@ -18,6 +18,7 @@ import { isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
+import EmptyFeedMessage from '../../components/empty-feed-message/empty-feed-message';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
@@ -31,6 +32,7 @@ interface FooterProps {
   communityAddress: string;
   feedLength: number;
   isOnline: boolean;
+  hasCommunityLoaded: boolean;
   started: boolean;
   isSubCreatedButNotYetPublished: boolean;
   hasMore: boolean;
@@ -46,6 +48,7 @@ const Footer = ({
   communityAddress,
   feedLength,
   isOnline,
+  hasCommunityLoaded,
   started: _started,
   isSubCreatedButNotYetPublished: _isSubCreatedButNotYetPublished,
   hasMore,
@@ -58,7 +61,8 @@ const Footer = ({
   const { t } = useTranslation();
   let footerFirstLine;
   let footerSecondLine;
-  const loadingStateString = useFeedStateString(communityAddresses) || t('loading');
+  const feedStateString = useFeedStateString(communityAddresses);
+  const loadingStateString = feedStateString || t('loading');
 
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
@@ -180,8 +184,8 @@ const Footer = ({
         </div>
       );
     }
-  } else if (feedLength === 0 && isOnline && !hasMore) {
-    footerFirstLine = t('no_posts');
+  } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString) {
+    footerFirstLine = <EmptyFeedMessage />;
   } else if (feedLength === 0 || !isOnline) {
     footerFirstLine = loadingString;
   } else if (hasMore) {
@@ -320,6 +324,7 @@ const CommunityView = () => {
     communityAddress,
     feedLength: combinedFeed.length || 0,
     isOnline,
+    hasCommunityLoaded: Boolean(updatedAt),
     started,
     isSubCreatedButNotYetPublished,
     hasMore,
