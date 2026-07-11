@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useCommunities } from '@bitsocial/bitsocial-react-hooks';
 import { isAllView, isModView } from '../../lib/utils/view-utils';
+import { useCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useFeedStateString } from '../../hooks/use-state-string';
+import EmptyFeedMessage from '../empty-feed-message/empty-feed-message';
 import LoadingEllipsis from '../loading-ellipsis';
+import { shouldShowEmptyFeed } from './feed-footer-utils';
 import styles from './feed-footer.module.css';
 import React from 'react';
 
@@ -45,12 +49,55 @@ const FeedFooter = ({
   const isInModView = isModView(location.pathname);
   const isInAllView = isAllView(location.pathname);
 
+  const feedCommunityIdentifiers = useCommunityIdentifiers(communityAddresses);
+  const { communities } = useCommunities({ communities: feedCommunityIdentifiers });
   const feedStateString = useFeedStateString(communityAddresses);
   const loadingStateString =
-    useFeedStateString(communityAddresses) ||
+    feedStateString ||
     (!hasFeedLoaded || (feedLength === 0 && !(weeklyFeedLength > feedLength || monthlyFeedLength > feedLength || yearlyFeedLength > feedLength))
       ? t('loading_feed')
       : t('looking_for_more_posts'));
+  const hasEmptyFeedData = shouldShowEmptyFeed({
+    requestedCommunityCount: feedCommunityIdentifiers.length,
+    communities,
+    feedLength,
+    isLoadingCommunityData: Boolean(feedStateString),
+    isSearching,
+    searchQuery,
+  });
+
+  const widerFeedSuggestion =
+    weeklyFeedLength > feedLength && !searchQuery ? (
+      <div className={styles.morePostsSuggestion}>
+        <Trans
+          i18nKey='more_posts_last_week'
+          values={{ currentTimeFilterName, count: feedLength }}
+          components={{
+            1: <Link key='weekly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1w'} />,
+          }}
+        />
+      </div>
+    ) : monthlyFeedLength > feedLength && !searchQuery ? (
+      <div className={styles.morePostsSuggestion}>
+        <Trans
+          i18nKey='more_posts_last_month'
+          values={{ currentTimeFilterName, count: feedLength }}
+          components={{
+            1: <Link key='monthly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1m'} />,
+          }}
+        />
+      </div>
+    ) : yearlyFeedLength > feedLength && !searchQuery ? (
+      <div className={styles.morePostsSuggestion}>
+        <Trans
+          i18nKey='more_posts_last_year'
+          values={{ currentTimeFilterName, count: feedLength }}
+          components={{
+            1: <Link key='yearly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1y'} />,
+          }}
+        />
+      </div>
+    ) : null;
 
   // Add state to track initial loading
   const [hasFetchedCommunityAddresses, setHasFetchedSubplebbitAddresses] = useState(false);
@@ -62,6 +109,8 @@ const FeedFooter = ({
     }, 500);
     return () => clearTimeout(timer);
   }, []);
+
+  const showEmptyFeed = hasFetchedCommunityAddresses && hasEmptyFeedData;
 
   if (!hasFetchedCommunityAddresses) {
     footerContent = <LoadingEllipsis string={t('loading_feed')} />;
@@ -101,57 +150,32 @@ const FeedFooter = ({
         </div>
       </div>
     );
-  } else if (
-    hasFeedLoaded &&
-    feedLength === 0 &&
-    !hasMore &&
-    !isSearching &&
-    !searchQuery &&
-    !(weeklyFeedLength > feedLength || monthlyFeedLength > feedLength || yearlyFeedLength > feedLength)
-  ) {
-    footerContent = t('no_posts');
+  } else if (showEmptyFeed) {
+    footerContent = (
+      <>
+        {widerFeedSuggestion}
+        <EmptyFeedMessage />
+      </>
+    );
   } else if (hasMore || communityAddresses.length > 0 || (communityAddresses && communityAddresses.length === 0)) {
     // Only show newer posts/weekly/monthly suggestions when not searching
     footerContent = (
       <>
-        {weeklyFeedLength > feedLength && !searchQuery ? (
-          <div className={styles.morePostsSuggestion}>
-            <Trans
-              i18nKey='more_posts_last_week'
-              values={{ currentTimeFilterName, count: feedLength }}
-              components={{
-                1: <Link key='weekly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1w'} />,
-              }}
-            />
-          </div>
-        ) : monthlyFeedLength > feedLength && !searchQuery ? (
-          <div className={styles.morePostsSuggestion}>
-            <Trans
-              i18nKey='more_posts_last_month'
-              values={{ currentTimeFilterName, count: feedLength }}
-              components={{
-                1: <Link key='monthly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1m'} />,
-              }}
-            />
-          </div>
-        ) : yearlyFeedLength > feedLength && !searchQuery ? (
-          <div className={styles.morePostsSuggestion}>
-            <Trans
-              i18nKey='more_posts_last_year'
-              values={{ currentTimeFilterName, count: feedLength }}
-              components={{
-                1: <Link key='yearly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1y'} />,
-              }}
-            />
-          </div>
-        ) : null}
+        {widerFeedSuggestion}
         <div className={styles.stateString}>
           {communityAddresses.length === 0 ? (
             isInModView ? (
               <div className={styles.notModerator}>{t('not_moderator')}</div>
             ) : (
               <div>
-                <Trans i18nKey='no_communities_found' components={[<a href='https://github.com/bitsocialhq/lists'>https://github.com/bitsocialhq/lists</a>]} />
+                <Trans
+                  i18nKey='no_communities_found'
+                  components={[
+                    <a key='community-lists-link' href='https://github.com/bitsocialhq/lists'>
+                      https://github.com/bitsocialhq/lists
+                    </a>,
+                  ]}
+                />
                 <br />
                 {t('connect_community_notice')}
               </div>
