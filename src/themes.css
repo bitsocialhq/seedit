@@ -1,3 +1,8 @@
+:root {
+  /* Dominant opaque leaf color in /public/assets/sprout/sprout.png. */
+  --sprout-green: #37bb15;
+}
+
 :root .dark {
   --account-dropdown-arrow: url("/assets/buttons/droparrowgray.gif");
   --background: #0f0f0f;
@@ -48,8 +53,8 @@
   --gray-light: #3e3e3e9d;
   --gray-overlay: #1f1f1f;
   --gray-overlay-border: #3e3e3e;
-  --green: #228822;
-  --green-bright: rgb(76, 207, 92);
+  --green: var(--sprout-green);
+  --green-bright: var(--sprout-green);
   --icon: #c6c6c6;
   --info-tooltip-text: #bfbfbf;
   --info-tooltip-border-color: #3e3e3e;
