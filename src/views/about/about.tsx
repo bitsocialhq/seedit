@@ -8,6 +8,7 @@ import { Capacitor } from '@capacitor/core';
 import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -157,17 +158,22 @@ const About = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isInHomeAboutView = isHomeAboutView(location.pathname);
-  const { commentCid, communityAddress } = useParams();
+  const { commentCid, communityAddress: routeCommunityAddress } = useParams();
+  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
 
   const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {
     if (!isMobile && location.pathname.endsWith('/about') && !isInHomeAboutView) {
-      const newPath = location.pathname.replace(/\/about$/, '');
-      navigate(newPath || '/');
+      const newPath = communityAddress
+        ? commentCid
+          ? getCommunityPostPath(communityAddress, commentCid)
+          : getCommunityPath(communityAddress)
+        : location.pathname.replace(/\/about$/, '') || '/';
+      navigate(`${newPath}${location.search}${location.hash}`);
     }
-  }, [isMobile, location.pathname, navigate, isInHomeAboutView]);
+  }, [commentCid, communityAddress, isMobile, location.hash, location.pathname, location.search, navigate, isInHomeAboutView]);
 
   return (
     <div className={styles.content}>

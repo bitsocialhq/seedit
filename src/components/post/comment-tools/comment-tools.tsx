@@ -11,6 +11,7 @@ import ModMenu from './mod-menu';
 import { isInboxView } from '../../../lib/utils/view-utils';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { copyShareLinkToClipboard } from '../../../lib/utils/url-utils';
+import { getCommunityPostPath } from '../../../lib/utils/community-route-utils';
 
 interface CommentToolsProps {
   author?: Author;
@@ -115,7 +116,7 @@ const PostTools = ({
   const commentCountButton = failed ? (
     <span>{commentCount}</span>
   ) : (
-    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
+    <Link to={cid ? getCommunityPostPath(communityAddress, cid) : `/profile/${index}`} onClick={() => cid && handlePostClick?.()}>
       {commentCount}
     </Link>
   );
@@ -159,7 +160,7 @@ const ReplyTools = ({
   const permalink = failed ? (
     <span>permalink</span>
   ) : (
-    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? getCommunityPostPath(communityAddress, cid) : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   );
@@ -203,7 +204,7 @@ const SingleReplyTools = ({
   const hasContext = parentCid !== postCid;
 
   const permalinkButton = cid ? (
-    <Link to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
+    <Link to={cid ? getCommunityPostPath(communityAddress, cid) : `/profile/${index}`} onClick={(e) => !cid && e.preventDefault()}>
       permalink
     </Link>
   ) : (
@@ -211,13 +212,15 @@ const SingleReplyTools = ({
   );
 
   const contextButton = cid ? (
-    <Link to={cid ? (hasContext ? `/s/${communityAddress}/c/${cid}/?context=3` : `/s/${communityAddress}/c/${cid}`) : `/profile/${index}`}>{t('context')}</Link>
+    <Link to={cid ? (hasContext ? `${getCommunityPostPath(communityAddress, cid)}/?context=3` : getCommunityPostPath(communityAddress, cid)) : `/profile/${index}`}>
+      {t('context')}
+    </Link>
   ) : (
     <span>{t('context')}</span>
   );
 
   const fullCommentsButton = cid ? (
-    <Link to={cid ? `/s/${communityAddress}/c/${postCid}` : `/profile/${index}`}>
+    <Link to={cid ? getCommunityPostPath(communityAddress, postCid!) : `/profile/${index}`}>
       {t('full_comments')} {comment?.replyCount ? `(${comment?.replyCount})` : ''}
     </Link>
   ) : (

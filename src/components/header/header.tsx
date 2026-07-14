@@ -43,6 +43,7 @@ import {
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import getShortAddress from '../../lib/utils/address-utils';
+import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -56,7 +57,12 @@ const AboutButton = () => {
   const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
-  const aboutLink = getAboutLink(location.pathname, params);
+  const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const aboutLink = routeCommunityAddress
+    ? params.commentCid
+      ? `${getCommunityPostPath(routeCommunityAddress, params.commentCid)}/about`
+      : `${getCommunityPath(routeCommunityAddress)}/about`
+    : getAboutLink(location.pathname, params);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
@@ -76,10 +82,14 @@ const CommentsButton = () => {
   const isInPendingPostView = isPendingPostView(location.pathname, params);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
 
   return (
     <li className={(isInPostPageView || isInPendingPostView) && !isInHomeAboutView && !isInPostPageAboutView ? styles.selected : styles.choice}>
-      <Link to={`/s/${params.communityAddress}/c/${params.commentCid}`} onClick={(e) => isInPendingPostView && e.preventDefault()}>
+      <Link
+        to={communityAddress && params.commentCid ? getCommunityPostPath(communityAddress, params.commentCid) : '/'}
+        onClick={(e) => isInPendingPostView && e.preventDefault()}
+      >
         {t('comments')}
       </Link>
     </li>
@@ -97,13 +107,14 @@ const SortItems = () => {
   const isInModView = isModView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
   const isInCommunityView = isCommunityView(location.pathname, params);
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
   // Derive selection directly from route instead of syncing via an effect
   const selectedSortType = isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? '' : params.sortType || 'hot';
   const timeFilterName = params.timeFilterName;
 
   return sortTypes.map((sortType, index) => {
     let sortLink = isInCommunityView
-      ? `/s/${params.communityAddress}/${sortType}`
+      ? `${communityAddress ? getCommunityPath(communityAddress) : ''}/${sortType}`
       : isInAllView
         ? `/s/all/${sortType}`
         : isInModView
@@ -331,13 +342,14 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const isInCreateCommunityView = isCreateCommunityView(location.pathname);
   const isInNotFoundView = useNotFoundStore((state) => state.isNotFound);
 
-  const communityAddress = params.communityAddress;
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const titleCommunityAddress = isInPendingPostView ? pendingPostCommunityAddress : communityAddress;
 
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
   const communityTitle = (
-    <Link to={`/s/${isInPendingPostView ? pendingPostCommunityAddress : communityAddress}`}>
+    <Link to={titleCommunityAddress ? getCommunityPath(titleCommunityAddress) : '/'}>
       {title || (communityAddress && getShortAddress(communityAddress)) || (pendingPostCommunityAddress && getShortAddress(pendingPostCommunityAddress))}
     </Link>
   );
@@ -393,7 +405,8 @@ const Header = () => {
   const [theme] = useTheme();
   const location = useLocation();
   const params = useParams();
-  const community = useCommunity(params?.communityAddress ? { community: getCommunityIdentifier(params.communityAddress), onlyIfCached: true } : undefined);
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
   const { suggested, title } = community || {};
 
   const accountComment = useOptionalAccountComment(params?.accountCommentIndex);
@@ -436,8 +449,6 @@ const Header = () => {
     (isInDomainView && !isInHomeAboutView) ||
     (isInAuthorView && !isInHomeAboutView);
 
-  const communityAddress = params.communityAddress;
-
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
@@ -449,9 +460,11 @@ const Header = () => {
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? `/s/${accountComment?.subplebbitAddress}/submit`
+        ? accountComment?.subplebbitAddress
+          ? `${getCommunityPath(accountComment.subplebbitAddress)}/submit`
+          : '/submit'
         : communityAddress
-          ? `/s/${communityAddress}/submit`
+          ? `${getCommunityPath(communityAddress)}/submit`
           : '/submit';
 
   return (

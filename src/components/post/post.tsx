@@ -28,6 +28,7 @@ import styles from './post.module.css';
 import _ from 'lodash';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import React from 'react';
+import { getCommunityPath, getCommunityPostPath } from '../../lib/utils/community-route-utils';
 
 interface PostAuthorProps {
   authorAddress: string;
@@ -247,7 +248,11 @@ const Post = ({ index, post = {} }: PostProps) => {
                       {displayedTitle}
                     </a>
                   ) : (
-                    <Link className={linkClass} to={cid ? `/s/${communityAddress}/c/${cid}` : `/profile/${post?.index}`} onClick={handlePostClick}>
+                    <Link
+                      className={linkClass}
+                      to={cid && communityAddress ? getCommunityPostPath(communityAddress, cid) : `/profile/${post?.index}`}
+                      onClick={handlePostClick}
+                    >
                       {displayedTitle}
                     </Link>
                   )}
@@ -262,7 +267,9 @@ const Post = ({ index, post = {} }: PostProps) => {
                     {hostname ? (
                       <Link to={`/domain/${hostname}`}>{hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname}</Link>
                     ) : (
-                      <Link to={`/s/${communityAddress}`}>self.{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}</Link>
+                      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''}>
+                        self.{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}
+                      </Link>
                     )}
                     )
                   </span>
@@ -308,7 +315,10 @@ const Post = ({ index, post = {} }: PostProps) => {
                             />
                           </span>
                         )}
-                        <Link className={`${styles.community} ${subscribed && hasClickedSubscribe ? styles.greenCommunityAddress : ''}`} to={`/s/${communityAddress}`}>
+                        <Link
+                          className={`${styles.community} ${subscribed && hasClickedSubscribe ? styles.greenCommunityAddress : ''}`}
+                          to={communityAddress ? getCommunityPath(communityAddress) : ''}
+                        >
                           s/{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}
                         </Link>
                       </span>

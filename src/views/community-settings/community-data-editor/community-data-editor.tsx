@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
+import { getCommunityPath, resolveCommunityRouteAddress } from '../../../lib/utils/community-route-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -59,7 +60,8 @@ const CommunityDataEditor = () => {
   const theme = useTheme((state) => state.theme);
   const [text, setText] = useState('');
 
-  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
+  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, createdAt, description, error, rules, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
@@ -326,7 +328,9 @@ const CommunityDataEditor = () => {
           />
           <div>
             <br />
-            <button onClick={() => navigate(`/s/${communityAddress}/settings`)}>return to settings</button>
+            <button type='button' onClick={() => communityAddress && navigate(`${getCommunityPath(communityAddress)}/settings`)}>
+              return to settings
+            </button>
           </div>
         </div>
       )}

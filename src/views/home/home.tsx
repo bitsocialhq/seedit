@@ -6,7 +6,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
-import { useExpandedSubscriptions } from '../../hooks/use-expanded-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -14,6 +13,7 @@ import FeedFooter from '../../components/feed-footer';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
+import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
 import { sortTypes } from '../../constants/sort-types';
 import styles from './home.module.css';
 
@@ -24,12 +24,11 @@ type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
 const Home = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  // Directory-code subscriptions resolve to their winning community's address at read time;
-  // plain address subscriptions pass through. The raw entries drive the empty-state logic.
-  const { subscriptions, addresses: communityAddresses, isResolvingDirectories } = useExpandedSubscriptions();
+  const subscriptions = useMemo(() => account?.subscriptions ?? [], [account?.subscriptions]);
+  const communityAddresses = subscriptions;
   const { isCheckingAccount } = useAutoSubscribeStore();
   const accountAddress = account?.author?.address;
-  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress) || isResolvingDirectories;
+  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress);
 
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -266,9 +265,6 @@ const Home = () => {
       return;
     }
 
-    // Base the empty state on the raw subscription entries (codes included), not the
-    // expanded addresses: a subscribed directory whose candidates are all unresolvable
-    // still counts as a subscription and must not flash the "no subscriptions" state.
     if (subscriptions.length > 0 || feed?.length > 0) {
       setSubscriptionState('hasSubscriptions');
       return;
@@ -288,6 +284,7 @@ const Home = () => {
 
   return (
     <div>
+      <StarterSubscriptionsNotice />
       <div className={styles.content}>
         <div className={`${styles.sidebar}`}>
           <Sidebar />

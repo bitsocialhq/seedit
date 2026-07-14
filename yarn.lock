@@ -1366,16 +1366,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bso-resolver@npm:0.0.8":
-  version: 0.0.8
-  resolution: "@bitsocial/bso-resolver@npm:0.0.8"
-  dependencies:
-    "@pkcprotocol/pkc-logger": "npm:0.1.0"
-    viem: "npm:2.48.1"
-  checksum: 10c0/0acb033cac4f8860323e154a5a53b95e9d107326e78bc9febd36091cd96dc2c095b31996d594fba9d676c132305c5504d5b7e1b3e5af1f78e2c372f1eebc2f7a
-  languageName: node
-  linkType: hard
-
 "@capacitor/android@npm:7.4.5":
   version: 7.4.5
   resolution: "@capacitor/android@npm:7.4.5"
@@ -17085,27 +17075,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ox@npm:0.14.17":
-  version: 0.14.17
-  resolution: "ox@npm:0.14.17"
-  dependencies:
-    "@adraffy/ens-normalize": "npm:^1.11.0"
-    "@noble/ciphers": "npm:^1.3.0"
-    "@noble/curves": "npm:1.9.1"
-    "@noble/hashes": "npm:^1.8.0"
-    "@scure/bip32": "npm:^1.7.0"
-    "@scure/bip39": "npm:^1.6.0"
-    abitype: "npm:^1.2.3"
-    eventemitter3: "npm:5.0.1"
-  peerDependencies:
-    typescript: ">=5.4.0"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10c0/a4632918d89db20e7265dff96dec3786046e2ec99a42659badd300b7b24678348f505fd57e651c3a814a150d905f512a23a037f15757eae41db601d25fa7b10c
-  languageName: node
-  linkType: hard
-
 "ox@npm:0.14.30":
   version: 0.14.30
   resolution: "ox@npm:0.14.30"
@@ -19660,7 +19629,7 @@ __metadata:
   resolution: "seedit@workspace:."
   dependencies:
     "@bitsocial/bitsocial-react-hooks": "npm:0.1.30"
-    "@bitsocial/bso-resolver": "npm:0.0.8"
+    "@bitsocial/bso-resolver": "npm:0.0.10"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"
     "@capacitor/cli": "npm:7.4.5"
@@ -22146,27 +22115,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/099c73d2980493a372d7c91d7593c62c9bb534a91293f6ae308a88292e16a4c89301db8899fec98597a9e6ee51f02bd9ed857f498946b2ee905c9cae00e5289d
-  languageName: node
-  linkType: hard
-
-"viem@npm:2.48.1":
-  version: 2.48.1
-  resolution: "viem@npm:2.48.1"
-  dependencies:
-    "@noble/curves": "npm:1.9.1"
-    "@noble/hashes": "npm:1.8.0"
-    "@scure/bip32": "npm:1.7.0"
-    "@scure/bip39": "npm:1.6.0"
-    abitype: "npm:1.2.3"
-    isows: "npm:1.0.7"
-    ox: "npm:0.14.17"
-    ws: "npm:8.18.3"
-  peerDependencies:
-    typescript: ">=5.0.4"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10c0/222ad600cee6f9887228e2a9a8bc9d11315cb8a68cef6e271de4aee75be087be33544d3f1c7483d8a5c93c1964bbd4298fc6b36bfbcd3b7f1a66bda0de82d841
   languageName: node
   linkType: hard
 

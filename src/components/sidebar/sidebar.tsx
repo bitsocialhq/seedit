@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, usePkcRpcSettings, useSubscribe } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import { getPostScore } from '../../lib/utils/post-utils';
 import { getFormattedDate, getFormattedTimeDuration, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { findCommunityCreator } from '../../lib/utils/user-utils';
@@ -25,7 +25,7 @@ import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
-import { isDirectoryCode } from '../../lib/utils/directory-codes';
+import { getCommunityPath, getCommunityPostUrl } from '../../lib/utils/community-route-utils';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
 import Markdown from '../markdown';
@@ -98,7 +98,7 @@ const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
       </div>
       {subplebbitAddress && cid && (
         <div className={styles.shareLink}>
-          {t('share_link')}: <input type='text' value={`https://seedit.app/s/${subplebbitAddress}/c/${cid}`} readOnly={true} />
+          {t('share_link')}: <input type='text' value={getCommunityPostUrl(subplebbitAddress, cid)} readOnly={true} />
         </div>
       )}
     </div>
@@ -116,7 +116,7 @@ const ModerationTools = ({ address }: { address?: string }) => {
       <div className={styles.listTitle}>{t('moderation_tools')}</div>
       <ul className={`${styles.listContent} ${styles.modsList}`}>
         <li className={`${styles.moderationTool} ${isInCommunitySettingsView ? styles.selectedTool : ''}`}>
-          <Link className={styles.communitySettingsTool} to={`/s/${address}/settings`}>
+          <Link className={styles.communitySettingsTool} to={address ? `${getCommunityPath(address)}/settings` : '/communities'}>
             {t('community_settings')}
           </Link>
         </li>
@@ -215,9 +215,11 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? `/s/${pendingPost?.subplebbitAddress}/submit`
+        ? pendingPost?.subplebbitAddress
+          ? `${getCommunityPath(pendingPost.subplebbitAddress)}/submit`
+          : '/submit'
         : address || params?.communityAddress
-          ? `/s/${address || params?.communityAddress}/submit`
+          ? `${getCommunityPath(address || params.communityAddress!)}/submit`
           : '/submit';
 
   const { blocked, unblock, block } = useBlock({ address });
@@ -245,13 +247,6 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const account = useAccount();
   const moderatorRole = roles?.[account.author?.address]?.role;
   const isOwner = !!settings;
-
-  // On a /s/<code> directory route the subscribe button targets the code, so the
-  // subscription keeps following whichever community currently wins the directory.
-  const directoryCode = params?.communityAddress && isDirectoryCode(params.communityAddress) ? params.communityAddress : undefined;
-  const { subscribe: subscribeToResolvedCommunity, subscribed: subscribedToResolvedCommunity } = useSubscribe({
-    communityAddress: directoryCode ? address : undefined,
-  });
 
   const communitySubtitles = useCommunitySubtitles();
   const [subtitleIndexes] = useState(() => getRandomSubtitleIndexes(communitySubtitles.length));
@@ -309,22 +304,12 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
           !isInDomainView &&
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
-              <Link className={styles.title} to={`/s/${directoryCode ?? address}`}>
-                {directoryCode ?? subplebbit?.address}
+              <Link className={styles.title} to={address ? getCommunityPath(address) : '/communities'}>
+                {subplebbit?.address}
               </Link>
-              {directoryCode && (
-                <div className={styles.directoryNotice}>
-                  s/{directoryCode} — {t('directory_served_by', { community: title || (address ? getShortAddress(address) : '...') })}
-                  {address && !subscribedToResolvedCommunity && (
-                    <button type='button' className={styles.directorySubscribeOnly} onClick={() => subscribeToResolvedCommunity()}>
-                      {t('subscribe_to_this_community_only')}
-                    </button>
-                  )}
-                </div>
-              )}
               <div className={styles.subscribeContainer}>
                 <span className={styles.subscribeButton}>
-                  <SubscribeButton address={directoryCode ?? address} />
+                  <SubscribeButton address={address} />
                 </span>
                 <span className={styles.subscribers}>{t('members_count', { count: allActiveUserCount })}</span>
               </div>
@@ -399,7 +384,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
         {(!(isMobile && isInHomeAboutView) || isInCommunityAboutView || isInPostPageAboutView) && <Footer />}
         {address && !(moderatorRole || isOwner) && (
           <div className={styles.readOnlySettingsLink}>
-            <Link to={`/s/${address}/settings`}>{t('community_settings')}</Link>
+            <Link to={`${getCommunityPath(address)}/settings`}>{t('community_settings')}</Link>
           </div>
         )}
         {isMobile && isInHomeAboutView && <FAQ />}

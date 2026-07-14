@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useDefaultSubscriptions } from './use-default-subscriptions';
 
 /**
- * Whether the community is the winner of a directory marked `nsfw: true` (e.g. "nsfw").
- * Non-directory communities have no NSFW metadata, so they return false.
+ * Whether default-community metadata marks this community `nsfw: true`.
+ * Communities without default metadata return false.
  */
 export const useIsNsfwCommunity = (communityAddress: string) => {
   const defaultCommunities = useDefaultSubscriptions();

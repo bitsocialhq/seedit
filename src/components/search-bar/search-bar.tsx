@@ -18,6 +18,7 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import styles from './search-bar.module.css';
 import _ from 'lodash';
+import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 
 interface SearchBarProps {
   isFocused?: boolean;
@@ -145,14 +146,17 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       debouncedSetSearchQuery.flush();
       return;
     }
-    const searchInput = searchInputRef.current?.value;
+    const searchInput = searchInputRef.current?.value.trim();
     if (searchInput) {
-      if (searchInput.toLowerCase() === params.communityAddress?.toLowerCase()) {
+      const communityAddress = resolveCommunityRouteAddress(searchInput);
+      if (!communityAddress) return;
+      const currentCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+      if (communityAddress?.toLowerCase() === currentCommunityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
       }
       setInputValue('');
-      navigate(`/s/${searchInput}`);
+      navigate(getCommunityPath(communityAddress));
     }
   };
 
@@ -189,7 +193,8 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const handleCommunitySelect = useCallback(
     (address: string) => {
-      if (address.toLowerCase() === params.communityAddress?.toLowerCase()) {
+      const currentCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+      if (address.toLowerCase() === currentCommunityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
       }
@@ -198,7 +203,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       setActiveDropdownIndex(-1);
       setShowExpando(false);
       searchInputRef.current?.blur();
-      navigate(`/s/${address}`);
+      navigate(getCommunityPath(address));
     },
     [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, params.communityAddress, t],
   );

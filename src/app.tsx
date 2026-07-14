@@ -21,6 +21,7 @@ import SubmitPage from './views/submit-page';
 import CommunityView from './views/community';
 import CommunitySettings from './views/community-settings';
 import Communities from './views/communities';
+import StarterSubscriptions from './views/starter-subscriptions/starter-subscriptions';
 import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
@@ -116,6 +117,7 @@ const App = () => {
             <Route path='/inbox/postreplies' element={<Inbox />} />
 
             <Route path='/communities' element={<Communities />} />
+            <Route path='/communities/defaults' element={<StarterSubscriptions />} />
             <Route path='/communities/subscriber' element={<Communities />} />
             <Route path='/communities/moderator' element={<Communities />} />
             <Route path='/communities/admin' element={<Communities />} />

@@ -2,6 +2,7 @@ import assert from 'assert';
 import { useEffect } from 'react';
 import { useLocation, useParams, Params } from 'react-router-dom';
 import { isCommunityView, isAllView, isModView, isHomeView, isDomainView } from '../lib/utils/view-utils';
+import { resolveCommunityRouteAddress } from '../lib/utils/community-route-utils';
 
 // the timestamp the last time the user visited
 const lastVisitTimestamp = localStorage.getItem('seeditLastVisitTimestamp');
@@ -85,7 +86,7 @@ const getSessionKeyForView = (pathname: string, params: Readonly<Params<string>>
   if (isAllView(pathname)) return 'sessionTimeFilter-all';
   if (isModView(pathname)) return 'sessionTimeFilter-mod';
   if (isDomainView(pathname)) return `sessionTimeFilter-domain-${params.domain}`;
-  if (isCommunityView(pathname, params)) return `sessionTimeFilter-community-${params.communityAddress}`;
+  if (isCommunityView(pathname, params)) return `sessionTimeFilter-community-${resolveCommunityRouteAddress(params.communityAddress)}`;
   return null;
 };
 

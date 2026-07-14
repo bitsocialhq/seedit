@@ -30,6 +30,7 @@ import Thumbnail from '../post/thumbnail/';
 import ReplyForm from '../reply-form';
 import styles from './reply.module.css';
 import _ from 'lodash';
+import { getCommunityPath, getCommunityPostPath } from '../../lib/utils/community-route-utils';
 
 interface ReplyAuthorProps {
   address: string;
@@ -103,7 +104,7 @@ const ReplyAuthor = ({
               {' '}
               [
               {isAuthorSubmitter && (
-                <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+                <Link to={getCommunityPostPath(communityAddress, postCid)} className={styles.submitter} title={t('submitter')}>
                   S
                 </Link>
               )}
@@ -120,7 +121,7 @@ const ReplyAuthor = ({
             <span className={styles.moderatorBrackets}>
               {' '}
               [
-              <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+              <Link to={getCommunityPostPath(communityAddress, postCid)} className={styles.submitter} title={t('submitter')}>
                 S
               </Link>
               ]
@@ -221,7 +222,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
 
   return (
     <div className={styles.parent}>
-      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.parentLink}>
+      <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''} className={styles.parentLink}>
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
@@ -229,7 +230,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         u/{author?.shortAddress}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={`/s/${communityAddress}`} className={styles.parentSubplebbit}>
+      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentSubplebbit}>
         s/{communityAddress}
       </Link>
     </div>
@@ -251,7 +252,7 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
   return (
     <div className={styles.inboxParentLinkWrapper}>
       <span className={styles.inboxParentLinkSubject}>{isInboxCommentReply ? t('comment_reply') : isInboxPostReply ? t('post_reply') : ''}</span>
-      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.inboxParentLink}>
+      <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''} className={styles.inboxParentLink}>
         {postTitle}
       </Link>
     </div>
@@ -266,7 +267,7 @@ const InboxParentComment = ({ parentCid }: { parentCid: string | undefined }) =>
   return (
     <>
       <Expando content={content} expanded={true} showContent={true} />
-      <Link className={styles.viewParentComment} to={`/s/${communityAddress}/c/${parentCid}`}>
+      <Link className={styles.viewParentComment} to={communityAddress && parentCid ? getCommunityPostPath(communityAddress, parentCid) : ''}>
         {t('view_parent_comment')}
       </Link>
     </>
@@ -298,7 +299,7 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
           u/{shortAddress}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={`/s/${communityAddress}`} className={styles.inboxParentSubplebbit}>
+        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.inboxParentSubplebbit}>
           s/{shortCommunityAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}
@@ -589,7 +590,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                         />
                       ) : (
                         <div className={styles.continueThisThread}>
-                          <Link to={`/s/${communityAddress}/c/${cid}`}>{t('continue_thread')}</Link>
+                          <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''}>{t('continue_thread')}</Link>
                         </div>
                       )}
                     </Fragment>

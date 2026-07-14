@@ -5,6 +5,7 @@ import { CommentMediaInfo } from '../../../lib/utils/media-utils';
 import useFetchGifFirstFrame from '../../../hooks/use-fetch-gif-first-frame';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
 import { useIsNsfwCommunity } from '../../../hooks/use-is-nsfw-community';
+import { getCommunityPostPath } from '../../../lib/utils/community-route-utils';
 
 interface ThumbnailProps {
   cid?: string;
@@ -179,7 +180,7 @@ const Thumbnail = ({
             {mediaComponent}
           </a>
         ) : (
-          <Link to={`/s/${communityAddress}/c/${cid}`}>{mediaComponent}</Link>
+          <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''}>{mediaComponent}</Link>
         )}
       </span>
     </span>

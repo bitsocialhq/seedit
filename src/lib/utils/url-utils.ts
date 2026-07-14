@@ -1,4 +1,5 @@
 import { copyToClipboard } from './clipboard-utils';
+import { getCommunityPath, getCommunityPostPath, getCommunityPostUrl } from './community-route-utils';
 
 export const getHostname = (url: string) => {
   try {
@@ -18,7 +19,7 @@ export const isValidURL = (url: string) => {
 };
 
 export const copyShareLinkToClipboard = async (communityAddress: string, cid: string) => {
-  const shareLink = `https://seedit.app/s/${communityAddress}/c/${cid}`;
+  const shareLink = getCommunityPostUrl(communityAddress, cid);
   await copyToClipboard(shareLink);
 };
 
@@ -130,8 +131,10 @@ export const preprocessSeeditPatterns = (content: string): string => {
     if (isValidCommunityPattern(fullPattern)) {
       // Get the trailing punctuation that was matched but shouldn't be part of the link
       const trailingPunctuation = match.slice(fullPattern.length);
+      const postMatch = cleanPath.match(/^([^/]+)\/c\/([^/]+)$/);
+      const internalPath = postMatch ? getCommunityPostPath(postMatch[1], postMatch[2]) : getCommunityPath(cleanPath);
       // Convert to markdown link format and preserve trailing punctuation
-      return `[${fullPattern}](/${fullPattern})${trailingPunctuation}`;
+      return `[${fullPattern}](${internalPath})${trailingPunctuation}`;
     }
 
     // If not valid, return unchanged

@@ -1,11 +1,14 @@
 {
-  "title": "Seedit Directory Defaults",
-  "description": "Expected Seedit UX defaults by directory code. These defaults apply to the directory, not to individual candidate communities.",
-  "createdAt": 1783123200,
-  "updatedAt": 1783123200,
-  "directories": {
-    "askseedit": {
-      "directoryCode": "askseedit",
+  "schemaVersion": 1,
+  "revision": 1,
+  "title": "Seedit Default Communities",
+  "description": "Communities new Seedit accounts subscribe to by default.",
+  "createdAt": 1745707200,
+  "updatedAt": 1784049342,
+  "communities": [
+    {
+      "address": "askseedit.bso",
+      "publicKey": "12D3KooWNv5HzmkcKZkxMn1SrfMyozTdTJSr7kA1bzEKKa7PTS5N",
       "title": "AskSeedit",
       "description": "Ask the Seedit community anything: thought-provoking and open-ended questions.",
       "tags": [
@@ -13,8 +16,9 @@
         "discussion"
       ]
     },
-    "memes": {
-      "directoryCode": "memes",
+    {
+      "address": "memes-posting.bso",
+      "publicKey": "12D3KooWFkZorC92RxQAwMBYMido8xBM88ghpLWA26mrE9W9Xmxd",
       "title": "Memes",
       "description": "Memes of all kinds. A way of describing cultural information being shared.",
       "tags": [
@@ -22,8 +26,9 @@
         "humor"
       ]
     },
-    "news": {
-      "directoryCode": "news",
+    {
+      "address": "news-posting.bso",
+      "publicKey": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5",
       "title": "News",
       "description": "News from around the world: current events, politics and everything in between.",
       "tags": [
@@ -31,8 +36,9 @@
         "world"
       ]
     },
-    "pics": {
-      "directoryCode": "pics",
+    {
+      "address": "pics-posting.bso",
+      "publicKey": "12D3KooWR39v9RaLHXXsJC9NSqdmWgrw5FMjJJAECEAsras4AztU",
       "title": "Pics",
       "description": "A place for photographs, pictures, and other images.",
       "tags": [
@@ -40,8 +46,9 @@
         "photography"
       ]
     },
-    "todayilearned": {
-      "directoryCode": "todayilearned",
+    {
+      "address": "til-posting.bso",
+      "publicKey": "12D3KooWEXNQaBi1xWXW9ksm8Fa5LpAP46YsmV44oGaHrsCJ41Jt",
       "title": "Today I Learned",
       "description": "You learn something new every day; what did you learn today?",
       "tags": [
@@ -49,16 +56,18 @@
         "facts"
       ]
     },
-    "interestingasfuck": {
-      "directoryCode": "interestingasfuck",
+    {
+      "address": "interestingasfuck.bso",
+      "publicKey": "12D3KooWDexsEFuP8wt4vPKjLn3ZaxEyQJv4EWMU3abnLk7NxEhd",
       "title": "Interesting As Fuck",
       "description": "For anything that is InterestingAsFuck.",
       "tags": [
         "interesting"
       ]
     },
-    "gaming": {
-      "directoryCode": "gaming",
+    {
+      "address": "gaming-posting.bso",
+      "publicKey": "12D3KooWRHbY2AS9oComoTVpMF4iF33d3GPzKCW7MSfHEJT8qeZc",
       "title": "Gaming",
       "description": "A community for (almost) anything related to games: video games, board games, card games, and so on.",
       "tags": [
@@ -66,16 +75,18 @@
         "videogames"
       ]
     },
-    "videos": {
-      "directoryCode": "videos",
+    {
+      "address": "videos-posting.bso",
+      "publicKey": "12D3KooWQt3UJ6A3AeZxJSFJnspVmYQK1Epj8VeSzrFG1tHiZC9o",
       "title": "Videos",
       "description": "The best place for video content of all kinds.",
       "tags": [
         "videos"
       ]
     },
-    "funny": {
-      "directoryCode": "funny",
+    {
+      "address": "funny-posting.bso",
+      "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
       "title": "Funny",
       "description": "Seedit's largest humour depository.",
       "tags": [
@@ -83,8 +94,9 @@
         "funny"
       ]
     },
-    "aww": {
-      "directoryCode": "aww",
+    {
+      "address": "aww-posting.bso",
+      "publicKey": "12D3KooWDniAeB2eenHaA25vxk4wt2v8H39dAi42L5bfrMSxtpEs",
       "title": "Aww",
       "description": "Things that make you go AWW! Like puppies, bunnies, babies, and so on.",
       "tags": [
@@ -92,5 +104,5 @@
         "cute"
       ]
     }
-  }
+  ]
 }

@@ -1,43 +1,32 @@
 import { useEffect } from 'react';
-import { useAccount, type Account } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount } from '@bitsocial/bitsocial-react-hooks';
 import accountsDatabase from '@bitsocial/bitsocial-react-hooks/dist/stores/accounts/accounts-database.js';
 import accountsStore from '@bitsocial/bitsocial-react-hooks/dist/stores/accounts/accounts-store.js';
-import { computeDirectoryMigration, type DirectoryMigrationResult } from '../lib/utils/legacy-default-subscriptions';
+import { computeStarterAccount, type StarterAccount } from '../lib/utils/starter-account';
 import { useAutoSubscribeStore } from '../stores/use-auto-subscribe-store';
+import { useStarterCommunityList, type StarterCommunityList } from './use-default-subscriptions';
 
-// New guard key: the old 'seedit-auto-subscribe-done-' flag predates directory
-// subscriptions, so accounts that already auto-subscribed once (or subscribed manually)
-// must still run the directory migration exactly once.
+const OLD_AUTO_SUBSCRIBE_KEY_PREFIX = 'seedit-auto-subscribe-done-';
 const DIRECTORY_MIGRATION_KEY_PREFIX = 'seedit-directory-subscriptions-migration-v1-';
-
-// Keep track of which accounts have been processed globally
 const processedAccounts = new Set<string>();
 const migratingAccounts = new Set<string>();
 
-const getStoreAccountByName = (accountName: string): Account | undefined => {
+const getStoreAccountByName = (accountName: string): StarterAccount | undefined => {
   const { accounts, accountNamesToAccountIds } = accountsStore.getState();
   const accountId = accountNamesToAccountIds[accountName];
-  return accountId ? accounts[accountId] : undefined;
+  return accountId ? (accounts[accountId] as StarterAccount) : undefined;
 };
 
-const prepareDirectoryMigration = (accountName: string) => {
-  const sourceAccount = getStoreAccountByName(accountName);
-  if (!sourceAccount) throw new Error(`Account '${accountName}' was not found for directory migration`);
-
-  const migration = computeDirectoryMigration(sourceAccount.subscriptions);
-  return {
-    migration,
-    sourceAccount,
-    accountToPersist: migration.changed
-      ? {
-          ...sourceAccount,
-          subscriptions: migration.next,
-        }
-      : undefined,
-  };
+const getRequiredStoreAccountByName = (accountName: string): StarterAccount => {
+  const account = getStoreAccountByName(accountName);
+  if (!account) throw new Error(`Account '${accountName}' was not found for starter-subscription migration`);
+  return account;
 };
 
-const setStoreAccountIfCurrent = (accountName: string, expectedAccount: Account, nextAccount: Account) => {
+const starterStateChanged = (previous: StarterAccount, next: StarterAccount) =>
+  previous.subscriptions !== next.subscriptions || previous.seeditStarterSubscriptions !== next.seeditStarterSubscriptions;
+
+const setStoreAccountIfCurrent = (accountName: string, expectedAccount: StarterAccount, nextAccount: StarterAccount) => {
   accountsStore.setState((state) => {
     const accountId = state.accountNamesToAccountIds[accountName];
     if (!accountId || state.accounts[accountId] !== expectedAccount) return {};
@@ -50,49 +39,41 @@ const setStoreAccountIfCurrent = (accountName: string, expectedAccount: Account,
   });
 };
 
-const persistMigratedAccount = async (accountName: string, sourceAccount: Account, accountToPersist: Account) => {
-  await accountsDatabase.addAccount(accountToPersist);
+const persistStarterAccount = async (
+  accountName: string,
+  sourceAccount: StarterAccount,
+  nextAccount: StarterAccount,
+  isKnownExistingAccount: boolean,
+  starterList: Pick<StarterCommunityList, 'revision' | 'communities'>,
+) => {
+  await accountsDatabase.addAccount(nextAccount);
 
   const currentAccount = getStoreAccountByName(accountName);
   if (currentAccount === sourceAccount) {
-    setStoreAccountIfCurrent(accountName, sourceAccount, accountToPersist);
+    setStoreAccountIfCurrent(accountName, sourceAccount, nextAccount);
     return;
   }
-  if (!currentAccount) throw new Error(`Account '${accountName}' disappeared during directory migration`);
+  if (!currentAccount) throw new Error(`Account '${accountName}' disappeared during starter-subscription migration`);
 
-  const rebasedMigration = computeDirectoryMigration(currentAccount.subscriptions);
-  const rebasedAccount = rebasedMigration.changed
-    ? {
-        ...currentAccount,
-        subscriptions: rebasedMigration.next,
-      }
-    : currentAccount;
-
+  const rebasedAccount = computeStarterAccount(currentAccount, isKnownExistingAccount, starterList);
+  if (!starterStateChanged(currentAccount, rebasedAccount)) return;
   await accountsDatabase.addAccount(rebasedAccount);
-  if (rebasedMigration.changed) {
-    setStoreAccountIfCurrent(accountName, currentAccount, rebasedAccount);
-  }
-};
-
-const migrateDirectorySubscriptions = async (accountName: string): Promise<DirectoryMigrationResult> => {
-  const { migration, sourceAccount, accountToPersist } = prepareDirectoryMigration(accountName);
-  if (accountToPersist) await persistMigratedAccount(accountName, sourceAccount, accountToPersist);
-  return migration;
+  setStoreAccountIfCurrent(accountName, currentAccount, rebasedAccount);
 };
 
 /**
- * One-time per-account migration to directory subscriptions: removes the dead legacy
- * default communities from account.subscriptions and subscribes the directory codes
- * (new accounts with empty subscriptions take the same path).
+ * Migrates retired directory-code subscriptions to fixed addresses, gives new accounts the
+ * current default subscriptions, and records their ownership for safe future updates.
  */
 export const useAutoSubscribe = () => {
-  const account = useAccount();
+  const account = useAccount() as StarterAccount | undefined;
+  const { list: starterList, loading: starterListLoading } = useStarterCommunityList();
   const accountAddress = account?.author?.address;
   const accountName = typeof account?.name === 'string' ? account.name : undefined;
   const { addCheckingAccount, removeCheckingAccount, isCheckingAccount } = useAutoSubscribeStore();
 
   useEffect(() => {
-    if (!accountAddress) return;
+    if (!accountAddress || starterListLoading) return;
 
     if (migratingAccounts.has(accountAddress)) {
       addCheckingAccount(accountAddress);
@@ -101,46 +82,32 @@ export const useAutoSubscribe = () => {
       };
     }
 
-    // Mark as checking immediately when account changes
     addCheckingAccount(accountAddress);
 
     const processAutoSubscribe = async () => {
-      if (!account) {
+      if (!account || processedAccounts.has(accountAddress)) {
         removeCheckingAccount(accountAddress);
         return;
       }
-
-      if (processedAccounts.has(accountAddress)) {
-        removeCheckingAccount(accountAddress);
-        return;
-      }
-
-      const storageKey = DIRECTORY_MIGRATION_KEY_PREFIX + accountAddress;
-      if (localStorage.getItem(storageKey)) {
-        processedAccounts.add(accountAddress);
-        removeCheckingAccount(accountAddress);
-        return;
-      }
-
       if (!accountName) {
-        console.error('Directory subscriptions migration error: active account is missing a name');
+        console.error('Default subscriptions migration error: active account is missing a name');
         removeCheckingAccount(accountAddress);
         return;
       }
+
+      const isKnownExistingAccount =
+        localStorage.getItem(OLD_AUTO_SUBSCRIBE_KEY_PREFIX + accountAddress) === 'true' ||
+        localStorage.getItem(DIRECTORY_MIGRATION_KEY_PREFIX + accountAddress) === 'true';
 
       migratingAccounts.add(accountAddress);
       try {
-        const { removed, added, changed } = await migrateDirectorySubscriptions(accountName);
-        if (changed) {
-          console.log(
-            `Migrated subscriptions to seedit directories: removed ${removed.length} dead legacy default(s) [${removed.join(', ')}], added ${added.length} directory code(s) [${added.join(', ')}]`,
-          );
+        const sourceAccount = getRequiredStoreAccountByName(accountName);
+        const nextAccount = computeStarterAccount(sourceAccount, isKnownExistingAccount, starterList);
+        if (starterStateChanged(sourceAccount, nextAccount)) {
+          await persistStarterAccount(accountName, sourceAccount, nextAccount, isKnownExistingAccount, starterList);
         }
-        localStorage.setItem(storageKey, 'true');
       } catch (error) {
-        console.error('Directory subscriptions migration error:', error);
-        // Don't mark the account as processed: a transient subscription update failure
-        // should retry on the next effect run instead of waiting for a reload.
+        console.error('Default subscriptions migration error:', error);
         removeCheckingAccount(accountAddress);
         return;
       } finally {
@@ -151,12 +118,11 @@ export const useAutoSubscribe = () => {
       removeCheckingAccount(accountAddress);
     };
 
-    processAutoSubscribe();
-
+    void processAutoSubscribe();
     return () => {
-      if (accountAddress && !migratingAccounts.has(accountAddress)) removeCheckingAccount(accountAddress);
+      if (!migratingAccounts.has(accountAddress)) removeCheckingAccount(accountAddress);
     };
-  }, [account, accountAddress, accountName, addCheckingAccount, removeCheckingAccount]);
+  }, [account, accountAddress, accountName, addCheckingAccount, removeCheckingAccount, starterList, starterListLoading]);
 
   return {
     isCheckingSubscriptions: !accountAddress || isCheckingAccount(accountAddress),

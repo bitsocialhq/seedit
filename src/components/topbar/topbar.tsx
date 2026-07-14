@@ -6,17 +6,16 @@ import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from 
 import getShortAddress from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
-import { isDirectoryCode, isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
+import { getCommunityPath, getCommunityRouteSegment, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
-// Directory-code subscriptions (e.g. "memes") have no dot and are shorter than raw public
-// keys, so getShortAddress would return an empty string for them; show the code itself.
 const getSubscriptionDisplayName = (subscription: string) => {
-  if (isDirectoryCode(subscription)) {
-    return subscription;
+  const routeSegment = getCommunityRouteSegment(subscription);
+  if (routeSegment !== subscription) {
+    return routeSegment;
   }
   const shortAddress = getShortAddress(subscription);
   return shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
@@ -56,8 +55,8 @@ const CommunitiesDropdown = () => {
     <div className={`${styles.dropdown} ${styles.subsDropdown}`} ref={subsDropdownRef} onClick={toggleSubsDropdown}>
       <span className={styles.selectedTitle}>{t('my_communities')}</span>
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
-        {reversedSubscriptions?.map((subscription: string, index: number) => (
-          <Link key={index} to={`/s/${subscription}`} className={styles.dropdownItem}>
+        {reversedSubscriptions?.map((subscription: string) => (
+          <Link key={subscription} to={getCommunityPath(subscription)} className={styles.dropdownItem}>
             {getSubscriptionDisplayName(subscription)}
           </Link>
         ))}
@@ -78,6 +77,7 @@ const SortTypesDropdown = () => {
   const { timeFilterName } = useTimeFilter();
 
   const selectedSortType = params.sortType || 'hot';
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
 
   const getSelectedSortLabel = () => {
     const index = sortTypes.indexOf(selectedSortType);
@@ -108,12 +108,12 @@ const SortTypesDropdown = () => {
       <span className={styles.selectedTitle}>{t(getSelectedSortLabel())}</span>
       <div className={`${styles.dropChoices} ${styles.sortsDropChoices} ${sortsDropdownClass}`} ref={sortsdropdownItemsRef}>
         {sortTypes.map((sortType, index) => {
-          let dropdownLink = isInCommunityView ? `/s/${params.communityAddress}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
+          let dropdownLink = isInCommunityView && communityAddress ? `${getCommunityPath(communityAddress)}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
           if (timeFilterName) {
             dropdownLink += `/${timeFilterName}`;
           }
           return (
-            <Link to={dropdownLink} key={index} className={styles.dropdownItem}>
+            <Link to={dropdownLink} key={sortType} className={styles.dropdownItem}>
               {t(sortLabels[index])}
             </Link>
           );
@@ -140,10 +140,11 @@ const TimeFilterDropdown = () => {
   const timeFilterDropdownClass = isTimeFilterDropdownOpen ? styles.visible : styles.hidden;
 
   const selectedSortType = params.sortType || 'hot';
+  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
 
   const getTimeFilterLink = (timeFilterName: string) => {
     return isInCommunityView
-      ? `/s/${params.communityAddress}/${selectedSortType}/${timeFilterName}`
+      ? `${communityAddress ? getCommunityPath(communityAddress) : '/s'}/${selectedSortType}/${timeFilterName}`
       : isinAllView
         ? `s/all/${selectedSortType}/${timeFilterName}`
         : isInModView
@@ -173,7 +174,7 @@ const TimeFilterDropdown = () => {
         {timeFilterNames.slice(0, -1).map((timeFilterName, index) => (
           <Link
             to={getTimeFilterLink(timeFilterName)}
-            key={index}
+            key={timeFilterName}
             className={styles.dropdownItem}
             onClick={() => setSessionTimeFilterPreference(sessionKey, timeFilterName)}
           >
@@ -204,20 +205,12 @@ const TopBar = memo(() => {
   const subscriptions = useMemo(() => account?.subscriptions, [account?.subscriptions]);
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
 
-  // Hide defaults the user already follows, either by direct address or via the
-  // matching directory-code subscription (which resolves to the same community).
-  const filteredCommunityAddresses = defaultCommunities.reduce<string[]>((addresses, defaultCommunity) => {
-    if (
-      !isResolvableCommunityAddress(defaultCommunity.address) ||
-      subscriptions?.includes(defaultCommunity.address) ||
-      (defaultCommunity.directoryCode && subscriptions?.includes(defaultCommunity.directoryCode))
-    ) {
-      return addresses;
-    }
-
-    addresses.push(defaultCommunity.address);
-    return addresses;
-  }, []);
+  const subscriptionSet = new Set(subscriptions ?? []);
+  const filteredCommunityAddresses: string[] = [];
+  for (const { address } of defaultCommunities) {
+    if (!subscriptionSet.has(address)) filteredCommunityAddresses.push(address);
+  }
+  const activeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
 
   return (
     <div className={styles.headerArea}>
@@ -250,9 +243,9 @@ const TopBar = memo(() => {
             {reversedSubscriptions?.map((subscription: string, index: number) => {
               const displayAddress = getSubscriptionDisplayName(subscription);
               return (
-                <li key={index}>
+                <li key={subscription}>
                   {index !== 0 && <span className={styles.separator}>-</span>}
-                  <Link to={`/s/${subscription}`} className={params.communityAddress === subscription ? styles.selected : styles.choice}>
+                  <Link to={getCommunityPath(subscription)} className={activeCommunityAddress === subscription ? styles.selected : styles.choice}>
                     {displayAddress}
                   </Link>
                 </li>
@@ -261,16 +254,11 @@ const TopBar = memo(() => {
             {!hideDefaultCommunities && filteredCommunityAddresses?.length > 0 && <span className={styles.separator}> | </span>}
             {!hideDefaultCommunities &&
               filteredCommunityAddresses?.map((address, index) => {
-                const shortAddress = getShortAddress(address);
-                const displayAddress = shortAddress.includes('.eth')
-                  ? shortAddress.slice(0, -4)
-                  : shortAddress.includes('.sol')
-                    ? shortAddress.slice(0, -4)
-                    : shortAddress;
+                const displayAddress = getSubscriptionDisplayName(address);
                 return (
-                  <li key={index}>
+                  <li key={address}>
                     {index !== 0 && <span className={styles.separator}>-</span>}
-                    <Link to={`/s/${address}`} className={params.communityAddress === address ? styles.selected : styles.choice}>
+                    <Link to={getCommunityPath(address)} className={activeCommunityAddress === address ? styles.selected : styles.choice}>
                       {displayAddress}
                     </Link>
                   </li>
