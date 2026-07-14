@@ -1331,11 +1331,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bitsocial-react-hooks@npm:0.1.29":
-  version: 0.1.29
-  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.29"
+"@bitsocial/bitsocial-react-hooks@npm:0.1.30":
+  version: 0.1.30
+  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.30"
   dependencies:
-    "@bitsocial/bso-resolver": "npm:0.0.8"
+    "@bitsocial/bso-resolver": "npm:0.0.10"
     "@pkcprotocol/pkc-js": "npm:0.0.71"
     "@pkcprotocol/pkc-logger": "npm:0.1.0"
     assert: "npm:2.0.0"
@@ -1352,7 +1352,17 @@ __metadata:
     zustand: "npm:4.0.0"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/51a31922421dd2c44492e2358108dbc51b1c1d5ebcc6ece0ce1e580346bdb6c445f811ea73bd51b47cbdcd2e0930de86f146c0166554eedbc56883554ebbba03
+  checksum: 10c0/da3b6d4f0bc304228dd0208e39e375c8cd16d2f11454319456a7d30c64bd8c6296dcbf867c008abd8ddd087a2091302742d539f705f4d93ef9682bc0c0453d20
+  languageName: node
+  linkType: hard
+
+"@bitsocial/bso-resolver@npm:0.0.10":
+  version: 0.0.10
+  resolution: "@bitsocial/bso-resolver@npm:0.0.10"
+  dependencies:
+    "@pkcprotocol/pkc-logger": "npm:0.1.0"
+    viem: "npm:2.55.1"
+  checksum: 10c0/6dd612cb374fadb4f23d37eb6f48292032efa64867871a3d2f81b0c1a4d9a4bdb6463afb0d737ec60a78a39505d92aaf42586812356e31e21b49012daf8fd55c
   languageName: node
   linkType: hard
 
@@ -17096,6 +17106,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ox@npm:0.14.30":
+  version: 0.14.30
+  resolution: "ox@npm:0.14.30"
+  dependencies:
+    "@adraffy/ens-normalize": "npm:^1.11.0"
+    "@noble/ciphers": "npm:^1.3.0"
+    "@noble/curves": "npm:1.9.1"
+    "@noble/hashes": "npm:^1.8.0"
+    "@scure/bip32": "npm:^1.7.0"
+    "@scure/bip39": "npm:^1.6.0"
+    abitype: "npm:^1.2.3"
+    eventemitter3: "npm:5.0.1"
+  peerDependencies:
+    typescript: ">=5.4.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/dfefa9218269103b3da3686c4da62849aef15e4347fd21f898fa113d9b4c2b86afab7c662c94d58206257736202647ce96249405c021c4a233712ac34fa3cc1b
+  languageName: node
+  linkType: hard
+
 "oxc-parser@npm:^0.132.0":
   version: 0.132.0
   resolution: "oxc-parser@npm:0.132.0"
@@ -19628,7 +19659,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "seedit@workspace:."
   dependencies:
-    "@bitsocial/bitsocial-react-hooks": "npm:0.1.29"
+    "@bitsocial/bitsocial-react-hooks": "npm:0.1.30"
     "@bitsocial/bso-resolver": "npm:0.0.8"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"
@@ -22136,6 +22167,27 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/222ad600cee6f9887228e2a9a8bc9d11315cb8a68cef6e271de4aee75be087be33544d3f1c7483d8a5c93c1964bbd4298fc6b36bfbcd3b7f1a66bda0de82d841
+  languageName: node
+  linkType: hard
+
+"viem@npm:2.55.1":
+  version: 2.55.1
+  resolution: "viem@npm:2.55.1"
+  dependencies:
+    "@noble/curves": "npm:1.9.1"
+    "@noble/hashes": "npm:1.8.0"
+    "@scure/bip32": "npm:1.7.0"
+    "@scure/bip39": "npm:1.6.0"
+    abitype: "npm:1.2.3"
+    isows: "npm:1.0.7"
+    ox: "npm:0.14.30"
+    ws: "npm:8.21.0"
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/4747450c511604dc2280b94b6a6eab53638058a559531f7707d31f21de51670449530f9ebc2fbc06d961b8b5a6cfadb920683e701058adc8996619b012bbc56d
   languageName: node
   linkType: hard
 
