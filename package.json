@@ -2,7 +2,7 @@
   "name": "seedit",
   "version": "0.5.10",
   "description": "A bitsocial client with an old.reddit UI",
-  "author": "Bitsocial Labs",
+  "author": "Bitsocial Forge",
   "type": "module",
   "license": "GPL-3.0-or-later",
   "private": true,
