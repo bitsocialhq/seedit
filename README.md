@@ -9,7 +9,7 @@ _Telegram group for this repo https://t.me/seeditreact_
 
 # Seedit
 
-Seedit is a serverless, adminless, decentralized and open-source (old)reddit alternative built on the [Bitsocial protocol](https://bitsocial.net). Like reddit, anyone can create a seedit community, It features a similar homepage structure as reddit, but with a crucial difference: **anyone can create and own communities, and multiple communities can compete for each default community slot**.
+Seedit is a serverless, adminless, decentralized and open-source (old)reddit alternative built on the [Bitsocial protocol](https://bitsocial.net). Like reddit, anyone can create a seedit community. Unlike reddit, communities are independently owned, subscriptions point directly to community addresses, and Seedit's default communities can evolve with the network.
 
 - Seedit web version: https://seedit.app — or, using Brave/IPFS Companion: https://seedit.eth
 
@@ -29,8 +29,9 @@ To run a community, you can choose between two options:
 
 Peers can connect to your bitsocial community using any bitsocial client, such as Seedit or [5chan](https://github.com/bitsocialnet/5chan). They only need the community address, which is not stored in any central database, as bitsocial is a pure peer-to-peer protocol.
 
-### How to add a community to the default list (s/all)
-The default list of communities, used on s/all on Seedit, is bitsocial's [seedit-default-subscriptions.json list](https://github.com/bitsocialnet/lists/blob/master/seedit-default-subscriptions.json). You can open a pull request in that repo to add your community to the list.
+### How to add a default community
+
+Seedit's versioned default communities are published in Bitsocial's [seedit-default-subscriptions.json list](https://github.com/bitsocialnet/lists/blob/master/seedit-default-subscriptions.json). New accounts subscribe to these communities by default. When the list changes, existing users can review the update and choose which additions to join; Seedit never removes a manually chosen subscription. You can open a pull request in that repository to propose a community for the list.
 
 ## Contributor setup
 
