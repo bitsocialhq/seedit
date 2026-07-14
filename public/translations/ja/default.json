@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "このコミュニティは既に表示中です",
   "advanced": "詳細",
-  "p2p_stats": "p2p統計"
+  "p2p_stats": "p2p統計",
+  "starter_subscriptions_updated": "Seeditのデフォルトコミュニティが変更されました。",
+  "starter_subscriptions_change_summary": "{{added}}件追加、{{removed}}件削除。",
+  "starter_communities": "デフォルトのコミュニティ",
+  "review_changes": "変更を確認",
+  "starter_communities_explanation": "新しいSeeditアカウントは、デフォルトでこれらのコミュニティを購読します。以下のオプションを選択しない限り、購読内容は変更されません。",
+  "starter_list_revision": "デフォルトコミュニティの改訂 {{revision}}",
+  "starter_list_offline_fallback": "デフォルトコミュニティを更新できなかったため、内蔵のコピーを表示しています。",
+  "add_selected_communities": "選択したコミュニティを追加",
+  "removed_starter_communities": "デフォルトコミュニティから外れました。最新のデフォルトに切り替えることを選択しない限り、購読内容は変更されません。",
+  "keep_current_subscriptions": "自分の購読を維持する",
+  "use_latest_starter_set": "最新のデフォルトコミュニティに切り替える",
+  "starter_replacement_safety": "削除できるのは、以前にSeeditがデフォルトで購読登録したコミュニティだけです。手動で追加した購読は常に保持されます。"
 }

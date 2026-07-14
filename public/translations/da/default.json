@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Du ser allerede denne fællesskab",
   "advanced": "avanceret",
-  "p2p_stats": "p2p-statistik"
+  "p2p_stats": "p2p-statistik",
+  "starter_subscriptions_updated": "Standardfællesskaberne på Seedit er blevet ændret.",
+  "starter_subscriptions_change_summary": "{{added}} tilføjet, {{removed}} fjernet.",
+  "starter_communities": "standardfællesskaber",
+  "review_changes": "gennemgå ændringer",
+  "starter_communities_explanation": "Nye Seedit-konti abonnerer som standard på disse fællesskaber. Dine abonnementer ændres ikke, medmindre du vælger en mulighed nedenfor.",
+  "starter_list_revision": "revision af standardfællesskaber {{revision}}",
+  "starter_list_offline_fallback": "Standardfællesskaberne kunne ikke opdateres; den indbyggede kopi vises.",
+  "add_selected_communities": "tilføj valgte fællesskaber",
+  "removed_starter_communities": "Er ikke længere blandt standardfællesskaberne. Dine abonnementer forbliver uændrede, medmindre du vælger at skifte til det nyeste standardsæt.",
+  "keep_current_subscriptions": "behold mine abonnementer",
+  "use_latest_starter_set": "skift til de nyeste standardfællesskaber",
+  "starter_replacement_safety": "Kun fællesskaber, som Seedit tidligere som standard abonnerede på for dig, kan fjernes. Dine manuelle abonnementer bevares altid."
 }

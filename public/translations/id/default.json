@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Anda sudah melihat komunitas ini",
   "advanced": "lanjutan",
-  "p2p_stats": "statistik p2p"
+  "p2p_stats": "statistik p2p",
+  "starter_subscriptions_updated": "Komunitas default Seedit telah berubah.",
+  "starter_subscriptions_change_summary": "{{added}} ditambahkan, {{removed}} dihapus.",
+  "starter_communities": "komunitas bawaan",
+  "review_changes": "tinjau perubahan",
+  "starter_communities_explanation": "Akun Seedit baru secara default berlangganan komunitas ini. Langganan Anda tidak akan berubah kecuali Anda memilih opsi di bawah.",
+  "starter_list_revision": "revisi komunitas bawaan {{revision}}",
+  "starter_list_offline_fallback": "Tidak dapat memperbarui komunitas default; menampilkan salinan bawaan.",
+  "add_selected_communities": "tambahkan komunitas terpilih",
+  "removed_starter_communities": "Tidak lagi termasuk komunitas default. Langganan Anda tidak berubah kecuali Anda memilih untuk beralih ke default terbaru.",
+  "keep_current_subscriptions": "pertahankan langganan saya",
+  "use_latest_starter_set": "beralih ke komunitas bawaan terbaru",
+  "starter_replacement_safety": "Hanya komunitas yang sebelumnya dilanggankan Seedit untuk Anda secara bawaan yang dapat dihapus. Langganan manual Anda selalu dipertahankan."
 }

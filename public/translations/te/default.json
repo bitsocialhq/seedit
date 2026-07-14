@@ -382,5 +382,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "మీరు ఇప్పటికే ఈ కమ్యూనిటీని చూస్తున్నారు",
   "advanced": "అధునిక",
-  "p2p_stats": "p2p గణాంకాలు"
+  "p2p_stats": "p2p గణాంకాలు",
+  "starter_subscriptions_updated": "Seedit డిఫాల్ట్ కమ్యూనిటీలు మారాయి.",
+  "starter_subscriptions_change_summary": "{{added}} జోడించబడ్డాయి, {{removed}} తీసివేయబడ్డాయి.",
+  "starter_communities": "డిఫాల్ట్ కమ్యూనిటీలు",
+  "review_changes": "మార్పులను సమీక్షించండి",
+  "starter_communities_explanation": "కొత్త Seedit ఖాతాలు డిఫాల్ట్‌గా ఈ కమ్యూనిటీలకు సబ్‌స్క్రైబ్ అవుతాయి. మీరు దిగువన ఉన్న ఒక ఎంపికను ఎంచుకుంటే తప్ప మీ సబ్‌స్క్రిప్షన్‌లు మారవు.",
+  "starter_list_revision": "డిఫాల్ట్ కమ్యూనిటీల పునర్విమర్శ {{revision}}",
+  "starter_list_offline_fallback": "డిఫాల్ట్ కమ్యూనిటీలను రిఫ్రెష్ చేయలేకపోయాము; అంతర్నిర్మిత కాపీని చూపిస్తున్నాము.",
+  "add_selected_communities": "ఎంచుకున్న కమ్యూనిటీలను జోడించండి",
+  "removed_starter_communities": "ఇకపై డిఫాల్ట్ కమ్యూనిటీలలో లేదు. మీరు తాజా డిఫాల్ట్‌లకు మారాలని ఎంచుకుంటే తప్ప మీ సబ్‌స్క్రిప్షన్‌లు మారవు.",
+  "keep_current_subscriptions": "నా సబ్‌స్క్రిప్షన్‌లను ఉంచండి",
+  "use_latest_starter_set": "తాజా డిఫాల్ట్ కమ్యూనిటీలకు మారండి",
+  "starter_replacement_safety": "Seedit మునుపు మిమ్మల్ని డిఫాల్ట్‌గా సబ్‌స్క్రైబ్ చేసిన కమ్యూనిటీలను మాత్రమే తీసివేయవచ్చు. మీ మాన్యువల్ సబ్‌స్క్రిప్షన్‌లు ఎల్లప్పుడూ అలాగే ఉంచబడతాయి."
 }

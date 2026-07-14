@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Você já está visualizando esta comunidade",
   "advanced": "avançado",
-  "p2p_stats": "estatísticas p2p"
+  "p2p_stats": "estatísticas p2p",
+  "starter_subscriptions_updated": "As comunidades predefinidas de Seedit mudaram.",
+  "starter_subscriptions_change_summary": "{{added}} adicionados, {{removed}} removidos.",
+  "starter_communities": "comunidades padrão",
+  "review_changes": "revisar alterações",
+  "starter_communities_explanation": "As novas contas Seedit subscrevem estas comunidades por predefinição. As suas subscrições não serão alteradas, a menos que escolha uma das opções abaixo.",
+  "starter_list_revision": "revisão das comunidades padrão {{revision}}",
+  "starter_list_offline_fallback": "Não foi possível atualizar as comunidades predefinidas; exibindo a cópia integrada.",
+  "add_selected_communities": "adicionar comunidades selecionadas",
+  "removed_starter_communities": "Já não faz parte das comunidades predefinidas. As suas subscrições permanecem inalteradas, a menos que opte por mudar para as predefinições mais recentes.",
+  "keep_current_subscriptions": "manter minhas assinaturas",
+  "use_latest_starter_set": "mudar para as comunidades predefinidas mais recentes",
+  "starter_replacement_safety": "Apenas as comunidades que o Seedit subscreveu anteriormente por predefinição para si podem ser removidas. As suas subscrições manuais são sempre mantidas."
 }

@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "คุณกำลังดูชุมชนนี้อยู่แล้ว",
   "advanced": "ขั้นสูง",
-  "p2p_stats": "สถิติ p2p"
+  "p2p_stats": "สถิติ p2p",
+  "starter_subscriptions_updated": "ชุมชนเริ่มต้นของ Seedit เปลี่ยนไปแล้ว",
+  "starter_subscriptions_change_summary": "เพิ่มแล้ว {{added}} รายการ ลบแล้ว {{removed}} รายการ",
+  "starter_communities": "ชุมชนค่าเริ่มต้น",
+  "review_changes": "ตรวจสอบการเปลี่ยนแปลง",
+  "starter_communities_explanation": "บัญชี Seedit ใหม่จะติดตามชุมชนเหล่านี้โดยค่าเริ่มต้น การติดตามของคุณจะไม่เปลี่ยนแปลง เว้นแต่คุณจะเลือกตัวเลือกด้านล่าง",
+  "starter_list_revision": "ชุมชนค่าเริ่มต้นฉบับแก้ไข {{revision}}",
+  "starter_list_offline_fallback": "ไม่สามารถรีเฟรชชุมชนค่าเริ่มต้นได้ กำลังแสดงสำเนาที่มีมาให้ในตัว",
+  "add_selected_communities": "เพิ่มชุมชนที่เลือก",
+  "removed_starter_communities": "ไม่อยู่ในชุมชนค่าเริ่มต้นแล้ว การติดตามของคุณจะไม่เปลี่ยนแปลง เว้นแต่คุณจะเลือกเปลี่ยนไปใช้ค่าเริ่มต้นล่าสุด",
+  "keep_current_subscriptions": "คงการสมัครรับข้อมูลของฉันไว้",
+  "use_latest_starter_set": "เปลี่ยนไปใช้ชุมชนค่าเริ่มต้นล่าสุด",
+  "starter_replacement_safety": "ลบได้เฉพาะชุมชนที่ Seedit เคยสมัครให้คุณเป็นค่าเริ่มต้นเท่านั้น การสมัครด้วยตนเองของคุณจะถูกเก็บไว้เสมอ"
 }

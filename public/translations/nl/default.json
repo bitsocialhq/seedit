@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Je bekijkt deze community al",
   "advanced": "geavanceerd",
-  "p2p_stats": "p2p-statistieken"
+  "p2p_stats": "p2p-statistieken",
+  "starter_subscriptions_updated": "De standaardcommunity's van Seedit zijn gewijzigd.",
+  "starter_subscriptions_change_summary": "{{added}} toegevoegd, {{removed}} verwijderd.",
+  "starter_communities": "standaardcommunity's",
+  "review_changes": "wijzigingen controleren",
+  "starter_communities_explanation": "Nieuwe Seedit-accounts abonneren zich standaard op deze gemeenschappen. Je abonnementen veranderen alleen als je hieronder een optie kiest.",
+  "starter_list_revision": "revisie van de standaardcommunity's {{revision}}",
+  "starter_list_offline_fallback": "De standaardcommunity's konden niet worden vernieuwd; de ingebouwde kopie wordt getoond.",
+  "add_selected_communities": "geselecteerde community's toevoegen",
+  "removed_starter_communities": "Behoort niet meer tot de standaardcommunity's. Je abonnementen blijven ongewijzigd, tenzij je ervoor kiest over te schakelen op de nieuwste standaardselectie.",
+  "keep_current_subscriptions": "mijn abonnementen behouden",
+  "use_latest_starter_set": "overschakelen naar de nieuwste standaardgemeenschappen",
+  "starter_replacement_safety": "Alleen community's waarop Seedit je eerder standaard heeft geabonneerd, kunnen worden verwijderd. Je handmatige abonnementen blijven altijd behouden."
 }

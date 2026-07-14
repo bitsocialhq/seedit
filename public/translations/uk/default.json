@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Ви вже переглядаєте це співтовариство",
   "advanced": "додатково",
-  "p2p_stats": "статистика p2p"
+  "p2p_stats": "статистика p2p",
+  "starter_subscriptions_updated": "Стандартні спільноти Seedit змінилися.",
+  "starter_subscriptions_change_summary": "Додано: {{added}}, видалено: {{removed}}.",
+  "starter_communities": "спільноти за замовчуванням",
+  "review_changes": "переглянути зміни",
+  "starter_communities_explanation": "Нові облікові записи Seedit за замовчуванням підписуються на ці спільноти. Ваші підписки не зміняться, якщо ви не виберете один із варіантів нижче.",
+  "starter_list_revision": "редакція спільнот за замовчуванням {{revision}}",
+  "starter_list_offline_fallback": "Не вдалося оновити стандартні спільноти; відображається вбудована копія.",
+  "add_selected_communities": "додати вибрані спільноти",
+  "removed_starter_communities": "Більше не входить до спільнот за замовчуванням. Ваші підписки залишаться без змін, якщо ви не вирішите перейти на найновіші налаштування за замовчуванням.",
+  "keep_current_subscriptions": "зберегти мої підписки",
+  "use_latest_starter_set": "перейти на найновіші спільноти за замовчуванням",
+  "starter_replacement_safety": "Можна видалити лише спільноти, на які Seedit раніше підписав вас за замовчуванням. Ваші ручні підписки завжди зберігаються."
 }

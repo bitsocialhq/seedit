@@ -118,9 +118,6 @@
   "about_moderation": "about moderation team",
   "join": "Join",
   "leave": "leave",
-  "directory": "directory",
-  "directory_served_by": "currently served by {{community}}",
-  "subscribe_to_this_community_only": "subscribe to this community only",
   "created_by": "created by {{creatorAddress}}",
   "community_for": "a community for {{date}}",
   "post_submitted_on": "this post was submitted on {{postDate}}",
@@ -384,5 +381,17 @@
   "more_posts_last_year": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last year</1>",
   "already_in_community": "You're already viewing this community",
   "advanced": "advanced",
-  "p2p_stats": "p2p stats"
+  "p2p_stats": "p2p stats",
+  "starter_subscriptions_updated": "Seedit's default communities have changed.",
+  "starter_subscriptions_change_summary": "{{added}} added, {{removed}} removed.",
+  "starter_communities": "default communities",
+  "review_changes": "review changes",
+  "starter_communities_explanation": "New Seedit accounts subscribe to these communities by default. Your subscriptions won't change unless you choose an option below.",
+  "starter_list_revision": "default communities revision {{revision}}",
+  "starter_list_offline_fallback": "Could not refresh the default communities; showing the built-in copy.",
+  "add_selected_communities": "add selected communities",
+  "removed_starter_communities": "No longer among the default communities. Your subscriptions are unchanged unless you choose to switch to the latest defaults.",
+  "keep_current_subscriptions": "keep my subscriptions",
+  "use_latest_starter_set": "switch to latest defaults",
+  "starter_replacement_safety": "Only communities Seedit previously subscribed you to by default can be removed. Your manual subscriptions are always kept."
 }

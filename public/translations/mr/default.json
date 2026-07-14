@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "तुम्ही आधीच हे समुदाय पाहत आहात",
   "advanced": "उन्नत",
-  "p2p_stats": "p2p आकडे"
+  "p2p_stats": "p2p आकडे",
+  "starter_subscriptions_updated": "Seedit चे डीफॉल्ट समुदाय बदलले आहेत.",
+  "starter_subscriptions_change_summary": "{{added}} जोडले, {{removed}} काढले.",
+  "starter_communities": "डीफॉल्ट समुदाय",
+  "review_changes": "बदलांचे पुनरावलोकन करा",
+  "starter_communities_explanation": "नवीन Seedit खाती डीफॉल्टनुसार या कम्युनिटींची सदस्यता घेतात. तुम्ही खालीलपैकी एखादा पर्याय निवडल्याशिवाय तुमच्या सदस्यता बदलणार नाहीत.",
+  "starter_list_revision": "डीफॉल्ट समुदायांची आवृत्ती {{revision}}",
+  "starter_list_offline_fallback": "डीफॉल्ट समुदाय रीफ्रेश करता आले नाहीत; अंगभूत प्रत दाखवली जात आहे.",
+  "add_selected_communities": "निवडलेले समुदाय जोडा",
+  "removed_starter_communities": "आता डीफॉल्ट समुदायांमध्ये समाविष्ट नाही. तुम्ही नवीनतम डीफॉल्टवर स्विच करण्याचा पर्याय निवडल्याशिवाय तुमच्या सदस्यता बदलणार नाहीत.",
+  "keep_current_subscriptions": "माझी सदस्यत्वे ठेवा",
+  "use_latest_starter_set": "नवीनतम डीफॉल्ट कम्युनिटींवर स्विच करा",
+  "starter_replacement_safety": "Seedit ने तुम्हाला पूर्वी डीफॉल्टनुसार सदस्य केलेले समुदायच काढता येतात. तुमची मॅन्युअल सदस्यत्वे नेहमी ठेवली जातात."
 }
