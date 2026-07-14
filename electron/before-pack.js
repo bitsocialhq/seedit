@@ -3,7 +3,8 @@
 import fs from 'fs-extra';
 import ProgressBar from 'progress';
 import https from 'https';
-import decompress from 'decompress';
+import extractZip from 'extract-zip';
+import tar from 'tar';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const ipfsClientsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin');
@@ -97,6 +98,20 @@ const downloadWithRetry = async (url, retries = 3) => {
   }
 };
 
+const extractArchive = async (archivePath, destinationPath) => {
+  if (archivePath.endsWith('.zip')) {
+    await extractZip(archivePath, { dir: destinationPath });
+    return;
+  }
+
+  if (archivePath.endsWith('.tar.gz') || archivePath.endsWith('.tgz')) {
+    await tar.x({ file: archivePath, cwd: destinationPath });
+    return;
+  }
+
+  throw new Error(`Unsupported archive format: ${archivePath}`);
+};
+
 // official kubo downloads need to be extracted
 const downloadAndExtract = async (url, destinationPath) => {
   let binName = 'ipfs';
@@ -117,7 +132,7 @@ const downloadAndExtract = async (url, destinationPath) => {
   console.log(`Downloaded archive to ${archivePath}`);
   console.log(`Extracting ${archivePath} to ${destinationPath}`);
   try {
-    await decompress(archivePath, destinationPath);
+    await extractArchive(archivePath, destinationPath);
     console.log('Decompression complete');
   } catch (err) {
     console.error('Error during decompression:', err);
