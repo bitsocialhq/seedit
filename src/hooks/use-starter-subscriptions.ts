@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { setAccount, useAccount, type Account } from '@bitsocial/bitsocial-react-hooks';
 import { useStarterCommunityList } from './use-default-subscriptions';
 import {
@@ -21,68 +21,56 @@ export const useStarterSubscriptions = () => {
   const account = useAccount() as StarterAccount | undefined;
   const { list, loading, error } = useStarterCommunityList();
   const [saving, setSaving] = useState(false);
-  const starterAddresses = useMemo(() => list.communities.map(({ address }) => address), [list.communities]);
+  const starterAddresses = list.communities.map(({ address }) => address);
   const provenance = account?.seeditStarterSubscriptions;
   const subscriptions = account?.subscriptions ?? EMPTY_SUBSCRIPTIONS;
-  const delta = useMemo(() => getStarterSetDelta(provenance, starterAddresses), [provenance, starterAddresses]);
+  const delta = getStarterSetDelta(provenance, starterAddresses);
   const hasUpdate = shouldShowStarterSetUpdateNotice(provenance, list.revision, starterAddresses);
 
-  const persist = useCallback(
-    async (result: StarterSubscriptionsResult) => {
-      if (!account) return;
-      setSaving(true);
-      try {
-        await setAccount({
+  const persist = (result: StarterSubscriptionsResult) => {
+    if (!account) return Promise.resolve();
+    setSaving(true);
+    return Promise.resolve()
+      .then(() =>
+        setAccount({
           ...account,
           subscriptions: result.subscriptions,
           seeditStarterSubscriptions: result.provenance,
-        });
-      } finally {
-        setSaving(false);
-      }
-    },
-    [account],
-  );
-
-  const addSelected = useCallback(
-    (selectedAddresses: readonly string[]) =>
-      persist(
-        addSelectedStarterSubscriptions({
-          subscriptions,
-          provenance,
-          revision: list.revision,
-          starterAddresses,
-          selectedAddresses,
         }),
-      ),
-    [list.revision, persist, provenance, starterAddresses, subscriptions],
-  );
+      )
+      .finally(() => setSaving(false));
+  };
 
-  const keepCurrent = useCallback(
-    () =>
-      persist(
-        keepCurrentStarterSubscriptions({
-          subscriptions,
-          provenance,
-          revision: list.revision,
-          starterAddresses,
-        }),
-      ),
-    [list.revision, persist, provenance, starterAddresses, subscriptions],
-  );
+  const addSelected = (selectedAddresses: readonly string[]) =>
+    persist(
+      addSelectedStarterSubscriptions({
+        subscriptions,
+        provenance,
+        revision: list.revision,
+        starterAddresses,
+        selectedAddresses,
+      }),
+    );
 
-  const replacePrevious = useCallback(
-    () =>
-      persist(
-        replacePreviousStarterSubscriptions({
-          subscriptions,
-          provenance,
-          revision: list.revision,
-          starterAddresses,
-        }),
-      ),
-    [list.revision, persist, provenance, starterAddresses, subscriptions],
-  );
+  const keepCurrent = () =>
+    persist(
+      keepCurrentStarterSubscriptions({
+        subscriptions,
+        provenance,
+        revision: list.revision,
+        starterAddresses,
+      }),
+    );
+
+  const replacePrevious = () =>
+    persist(
+      replacePreviousStarterSubscriptions({
+        subscriptions,
+        provenance,
+        revision: list.revision,
+        starterAddresses,
+      }),
+    );
 
   return {
     list,

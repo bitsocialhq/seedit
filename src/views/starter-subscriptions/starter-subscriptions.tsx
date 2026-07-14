@@ -1,27 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useStarterSubscriptions } from '../../hooks/use-starter-subscriptions';
 import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import styles from './starter-subscriptions.module.css';
 
-const StarterSubscriptions = () => {
-  const { t } = useTranslation();
-  const { list, subscriptions, delta, loading, error, saving, addSelected, keepCurrent, replacePrevious } = useStarterSubscriptions();
-  const subscribedSet = useMemo(() => new Set(subscriptions), [subscriptions]);
-  const newAddressSet = useMemo(() => new Set(delta.addedAddresses), [delta.addedAddresses]);
-  const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
+type StarterSubscriptionsState = ReturnType<typeof useStarterSubscriptions>;
 
-  useEffect(() => {
-    setSelectedAddresses(delta.addedAddresses.filter((address) => !subscribedSet.has(address)));
-  }, [delta.addedAddresses, list.revision, subscribedSet]);
+interface StarterSubscriptionsReviewProps {
+  initialSelectedAddresses: string[];
+  state: StarterSubscriptionsState;
+}
+
+const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: StarterSubscriptionsReviewProps) => {
+  const { t } = useTranslation();
+  const { list, subscriptions, delta, loading, error, saving, addSelected, keepCurrent, replacePrevious } = state;
+  const subscribedSet = new Set(subscriptions);
+  const newAddressSet = new Set(delta.addedAddresses);
+  const [selectedAddresses, setSelectedAddresses] = useState(() => new Set(initialSelectedAddresses));
 
   useEffect(() => {
     document.title = `${t('starter_communities')} - seedit`;
   }, [t]);
 
   const toggleAddress = (address: string) => {
-    setSelectedAddresses((current) => (current.includes(address) ? current.filter((entry) => entry !== address) : [...current, address]));
+    setSelectedAddresses((current) => {
+      const next = new Set(current);
+      if (next.has(address)) next.delete(address);
+      else next.add(address);
+      return next;
+    });
   };
 
   return (
@@ -48,7 +56,7 @@ const StarterSubscriptions = () => {
         {list.communities.map((community) => {
           const subscribed = subscribedSet.has(community.address);
           const isNew = newAddressSet.has(community.address);
-          const selected = subscribed || selectedAddresses.includes(community.address);
+          const selected = subscribed || selectedAddresses.has(community.address);
           return (
             <label className={styles.community} key={community.address}>
               <input type='checkbox' checked={selected} disabled={subscribed || saving} onChange={() => toggleAddress(community.address)} />
@@ -64,7 +72,7 @@ const StarterSubscriptions = () => {
       </div>
 
       <div className={styles.actions}>
-        <button type='button' className={styles.primary} disabled={saving} onClick={() => void addSelected(selectedAddresses)}>
+        <button type='button' className={styles.primary} disabled={saving} onClick={() => void addSelected([...selectedAddresses])}>
           {saving ? t('saving') : t('add_selected_communities')}
         </button>
         <button type='button' disabled={saving} onClick={() => void keepCurrent()}>
@@ -77,6 +85,15 @@ const StarterSubscriptions = () => {
       <p className={styles.safety}>{t('starter_replacement_safety')}</p>
     </main>
   );
+};
+
+const StarterSubscriptions = () => {
+  const state = useStarterSubscriptions();
+  const subscribedSet = new Set(state.subscriptions);
+  const initialSelectedAddresses = state.delta.addedAddresses.filter((address) => !subscribedSet.has(address));
+  const selectionKey = JSON.stringify([state.list.revision, initialSelectedAddresses]);
+
+  return <StarterSubscriptionsReview key={selectionKey} initialSelectedAddresses={initialSelectedAddresses} state={state} />;
 };
 
 export default StarterSubscriptions;

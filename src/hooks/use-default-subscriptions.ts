@@ -166,7 +166,7 @@ export const useDefaultSubscriptionAddresses = (): string[] => {
 
 export const useDefaultSubscriptionsMetadata = () => {
   const { list } = useStarterCommunityList();
-  return useMemo(() => ({ title: list.title, description: list.description, createdAt: list.createdAt, updatedAt: list.updatedAt, revision: list.revision }), [list]);
+  return { title: list.title, description: list.description, createdAt: list.createdAt, updatedAt: list.updatedAt, revision: list.revision };
 };
 
 export const useDefaultSubscriptionTags = (subscriptions: DefaultSubscription[]) => [...new Set(subscriptions.flatMap(({ tags }) => tags ?? []))].sort();
