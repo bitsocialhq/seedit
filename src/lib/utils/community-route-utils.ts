@@ -40,6 +40,6 @@ export const getCommunityRouteSegment = (address: string): string => {
 
 export const getCommunityPath = (communityAddress: string): string => `/s/${encodeURIComponent(getCommunityRouteSegment(communityAddress))}`;
 
-export const getCommunityPostPath = (communityAddress: string, cid: string): string => `${getCommunityPath(communityAddress)}/c/${encodeURIComponent(cid)}`;
+export const getCommunityPostPath = (communityAddress: string, cid: string): string => `${getCommunityPath(communityAddress)}/comments/${encodeURIComponent(cid)}`;
 
 export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://seedit.app${getCommunityPostPath(communityAddress, cid)}`;

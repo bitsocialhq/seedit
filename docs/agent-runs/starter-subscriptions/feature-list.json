@@ -80,7 +80,7 @@
         "Chrome, Firefox, and WebKit desktop/mobile smoke checks"
       ],
       "files": [],
-      "notes": "Build, lint, type-check, 57 tests, focused React Doctor, and Chrome/Firefox/WebKit desktop/mobile checks pass for the changed flow. Full Doctor still reports repository baseline findings."
+      "notes": "Build, lint, type-check, 60 tests, focused React Doctor, and Chrome/Firefox/WebKit desktop/mobile checks pass for the changed flow. Full Doctor still reports repository baseline findings."
     }
   ]
 }

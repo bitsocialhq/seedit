@@ -54,7 +54,7 @@ const PostAuthor = ({ authorAddress, authorRole, cid, displayName, index, pinned
 
   return (
     <>
-      <Link to={cid ? `/u/${authorAddress}/c/${cid}` : `/profile/${index}`} className={`${styles.author} ${pinned && moderatorClass}`}>
+      <Link to={cid ? `/u/${authorAddress}/comments/${cid}` : `/profile/${index}`} className={`${styles.author} ${pinned && moderatorClass}`}>
         {displayName && (
           <>
             {' '}

@@ -93,8 +93,8 @@ const App = () => {
             <Route path='/about' element={<AboutView />} />
             <Route path='/submit' element={<SubmitPage />} />
 
-            <Route path='/s/:communityAddress/c/:commentCid' element={<PostPage />} />
-            <Route path='/s/:communityAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/s/:communityAddress/comments/:commentCid' element={<PostPage />} />
+            <Route path='/s/:communityAddress/comments/:commentCid/about' element={<AboutView />} />
 
             <Route path='/s/:communityAddress/submit' element={<SubmitPage />} />
             <Route path='/s/:communityAddress/about' element={<AboutView />} />
@@ -109,7 +109,7 @@ const App = () => {
 
             <Route path='/profile/about' element={<AboutView />} />
 
-            <Route path='/u/:authorAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/u/:authorAddress/comments/:commentCid/about' element={<AboutView />} />
 
             <Route path='/inbox' element={<Inbox />} />
             <Route path='/inbox/unread' element={<Inbox />} />
@@ -149,9 +149,9 @@ const App = () => {
               <Route path='submitted' element={<Profile.Submitted />} />
             </Route>
 
-            <Route path='/u/:authorAddress/c/:commentCid?/:sortType?/:timeFilterName?' element={<Author />} />
-            <Route path='/u/:authorAddress/c/:commentCid?/comments/:sortType?/:timeFilterName?' element={<Author />} />
-            <Route path='/u/:authorAddress/c/:commentCid?/submitted/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/comments/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/submitted/:sortType?/:timeFilterName?' element={<Author />} />
 
             <Route path='*' element={<NotFound />} />
             <Route path='/not-found' element={<NotFound />} />

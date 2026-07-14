@@ -52,17 +52,17 @@ describe('getCommunityRouteSegment', () => {
 describe('community route builders', () => {
   it('builds canonical shorthand paths for eligible .bso communities', () => {
     expect(getCommunityPath('aww.bso')).toBe('/s/aww');
-    expect(getCommunityPostPath('aww.bso', 'bafy-post-cid')).toBe('/s/aww/c/bafy-post-cid');
+    expect(getCommunityPostPath('aww.bso', 'bafy-post-cid')).toBe('/s/aww/comments/bafy-post-cid');
   });
 
   it('keeps explicit addresses when shorthand would be ambiguous', () => {
     expect(getCommunityPath('all.bso')).toBe('/s/all.bso');
     expect(getCommunityPath('topic.community.bso')).toBe('/s/topic.community.bso');
-    expect(getCommunityPostPath(PUBLIC_KEY, 'bafy-post-cid')).toBe(`/s/${PUBLIC_KEY}/c/bafy-post-cid`);
+    expect(getCommunityPostPath(PUBLIC_KEY, 'bafy-post-cid')).toBe(`/s/${PUBLIC_KEY}/comments/bafy-post-cid`);
   });
 
   it('builds the exact seedit.app external post URL', () => {
-    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww/c/bafy-post-cid');
+    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww/comments/bafy-post-cid');
   });
 
   it('round-trips every shorthand-eligible address', () => {

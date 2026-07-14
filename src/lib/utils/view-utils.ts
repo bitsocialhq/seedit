@@ -14,14 +14,14 @@ export const getAboutLink = (pathname: string, params: ParamsType): string => {
   // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
 
-  if (decodedPathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}`)) {
-    return `/s/${params.communityAddress}/c/${params.commentCid}/about`;
+  if (decodedPathname.startsWith(`/s/${params.communityAddress}/comments/${params.commentCid}`)) {
+    return `/s/${params.communityAddress}/comments/${params.commentCid}/about`;
   } else if (decodedPathname.startsWith(`/s/${params.communityAddress}`)) {
     return `/s/${params.communityAddress}/about`;
   } else if (decodedPathname.startsWith('/profile')) {
     return '/profile/about';
   } else if (decodedPathname.startsWith('/u/')) {
-    return `/u/${params.authorAddress}/c/${params.commentCid}/about`;
+    return `/u/${params.authorAddress}/comments/${params.commentCid}/about`;
   } else if (decodedPathname.startsWith('/s/all')) {
     return '/s/all/about';
   } else {
@@ -42,11 +42,11 @@ export const isAuthorView = (pathname: string): boolean => {
 };
 
 export const isAuthorCommentsView = (pathname: string, params: ParamsType): boolean => {
-  return pathname === `/u/${params.authorAddress}/c/${params.commentCid}/comments`;
+  return pathname === `/u/${params.authorAddress}/comments/${params.commentCid}/comments`;
 };
 
 export const isAuthorSubmittedView = (pathname: string, params: ParamsType): boolean => {
-  return pathname === `/u/${params.authorAddress}/c/${params.commentCid}/submitted`;
+  return pathname === `/u/${params.authorAddress}/comments/${params.commentCid}/submitted`;
 };
 
 export const isCreateCommunityView = (pathname: string): boolean => {
@@ -100,18 +100,18 @@ export const isPendingPostView = (pathname: string, params: ParamsType): boolean
 export const isPostPageView = (pathname: string, params: ParamsType): boolean => {
   // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
-  return params.communityAddress && params.commentCid ? decodedPathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}`) : false;
+  return params.communityAddress && params.commentCid ? decodedPathname.startsWith(`/s/${params.communityAddress}/comments/${params.commentCid}`) : false;
 };
 
 export const isPostPageAboutView = (pathname: string, params: ParamsType): boolean => {
-  return params.communityAddress && params.commentCid ? pathname.startsWith(`/s/${params.communityAddress}/c/${params.commentCid}/about`) : false;
+  return params.communityAddress && params.commentCid ? pathname.startsWith(`/s/${params.communityAddress}/comments/${params.commentCid}/about`) : false;
 };
 
 export const isPostContextView = (pathname: string, params: ParamsType, search: string): boolean => {
   if (!params.communityAddress || !params.commentCid) return false;
 
   const decodedPathname = decodeURIComponent(pathname);
-  const expectedPathBase = `/s/${params.communityAddress}/c/${params.commentCid}`;
+  const expectedPathBase = `/s/${params.communityAddress}/comments/${params.commentCid}`;
 
   if (!decodedPathname.startsWith(expectedPathBase)) return false;
 

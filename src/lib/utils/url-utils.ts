@@ -49,14 +49,14 @@ export const isSeeditLink = (url: string): boolean => {
       if (parsedUrl.searchParams.has('redirect')) {
         return false;
       }
-      // Must match exactly: /s/{communityAddress}/c/{cid}
-      return /^\/s\/[^/]+\/c\/[^/]+$/.test(routePath);
+      // Must match exactly: /s/{communityAddress}/comments/{cid}
+      return /^\/s\/[^/]+\/comments\/[^/]+$/.test(routePath);
     }
 
     // For other seedit hostnames, support:
     // - /s/{communityAddress}
-    // - /s/{communityAddress}/c/{commentCid}
-    return /^\/s\/[^/]+(\/c\/[^/]+)?$/.test(routePath);
+    // - /s/{communityAddress}/comments/{commentCid}
+    return /^\/s\/[^/]+(\/comments\/[^/]+)?$/.test(routePath);
   } catch {
     return false;
   }
@@ -104,8 +104,8 @@ export const isValidCommunityPattern = (pattern: string): boolean => {
 
   const pathPart = pattern.substring(2); // Remove "s/"
 
-  // Check if it's a post pattern: communityAddress/c/cid
-  const postMatch = pathPart.match(/^([^/]+)\/c\/([^/]+)$/);
+  // Check if it's a post pattern: communityAddress/comments/cid
+  const postMatch = pathPart.match(/^([^/]+)\/comments\/([^/]+)$/);
   if (postMatch) {
     const [, communityAddress, cid] = postMatch;
     // CID should be at least 10 characters (minimum reasonable CID length)
@@ -118,10 +118,10 @@ export const isValidCommunityPattern = (pattern: string): boolean => {
 
 // Preprocess content to convert plain text seedit patterns to markdown links
 export const preprocessSeeditPatterns = (content: string): string => {
-  // Pattern to match "s/something" or "s/something/c/something"
+  // Pattern to match "s/something" or "s/something/comments/something"
   // Use negative lookbehind to avoid matching patterns that are already part of URLs
   // This prevents matching "s/" that comes after "://" or other URL indicators
-  const pattern = /(?<!https?:\/\/[^\s]*)\bs\/([a-zA-Z0-9\-.]+(?:\/c\/[a-zA-Z0-9]{10,100})?)[.,:;!?]*/g;
+  const pattern = /(?<!https?:\/\/[^\s]*)\bs\/([a-zA-Z0-9\-.]+(?:\/comments\/[a-zA-Z0-9]{10,100})?)[.,:;!?]*/g;
 
   return content.replace(pattern, (match, capturedPath) => {
     // Remove any trailing punctuation from the captured path
@@ -131,7 +131,7 @@ export const preprocessSeeditPatterns = (content: string): string => {
     if (isValidCommunityPattern(fullPattern)) {
       // Get the trailing punctuation that was matched but shouldn't be part of the link
       const trailingPunctuation = match.slice(fullPattern.length);
-      const postMatch = cleanPath.match(/^([^/]+)\/c\/([^/]+)$/);
+      const postMatch = cleanPath.match(/^([^/]+)\/comments\/([^/]+)$/);
       const internalPath = postMatch ? getCommunityPostPath(postMatch[1], postMatch[2]) : getCommunityPath(cleanPath);
       // Convert to markdown link format and preserve trailing punctuation
       return `[${fullPattern}](${internalPath})${trailingPunctuation}`;

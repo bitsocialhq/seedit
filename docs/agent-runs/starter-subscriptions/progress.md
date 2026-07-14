@@ -44,3 +44,12 @@
 - Verification: The published payload shape validates with exactly seven top-level keys and 10 canonical communities; focused tests, type-check, lint, and diff checks pass. The suite now contains 55 tests after removing the obsolete compatibility-acceptance test.
 - Blockers: none
 - Next: The correction is published in `bitsocialnet/lists` commit `48a0ebd`; keep Seedit local and unpushed.
+
+## 2026-07-15 00:25
+
+- Items: F002, F005
+- Summary: Replaced the compact `/c/<cid>` segment with `/comments/<cid>` across community post permalinks, author CID routes, route detection, share URLs, plain-text autolinking, and internal navigation. This is a clean break with no legacy redirect routes.
+- Files: `src/app.tsx`, `src/lib/utils/community-route-utils.ts`, `src/lib/utils/url-utils.ts`, `src/lib/utils/view-utils.ts`, `src/components/markdown/markdown.tsx`, `src/components/header/header.tsx`, `src/components/post/post.tsx`, `src/components/reply/reply.tsx`, `src/views/author/author.tsx`, and route tests.
+- Verification: Route-focused tests pass, and a recursive audit finds no old compact CID route segment in active source. Three URL parsing/autolinking regressions bring the full suite to 60 tests. Type-check, lint, production build, and diff checks pass; Chrome, Firefox, and WebKit verified the comments permalink and generated links at 1440x900 and 390x844 without horizontal overflow. Focused React Doctor reports only the pre-existing large `Post` component warning.
+- Blockers: none
+- Next: Commit the permalink migration, push the branch, and open the Seedit PR.

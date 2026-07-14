@@ -89,13 +89,16 @@ const ReplyAuthor = ({
           )}
           {displayName && (
             <Link
-              to={`/u/${address}/c/${cid}`}
+              to={`/u/${address}/comments/${cid}`}
               className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
             >
               {shortDisplayName}{' '}
             </Link>
           )}
-          <Link to={`/u/${address}/c/${cid}`} className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}>
+          <Link
+            to={`/u/${address}/comments/${cid}`}
+            className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
+          >
             {displayName ? `u/${shortAuthorAddress}` : shortAuthorAddress}
           </Link>
           {/* TODO: implement comment.highlightRole once implemented in API */}
@@ -226,7 +229,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
-      <Link to={`/u/${author?.address}/c/${cid}`} className={styles.parentAuthor}>
+      <Link to={`/u/${author?.address}/comments/${cid}`} className={styles.parentAuthor}>
         u/{author?.shortAddress}{' '}
       </Link>
       {t('via')}{' '}
@@ -295,7 +298,7 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
     <>
       <div className={`${styles.inboxParentInfo} ${markedAsRead ? styles.inboxParentRead : styles.inboxParentUnread}`}>
         {t('from')}{' '}
-        <Link to={`/u/${address}/c/${cid}`} className={styles.inboxParentAuthor}>
+        <Link to={`/u/${address}/comments/${cid}`} className={styles.inboxParentAuthor}>
           u/{shortAddress}{' '}
         </Link>
         {t('via')}{' '}

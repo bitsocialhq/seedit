@@ -147,7 +147,7 @@ const AuthorHeaderTabs = () => {
   const isInProfileUpvotedView = isProfileUpvotedView(location.pathname);
   const isInProfileHiddenView = isProfileHiddenView(location.pathname);
 
-  const authorRoute = `/u/${params.authorAddress}/c/${params.commentCid}`;
+  const authorRoute = `/u/${params.authorAddress}/comments/${params.commentCid}`;
   const overviewSelectedClass =
     (isInProfileView || isInAuthorView) &&
     !isInProfileUpvotedView &&
@@ -356,7 +356,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const domainTitle = <Link to={`/domain/${params.domain}`}>{params.domain}</Link>;
   const submitTitle = <span className={styles.submitTitle}>{t('submit')}</span>;
   const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
-  const authorTitle = <Link to={`/u/${params.authorAddress}/c/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
+  const authorTitle = <Link to={`/u/${params.authorAddress}/comments/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
 
   if (isHiddenNsfwCommunity) {
     return <span>{t('over_18')}</span>;
