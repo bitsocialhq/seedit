@@ -23,6 +23,7 @@ export const useStarterSubscriptions = () => {
   const account = useAccount() as StarterAccount | undefined;
   const { list, loading, error } = useStarterCommunityList();
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<Error | null>(null);
   const starterAddresses = list.communities.map(({ address }) => address);
   const provenance = account?.seeditStarterSubscriptions;
   const subscriptions = account?.subscriptions ?? EMPTY_SUBSCRIPTIONS;
@@ -33,6 +34,7 @@ export const useStarterSubscriptions = () => {
   const persist = (computeResult: (currentAccount: StarterAccount) => StarterSubscriptionsResult) => {
     if (!account) return Promise.resolve();
     setSaving(true);
+    setSaveError(null);
     return Promise.resolve()
       .then(() =>
         persistStarterAccountUpdate(account.id, (currentAccount) => {
@@ -44,6 +46,11 @@ export const useStarterSubscriptions = () => {
           };
         }),
       )
+      .catch((persistError) => {
+        const normalizedError = persistError instanceof Error ? persistError : new Error(String(persistError));
+        console.error('Default subscriptions update error:', normalizedError);
+        setSaveError(normalizedError);
+      })
       .finally(() => setSaving(false));
   };
 
@@ -86,6 +93,7 @@ export const useStarterSubscriptions = () => {
     hasUpdate,
     loading,
     error,
+    saveError,
     saving,
     canReview,
     addSelected,

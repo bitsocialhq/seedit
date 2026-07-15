@@ -14,7 +14,7 @@ interface StarterSubscriptionsReviewProps {
 
 const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: StarterSubscriptionsReviewProps) => {
   const { t } = useTranslation();
-  const { list, subscriptions, delta, loading, error, saving, canReview, addSelected, keepCurrent, replacePrevious } = state;
+  const { list, subscriptions, delta, loading, error, saveError, saving, canReview, addSelected, keepCurrent, replacePrevious } = state;
   const subscribedSet = new Set(subscriptions);
   const newAddressSet = new Set(delta.addedAddresses);
   const [selectedAddresses, setSelectedAddresses] = useState(() => new Set(initialSelectedAddresses));
@@ -38,6 +38,11 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
       </div>
 
       {error && <p className={styles.warning}>{t('starter_list_offline_fallback')}</p>}
+      {saveError && (
+        <p className={styles.warning} role='alert'>
+          {t('failed')}: {saveError.message}
+        </p>
+      )}
       {delta.removedAddresses.length > 0 && (
         <section className={styles.removed}>
           <h2>{t('removed_starter_communities')}</h2>

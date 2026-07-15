@@ -26,24 +26,29 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
   const handleSubscribe = async () => {
     if (isInAuthorView) return; // TODO: remove once implemented in backend
 
-    if (subscribed === false) {
-      await subscribe();
-    } else if (subscribed === true) {
-      if (address && account) {
-        await persistStarterAccountUpdate(account.id, (currentAccount) => {
-          const { subscriptions, provenance } = leaveStarterSubscription({
-            subscriptions: currentAccount.subscriptions ?? [],
-            provenance: currentAccount.seeditStarterSubscriptions,
-            address,
+    try {
+      if (subscribed === false) {
+        await subscribe();
+      } else if (subscribed === true) {
+        if (address && account) {
+          await persistStarterAccountUpdate(account.id, (currentAccount) => {
+            const { subscriptions, provenance } = leaveStarterSubscription({
+              subscriptions: currentAccount.subscriptions ?? [],
+              provenance: currentAccount.seeditStarterSubscriptions,
+              address,
+            });
+            return provenance ? { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance } : { ...currentAccount, subscriptions };
           });
-          return provenance ? { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance } : { ...currentAccount, subscriptions };
-        });
-      } else {
-        await unsubscribe();
+        } else {
+          await unsubscribe();
+        }
+        if (onUnsubscribe && address) {
+          onUnsubscribe(address);
+        }
       }
-      if (onUnsubscribe && address) {
-        onUnsubscribe(address);
-      }
+    } catch (error) {
+      console.error('Subscription update error:', error);
+      alert(error instanceof Error ? error.message : t('failed'));
     }
   };
 
