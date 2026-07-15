@@ -1,5 +1,30 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeRemoteStarterCommunityList, normalizeStarterCommunityList } from './use-default-subscriptions';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fetchStarterCommunitiesPayload, normalizeRemoteStarterCommunityList, normalizeStarterCommunityList } from './use-default-subscriptions';
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
+
+describe('fetchStarterCommunitiesPayload', () => {
+  it('keeps the timeout active while a response body stalls', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(globalThis, 'fetch').mockImplementation((_input, init) =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          new Promise((_resolve, reject) => {
+            init?.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')));
+          }),
+      } as Response),
+    );
+
+    const payload = fetchStarterCommunitiesPayload(100);
+    const rejection = expect(payload).rejects.toMatchObject({ name: 'AbortError' });
+    await vi.advanceTimersByTimeAsync(100);
+    await rejection;
+  });
+});
 
 describe('normalizeStarterCommunityList', () => {
   it('accepts a versioned starter list and deduplicates addresses', () => {

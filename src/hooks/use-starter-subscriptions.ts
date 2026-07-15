@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { setAccount, useAccount, type Account } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, type Account } from '@bitsocial/bitsocial-react-hooks';
 import { useStarterCommunityList } from './use-default-subscriptions';
+import { persistStarterAccountUpdate } from '../lib/utils/starter-account-persistence';
 import {
   addSelectedStarterSubscriptions,
   getStarterSetDelta,
+  isStarterListRevisionCurrent,
   keepCurrentStarterSubscriptions,
   replacePreviousStarterSubscriptions,
   shouldShowStarterSetUpdateNotice,
@@ -26,26 +28,30 @@ export const useStarterSubscriptions = () => {
   const subscriptions = account?.subscriptions ?? EMPTY_SUBSCRIPTIONS;
   const delta = getStarterSetDelta(provenance, starterAddresses);
   const hasUpdate = shouldShowStarterSetUpdateNotice(provenance, list.revision, starterAddresses);
+  const canReview = isStarterListRevisionCurrent(provenance, list.revision);
 
-  const persist = (result: StarterSubscriptionsResult) => {
+  const persist = (computeResult: (currentAccount: StarterAccount) => StarterSubscriptionsResult) => {
     if (!account) return Promise.resolve();
     setSaving(true);
     return Promise.resolve()
       .then(() =>
-        setAccount({
-          ...account,
-          subscriptions: result.subscriptions,
-          seeditStarterSubscriptions: result.provenance,
+        persistStarterAccountUpdate(account.id, (currentAccount) => {
+          const result = computeResult(currentAccount);
+          return {
+            ...currentAccount,
+            subscriptions: result.subscriptions,
+            seeditStarterSubscriptions: result.provenance,
+          };
         }),
       )
       .finally(() => setSaving(false));
   };
 
   const addSelected = (selectedAddresses: readonly string[]) =>
-    persist(
+    persist((currentAccount) =>
       addSelectedStarterSubscriptions({
-        subscriptions,
-        provenance,
+        subscriptions: currentAccount.subscriptions ?? EMPTY_SUBSCRIPTIONS,
+        provenance: currentAccount.seeditStarterSubscriptions,
         revision: list.revision,
         starterAddresses,
         selectedAddresses,
@@ -53,20 +59,20 @@ export const useStarterSubscriptions = () => {
     );
 
   const keepCurrent = () =>
-    persist(
+    persist((currentAccount) =>
       keepCurrentStarterSubscriptions({
-        subscriptions,
-        provenance,
+        subscriptions: currentAccount.subscriptions ?? EMPTY_SUBSCRIPTIONS,
+        provenance: currentAccount.seeditStarterSubscriptions,
         revision: list.revision,
         starterAddresses,
       }),
     );
 
   const replacePrevious = () =>
-    persist(
+    persist((currentAccount) =>
       replacePreviousStarterSubscriptions({
-        subscriptions,
-        provenance,
+        subscriptions: currentAccount.subscriptions ?? EMPTY_SUBSCRIPTIONS,
+        provenance: currentAccount.seeditStarterSubscriptions,
         revision: list.revision,
         starterAddresses,
       }),
@@ -81,6 +87,7 @@ export const useStarterSubscriptions = () => {
     loading,
     error,
     saving,
+    canReview,
     addSelected,
     keepCurrent,
     replacePrevious,

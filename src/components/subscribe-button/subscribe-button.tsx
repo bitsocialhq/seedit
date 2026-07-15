@@ -1,8 +1,9 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { setAccount, useAccount, useSubscribe, type Account } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useSubscribe, type Account } from '@bitsocial/bitsocial-react-hooks';
 import styles from './subscribe-button.module.css';
 import { isAuthorView, isProfileView, isPendingPostView } from '../../lib/utils/view-utils';
+import { persistStarterAccountUpdate } from '../../lib/utils/starter-account-persistence';
 import { leaveStarterSubscription, type SeeditStarterSubscriptions } from '../../lib/utils/starter-subscriptions';
 
 interface subscribeButtonProps {
@@ -29,14 +30,18 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
       await subscribe();
     } else if (subscribed === true) {
       if (address && account?.seeditStarterSubscriptions) {
-        const { provenance } = leaveStarterSubscription({
-          subscriptions: account.subscriptions ?? [],
-          provenance: account.seeditStarterSubscriptions,
-          address,
+        await persistStarterAccountUpdate(account.id, (currentAccount) => {
+          if (!currentAccount.seeditStarterSubscriptions) return currentAccount;
+          const { subscriptions, provenance } = leaveStarterSubscription({
+            subscriptions: currentAccount.subscriptions ?? [],
+            provenance: currentAccount.seeditStarterSubscriptions,
+            address,
+          });
+          return { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance };
         });
-        await setAccount({ ...account, seeditStarterSubscriptions: provenance });
+      } else {
+        await unsubscribe();
       }
-      await unsubscribe();
       if (onUnsubscribe && address) {
         onUnsubscribe(address);
       }

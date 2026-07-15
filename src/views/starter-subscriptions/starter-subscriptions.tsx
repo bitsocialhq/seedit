@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useStarterSubscriptions } from '../../hooks/use-starter-subscriptions';
@@ -14,14 +14,10 @@ interface StarterSubscriptionsReviewProps {
 
 const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: StarterSubscriptionsReviewProps) => {
   const { t } = useTranslation();
-  const { list, subscriptions, delta, loading, error, saving, addSelected, keepCurrent, replacePrevious } = state;
+  const { list, subscriptions, delta, loading, error, saving, canReview, addSelected, keepCurrent, replacePrevious } = state;
   const subscribedSet = new Set(subscriptions);
   const newAddressSet = new Set(delta.addedAddresses);
   const [selectedAddresses, setSelectedAddresses] = useState(() => new Set(initialSelectedAddresses));
-
-  useEffect(() => {
-    document.title = `${t('starter_communities')} - seedit`;
-  }, [t]);
 
   const toggleAddress = (address: string) => {
     setSelectedAddresses((current) => {
@@ -34,13 +30,14 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
 
   return (
     <main className={styles.page}>
+      <title>{`${t('starter_communities')} - seedit`}</title>
       <div className={styles.infobar}>
         <h1>{t('starter_communities')}</h1>
         <p>{t('starter_communities_explanation')}</p>
         <p className={styles.revision}>{t('starter_list_revision', { revision: list.revision })}</p>
       </div>
 
-      {error && <p className={styles.warning}>{t('starter_list_offline_fallback')}</p>}
+      {(error || !canReview) && <p className={styles.warning}>{t('starter_list_offline_fallback')}</p>}
       {delta.removedAddresses.length > 0 && (
         <section className={styles.removed}>
           <h2>{t('removed_starter_communities')}</h2>
@@ -72,13 +69,13 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
       </div>
 
       <div className={styles.actions}>
-        <button type='button' className={styles.primary} disabled={saving} onClick={() => void addSelected([...selectedAddresses])}>
+        <button type='button' className={styles.primary} disabled={saving || loading || !canReview} onClick={() => void addSelected([...selectedAddresses])}>
           {saving ? t('saving') : t('add_selected_communities')}
         </button>
-        <button type='button' disabled={saving} onClick={() => void keepCurrent()}>
+        <button type='button' disabled={saving || loading || !canReview} onClick={() => void keepCurrent()}>
           {t('keep_current_subscriptions')}
         </button>
-        <button type='button' disabled={saving} onClick={() => void replacePrevious()}>
+        <button type='button' disabled={saving || loading || !canReview} onClick={() => void replacePrevious()}>
           {t('use_latest_starter_set')}
         </button>
       </div>

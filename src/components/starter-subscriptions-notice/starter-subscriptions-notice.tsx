@@ -10,14 +10,14 @@ const StarterSubscriptionsNotice = () => {
   if (!hasUpdate) return null;
 
   return (
-    <div className={styles.notice} role='status'>
+    <output className={styles.notice}>
       <strong>{t('starter_subscriptions_updated')}</strong>{' '}
       {t('starter_subscriptions_change_summary', {
         added: delta.addedAddresses.length,
         removed: delta.removedAddresses.length,
       })}{' '}
       <Link to='/communities/defaults'>{t('review_changes')}</Link>
-    </div>
+    </output>
   );
 };
 

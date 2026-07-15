@@ -66,6 +66,14 @@ const createProvenance = (revision: number, knownAddresses: readonly string[], m
 const getActionProvenance = (provenance: SeeditStarterSubscriptions | undefined): SeeditStarterSubscriptions =>
   provenance ? normalizeProvenance(provenance) : createProvenance(0, [], []);
 
+export const isStarterListRevisionCurrent = (provenance: SeeditStarterSubscriptions | undefined, revision: number): boolean =>
+  !provenance || normalizeRevision(revision) >= normalizeRevision(provenance.acknowledgedRevision);
+
+const preserveNewerStarterState = (subscriptions: readonly string[], provenance: SeeditStarterSubscriptions): StarterSubscriptionsResult => ({
+  subscriptions: uniqueAddresses(subscriptions),
+  provenance: normalizeProvenance(provenance),
+});
+
 /**
  * Record the current starter set as an existing account's baseline without changing any
  * subscriptions. Once provenance exists, initialization is a no-op so a later list revision
@@ -127,6 +135,7 @@ export const addSelectedStarterSubscriptions = ({
   starterAddresses,
   selectedAddresses,
 }: AddSelectedStarterSubscriptionsInput): StarterSubscriptionsResult => {
+  if (provenance && !isStarterListRevisionCurrent(provenance, revision)) return preserveNewerStarterState(subscriptions, provenance);
   const currentSubscriptions = uniqueAddresses(subscriptions);
   const currentStarterAddresses = uniqueAddresses(starterAddresses);
   const currentStarterSet = new Set(currentStarterAddresses);
@@ -144,6 +153,7 @@ export const addSelectedStarterSubscriptions = ({
 
 /** Acknowledge the latest starter set without changing subscription ownership or membership. */
 export const keepCurrentStarterSubscriptions = ({ subscriptions, provenance, revision, starterAddresses }: StarterSubscriptionsInput): StarterSubscriptionsResult => {
+  if (provenance && !isStarterListRevisionCurrent(provenance, revision)) return preserveNewerStarterState(subscriptions, provenance);
   const currentProvenance = getActionProvenance(provenance);
   return {
     subscriptions: uniqueAddresses(subscriptions),
@@ -156,6 +166,7 @@ export const keepCurrentStarterSubscriptions = ({ subscriptions, provenance, rev
  * be removed; manual subscriptions survive even when they are no longer in the starter set.
  */
 export const replacePreviousStarterSubscriptions = ({ subscriptions, provenance, revision, starterAddresses }: StarterSubscriptionsInput): StarterSubscriptionsResult => {
+  if (provenance && !isStarterListRevisionCurrent(provenance, revision)) return preserveNewerStarterState(subscriptions, provenance);
   const currentSubscriptions = uniqueAddresses(subscriptions);
   const currentStarterAddresses = uniqueAddresses(starterAddresses);
   const currentStarterSet = new Set(currentStarterAddresses);

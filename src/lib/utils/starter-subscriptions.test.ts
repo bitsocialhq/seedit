@@ -186,6 +186,25 @@ describe('starter-subscription update choices', () => {
 
     expect(second).toEqual(first);
   });
+
+  it('preserves a newer acknowledged snapshot for every stale review action', () => {
+    const newerProvenance = provenance({
+      acknowledgedRevision: 3,
+      knownAddresses: ['revision-three.bso'],
+      managedAddresses: ['revision-three.bso'],
+    });
+    const input = {
+      subscriptions: ['manual.bso', 'revision-three.bso'],
+      provenance: newerProvenance,
+      revision: 1,
+      starterAddresses: ['revision-one.bso'],
+    };
+    const expected = { subscriptions: input.subscriptions, provenance: newerProvenance };
+
+    expect(addSelectedStarterSubscriptions({ ...input, selectedAddresses: ['revision-one.bso'] })).toEqual(expected);
+    expect(keepCurrentStarterSubscriptions(input)).toEqual(expected);
+    expect(replacePreviousStarterSubscriptions(input)).toEqual(expected);
+  });
 });
 
 describe('manual subscription changes', () => {

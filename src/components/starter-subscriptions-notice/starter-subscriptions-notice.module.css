@@ -1,4 +1,5 @@
 .notice {
+  display: block;
   margin: 0 315px 7px 0;
   padding: 6px 10px;
   border: 1px solid var(--border-orange);

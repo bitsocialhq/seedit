@@ -4,6 +4,7 @@ import vendoredStarterCommunities from '../data/seedit-starter-communities.json'
 
 const STARTER_COMMUNITIES_URL = 'https://raw.githubusercontent.com/bitsocialnet/lists/master/seedit-default-subscriptions.json';
 const REVALIDATE_INTERVAL_MS = 60 * 60 * 1000;
+const FETCH_TIMEOUT_MS = 10 * 1000;
 
 export interface DefaultSubscription {
   title?: string;
@@ -100,6 +101,17 @@ const listeners = new Set<() => void>();
 
 const emit = () => listeners.forEach((listener) => listener());
 
+export const fetchStarterCommunitiesPayload = (timeoutMs = FETCH_TIMEOUT_MS): Promise<unknown> => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(STARTER_COMMUNITIES_URL, { cache: 'no-cache', signal: controller.signal })
+    .then((response) => {
+      if (!response.ok) throw new Error(`Default communities request failed with ${response.status}`);
+      return response.json();
+    })
+    .finally(() => clearTimeout(timeout));
+};
+
 const fetchStarterCommunities = () => {
   if (inFlightFetch || Date.now() - lastFetchAt < REVALIDATE_INTERVAL_MS) return inFlightFetch;
 
@@ -107,10 +119,9 @@ const fetchStarterCommunities = () => {
   emit();
   lastFetchAt = Date.now();
 
-  inFlightFetch = fetch(STARTER_COMMUNITIES_URL, { cache: 'no-cache' })
-    .then(async (response) => {
-      if (!response.ok) throw new Error(`Default communities request failed with ${response.status}`);
-      const remoteList = normalizeRemoteStarterCommunityList(await response.json(), snapshot.list);
+  inFlightFetch = fetchStarterCommunitiesPayload()
+    .then((payload) => {
+      const remoteList = normalizeRemoteStarterCommunityList(payload, snapshot.list);
       if (remoteList) {
         snapshot = { list: remoteList, loading: false, error: null };
       } else {
@@ -161,12 +172,16 @@ export const useFilteredDefaultSubscriptions = (): DefaultSubscription[] => {
 
 export const useDefaultSubscriptionAddresses = (): string[] => {
   const subscriptions = useFilteredDefaultSubscriptions();
-  return subscriptions.map(({ address }) => address);
+  return useMemo(() => subscriptions.map(({ address }) => address), [subscriptions]);
 };
 
 export const useDefaultSubscriptionsMetadata = () => {
   const { list } = useStarterCommunityList();
-  return { title: list.title, description: list.description, createdAt: list.createdAt, updatedAt: list.updatedAt, revision: list.revision };
+  return useMemo(
+    () => ({ title: list.title, description: list.description, createdAt: list.createdAt, updatedAt: list.updatedAt, revision: list.revision }),
+    [list.title, list.description, list.createdAt, list.updatedAt, list.revision],
+  );
 };
 
-export const useDefaultSubscriptionTags = (subscriptions: DefaultSubscription[]) => [...new Set(subscriptions.flatMap(({ tags }) => tags ?? []))].sort();
+export const useDefaultSubscriptionTags = (subscriptions: DefaultSubscription[]) =>
+  useMemo(() => [...new Set(subscriptions.flatMap(({ tags }) => tags ?? []))].sort(), [subscriptions]);
