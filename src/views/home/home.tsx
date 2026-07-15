@@ -24,7 +24,7 @@ type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
 const Home = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  const subscriptions = useMemo(() => account?.subscriptions ?? [], [account?.subscriptions]);
+  const subscriptions = account?.subscriptions ?? [];
   const communityAddresses = subscriptions;
   const { isCheckingAccount } = useAutoSubscribeStore();
   const accountAddress = account?.author?.address;
@@ -228,17 +228,7 @@ const Home = () => {
     ],
   );
 
-  const [subscriptionState, setSubscriptionState] = useState<SubscriptionState>('loading');
-  const initialLoadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [safeToShowNoSubscriptions, setSafeToShowNoSubscriptions] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (initialLoadTimeoutRef.current) {
-        clearTimeout(initialLoadTimeoutRef.current);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (isCheckingSubscriptions) {
@@ -246,41 +236,16 @@ const Home = () => {
       return;
     }
 
-    if (!isCheckingSubscriptions && !safeToShowNoSubscriptions) {
-      initialLoadTimeoutRef.current = setTimeout(() => {
-        setSafeToShowNoSubscriptions(true);
-      }, 800);
-    }
+    const timeout = setTimeout(() => setSafeToShowNoSubscriptions(true), 800);
+    return () => clearTimeout(timeout);
+  }, [isCheckingSubscriptions, accountAddress]);
 
-    return () => {
-      if (initialLoadTimeoutRef.current) {
-        clearTimeout(initialLoadTimeoutRef.current);
-      }
-    };
-  }, [isCheckingSubscriptions, safeToShowNoSubscriptions, accountAddress]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setSubscriptionState('hasSubscriptions');
-      return;
-    }
-
-    if (subscriptions.length > 0 || feed?.length > 0) {
-      setSubscriptionState('hasSubscriptions');
-      return;
-    }
-
-    if (isCheckingSubscriptions || feed === undefined) {
-      setSubscriptionState('loading');
-      return;
-    }
-
-    if (!isCheckingSubscriptions && feed?.length === 0 && subscriptions.length === 0 && safeToShowNoSubscriptions) {
-      setSubscriptionState('noSubscriptions');
-    } else {
-      setSubscriptionState('loading');
-    }
-  }, [isCheckingSubscriptions, subscriptions, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
+  let subscriptionState: SubscriptionState = 'loading';
+  if (searchQuery || subscriptions.length > 0 || (feed && feed.length > 0)) {
+    subscriptionState = 'hasSubscriptions';
+  } else if (!isCheckingSubscriptions && feed?.length === 0 && safeToShowNoSubscriptions) {
+    subscriptionState = 'noSubscriptions';
+  }
 
   return (
     <div>
