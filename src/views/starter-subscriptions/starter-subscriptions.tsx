@@ -37,7 +37,7 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
         <p className={styles.revision}>{t('starter_list_revision', { revision: list.revision })}</p>
       </div>
 
-      {(error || !canReview) && <p className={styles.warning}>{t('starter_list_offline_fallback')}</p>}
+      {error && <p className={styles.warning}>{t('starter_list_offline_fallback')}</p>}
       {delta.removedAddresses.length > 0 && (
         <section className={styles.removed}>
           <h2>{t('removed_starter_communities')}</h2>
