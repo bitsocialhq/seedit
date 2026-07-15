@@ -1,5 +1,5 @@
 import { copyToClipboard } from './clipboard-utils';
-import { getCommunityPath, getCommunityPostPath, getCommunityPostUrl } from './community-route-utils';
+import { getCommunityPath, getCommunityPostPath, getCommunityPostUrl, resolveCommunityRouteAddress } from './community-route-utils';
 
 export const getHostname = (url: string) => {
   try {
@@ -95,6 +95,12 @@ const isValidDomain = (str: string): boolean => {
   return str.includes('.') && str.split('.').length >= 2 && str.split('.').every((part) => part.length > 0);
 };
 
+const isValidCommunityReference = (value: string): boolean => {
+  if (isValidDomain(value) || isValidIPNSKey(value)) return true;
+  const resolvedAddress = resolveCommunityRouteAddress(value);
+  return resolvedAddress !== value && Boolean(resolvedAddress && isValidDomain(resolvedAddress));
+};
+
 // Check if a plain text pattern is a valid seedit community reference
 export const isValidCommunityPattern = (pattern: string): boolean => {
   // Must start with "s/"
@@ -109,11 +115,11 @@ export const isValidCommunityPattern = (pattern: string): boolean => {
   if (postMatch) {
     const [, communityAddress, cid] = postMatch;
     // CID should be at least 10 characters (minimum reasonable CID length)
-    return (isValidDomain(communityAddress) || isValidIPNSKey(communityAddress)) && cid.length >= 10;
+    return isValidCommunityReference(communityAddress) && cid.length >= 10;
   }
 
   // Check if it's just a community pattern: communityAddress
-  return isValidDomain(pathPart) || isValidIPNSKey(pathPart);
+  return isValidCommunityReference(pathPart);
 };
 
 // Preprocess content to convert plain text seedit patterns to markdown links

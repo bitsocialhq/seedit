@@ -21,6 +21,20 @@ describe('Seedit comments permalinks', () => {
     expect(preprocessSeeditPatterns(`${pattern}.`)).toBe(`[${pattern}](/s/aww/comments/${CID}).`);
   });
 
+  it('recognizes and links default-TLD shorthand references', () => {
+    expect(isValidCommunityPattern('s/aww')).toBe(true);
+    expect(preprocessSeeditPatterns('See s/aww.')).toBe('See [s/aww](/s/aww).');
+
+    const pattern = `s/aww/comments/${CID}`;
+    expect(isValidCommunityPattern(pattern)).toBe(true);
+    expect(preprocessSeeditPatterns(pattern)).toBe(`[${pattern}](/s/aww/comments/${CID})`);
+  });
+
+  it('does not interpret reserved feed routes as default-TLD community shorthand', () => {
+    expect(isValidCommunityPattern('s/all')).toBe(false);
+    expect(isValidCommunityPattern('s/mod')).toBe(false);
+  });
+
   it('links punctuated community references without regex lookbehind', () => {
     expect(preprocessSeeditPatterns('See (s/aww.bso).')).toBe('See ([s/aww.bso](/s/aww)).');
   });
