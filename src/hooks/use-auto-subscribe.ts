@@ -35,10 +35,9 @@ export const useAutoSubscribe = () => {
         removeCheckingAccount(accountAddress);
         return;
       }
-      const isKnownExistingAccount = hasExistingSeeditAccountState(accountAddress, (key) => localStorage.getItem(key));
-
       migratingAccounts.add(accountAddress);
       try {
+        const isKnownExistingAccount = hasExistingSeeditAccountState(accountAddress, (key) => localStorage.getItem(key));
         await persistStarterAccountUpdate(account.id, (currentAccount) => computeStarterAccount(currentAccount, isKnownExistingAccount, starterList));
       } catch (error) {
         console.error('Default subscriptions migration error:', error);
