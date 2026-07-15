@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { getCommunityPath, getCommunityPostPath, getCommunityPostUrl, getCommunityRouteSegment, resolveCommunityRouteAddress } from './community-route-utils';
+import {
+  getCanonicalCommunityPostRedirectPath,
+  getCommunityPath,
+  getCommunityPostPath,
+  getCommunityPostUrl,
+  getCommunityRouteSegment,
+  resolveCommunityRouteAddress,
+} from './community-route-utils';
 
 const PUBLIC_KEY = '12D3KooWFnLrUYHpvqki7gbL4w9JzdxjpQPKE2JBDEd23Ly6X82X';
 
@@ -69,5 +76,15 @@ describe('community route builders', () => {
     for (const address of ['aww.bso', 'aww-posting.bso']) {
       expect(resolveCommunityRouteAddress(getCommunityRouteSegment(address))).toBe(address);
     }
+  });
+});
+
+describe('getCanonicalCommunityPostRedirectPath', () => {
+  it('does not redirect when a bare route and bare post address resolve to the same community', () => {
+    expect(getCanonicalCommunityPostRedirectPath('aww', 'aww', 'bafy-post-cid')).toBeUndefined();
+  });
+
+  it('redirects a mismatched route to the canonical post community path', () => {
+    expect(getCanonicalCommunityPostRedirectPath('wrong', 'aww.bso', 'bafy-post-cid')).toBe('/s/aww/comments/bafy-post-cid');
   });
 });

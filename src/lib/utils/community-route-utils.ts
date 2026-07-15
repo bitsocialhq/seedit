@@ -43,3 +43,14 @@ export const getCommunityPath = (communityAddress: string): string => `/s/${enco
 export const getCommunityPostPath = (communityAddress: string, cid: string): string => `${getCommunityPath(communityAddress)}/comments/${encodeURIComponent(cid)}`;
 
 export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://seedit.app${getCommunityPostPath(communityAddress, cid)}`;
+
+export const getCanonicalCommunityPostRedirectPath = (
+  routeCommunitySegment: string | undefined,
+  postCommunityAddress: string | undefined,
+  cid: string | undefined,
+): string | undefined => {
+  const routeCommunityAddress = resolveCommunityRouteAddress(routeCommunitySegment);
+  const resolvedPostCommunityAddress = resolveCommunityRouteAddress(postCommunityAddress);
+  if (!cid || !resolvedPostCommunityAddress || routeCommunityAddress === resolvedPostCommunityAddress) return undefined;
+  return getCommunityPostPath(resolvedPostCommunityAddress, cid);
+};

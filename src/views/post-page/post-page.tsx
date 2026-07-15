@@ -5,7 +5,7 @@ import { Comment, useAccount, useAccountComments, useComment, useCommunity } fro
 import findTopParentCidOfReply from '../../lib/utils/cid-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
-import { getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCanonicalCommunityPostRedirectPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
@@ -245,9 +245,10 @@ const PostWithContext = ({ post }: { post: Comment }) => {
 const PostPage = () => {
   const params = useParams();
   const location = useLocation();
+  const locationSearch = location.search;
   const navigate = useNavigate();
   const isInPendingPostView = isPendingPostView(location.pathname, params);
-  const isInPostContextView = isPostContextView(location.pathname, params, location.search);
+  const isInPostContextView = isPostContextView(location.pathname, params, locationSearch);
 
   // pending post
   const { accountComments } = useAccountComments();
@@ -287,14 +288,16 @@ const PostPage = () => {
     post = pendingPost;
   }
   const postCommunityAddress = getCommentCommunityAddress(post);
-  const communityAddress = isInPendingPostView ? pendingPost?.subplebbitAddress : postCommunityAddress || routeCommunityAddress;
+  const resolvedPostCommunityAddress = resolveCommunityRouteAddress(postCommunityAddress);
+  const communityAddress = isInPendingPostView ? pendingPost?.subplebbitAddress : resolvedPostCommunityAddress || routeCommunityAddress;
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const canonicalPostRedirectPath = getCanonicalCommunityPostRedirectPath(params.communityAddress, postCommunityAddress, commentCid);
 
   useEffect(() => {
-    if (!isInPendingPostView && commentCid && postCommunityAddress && routeCommunityAddress !== postCommunityAddress) {
-      navigate(`${getCommunityPostPath(postCommunityAddress, commentCid)}${location.search}`, { replace: true });
+    if (!isInPendingPostView && canonicalPostRedirectPath) {
+      navigate(`${canonicalPostRedirectPath}${locationSearch}`, { replace: true });
     }
-  }, [commentCid, isInPendingPostView, location.search, navigate, postCommunityAddress, routeCommunityAddress]);
+  }, [canonicalPostRedirectPath, isInPendingPostView, locationSearch, navigate]);
 
   const { hasAcceptedWarning } = useContentOptionsStore();
   const isNsfwCommunity = useIsNsfwCommunity(communityAddress || '');

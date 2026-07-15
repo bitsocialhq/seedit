@@ -98,7 +98,7 @@ const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
       </div>
       {subplebbitAddress && cid && (
         <div className={styles.shareLink}>
-          {t('share_link')}: <input type='text' value={getCommunityPostUrl(subplebbitAddress, cid)} readOnly={true} />
+          {t('share_link')}: <input type='text' value={getCommunityPostUrl(subplebbitAddress, cid)} aria-label={t('share_link')} readOnly={true} />
         </div>
       )}
     </div>

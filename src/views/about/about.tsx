@@ -157,7 +157,8 @@ const About = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const navigate = useNavigate();
-  const isInHomeAboutView = isHomeAboutView(location.pathname);
+  const { pathname, search, hash } = location;
+  const isInHomeAboutView = isHomeAboutView(pathname);
   const { commentCid, communityAddress: routeCommunityAddress } = useParams();
   const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
 
@@ -165,15 +166,15 @@ const About = () => {
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {
-    if (!isMobile && location.pathname.endsWith('/about') && !isInHomeAboutView) {
+    if (!isMobile && pathname.endsWith('/about') && !isInHomeAboutView) {
       const newPath = communityAddress
         ? commentCid
           ? getCommunityPostPath(communityAddress, commentCid)
           : getCommunityPath(communityAddress)
-        : location.pathname.replace(/\/about$/, '') || '/';
-      navigate(`${newPath}${location.search}${location.hash}`);
+        : pathname.replace(/\/about$/, '') || '/';
+      navigate(`${newPath}${search}${hash}`);
     }
-  }, [commentCid, communityAddress, isMobile, location.hash, location.pathname, location.search, navigate, isInHomeAboutView]);
+  }, [commentCid, communityAddress, hash, isMobile, isInHomeAboutView, navigate, pathname, search]);
 
   return (
     <div className={styles.content}>

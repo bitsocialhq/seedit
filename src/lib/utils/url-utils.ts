@@ -119,20 +119,20 @@ export const isValidCommunityPattern = (pattern: string): boolean => {
 // Preprocess content to convert plain text seedit patterns to markdown links
 export const preprocessSeeditPatterns = (content: string): string => {
   // Pattern to match "s/something" or "s/something/comments/something"
-  // Use negative lookbehind to avoid matching patterns that are already part of URLs
-  // This prevents matching "s/" that comes after "://" or other URL indicators
-  const pattern = /(?<!https?:\/\/[^\s]*)\bs\/([a-zA-Z0-9\-.]+(?:\/comments\/[a-zA-Z0-9]{10,100})?)[.,:;!?]*/g;
+  const pattern = /\bs\/([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\/comments\/[a-zA-Z0-9]{10,100})?)([.,:;!?]*)/g;
 
-  return content.replace(pattern, (match, capturedPath) => {
-    // Remove any trailing punctuation from the captured path
-    const cleanPath = capturedPath.replace(/[.,:;!?]+$/, '');
-    const fullPattern = `s/${cleanPath}`;
+  return content.replace(pattern, (match, capturedPath, trailingPunctuation, offset, source) => {
+    const precedingToken = source.slice(
+      Math.max(source.lastIndexOf(' ', offset - 1), source.lastIndexOf('\n', offset - 1), source.lastIndexOf('\t', offset - 1)) + 1,
+      offset,
+    );
+    if (/(?:[a-z][a-z0-9+.-]*:\/\/|www\.)\S*$/i.test(precedingToken)) return match;
+
+    const fullPattern = `s/${capturedPath}`;
 
     if (isValidCommunityPattern(fullPattern)) {
-      // Get the trailing punctuation that was matched but shouldn't be part of the link
-      const trailingPunctuation = match.slice(fullPattern.length);
-      const postMatch = cleanPath.match(/^([^/]+)\/comments\/([^/]+)$/);
-      const internalPath = postMatch ? getCommunityPostPath(postMatch[1], postMatch[2]) : getCommunityPath(cleanPath);
+      const postMatch = capturedPath.match(/^([^/]+)\/comments\/([^/]+)$/);
+      const internalPath = postMatch ? getCommunityPostPath(postMatch[1], postMatch[2]) : getCommunityPath(capturedPath);
       // Convert to markdown link format and preserve trailing punctuation
       return `[${fullPattern}](${internalPath})${trailingPunctuation}`;
     }

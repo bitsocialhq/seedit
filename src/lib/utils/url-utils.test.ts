@@ -20,4 +20,13 @@ describe('Seedit comments permalinks', () => {
     expect(isValidCommunityPattern(pattern)).toBe(true);
     expect(preprocessSeeditPatterns(`${pattern}.`)).toBe(`[${pattern}](/s/aww/comments/${CID}).`);
   });
+
+  it('links punctuated community references without regex lookbehind', () => {
+    expect(preprocessSeeditPatterns('See (s/aww.bso).')).toBe('See ([s/aww.bso](/s/aww)).');
+  });
+
+  it('does not relink references already embedded in URLs or words', () => {
+    const content = 'https://example.com/s/aww.bso https://example.com/?next=s/aww.bso https://example.com/#s/aww.bso xs/aww.bso';
+    expect(preprocessSeeditPatterns(content)).toBe(content);
+  });
 });
