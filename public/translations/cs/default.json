@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Tuto komunitu již prohlížíte",
   "advanced": "pokročilé",
-  "p2p_stats": "statistiky p2p"
+  "p2p_stats": "statistiky p2p",
+  "starter_subscriptions_updated": "Výchozí komunity Seedit se změnily.",
+  "starter_subscriptions_change_summary": "{{added}} přidáno, {{removed}} odebráno.",
+  "starter_communities": "výchozí komunity",
+  "review_changes": "zkontrolovat změny",
+  "starter_communities_explanation": "Nové účty Seedit se ve výchozím nastavení přihlásí k odběru těchto komunit. Vaše odběry se nezmění, dokud níže nevyberete některou možnost.",
+  "starter_list_revision": "revize výchozích komunit {{revision}}",
+  "starter_list_offline_fallback": "Výchozí komunity se nepodařilo obnovit; zobrazuje se vestavěná kopie.",
+  "add_selected_communities": "přidat vybrané komunity",
+  "removed_starter_communities": "Již nepatří mezi výchozí komunity. Vaše odběry se nezmění, pokud se nerozhodnete přejít na nejnovější výchozí sadu.",
+  "keep_current_subscriptions": "ponechat moje předplatná",
+  "use_latest_starter_set": "přejít na nejnovější výchozí komunity",
+  "starter_replacement_safety": "Odebrat lze pouze komunity, k jejichž odběru vás Seedit dříve ve výchozím nastavení přihlásil. Vaše ručně přidané odběry budou vždy zachovány."
 }

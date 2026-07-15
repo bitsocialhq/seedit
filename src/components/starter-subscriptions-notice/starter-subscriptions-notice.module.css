@@ -1,0 +1,21 @@
+.notice {
+  display: block;
+  margin: 0 315px 7px 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border-orange);
+  background: var(--background-orange);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.notice a {
+  color: var(--link-primary);
+  font-weight: 700;
+}
+
+@media (max-width: 639px) {
+  .notice {
+    margin: 0 2px 7px;
+  }
+}

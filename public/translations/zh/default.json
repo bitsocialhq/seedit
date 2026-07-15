@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "您已经在查看此社区",
   "advanced": "高级",
-  "p2p_stats": "p2p统计"
+  "p2p_stats": "p2p统计",
+  "starter_subscriptions_updated": "Seedit 的默认社区已更改。",
+  "starter_subscriptions_change_summary": "已添加 {{added}} 个，已移除 {{removed}} 个。",
+  "starter_communities": "默认社区",
+  "review_changes": "查看更改",
+  "starter_communities_explanation": "新的 Seedit 账户默认订阅这些社区。除非您选择下方的选项，否则您的订阅不会更改。",
+  "starter_list_revision": "默认社区修订版 {{revision}}",
+  "starter_list_offline_fallback": "无法刷新默认社区；正在显示内置副本。",
+  "add_selected_communities": "添加所选社区",
+  "removed_starter_communities": "已不再属于默认社区。除非您选择切换到最新默认设置，否则您的订阅不会改变。",
+  "keep_current_subscriptions": "保留我的订阅",
+  "use_latest_starter_set": "切换到最新默认社区",
+  "starter_replacement_safety": "只能移除 Seedit 之前默认为您订阅的社区。您的手动订阅将始终保留。"
 }

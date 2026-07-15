@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Bạn đã đang xem cộng đồng này",
   "advanced": "nâng cao",
-  "p2p_stats": "thống kê p2p"
+  "p2p_stats": "thống kê p2p",
+  "starter_subscriptions_updated": "Các cộng đồng mặc định của Seedit đã thay đổi.",
+  "starter_subscriptions_change_summary": "Đã thêm {{added}}, đã xóa {{removed}}.",
+  "starter_communities": "cộng đồng mặc định",
+  "review_changes": "xem lại thay đổi",
+  "starter_communities_explanation": "Các tài khoản Seedit mới mặc định đăng ký theo dõi các cộng đồng này. Các đăng ký của bạn sẽ không thay đổi trừ khi bạn chọn một tùy chọn bên dưới.",
+  "starter_list_revision": "bản sửa đổi cộng đồng mặc định {{revision}}",
+  "starter_list_offline_fallback": "Không thể làm mới các cộng đồng mặc định; đang hiển thị bản tích hợp sẵn.",
+  "add_selected_communities": "thêm các cộng đồng đã chọn",
+  "removed_starter_communities": "Không còn nằm trong các cộng đồng mặc định. Các đăng ký của bạn vẫn không thay đổi trừ khi bạn chọn chuyển sang các mặc định mới nhất.",
+  "keep_current_subscriptions": "giữ các đăng ký của tôi",
+  "use_latest_starter_set": "chuyển sang các cộng đồng mặc định mới nhất",
+  "starter_replacement_safety": "Chỉ có thể xóa những cộng đồng mà trước đây Seedit đã đăng ký mặc định cho bạn. Các đăng ký thủ công của bạn luôn được giữ lại."
 }

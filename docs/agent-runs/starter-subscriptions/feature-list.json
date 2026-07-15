@@ -1,0 +1,86 @@
+{
+  "task": "starter-subscriptions",
+  "last_updated": "2026-07-14",
+  "items": [
+    {
+      "id": "F001",
+      "priority": 1,
+      "status": "completed",
+      "description": "Remove Seedit directory-code routing and subscriptions while preserving direct community addresses and safely migrating existing directory-code subscriptions to their current community addresses.",
+      "verification": [
+        "Focused unit tests cover address-only subscription migration and direct route resolution.",
+        "No product code treats a Seedit directory code as a subscription target."
+      ],
+      "files": [
+        "src/hooks/use-auto-subscribe.ts",
+        "src/lib/utils/legacy-default-subscriptions.ts",
+        "src/data/seedit-starter-communities.json"
+      ],
+      "notes": "Fixed directory-code subscriptions are migrated once to their matching addresses; retired directory runtime data and hooks were removed."
+    },
+    {
+      "id": "F002",
+      "priority": 2,
+      "status": "completed",
+      "description": "Add deterministic default-TLD shorthand so extensionless community routes resolve to the same .bso identity without a contested directory mapping.",
+      "verification": [
+        "Unit tests cover shorthand expansion, reserved routes, full addresses, and post permalinks."
+      ],
+      "files": [
+        "src/lib/utils/community-route-utils.ts",
+        "src/lib/utils/community-route-utils.test.ts"
+      ],
+      "notes": "Generated links shorten only deterministic single-label .bso addresses; route data boundaries expand the shorthand back to the full address."
+    },
+    {
+      "id": "F003",
+      "priority": 3,
+      "status": "completed",
+      "description": "Implement versioned default communities with a non-blocking update notice and explicit add-selected, keep-current, and replace-previous-default choices.",
+      "verification": [
+        "Component and utility tests cover update detection, provenance-safe replacement, selection, and dismissal.",
+        "Desktop and mobile browser checks confirm the notice and review interaction."
+      ],
+      "files": [
+        "src/hooks/use-starter-subscriptions.ts",
+        "src/lib/utils/starter-subscriptions.ts",
+        "src/components/starter-subscriptions-notice/starter-subscriptions-notice.tsx",
+        "src/views/starter-subscriptions/starter-subscriptions.tsx"
+      ],
+      "notes": "The notice is membership-change-driven, not time-driven. Account-owned provenance protects manual subscriptions during replacement. The versioned external payload was published in bitsocialnet/lists commit 139a15d."
+    },
+    {
+      "id": "F004",
+      "priority": 4,
+      "status": "completed",
+      "description": "Remove obsolete directory data and copy, update public documentation and generated LLM indexes, and keep translations complete.",
+      "verification": [
+        "Directory-specific product files and English copy are gone or deliberately retained only for migration compatibility.",
+        "Generated LLM files and translations are synchronized."
+      ],
+      "files": [
+        "README.md",
+        "public/llms.txt",
+        "public/llms-full.txt",
+        "public/translations/*/default.json"
+      ],
+      "notes": "All 12 new keys were translated across 35 locales; nine user-facing values now consistently use default-community terminology, and three retired directory-only keys were deleted."
+    },
+    {
+      "id": "F005",
+      "priority": 5,
+      "status": "completed",
+      "description": "Run repository verification and cross-browser desktop/mobile checks for the complete default-subscription flow.",
+      "verification": [
+        "yarn test",
+        "yarn build",
+        "yarn lint",
+        "yarn type-check",
+        "yarn doctor",
+        "Chrome, Firefox, and WebKit desktop/mobile smoke checks"
+      ],
+      "files": [],
+      "notes": "Build, lint, type-check, 60 tests, focused React Doctor, and Chrome/Firefox/WebKit desktop/mobile checks pass for the changed flow. Full Doctor still reports repository baseline findings."
+    }
+  ]
+}

@@ -22,6 +22,7 @@ import getShortAddress from '../../lib/utils/address-utils';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
+import { getCommunityPath } from '../../lib/utils/community-route-utils';
 
 interface AuthorModeratingListProps {
   accountCommunities: Record<string, AccountCommunity & Partial<Community>>;
@@ -41,7 +42,7 @@ const AuthorModeratingList = ({ accountCommunities, authorCommunities, isAuthor 
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
           {communityAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={`/s/${address}`}>s/{getShortAddress(address)}</Link>
+              <Link to={getCommunityPath(address)}>s/{getShortAddress(address)}</Link>
             </li>
           ))}
         </ul>

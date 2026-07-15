@@ -30,6 +30,7 @@ import Thumbnail from '../post/thumbnail/';
 import ReplyForm from '../reply-form';
 import styles from './reply.module.css';
 import _ from 'lodash';
+import { getCommunityPath, getCommunityPostPath } from '../../lib/utils/community-route-utils';
 
 interface ReplyAuthorProps {
   address: string;
@@ -88,13 +89,16 @@ const ReplyAuthor = ({
           )}
           {displayName && (
             <Link
-              to={`/u/${address}/c/${cid}`}
+              to={`/u/${address}/comments/${cid}`}
               className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
             >
               {shortDisplayName}{' '}
             </Link>
           )}
-          <Link to={`/u/${address}/c/${cid}`} className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}>
+          <Link
+            to={`/u/${address}/comments/${cid}`}
+            className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
+          >
             {displayName ? `u/${shortAuthorAddress}` : shortAuthorAddress}
           </Link>
           {/* TODO: implement comment.highlightRole once implemented in API */}
@@ -103,7 +107,7 @@ const ReplyAuthor = ({
               {' '}
               [
               {isAuthorSubmitter && (
-                <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+                <Link to={getCommunityPostPath(communityAddress, postCid)} className={styles.submitter} title={t('submitter')}>
                   S
                 </Link>
               )}
@@ -120,7 +124,7 @@ const ReplyAuthor = ({
             <span className={styles.moderatorBrackets}>
               {' '}
               [
-              <Link to={`/s/${communityAddress}/c/${postCid}`} className={styles.submitter} title={t('submitter')}>
+              <Link to={getCommunityPostPath(communityAddress, postCid)} className={styles.submitter} title={t('submitter')}>
                 S
               </Link>
               ]
@@ -221,15 +225,15 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
 
   return (
     <div className={styles.parent}>
-      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.parentLink}>
+      <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''} className={styles.parentLink}>
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
-      <Link to={`/u/${author?.address}/c/${cid}`} className={styles.parentAuthor}>
+      <Link to={`/u/${author?.address}/comments/${cid}`} className={styles.parentAuthor}>
         u/{author?.shortAddress}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={`/s/${communityAddress}`} className={styles.parentSubplebbit}>
+      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentSubplebbit}>
         s/{communityAddress}
       </Link>
     </div>
@@ -251,7 +255,7 @@ const InboxParentLink = ({ commentCid }: ParentLinkProps) => {
   return (
     <div className={styles.inboxParentLinkWrapper}>
       <span className={styles.inboxParentLinkSubject}>{isInboxCommentReply ? t('comment_reply') : isInboxPostReply ? t('post_reply') : ''}</span>
-      <Link to={`/s/${communityAddress}/c/${cid}`} className={styles.inboxParentLink}>
+      <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''} className={styles.inboxParentLink}>
         {postTitle}
       </Link>
     </div>
@@ -266,7 +270,7 @@ const InboxParentComment = ({ parentCid }: { parentCid: string | undefined }) =>
   return (
     <>
       <Expando content={content} expanded={true} showContent={true} />
-      <Link className={styles.viewParentComment} to={`/s/${communityAddress}/c/${parentCid}`}>
+      <Link className={styles.viewParentComment} to={communityAddress && parentCid ? getCommunityPostPath(communityAddress, parentCid) : ''}>
         {t('view_parent_comment')}
       </Link>
     </>
@@ -294,11 +298,11 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
     <>
       <div className={`${styles.inboxParentInfo} ${markedAsRead ? styles.inboxParentRead : styles.inboxParentUnread}`}>
         {t('from')}{' '}
-        <Link to={`/u/${address}/c/${cid}`} className={styles.inboxParentAuthor}>
+        <Link to={`/u/${address}/comments/${cid}`} className={styles.inboxParentAuthor}>
           u/{shortAddress}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={`/s/${communityAddress}`} className={styles.inboxParentSubplebbit}>
+        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.inboxParentSubplebbit}>
           s/{shortCommunityAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}
@@ -589,7 +593,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                         />
                       ) : (
                         <div className={styles.continueThisThread}>
-                          <Link to={`/s/${communityAddress}/c/${cid}`}>{t('continue_thread')}</Link>
+                          <Link to={communityAddress && cid ? getCommunityPostPath(communityAddress, cid) : ''}>{t('continue_thread')}</Link>
                         </div>
                       )}
                     </Fragment>

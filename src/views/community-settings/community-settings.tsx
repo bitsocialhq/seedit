@@ -13,6 +13,7 @@ import {
 } from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
+import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
 import useCommunitySettingsStore from '../../stores/use-community-settings-store';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
@@ -326,14 +327,17 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
+  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
 
   return (
     <div className={`${styles.box}`}>
       <div className={`${styles.boxTitle} ${styles.JSONSettingsTitle}`}>{t('json_settings')}</div>
       <div className={styles.boxSubtitle}>{t('json_settings_info')}</div>
       <div className={`${styles.boxInput} ${styles.JSONSettings}`}>
-        <button onClick={() => navigate(`/s/${communityAddress}/settings/editor`)}>{t('edit')}</button>
+        <button type='button' onClick={() => communityAddress && navigate(`${getCommunityPath(communityAddress)}/settings/editor`)}>
+          {t('edit')}
+        </button>
       </div>
     </div>
   );
@@ -341,7 +345,8 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
 
 const CommunitySettings = () => {
   const { t } = useTranslation();
-  const { communityAddress } = useParams<{ communityAddress: string }>();
+  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
+  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;
@@ -471,7 +476,9 @@ const CommunitySettings = () => {
       }
 
       resetCommunitySettingsStore();
-      navigate(`/s/${createdCommunity?.address}/`);
+      if (createdCommunity.address) {
+        navigate(getCommunityPath(createdCommunity.address));
+      }
     }
   }, [createdCommunity, navigate, resetCommunitySettingsStore, account, subscribe]);
 

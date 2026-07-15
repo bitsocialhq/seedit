@@ -77,7 +77,7 @@ const Author = () => {
   // always redirect to latest author cid
   useEffect(() => {
     if (authorAddress && lastCommentCid && commentCid && lastCommentCid !== commentCid) {
-      navigate(`/u/${authorAddress}/c/${lastCommentCid}`, { replace: true });
+      navigate(`/u/${authorAddress}/comments/${lastCommentCid}`, { replace: true });
     }
   }, [authorAddress, lastCommentCid, commentCid, navigate]);
 

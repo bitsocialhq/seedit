@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Vizualizezi deja această comunitate",
   "advanced": "avansat",
-  "p2p_stats": "statistici p2p"
+  "p2p_stats": "statistici p2p",
+  "starter_subscriptions_updated": "Comunitățile implicite din Seedit s-au schimbat.",
+  "starter_subscriptions_change_summary": "S-au adăugat {{added}}, s-au eliminat {{removed}}.",
+  "starter_communities": "comunități implicite",
+  "review_changes": "examinează modificările",
+  "starter_communities_explanation": "Conturile Seedit noi se abonează implicit la aceste comunități. Abonamentele dvs. nu se vor schimba decât dacă alegeți una dintre opțiunile de mai jos.",
+  "starter_list_revision": "revizuirea comunităților implicite {{revision}}",
+  "starter_list_offline_fallback": "Comunitățile implicite nu au putut fi reîmprospătate; se afișează copia încorporată.",
+  "add_selected_communities": "adaugă comunitățile selectate",
+  "removed_starter_communities": "Nu mai face parte dintre comunitățile implicite. Abonamentele dvs. rămân neschimbate, cu excepția cazului în care alegeți să treceți la cele mai recente opțiuni implicite.",
+  "keep_current_subscriptions": "păstrează abonamentele mele",
+  "use_latest_starter_set": "treci la cele mai recente comunități implicite",
+  "starter_replacement_safety": "Pot fi eliminate numai comunitățile la care Seedit te-a abonat anterior în mod implicit. Abonamentele tale manuale sunt păstrate întotdeauna."
 }

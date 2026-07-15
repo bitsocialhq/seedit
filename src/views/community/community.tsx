@@ -13,8 +13,7 @@ import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
-import { useResolvedCommunityAddress } from '../../hooks/use-resolved-community-address';
-import { isResolvableCommunityAddress } from '../../lib/utils/directory-codes';
+import { getCommunityPath, isResolvableCommunityAddress, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
@@ -199,7 +198,7 @@ const Footer = ({
           i18nKey='show_all_instead'
           values={{ timeFilterName }}
           components={{
-            1: <Link key='show_all_instead_link' to={`/s/${communityAddress}`} />,
+            1: <Link key='show_all_instead_link' to={getCommunityPath(communityAddress)} />,
           }}
         />
       </div>
@@ -226,13 +225,8 @@ const CommunityView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
-  // /s/<code> directory routes resolve to the winning candidate community's address;
-  // /s/<address> routes pass through unchanged.
   const rawCommunityIdentifier = params?.communityAddress || '';
-  const { communityAddress: resolvedCommunityAddress, isDirectory } = useResolvedCommunityAddress();
-  const communityAddress = (isDirectory ? resolvedCommunityAddress : rawCommunityIdentifier) || '';
-  // Placeholder candidates from not-yet-populated directory lists cannot be loaded; skip
-  // loading so the page degrades to the offline state instead of erroring.
+  const communityAddress = resolveCommunityRouteAddress(rawCommunityIdentifier) || '';
   const canLoadCommunity = !!communityAddress && isResolvableCommunityAddress(communityAddress);
   const subplebbit = useCommunity(canLoadCommunity ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
@@ -350,7 +344,7 @@ const CommunityView = () => {
   }, [communityAddress, sortType, timeFilterName, searchQuery]);
   const lastVirtuosoState = lastVirtuosoStates?.[communityAddress + sortType + timeFilterName + searchQuery];
 
-  // over 18 warning for community served by a directory marked nsfw
+  // Show the warning when default-community metadata marks this community NSFW.
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 

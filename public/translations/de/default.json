@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Sie sehen diese Community bereits",
   "advanced": "erweitert",
-  "p2p_stats": "p2p-Statistiken"
+  "p2p_stats": "p2p-Statistiken",
+  "starter_subscriptions_updated": "Die Standard-Communitys von Seedit haben sich geändert.",
+  "starter_subscriptions_change_summary": "{{added}} hinzugefügt, {{removed}} entfernt.",
+  "starter_communities": "Standard-Communitys",
+  "review_changes": "Änderungen überprüfen",
+  "starter_communities_explanation": "Neue Seedit-Konten abonnieren diese Communitys standardmäßig. Deine Abonnements ändern sich nur, wenn du unten eine Option auswählst.",
+  "starter_list_revision": "Überarbeitung der Standard-Communitys {{revision}}",
+  "starter_list_offline_fallback": "Die Standard-Communitys konnten nicht aktualisiert werden; die integrierte Kopie wird angezeigt.",
+  "add_selected_communities": "ausgewählte Communitys hinzufügen",
+  "removed_starter_communities": "Gehört nicht mehr zu den Standard-Communitys. Deine Abonnements bleiben unverändert, es sei denn, du wechselst zur neuesten Standardauswahl.",
+  "keep_current_subscriptions": "meine Abonnements beibehalten",
+  "use_latest_starter_set": "zu den neuesten Standard-Communitys wechseln",
+  "starter_replacement_safety": "Nur Communitys, die Seedit zuvor standardmäßig für dich abonniert hat, können entfernt werden. Deine manuellen Abonnements bleiben immer erhalten."
 }

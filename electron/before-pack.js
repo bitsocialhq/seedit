@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import ProgressBar from 'progress';
 import https from 'https';
 import extractZip from 'extract-zip';
-import tar from 'tar';
+import * as tar from 'tar';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const ipfsClientsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin');

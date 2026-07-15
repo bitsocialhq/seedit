@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "شما در حال مشاهده این انجمن هستید",
   "advanced": "پیشرفته",
-  "p2p_stats": "آمار p2p"
+  "p2p_stats": "آمار p2p",
+  "starter_subscriptions_updated": "انجمن‌های پیش‌فرض Seedit تغییر کرده‌اند.",
+  "starter_subscriptions_change_summary": "{{added}} مورد اضافه شد، {{removed}} مورد حذف شد.",
+  "starter_communities": "انجمن‌های پیش‌فرض",
+  "review_changes": "بررسی تغییرات",
+  "starter_communities_explanation": "حساب‌های جدید Seedit به‌طور پیش‌فرض در این انجمن‌ها مشترک می‌شوند. اشتراک‌های شما تغییر نمی‌کنند مگر اینکه یکی از گزینه‌های زیر را انتخاب کنید.",
+  "starter_list_revision": "بازبینی انجمن‌های پیش‌فرض {{revision}}",
+  "starter_list_offline_fallback": "انجمن‌های پیش‌فرض به‌روزرسانی نشدند؛ نسخهٔ داخلی نمایش داده می‌شود.",
+  "add_selected_communities": "افزودن انجمن‌های انتخاب‌شده",
+  "removed_starter_communities": "دیگر در میان انجمن‌های پیش‌فرض نیست. اشتراک‌های شما بدون تغییر می‌مانند، مگر اینکه انتخاب کنید به جدیدترین گزینه‌های پیش‌فرض بروید.",
+  "keep_current_subscriptions": "حفظ اشتراک‌هایم",
+  "use_latest_starter_set": "تغییر به جدیدترین انجمن‌های پیش‌فرض",
+  "starter_replacement_safety": "فقط انجمن‌هایی که Seedit قبلاً به‌طور پیش‌فرض شما را در آن‌ها مشترک کرده است قابل حذف هستند. اشتراک‌های دستی شما همیشه حفظ می‌شوند."
 }

@@ -6,30 +6,30 @@ import { Trans, useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
-import { useExpandedSubscriptions } from '../../hooks/use-expanded-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
+import { useStarterCommunityList } from '../../hooks/use-default-subscriptions';
 import FeedFooter from '../../components/feed-footer';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
+import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
 import { sortTypes } from '../../constants/sort-types';
+import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
-type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
-
 const Home = () => {
   const { t } = useTranslation();
   const account = useAccount();
-  // Directory-code subscriptions resolve to their winning community's address at read time;
-  // plain address subscriptions pass through. The raw entries drive the empty-state logic.
-  const { subscriptions, addresses: communityAddresses, isResolvingDirectories } = useExpandedSubscriptions();
+  const subscriptions = account?.subscriptions ?? [];
+  const communityAddresses = subscriptions;
   const { isCheckingAccount } = useAutoSubscribeStore();
+  const { loading: starterListLoading } = useStarterCommunityList();
   const accountAddress = account?.author?.address;
-  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress) || isResolvingDirectories;
+  const isCheckingSubscriptions = starterListLoading || !accountAddress || isCheckingAccount(accountAddress);
 
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -229,17 +229,7 @@ const Home = () => {
     ],
   );
 
-  const [subscriptionState, setSubscriptionState] = useState<SubscriptionState>('loading');
-  const initialLoadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [safeToShowNoSubscriptions, setSafeToShowNoSubscriptions] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (initialLoadTimeoutRef.current) {
-        clearTimeout(initialLoadTimeoutRef.current);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (isCheckingSubscriptions) {
@@ -247,47 +237,21 @@ const Home = () => {
       return;
     }
 
-    if (!isCheckingSubscriptions && !safeToShowNoSubscriptions) {
-      initialLoadTimeoutRef.current = setTimeout(() => {
-        setSafeToShowNoSubscriptions(true);
-      }, 800);
-    }
+    const timeout = setTimeout(() => setSafeToShowNoSubscriptions(true), 800);
+    return () => clearTimeout(timeout);
+  }, [isCheckingSubscriptions, accountAddress]);
 
-    return () => {
-      if (initialLoadTimeoutRef.current) {
-        clearTimeout(initialLoadTimeoutRef.current);
-      }
-    };
-  }, [isCheckingSubscriptions, safeToShowNoSubscriptions, accountAddress]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setSubscriptionState('hasSubscriptions');
-      return;
-    }
-
-    // Base the empty state on the raw subscription entries (codes included), not the
-    // expanded addresses: a subscribed directory whose candidates are all unresolvable
-    // still counts as a subscription and must not flash the "no subscriptions" state.
-    if (subscriptions.length > 0 || feed?.length > 0) {
-      setSubscriptionState('hasSubscriptions');
-      return;
-    }
-
-    if (isCheckingSubscriptions || feed === undefined) {
-      setSubscriptionState('loading');
-      return;
-    }
-
-    if (!isCheckingSubscriptions && feed?.length === 0 && subscriptions.length === 0 && safeToShowNoSubscriptions) {
-      setSubscriptionState('noSubscriptions');
-    } else {
-      setSubscriptionState('loading');
-    }
-  }, [isCheckingSubscriptions, subscriptions, feed, safeToShowNoSubscriptions, searchQuery, accountAddress]);
+  const subscriptionState = getHomeSubscriptionState({
+    hasSearchQuery: Boolean(searchQuery),
+    subscriptionCount: subscriptions.length,
+    feedLength: feed?.length,
+    isCheckingSubscriptions,
+    safeToShowNoSubscriptions,
+  });
 
   return (
     <div>
+      <StarterSubscriptionsNotice />
       <div className={styles.content}>
         <div className={`${styles.sidebar}`}>
           <Sidebar />

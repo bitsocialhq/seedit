@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Nakikita mo na ang komunidad na ito",
   "advanced": "advanced",
-  "p2p_stats": "istatistika ng p2p"
+  "p2p_stats": "istatistika ng p2p",
+  "starter_subscriptions_updated": "Nagbago na ang mga default na komunidad ng Seedit.",
+  "starter_subscriptions_change_summary": "{{added}} idinagdag, {{removed}} inalis.",
+  "starter_communities": "mga default na komunidad",
+  "review_changes": "suriin ang mga pagbabago",
+  "starter_communities_explanation": "Ang mga bagong Seedit account ay naka-subscribe sa mga komunidad na ito bilang default. Hindi magbabago ang iyong mga subscription maliban kung pipili ka ng opsyon sa ibaba.",
+  "starter_list_revision": "rebisyon ng mga default na komunidad {{revision}}",
+  "starter_list_offline_fallback": "Hindi ma-refresh ang mga default na komunidad; ipinapakita ang built-in na kopya.",
+  "add_selected_communities": "idagdag ang mga napiling komunidad",
+  "removed_starter_communities": "Wala na sa mga default na komunidad. Hindi magbabago ang iyong mga subscription maliban kung pipiliin mong lumipat sa pinakabagong mga default.",
+  "keep_current_subscriptions": "panatilihin ang aking mga subscription",
+  "use_latest_starter_set": "lumipat sa pinakabagong mga default na komunidad",
+  "starter_replacement_safety": "Ang mga komunidad lang na dati kang awtomatikong sinu-subscribe ng Seedit bilang default ang maaaring alisin. Palaging pinapanatili ang mga manu-mano mong subscription."
 }

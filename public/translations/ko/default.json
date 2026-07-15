@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "이미 이 커뮤니티를 보고 있습니다",
   "advanced": "고급",
-  "p2p_stats": "p2p 통계"
+  "p2p_stats": "p2p 통계",
+  "starter_subscriptions_updated": "Seedit의 기본 커뮤니티가 변경되었습니다.",
+  "starter_subscriptions_change_summary": "{{added}}개 추가, {{removed}}개 제거.",
+  "starter_communities": "기본 커뮤니티",
+  "review_changes": "변경 사항 검토",
+  "starter_communities_explanation": "새 Seedit 계정은 기본적으로 이 커뮤니티들을 구독합니다. 아래 옵션을 선택하지 않는 한 구독은 변경되지 않습니다.",
+  "starter_list_revision": "기본 커뮤니티 개정판 {{revision}}",
+  "starter_list_offline_fallback": "기본 커뮤니티를 새로 고칠 수 없어 내장된 사본을 표시합니다.",
+  "add_selected_communities": "선택한 커뮤니티 추가",
+  "removed_starter_communities": "더 이상 기본 커뮤니티에 포함되지 않습니다. 최신 기본값으로 전환하도록 선택하지 않는 한 구독은 변경되지 않습니다.",
+  "keep_current_subscriptions": "내 구독 유지",
+  "use_latest_starter_set": "최신 기본 커뮤니티로 전환",
+  "starter_replacement_safety": "Seedit이 이전에 기본으로 구독시킨 커뮤니티만 삭제할 수 있습니다. 직접 추가한 구독은 항상 유지됩니다."
 }

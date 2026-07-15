@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Bu topluluğu zaten görüntülüyorsunuz",
   "advanced": "gelişmiş",
-  "p2p_stats": "p2p istatistikleri"
+  "p2p_stats": "p2p istatistikleri",
+  "starter_subscriptions_updated": "Seedit platformunun varsayılan toplulukları değişti.",
+  "starter_subscriptions_change_summary": "{{added}} eklendi, {{removed}} kaldırıldı.",
+  "starter_communities": "varsayılan topluluklar",
+  "review_changes": "değişiklikleri gözden geçir",
+  "starter_communities_explanation": "Yeni Seedit hesapları varsayılan olarak bu topluluklara abone olur. Aşağıdaki seçeneklerden birini belirlemediğiniz sürece abonelikleriniz değişmez.",
+  "starter_list_revision": "varsayılan topluluklar revizyonu {{revision}}",
+  "starter_list_offline_fallback": "Varsayılan topluluklar yenilenemedi; yerleşik kopya gösteriliyor.",
+  "add_selected_communities": "seçili toplulukları ekle",
+  "removed_starter_communities": "Artık varsayılan topluluklar arasında değil. En son varsayılanlara geçmeyi seçmediğiniz sürece abonelikleriniz değişmeden kalır.",
+  "keep_current_subscriptions": "aboneliklerimi koru",
+  "use_latest_starter_set": "en son varsayılan topluluklara geç",
+  "starter_replacement_safety": "Yalnızca Seedit'in daha önce varsayılan olarak sizi abone ettiği topluluklar kaldırılabilir. Manuel abonelikleriniz her zaman korunur."
 }

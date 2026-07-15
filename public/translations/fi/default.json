@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Katsot jo tätä yhteisöä",
   "advanced": "edistyneet",
-  "p2p_stats": "p2p-tilastot"
+  "p2p_stats": "p2p-tilastot",
+  "starter_subscriptions_updated": "Seedit-palvelun oletusyhteisöt ovat muuttuneet.",
+  "starter_subscriptions_change_summary": "{{added}} lisätty, {{removed}} poistettu.",
+  "starter_communities": "oletusyhteisöt",
+  "review_changes": "tarkista muutokset",
+  "starter_communities_explanation": "Uudet Seedit-tilit tilaavat nämä yhteisöt oletuksena. Tilauksesi eivät muutu, ellet valitse jotakin alla olevista vaihtoehdoista.",
+  "starter_list_revision": "oletusyhteisöjen versio {{revision}}",
+  "starter_list_offline_fallback": "Oletusyhteisöjä ei voitu päivittää; näytetään sisäänrakennettu kopio.",
+  "add_selected_communities": "lisää valitut yhteisöt",
+  "removed_starter_communities": "Ei enää kuulu oletusyhteisöihin. Tilauksesi säilyvät ennallaan, ellet päätä siirtyä uusimpaan oletusvalikoimaan.",
+  "keep_current_subscriptions": "säilytä tilaukseni",
+  "use_latest_starter_set": "vaihda uusimpiin oletusyhteisöihin",
+  "starter_replacement_safety": "Vain yhteisöt, jotka Seedit on aiemmin tilannut puolestasi oletusarvoisesti, voidaan poistaa. Manuaaliset tilauksesi säilytetään aina."
 }

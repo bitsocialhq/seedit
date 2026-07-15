@@ -5,6 +5,7 @@ import { Comment, useAccount, useAccountComments, useComment, useCommunity } fro
 import findTopParentCidOfReply from '../../lib/utils/cid-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
+import { getCanonicalCommunityPostRedirectPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
@@ -170,7 +171,7 @@ const Post = ({ post }: { post: Comment }) => {
             <div className={styles.singleCommentInfobar}>
               <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
               <div className={styles.singleCommentInfobarLink}>
-                <Link to={`/s/${communityAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+                <Link to={communityAddress && postCid ? getCommunityPostPath(communityAddress, postCid) : '/'}>{t('single_comment_link')}</Link> →
               </div>
             </div>
           )}
@@ -230,7 +231,7 @@ const PostWithContext = ({ post }: { post: Comment }) => {
         <div className={styles.singleCommentInfobar}>
           <div className={styles.singleCommentInfobarText}>{t('single_comment_notice')}</div>
           <div className={styles.singleCommentInfobarLink}>
-            <Link to={`/s/${communityAddress}/c/${postCid}`}>{t('single_comment_link')}</Link> →
+            <Link to={communityAddress && postCid ? getCommunityPostPath(communityAddress, postCid) : '/'}>{t('single_comment_link')}</Link> →
           </div>
         </div>
         <div className={styles.replies}>
@@ -244,9 +245,10 @@ const PostWithContext = ({ post }: { post: Comment }) => {
 const PostPage = () => {
   const params = useParams();
   const location = useLocation();
+  const locationSearch = location.search;
   const navigate = useNavigate();
   const isInPendingPostView = isPendingPostView(location.pathname, params);
-  const isInPostContextView = isPostContextView(location.pathname, params, location.search);
+  const isInPostContextView = isPostContextView(location.pathname, params, locationSearch);
 
   // pending post
   const { accountComments } = useAccountComments();
@@ -275,19 +277,28 @@ const PostPage = () => {
   useEffect(() => {
     if (pendingPost?.cid && pendingPost?.subplebbitAddress) {
       if (resetFeed) resetFeed();
-      navigate(`/s/${pendingPost?.subplebbitAddress}/c/${pendingPost?.cid}`, { replace: true });
+      navigate(getCommunityPostPath(pendingPost.subplebbitAddress, pendingPost.cid), { replace: true });
     }
   }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
 
-  const { commentCid, communityAddress } = params;
+  const { commentCid } = params;
+  const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
   let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;
   }
-  const _communityAddr = isInPendingPostView ? pendingPost?.subplebbitAddress : communityAddress;
-  const community = useCommunity(_communityAddr ? { community: getCommunityIdentifier(_communityAddr) } : undefined);
+  const postCommunityAddress = getCommentCommunityAddress(post);
+  const resolvedPostCommunityAddress = resolveCommunityRouteAddress(postCommunityAddress);
+  const communityAddress = isInPendingPostView ? pendingPost?.subplebbitAddress : resolvedPostCommunityAddress || routeCommunityAddress;
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const canonicalPostRedirectPath = getCanonicalCommunityPostRedirectPath(params.communityAddress, postCommunityAddress, commentCid);
 
-  // over 18 warning for community served by a directory marked nsfw
+  useEffect(() => {
+    if (!isInPendingPostView && canonicalPostRedirectPath) {
+      navigate(`${canonicalPostRedirectPath}${locationSearch}`, { replace: true });
+    }
+  }, [canonicalPostRedirectPath, isInPendingPostView, locationSearch, navigate]);
+
   const { hasAcceptedWarning } = useContentOptionsStore();
   const isNsfwCommunity = useIsNsfwCommunity(communityAddress || '');
 
@@ -305,7 +316,7 @@ const PostPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [commentCid, communityAddress, accountCommentIndex]);
+  }, [commentCid, routeCommunityAddress, accountCommentIndex]);
 
   // Derive whether to show error directly from current post state
   const shouldShowErrorToUser = Boolean(post?.error && ((post?.replyCount > 0 && post?.replies?.length === 0) || post?.state === 'failed'));

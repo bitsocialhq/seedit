@@ -1,8 +1,10 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSubscribe } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useSubscribe, type Account } from '@bitsocial/bitsocial-react-hooks';
 import styles from './subscribe-button.module.css';
 import { isAuthorView, isProfileView, isPendingPostView } from '../../lib/utils/view-utils';
+import { persistStarterAccountUpdate } from '../../lib/utils/starter-account-persistence';
+import { leaveStarterSubscription, type SeeditStarterSubscriptions } from '../../lib/utils/starter-subscriptions';
 
 interface subscribeButtonProps {
   address: string | undefined;
@@ -11,6 +13,7 @@ interface subscribeButtonProps {
 
 const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
   const { subscribe, subscribed, unsubscribe } = useSubscribe({ communityAddress: address });
+  const account = useAccount() as (Account & { seeditStarterSubscriptions?: SeeditStarterSubscriptions }) | undefined;
   const { t } = useTranslation();
   const location = useLocation();
   const params = useParams();
@@ -20,16 +23,32 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
   const subplebbitPageString = subscribed ? `${t('leave')}` : `${t('join')}`;
   const authorPageString = '+ friends'; // TODO: add functionality once implemented in backend
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (isInAuthorView) return; // TODO: remove once implemented in backend
 
-    if (subscribed === false) {
-      subscribe();
-    } else if (subscribed === true) {
-      unsubscribe();
-      if (onUnsubscribe && address) {
-        onUnsubscribe(address);
+    try {
+      if (subscribed === false) {
+        await subscribe();
+      } else if (subscribed === true) {
+        if (address && account) {
+          await persistStarterAccountUpdate(account.id, (currentAccount) => {
+            const { subscriptions, provenance } = leaveStarterSubscription({
+              subscriptions: currentAccount.subscriptions ?? [],
+              provenance: currentAccount.seeditStarterSubscriptions,
+              address,
+            });
+            return provenance ? { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance } : { ...currentAccount, subscriptions };
+          });
+        } else {
+          await unsubscribe();
+        }
+        if (onUnsubscribe && address) {
+          onUnsubscribe(address);
+        }
       }
+    } catch (error) {
+      console.error('Subscription update error:', error);
+      alert(error instanceof Error ? error.message : t('failed'));
     }
   };
 

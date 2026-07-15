@@ -1,0 +1,119 @@
+.page {
+  max-width: 920px;
+  margin: 8px auto 48px;
+  padding: 0 8px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.infobar {
+  padding: 8px 10px;
+  border: 1px solid var(--border-orange);
+  background: var(--background-orange);
+}
+
+.infobar h1,
+.removed h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.infobar p,
+.removed p {
+  margin: 3px 0;
+}
+
+.revision {
+  opacity: 0.75;
+}
+
+.warning,
+.removed {
+  margin: 7px 0;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  background: var(--background-secondary);
+}
+
+.removed ul {
+  margin: 5px 0 0 18px;
+  padding: 0;
+}
+
+.list {
+  margin-top: 7px;
+  border-top: 1px solid var(--border);
+}
+
+.community {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 4px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-top: 0;
+  background: var(--background);
+  cursor: pointer;
+}
+
+.community input {
+  margin-top: 2px;
+}
+
+.community a {
+  color: var(--link);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.community small,
+.description {
+  display: block;
+  margin-top: 2px;
+}
+
+.community small {
+  opacity: 0.7;
+}
+
+.newLabel {
+  margin-left: 6px;
+  padding: 1px 3px;
+  color: var(--text);
+  background: var(--background-orange);
+  border: 1px solid var(--border-orange);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.actions button {
+  padding: 4px 8px;
+  border: 1px solid var(--button-border-bottom);
+  background: var(--button-background-color);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.actions .primary {
+  outline: 2px solid var(--border-orange);
+  outline-offset: 1px;
+}
+
+.safety {
+  margin: 7px 0;
+  color: var(--text);
+}

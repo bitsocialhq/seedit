@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Вы уже просматриваете это сообщество",
   "advanced": "дополнительно",
-  "p2p_stats": "статистика p2p"
+  "p2p_stats": "статистика p2p",
+  "starter_subscriptions_updated": "Сообщества Seedit по умолчанию изменились.",
+  "starter_subscriptions_change_summary": "Добавлено: {{added}}, удалено: {{removed}}.",
+  "starter_communities": "сообщества по умолчанию",
+  "review_changes": "просмотреть изменения",
+  "starter_communities_explanation": "Новые учетные записи Seedit по умолчанию подписываются на эти сообщества. Ваши подписки не изменятся, если вы не выберете один из вариантов ниже.",
+  "starter_list_revision": "редакция сообществ по умолчанию {{revision}}",
+  "starter_list_offline_fallback": "Не удалось обновить сообщества по умолчанию; показывается встроенная копия.",
+  "add_selected_communities": "добавить выбранные сообщества",
+  "removed_starter_communities": "Больше не входит в число сообществ по умолчанию. Ваши подписки останутся без изменений, если вы не решите перейти на последние настройки по умолчанию.",
+  "keep_current_subscriptions": "сохранить мои подписки",
+  "use_latest_starter_set": "переключиться на последние сообщества по умолчанию",
+  "starter_replacement_safety": "Можно удалить только сообщества, на которые Seedit ранее подписал вас по умолчанию. Ваши ручные подписки всегда сохраняются."
 }

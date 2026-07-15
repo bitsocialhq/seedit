@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Vous consultez déjà cette communauté",
   "advanced": "avancé",
-  "p2p_stats": "statistiques p2p"
+  "p2p_stats": "statistiques p2p",
+  "starter_subscriptions_updated": "Les communautés par défaut de Seedit ont changé.",
+  "starter_subscriptions_change_summary": "{{added}} ajoutés, {{removed}} supprimés.",
+  "starter_communities": "communautés par défaut",
+  "review_changes": "examiner les modifications",
+  "starter_communities_explanation": "Les nouveaux comptes Seedit sont abonnés à ces communautés par défaut. Vos abonnements ne changeront que si vous choisissez une option ci-dessous.",
+  "starter_list_revision": "révision des communautés par défaut {{revision}}",
+  "starter_list_offline_fallback": "Impossible d’actualiser les communautés par défaut ; affichage de la copie intégrée.",
+  "add_selected_communities": "ajouter les communautés sélectionnées",
+  "removed_starter_communities": "Ne figure plus parmi les communautés par défaut. Vos abonnements restent inchangés, sauf si vous choisissez de passer aux communautés par défaut les plus récentes.",
+  "keep_current_subscriptions": "conserver mes abonnements",
+  "use_latest_starter_set": "passer aux dernières communautés par défaut",
+  "starter_replacement_safety": "Seules les communautés auxquelles Seedit vous avait précédemment abonné par défaut peuvent être supprimées. Vos abonnements manuels sont toujours conservés."
 }

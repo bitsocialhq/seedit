@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "آپ پہلے سے ہی اس کمیونٹی کو دیکھ رہے ہیں",
   "advanced": "اعلیٰ",
-  "p2p_stats": "p2p شماریات"
+  "p2p_stats": "p2p شماریات",
+  "starter_subscriptions_updated": "Seedit کی ڈیفالٹ کمیونٹیز تبدیل ہو گئی ہیں۔",
+  "starter_subscriptions_change_summary": "{{added}} شامل کیے گئے، {{removed}} ہٹائے گئے۔",
+  "starter_communities": "ڈیفالٹ کمیونٹیز",
+  "review_changes": "تبدیلیوں کا جائزہ لیں",
+  "starter_communities_explanation": "نئے Seedit اکاؤنٹس ڈیفالٹ طور پر ان کمیونٹیز کو سبسکرائب کرتے ہیں۔ آپ کی سبسکرپشنز تب تک تبدیل نہیں ہوں گی جب تک آپ نیچے کوئی آپشن منتخب نہ کریں۔",
+  "starter_list_revision": "ڈیفالٹ کمیونٹیز کی نظر ثانی {{revision}}",
+  "starter_list_offline_fallback": "ڈیفالٹ کمیونٹیز ریفریش نہیں ہو سکیں؛ بلٹ اِن نقل دکھائی جا رہی ہے۔",
+  "add_selected_communities": "منتخب کمیونٹیز شامل کریں",
+  "removed_starter_communities": "اب ڈیفالٹ کمیونٹیز میں شامل نہیں ہے۔ آپ کی سبسکرپشنز اس وقت تک تبدیل نہیں ہوں گی جب تک آپ تازہ ترین ڈیفالٹس پر سوئچ کرنے کا انتخاب نہ کریں۔",
+  "keep_current_subscriptions": "میری سبسکرپشنز برقرار رکھیں",
+  "use_latest_starter_set": "تازہ ترین ڈیفالٹ کمیونٹیز پر جائیں",
+  "starter_replacement_safety": "صرف وہی کمیونٹیز ہٹائی جا سکتی ہیں جن کی رکنیت Seedit نے پہلے آپ کے لیے بطور ڈیفالٹ لی تھی۔ آپ کی دستی سبسکرپشنز ہمیشہ برقرار رکھی جاتی ہیں۔"
 }

@@ -8,6 +8,7 @@ import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
 import getShortAddress from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
+import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
@@ -471,7 +472,7 @@ const SubmitPage = () => {
   const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
 
   useEffect(() => {
-    setPublishPostStore({ communityAddress: params.communityAddress || '' } as any);
+    setPublishPostStore({ communityAddress: resolveCommunityRouteAddress(params.communityAddress) || '' } as any);
   }, [params.communityAddress, setPublishPostStore]);
 
   const selectedCommunityData = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
@@ -529,7 +530,7 @@ const SubmitPage = () => {
             link: communityTitle || shortAddress || 'seedit',
           }}
           components={{
-            1: shortAddress ? <Link key='submit_to_link' to={`/s/${communityAddress}`} className={styles.location} /> : <span key='submit_to_span' />,
+            1: shortAddress ? <Link key='submit_to_link' to={getCommunityPath(communityAddress)} className={styles.location} /> : <span key='submit_to_span' />,
           }}
         />
       </h1>

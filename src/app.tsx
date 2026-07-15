@@ -21,6 +21,7 @@ import SubmitPage from './views/submit-page';
 import CommunityView from './views/community';
 import CommunitySettings from './views/community-settings';
 import Communities from './views/communities';
+import StarterSubscriptions from './views/starter-subscriptions/starter-subscriptions';
 import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
@@ -92,8 +93,8 @@ const App = () => {
             <Route path='/about' element={<AboutView />} />
             <Route path='/submit' element={<SubmitPage />} />
 
-            <Route path='/s/:communityAddress/c/:commentCid' element={<PostPage />} />
-            <Route path='/s/:communityAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/s/:communityAddress/comments/:commentCid' element={<PostPage />} />
+            <Route path='/s/:communityAddress/comments/:commentCid/about' element={<AboutView />} />
 
             <Route path='/s/:communityAddress/submit' element={<SubmitPage />} />
             <Route path='/s/:communityAddress/about' element={<AboutView />} />
@@ -108,7 +109,7 @@ const App = () => {
 
             <Route path='/profile/about' element={<AboutView />} />
 
-            <Route path='/u/:authorAddress/c/:commentCid/about' element={<AboutView />} />
+            <Route path='/u/:authorAddress/comments/:commentCid/about' element={<AboutView />} />
 
             <Route path='/inbox' element={<Inbox />} />
             <Route path='/inbox/unread' element={<Inbox />} />
@@ -116,6 +117,7 @@ const App = () => {
             <Route path='/inbox/postreplies' element={<Inbox />} />
 
             <Route path='/communities' element={<Communities />} />
+            <Route path='/communities/defaults' element={<StarterSubscriptions />} />
             <Route path='/communities/subscriber' element={<Communities />} />
             <Route path='/communities/moderator' element={<Communities />} />
             <Route path='/communities/admin' element={<Communities />} />
@@ -147,9 +149,9 @@ const App = () => {
               <Route path='submitted' element={<Profile.Submitted />} />
             </Route>
 
-            <Route path='/u/:authorAddress/c/:commentCid?/:sortType?/:timeFilterName?' element={<Author />} />
-            <Route path='/u/:authorAddress/c/:commentCid?/comments/:sortType?/:timeFilterName?' element={<Author />} />
-            <Route path='/u/:authorAddress/c/:commentCid?/submitted/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/comments/:sortType?/:timeFilterName?' element={<Author />} />
+            <Route path='/u/:authorAddress/comments/:commentCid?/submitted/:sortType?/:timeFilterName?' element={<Author />} />
 
             <Route path='*' element={<NotFound />} />
             <Route path='/not-found' element={<NotFound />} />

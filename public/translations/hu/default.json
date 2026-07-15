@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Már ezt a közösséget nézed",
   "advanced": "fejlett",
-  "p2p_stats": "p2p-statisztika"
+  "p2p_stats": "p2p-statisztika",
+  "starter_subscriptions_updated": "A Seedit alapértelmezett közösségei megváltoztak.",
+  "starter_subscriptions_change_summary": "{{added}} hozzáadva, {{removed}} eltávolítva.",
+  "starter_communities": "alapértelmezett közösségek",
+  "review_changes": "módosítások áttekintése",
+  "starter_communities_explanation": "Az új Seedit-fiókok alapértelmezés szerint feliratkoznak ezekre a közösségekre. A feliratkozásaid nem változnak, hacsak nem választasz egy lehetőséget alább.",
+  "starter_list_revision": "alapértelmezett közösségek változata {{revision}}",
+  "starter_list_offline_fallback": "Nem sikerült frissíteni az alapértelmezett közösségeket; a beépített másolat jelenik meg.",
+  "add_selected_communities": "kiválasztott közösségek hozzáadása",
+  "removed_starter_communities": "Már nem tartozik az alapértelmezett közösségek közé. A feliratkozásaid változatlanok maradnak, hacsak nem váltasz a legújabb alapértelmezett közösségekre.",
+  "keep_current_subscriptions": "feliratkozásaim megtartása",
+  "use_latest_starter_set": "váltás a legújabb alapértelmezett közösségekre",
+  "starter_replacement_safety": "Csak azok a közösségek távolíthatók el, amelyekre a Seedit korábban alapértelmezetten feliratkoztatott. A kézi feliratkozásaid mindig megmaradnak."
 }

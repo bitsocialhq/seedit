@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "আপনি ইতিমধ্যে এই সম্প্রদায়টি দেখছেন",
   "advanced": "উন্নত",
-  "p2p_stats": "p2p পরিসংখ্যান"
+  "p2p_stats": "p2p পরিসংখ্যান",
+  "starter_subscriptions_updated": "Seedit-এর ডিফল্ট কমিউনিটিগুলো পরিবর্তিত হয়েছে।",
+  "starter_subscriptions_change_summary": "{{added}}টি যোগ করা হয়েছে, {{removed}}টি সরানো হয়েছে।",
+  "starter_communities": "পূর্বনির্ধারিত কমিউনিটিগুলো",
+  "review_changes": "পরিবর্তনগুলি পর্যালোচনা করুন",
+  "starter_communities_explanation": "নতুন Seedit অ্যাকাউন্টগুলো ডিফল্টভাবে এই কমিউনিটিগুলোতে সাবস্ক্রাইব করে। নিচের কোনো বিকল্প বেছে না নিলে আপনার সাবস্ক্রিপশনগুলো পরিবর্তন হবে না।",
+  "starter_list_revision": "পূর্বনির্ধারিত কমিউনিটিগুলোর সংশোধন {{revision}}",
+  "starter_list_offline_fallback": "ডিফল্ট কমিউনিটিগুলো হালনাগাদ করা যায়নি; অন্তর্নির্মিত কপিটি দেখানো হচ্ছে।",
+  "add_selected_communities": "নির্বাচিত কমিউনিটিগুলো যোগ করুন",
+  "removed_starter_communities": "ডিফল্ট কমিউনিটিগুলোর মধ্যে আর নেই। আপনি সর্বশেষ ডিফল্ট সেটে স্যুইচ করার সিদ্ধান্ত না নিলে আপনার সাবস্ক্রিপশন অপরিবর্তিত থাকবে।",
+  "keep_current_subscriptions": "আমার সাবস্ক্রিপশনগুলো রাখুন",
+  "use_latest_starter_set": "সর্বশেষ ডিফল্ট কমিউনিটিগুলোতে পরিবর্তন করুন",
+  "starter_replacement_safety": "শুধু যেসব কমিউনিটিতে Seedit আগে আপনাকে ডিফল্টভাবে সাবস্ক্রাইব করেছিল সেগুলোই সরানো যাবে। আপনার হাতে করা সাবস্ক্রিপশনগুলো সবসময় রাখা হবে।"
 }

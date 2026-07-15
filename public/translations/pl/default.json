@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Już przeglądasz tę społeczność",
   "advanced": "zaawansowane",
-  "p2p_stats": "statystyki p2p"
+  "p2p_stats": "statystyki p2p",
+  "starter_subscriptions_updated": "Domyślne społeczności Seedit uległy zmianie.",
+  "starter_subscriptions_change_summary": "Dodano: {{added}}, usunięto: {{removed}}.",
+  "starter_communities": "domyślne społeczności",
+  "review_changes": "przejrzyj zmiany",
+  "starter_communities_explanation": "Nowe konta Seedit domyślnie subskrybują te społeczności. Twoje subskrypcje nie zmienią się, chyba że wybierzesz jedną z poniższych opcji.",
+  "starter_list_revision": "wersja domyślnych społeczności {{revision}}",
+  "starter_list_offline_fallback": "Nie udało się odświeżyć domyślnych społeczności; wyświetlana jest wbudowana kopia.",
+  "add_selected_communities": "dodaj wybrane społeczności",
+  "removed_starter_communities": "Nie należy już do domyślnych społeczności. Twoje subskrypcje pozostaną bez zmian, chyba że zdecydujesz się przełączyć na najnowsze ustawienia domyślne.",
+  "keep_current_subscriptions": "zachowaj moje subskrypcje",
+  "use_latest_starter_set": "przełącz na najnowsze domyślne społeczności",
+  "starter_replacement_safety": "Można usunąć tylko społeczności, do których Seedit wcześniej domyślnie Cię zapisał. Twoje ręczne subskrypcje są zawsze zachowywane."
 }

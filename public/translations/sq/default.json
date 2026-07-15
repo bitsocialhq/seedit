@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "Ju po shikoni tashmë këtë komunitet",
   "advanced": "e përparuar",
-  "p2p_stats": "statistika p2p"
+  "p2p_stats": "statistika p2p",
+  "starter_subscriptions_updated": "Komunitetet e parazgjedhura të Seedit kanë ndryshuar.",
+  "starter_subscriptions_change_summary": "{{added}} u shtuan, {{removed}} u hoqën.",
+  "starter_communities": "komunitetet e parazgjedhura",
+  "review_changes": "shqyrto ndryshimet",
+  "starter_communities_explanation": "Llogaritë e reja Seedit abonohen në këto komunitete si parazgjedhje. Abonimet tuaja nuk do të ndryshojnë nëse nuk zgjidhni një nga opsionet më poshtë.",
+  "starter_list_revision": "rishikimi i komuniteteve të parazgjedhura {{revision}}",
+  "starter_list_offline_fallback": "Komunitetet e parazgjedhura nuk mund të rifreskoheshin; po shfaqet kopja e integruar.",
+  "add_selected_communities": "shto komunitetet e zgjedhura",
+  "removed_starter_communities": "Nuk është më ndër komunitetet e parazgjedhura. Abonimet tuaja mbeten të pandryshuara, përveçse nëse zgjidhni të kaloni te parazgjedhjet më të fundit.",
+  "keep_current_subscriptions": "mbaj abonimet e mia",
+  "use_latest_starter_set": "kalo te komunitetet më të fundit të parazgjedhura",
+  "starter_replacement_safety": "Mund të hiqen vetëm komunitetet ku Seedit ju abonoi më parë si parazgjedhje. Abonimet tuaja manuale ruhen gjithmonë."
 }

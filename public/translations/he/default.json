@@ -381,5 +381,17 @@
   "no_gods_no_global_admins": "...no gods, no global admins.",
   "already_in_community": "אתה כבר צופה בקהילה זו",
   "advanced": "מתקדם",
-  "p2p_stats": "סטטיסטיקת p2p"
+  "p2p_stats": "סטטיסטיקת p2p",
+  "starter_subscriptions_updated": "קהילות ברירת המחדל של Seedit השתנו.",
+  "starter_subscriptions_change_summary": "{{added}} נוספו, {{removed}} הוסרו.",
+  "starter_communities": "קהילות ברירת מחדל",
+  "review_changes": "בדיקת השינויים",
+  "starter_communities_explanation": "חשבונות Seedit חדשים נרשמים לקהילות האלה כברירת מחדל. המינויים שלך לא ישתנו אלא אם תבחר באחת האפשרויות שלמטה.",
+  "starter_list_revision": "מהדורת קהילות ברירת המחדל {{revision}}",
+  "starter_list_offline_fallback": "לא ניתן לרענן את קהילות ברירת המחדל; מוצג העותק המובנה.",
+  "add_selected_communities": "הוספת הקהילות שנבחרו",
+  "removed_starter_communities": "כבר לא בין קהילות ברירת המחדל. המינויים שלך יישארו ללא שינוי, אלא אם תבחר לעבור לברירות המחדל העדכניות ביותר.",
+  "keep_current_subscriptions": "שמירת המינויים שלי",
+  "use_latest_starter_set": "מעבר לקהילות ברירת המחדל העדכניות",
+  "starter_replacement_safety": "אפשר להסיר רק קהילות ש-Seedit רשם אותך אליהן כברירת מחדל בעבר. המינויים הידניים שלך נשמרים תמיד."
 }
