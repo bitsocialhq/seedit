@@ -9,17 +9,17 @@ import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
+import { useStarterCommunityList } from '../../hooks/use-default-subscriptions';
 import FeedFooter from '../../components/feed-footer';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
 import { sortTypes } from '../../constants/sort-types';
+import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
-
-type SubscriptionState = 'loading' | 'noSubscriptions' | 'hasSubscriptions';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -27,8 +27,9 @@ const Home = () => {
   const subscriptions = account?.subscriptions ?? [];
   const communityAddresses = subscriptions;
   const { isCheckingAccount } = useAutoSubscribeStore();
+  const { loading: starterListLoading } = useStarterCommunityList();
   const accountAddress = account?.author?.address;
-  const isCheckingSubscriptions = !accountAddress || isCheckingAccount(accountAddress);
+  const isCheckingSubscriptions = starterListLoading || !accountAddress || isCheckingAccount(accountAddress);
 
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -240,12 +241,13 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [isCheckingSubscriptions, accountAddress]);
 
-  let subscriptionState: SubscriptionState = 'loading';
-  if (searchQuery || subscriptions.length > 0 || (feed && feed.length > 0)) {
-    subscriptionState = 'hasSubscriptions';
-  } else if (!isCheckingSubscriptions && feed?.length === 0 && safeToShowNoSubscriptions) {
-    subscriptionState = 'noSubscriptions';
-  }
+  const subscriptionState = getHomeSubscriptionState({
+    hasSearchQuery: Boolean(searchQuery),
+    subscriptionCount: subscriptions.length,
+    feedLength: feed?.length,
+    isCheckingSubscriptions,
+    safeToShowNoSubscriptions,
+  });
 
   return (
     <div>
