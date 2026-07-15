@@ -29,15 +29,14 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
     if (subscribed === false) {
       await subscribe();
     } else if (subscribed === true) {
-      if (address && account?.seeditStarterSubscriptions) {
+      if (address && account) {
         await persistStarterAccountUpdate(account.id, (currentAccount) => {
-          if (!currentAccount.seeditStarterSubscriptions) return currentAccount;
           const { subscriptions, provenance } = leaveStarterSubscription({
             subscriptions: currentAccount.subscriptions ?? [],
             provenance: currentAccount.seeditStarterSubscriptions,
             address,
           });
-          return { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance };
+          return provenance ? { ...currentAccount, subscriptions, seeditStarterSubscriptions: provenance } : { ...currentAccount, subscriptions };
         });
       } else {
         await unsubscribe();

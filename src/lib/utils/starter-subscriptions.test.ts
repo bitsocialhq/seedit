@@ -208,6 +208,18 @@ describe('starter-subscription update choices', () => {
 });
 
 describe('manual subscription changes', () => {
+  it('removes a subscription even if starter provenance disappeared before the write', () => {
+    expect(
+      leaveStarterSubscription({
+        subscriptions: ['manual.bso', 'old.bso'],
+        address: 'old.bso',
+      }),
+    ).toEqual({
+      subscriptions: ['manual.bso'],
+      provenance: undefined,
+    });
+  });
+
   it('removes a manually left address from subscriptions and managed provenance', () => {
     expect(
       leaveStarterSubscription({

@@ -30,8 +30,13 @@ interface AddSelectedStarterSubscriptionsInput extends StarterSubscriptionsInput
 
 interface ManualLeaveStarterSubscriptionInput {
   subscriptions: readonly string[];
-  provenance: SeeditStarterSubscriptions;
+  provenance?: SeeditStarterSubscriptions;
   address: string;
+}
+
+interface ManualLeaveStarterSubscriptionResult {
+  subscriptions: string[];
+  provenance?: SeeditStarterSubscriptions;
 }
 
 const uniqueAddresses = (addresses: readonly string[]): string[] => {
@@ -187,13 +192,15 @@ export const replacePreviousStarterSubscriptions = ({ subscriptions, provenance,
 };
 
 /** Leaving manually also relinquishes starter ownership, so a later manual rejoin stays manual. */
-export const leaveStarterSubscription = ({ subscriptions, provenance, address }: ManualLeaveStarterSubscriptionInput): StarterSubscriptionsResult => {
-  const currentProvenance = normalizeProvenance(provenance);
+export const leaveStarterSubscription = ({ subscriptions, provenance, address }: ManualLeaveStarterSubscriptionInput): ManualLeaveStarterSubscriptionResult => {
+  const currentProvenance = provenance ? normalizeProvenance(provenance) : undefined;
   return {
     subscriptions: uniqueAddresses(subscriptions).filter((subscription) => subscription !== address),
-    provenance: {
-      ...currentProvenance,
-      managedAddresses: currentProvenance.managedAddresses.filter((managedAddress) => managedAddress !== address),
-    },
+    provenance: currentProvenance
+      ? {
+          ...currentProvenance,
+          managedAddresses: currentProvenance.managedAddresses.filter((managedAddress) => managedAddress !== address),
+        }
+      : undefined,
   };
 };
