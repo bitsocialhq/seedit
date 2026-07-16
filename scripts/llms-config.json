@@ -21,6 +21,8 @@
   "docs": [
     "README.md",
     "AGENTS.md",
+    "PRODUCT.md",
+    "DESIGN.md",
     "src/AGENTS.md",
     "scripts/AGENTS.md",
     "docs/agent-playbooks/known-surprises.md",

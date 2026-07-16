@@ -10,6 +10,8 @@ Use this as compiled context only. Source files, tests, manifests, and live/runt
 
 - [README.md](#readmemd)
 - [AGENTS.md](#agentsmd)
+- [PRODUCT.md](#productmd)
+- [DESIGN.md](#designmd)
 - [src/AGENTS.md](#srcagentsmd)
 - [scripts/AGENTS.md](#scriptsagentsmd)
 - [docs/agent-playbooks/known-surprises.md](#docsagent-playbooksknown-surprisesmd)
@@ -147,12 +149,14 @@ When CodeGraph MCP tools are available and `.codegraph/` exists, prefer them for
 
 | Situation | Required action |
 |---|---|
+| New UI designed or styled, or any visual/component/theme work (`src/components`, `src/views`, CSS modules, `src/themes.css`) | Read `DESIGN.md` first and follow it; self-review the diff against its Do/Don't list before verifying. Seedit is compact and old.reddit-inspired: dense rows, square legacy controls, theme tokens, familiar link hierarchy, and a practical sidebar rather than generic dashboard cards |
 | React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available, fix valid findings, then run `yarn build`, `yarn lint`, `yarn type-check`, and `yarn doctor` |
 | Visible UI or interaction changed | Verify in browser with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari; test desktop and mobile viewport; if existing browser state matters, confirm whether to use a fresh session or the contributor's current browser session |
+| Loading, navigation, feed rendering, or interaction speed matters (or performance may only look good on a fast dev machine) | Run a low-spec pass: throttle a Chromium `playwright-cli` session with `./scripts/pw-throttle.sh <session> mid` (or `low`), then verify. Chromium only. See `docs/agent-playbooks/low-spec-verification.md` |
 | `package.json` changed | Run `corepack yarn install` to keep `yarn.lock` in sync |
 | Dependencies or import graph changed | Run `yarn knip` as an advisory manifest/import audit |
 | Translation key/value changed | Use the `translate` skill (spawns parallel `translator` subagents); for manual script operations see `docs/agent-playbooks/translations.md` |
-| Public-facing English content or AI context changed (`README.md`, `index.html`, `AGENTS.md`, docs pages, or `scripts/generate-llms-files.mjs`) | Run `yarn llms:generate`; inspect and commit any resulting changes to `public/llms*.txt` so LLM indexes stay current |
+| Public-facing English content or AI context changed (`README.md`, `index.html`, `AGENTS.md`, `PRODUCT.md`, `DESIGN.md`, docs pages, or `scripts/generate-llms-files.mjs`) | Run `yarn llms:generate`; inspect and commit any resulting changes to `public/llms*.txt` so LLM indexes stay current |
 | Bug report | Reproduce the reported behavior or establish the defect from conclusive source/runtime evidence before editing; for a specific file/line, also start with the git history scan in `docs/agent-playbooks/bug-investigation.md` |
 | `CHANGELOG.md`, `scripts/release-body.js`, or package version changed | Run `yarn changelog` if release notes need regeneration |
 | Long-running task spans multiple sessions, handoffs, or spawned agents | Use `docs/agent-playbooks/long-running-agent-workflow.md`, keep a machine-readable feature list plus a progress log, and run `./scripts/agent-init.sh` before starting a fresh feature slice |
@@ -207,6 +211,14 @@ src/
 - Avoid boolean flag soup for complex flows; model state clearly in Zustand.
 - Use React Router for navigation; no manual history manipulation.
 
+### Design Rules
+
+- Read `DESIGN.md` before designing, styling, or adding UI, and self-review the diff against its Do/Don't list before verification.
+- Preserve Seedit's compact old.reddit-inspired interaction language: dense feed rows, familiar voting and metadata order, square legacy controls, small browser-native typography, and the existing light/dark theme variables.
+- Use existing variables in `src/themes.css` before adding literal colors. Any new semantic token must work in both light and dark themes.
+- Do not introduce generic dashboard cards, rounded pills, decorative gradients, glass effects, soft elevation, oversized empty layouts, or crypto-first styling on routine browsing surfaces.
+- Keep community identity and user ownership inspectable: UI must not obscure which address, subscription, or moderation boundary an action affects.
+
 ### Code Organization Rules
 
 - Keep components focused; split large components.
@@ -248,6 +260,7 @@ src/
 - Do not commit or force-add local rebuild output. `build/` is the main generated build output in this repo; remove or restore generated output directories after local verification before committing.
 - For UI/visual changes, verify with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari.
 - Cover desktop and a mobile viewport flow in each browser engine when the change affects layout, touch behavior, or responsiveness.
+- When loading, navigation, feed rendering, or interaction speed matters, run a throttled Chromium pass with `./scripts/pw-throttle.sh <session> mid` (or `low`). Keep Firefox and WebKit checks unthrottled. See `docs/agent-playbooks/low-spec-verification.md`.
 - For browser automation and verification, default to a fresh isolated `playwright-cli` session for reproducibility.
 - If the task depends on existing auth, cookies, extensions, open tabs, or another live browser state, explicitly confirm whether to use a fresh isolated session or the contributor's current browser session.
 - Do not assume permission to drive the contributor's active personal browser session.
@@ -340,6 +353,205 @@ Use these only when relevant to the active task:
 - Skills/tools setup, MCP rationale, and the index of all committed skills/subagents: `docs/agent-playbooks/skills-and-tools.md`
 - Bug investigation workflow: `docs/agent-playbooks/bug-investigation.md`
 - Known surprises log: `docs/agent-playbooks/known-surprises.md`
+- Low-spec device verification (CPU/network throttling): `docs/agent-playbooks/low-spec-verification.md`
+```
+
+---
+
+## PRODUCT.md
+
+Source: https://github.com/bitsocialnet/seedit/blob/master/PRODUCT.md
+
+```markdown
+# Product
+
+## Register
+
+product
+
+## Users
+
+People who want a familiar Reddit-style discussion experience without a central platform administrator. They browse feeds, join independently operated communities, follow durable post links, and expect each subscription to keep pointing to the community they explicitly chose.
+
+## Product Purpose
+
+Seedit is a serverless, adminless Bitsocial client with an old.reddit-inspired interface. It should make peer-to-peer communities feel understandable and dependable while preserving user control over identity, subscriptions, discovery, and moderation boundaries.
+
+## Brand Personality
+
+Familiar, direct, independent. Seedit should feel dense and practical rather than promotional, with moments of personality coming from its established mascot and Reddit-like interaction language.
+
+## Anti-references
+
+- Interruptive adware-style prompts and recurring modals.
+- Modern Reddit patterns that blur subscriptions with algorithmic recommendations.
+- Generic dashboard cards, decorative gradients, glass effects, and oversized empty layouts.
+- Hidden identity or routing behavior that makes a joined community change underneath the user.
+
+## Design Principles
+
+1. A subscription is a durable choice of one community.
+2. Discovery can recommend without silently changing user-owned state.
+3. Prefer readable, inspectable identity over cosmetic URL shortcuts.
+4. Progressive disclosure should keep routine browsing uninterrupted.
+5. Reuse Seedit's compact old.reddit interaction vocabulary before adding new UI patterns.
+
+## Accessibility & Inclusion
+
+Preserve keyboard access, visible focus, semantic controls, reduced-motion preferences, readable contrast, responsive mobile behavior, and text labels that do not rely on color alone.
+```
+
+---
+
+## DESIGN.md
+
+Source: https://github.com/bitsocialnet/seedit/blob/master/DESIGN.md
+
+```markdown
+---
+version: alpha
+name: Seedit
+description: A decentralized community client with a compact old.reddit-inspired interface.
+colors:
+  light-page: "#ffffff"
+  light-header: "#cee3f8"
+  light-header-border: "#5f99cf"
+  light-link: "#0000ff"
+  light-action: "#336699"
+  light-muted: "#888888"
+  light-visited: "#551a8b"
+  dark-page: "#0f0f0f"
+  dark-surface: "#1f1f1f"
+  dark-muted-surface: "#3e3e3e"
+  dark-text: "#bfbfbf"
+  dark-link: "#7dafd8"
+  sprout-green: "#37bb15"
+typography:
+  body:
+    fontFamily: "Verdana, Arial, Helvetica, sans-serif"
+    fontSize: "10px"
+    fontWeight: 400
+    lineHeight: 1.3
+    letterSpacing: "normal"
+  post-title:
+    fontFamily: "Arial, Verdana, Helvetica, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.2
+    letterSpacing: "normal"
+  community-title:
+    fontFamily: "Arial, Verdana, Helvetica, sans-serif"
+    fontSize: "19px"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "normal"
+rounded:
+  legacy: "0"
+spacing:
+  compact: "2px"
+  control: "5px"
+  section: "10px"
+  sidebar-width: "300px"
+components:
+  header-tab:
+    backgroundColor: "{colors.light-header}"
+    textColor: "{colors.light-action}"
+    typography: "{typography.body}"
+    rounded: "{rounded.legacy}"
+    padding: "2px 6px 0"
+  post-title:
+    textColor: "{colors.light-link}"
+    typography: "{typography.post-title}"
+    rounded: "{rounded.legacy}"
+    padding: "0"
+  sidebar-box:
+    backgroundColor: "{colors.light-page}"
+    textColor: "{colors.light-muted}"
+    typography: "{typography.body}"
+    rounded: "{rounded.legacy}"
+    padding: "5px"
+---
+
+## Overview
+
+**Creative North Star: "The Familiar Community Front Page"**
+
+Seedit should make independently owned Bitsocial communities feel as immediately understandable as old Reddit. Its visual system is compact, browser-native, and content-first: small type, dense rows, familiar voting controls, blue links, narrow metadata, tabs, and a practical sidebar. Decentralized identity and loading state should enter through this established vocabulary instead of turning the product into a crypto dashboard.
+
+Light mode preserves the recognizable old.reddit blue-and-white palette. Dark mode is a careful token-level adaptation of the same hierarchy, with the sprout green used as a restrained identity and status accent. Existing CSS variables in `src/themes.css` are the implementation source of truth.
+
+## Colors
+
+- **Page and content:** `--background`, `--background-markdown`, and `--text`.
+- **Header and selected navigation:** `--background-primary`, `--background-secondary`, `--border-primary`, and `--text-primary`.
+- **Links:** `--link`, `--link-primary`, and `--link-visited`; do not replace established link semantics with decorative brand color.
+- **Metadata and separators:** `--text-info`, `--gray-*`, and `--border-text`.
+- **Identity and positive state:** `--green`; in dark mode this resolves to the sprout asset's `#37bb15`.
+- **Warnings and moderation state:** use the existing red, orange, and yellow tokens according to their current semantic roles.
+
+### Named Rules
+
+**The Token Rule.** Use an existing theme variable before adding a literal color. If a new semantic role is unavoidable, define it for both light and dark themes in `src/themes.css`.
+
+**The Familiarity Rule.** Routine browsing should look like a community discussion client, not a blockchain explorer, generic SaaS dashboard, or marketing site.
+
+## Typography
+
+Verdana is the compact application font. Arial/Helvetica is used for larger post and community titles where the existing UI does so. Keep browser-native rendering and the established small sizes; do not add web fonts, display type, oversized headings, or spacious editorial typography to product surfaces.
+
+- **Application chrome and metadata:** generally `10px` to `12px` Verdana/Arial.
+- **Post title:** `16px`, normal weight.
+- **Community/sidebar title:** about `19px`, bold.
+- **Comment content:** small but readable, with the existing markdown line height.
+
+## Layout
+
+Seedit is deliberately dense. Feed rows place rank, vote controls, content, and metadata close together. Desktop reserves a `300px` right sidebar; mobile collapses or reorders existing structures instead of converting them into a card grid.
+
+- Use small increments already common in the codebase: `2px`, `5px`, and `10px`.
+- Keep feed and comment hierarchy visible without large whitespace bands.
+- Preserve text wrapping for long community names, addresses, titles, and translated labels.
+- At mobile widths, protect tap access and prevent horizontal overflow while retaining the compact hierarchy.
+
+## Elevation and Shapes
+
+The product is flat and square. Structure comes from theme backgrounds, 1px borders, dotted reply nesting guides, and legacy image assets. Avoid rounded cards, pills, glass, blur, gradients, soft shadows, and floating dashboard panels. A small radius or transition is acceptable only where it already communicates a specific interaction, such as spoiler reveal behavior; do not generalize it into a new visual language.
+
+## Components
+
+### Navigation
+
+Use compact lowercase tabs, plain text links, and the existing selected-tab border treatment. Keep primary destinations stable and do not replace them with oversized icon navigation.
+
+### Posts and Replies
+
+Preserve the established rank/vote/title/domain/tagline order. Titles are links, metadata stays secondary, moderation state remains explicit, and nested replies keep their dotted hierarchy. New P2P status or identity details should be short, inspectable, and subordinate to the discussion content.
+
+### Buttons and Forms
+
+Prefer the existing browser-native controls, text actions, sprite-backed voting controls, and legacy large sidebar buttons. Keep labels direct. Do not introduce pill buttons or decorative icon-only controls when a familiar text action exists.
+
+### Notices and Empty States
+
+Use inline notices or compact bordered boxes that fit the feed. Explain what happened and what the user can do next without promotional illustration, oversized whitespace, or repeated modal interruption.
+
+## Do's and Don'ts
+
+### Do
+
+- Start with the closest existing Seedit component and its light/dark theme behavior.
+- Preserve old.reddit information density and interaction order.
+- Keep community addresses, ownership, subscription changes, and moderation boundaries understandable.
+- Verify desktop and mobile layouts in light and dark themes.
+- Check keyboard access, visible focus, long text, and translated copy.
+
+### Don't
+
+- Do not modernize the interface for taste.
+- Do not add generic dashboard cards, rounded pills, glass panels, gradients, or oversized empty layouts.
+- Do not make decentralization or crypto styling dominate routine browsing.
+- Do not silently change a user's chosen community or hide which address a route or subscription represents.
+- Do not rely on color alone for identity, loading, error, moderation, or subscription state.
 ```
 
 ---
@@ -356,7 +568,8 @@ These rules apply to `src/**`. Follow the repo-root `AGENTS.md` first, then use 
 - Keep route composition in `src/views/`, reusable UI in `src/components/`, shared logic in `src/hooks/`, and shared app state in `src/stores/`.
 - Before adding new state, decide whether it belongs in render, a reusable hook, or a Zustand store. Do not duplicate the same state logic across views.
 - Use `@bitsocial/bitsocial-react-hooks` for data access. Do not add data-fetching `useEffect` calls or effects that only synchronize derived state.
-- When changing React UI logic, run `yarn build`, `yarn lint`, and `yarn type-check`. When changing layout or interaction, verify desktop and mobile behavior with `playwright-cli`.
+- Read `DESIGN.md` before visual, layout, component, or theme work. Preserve Seedit's compact old.reddit-inspired hierarchy and verify both light and dark themes.
+- When changing React UI logic, review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available before final verification. Run `yarn build`, `yarn lint`, `yarn type-check`, and `yarn doctor`. When changing layout or interaction, verify desktop and mobile behavior with `playwright-cli`.
 - Prefer extending nearby tests under `src/**/__tests__/` when touching already-covered behavior.
 ```
 
@@ -374,6 +587,7 @@ These rules apply to `scripts/**`. Follow the repo-root `AGENTS.md` first, then 
 - Keep scripts non-interactive and idempotent. Print the command, URL, branch, or path being acted on so failures are diagnosable.
 - Use repo-relative paths and environment variables instead of user-specific absolute paths.
 - For dev-server helpers, default to `https://seedit.localhost`, but allow a branch-scoped `*.seedit.localhost` route when the launcher is avoiding a Portless name collision. Respect the existing `PORTLESS=0` fallback instead of hard-coding alternate ports. If a flow intentionally bypasses Portless, override `AGENT_APP_URL` explicitly.
+- Keep browser-performance helpers explicit about their limits. CDP throttling is Chromium-only; Firefox and WebKit verification stays unthrottled.
 - Keep shell helpers thin. When logic becomes stateful or cross-platform, prefer a Node script.
 - Git and worktree helpers must validate input and default to safe operations.
 - If a helper deletes local branches automatically, document the exact eligibility checks and keep the behavior conservative.

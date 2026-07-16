@@ -60,6 +60,12 @@ echo "Creating branch $branch_name from $base_ref"
 echo "Creating worktree at $worktree_path"
 git worktree add "$worktree_path" -b "$branch_name" "$base_ref"
 
+if [ -f "$worktree_path/yarn.lock" ]; then
+  echo ""
+  echo "Installing dependencies in new worktree (corepack yarn install)..."
+  (cd "$worktree_path" && corepack yarn install)
+fi
+
 echo ""
 echo "Worktree ready."
 echo "Branch: $branch_name"

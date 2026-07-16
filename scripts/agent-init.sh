@@ -7,8 +7,34 @@ if [ "$#" -ne 0 ]; then
   exit 1
 fi
 
+get_default_app_url() {
+  if [ "${PORTLESS:-}" = "0" ]; then
+    echo "http://localhost:${PORT:-3000}"
+    return
+  fi
+
+  local branch branch_label
+
+  branch="$(git branch --show-current 2>/dev/null || true)"
+
+  if [ -n "$branch" ] && [ "$branch" != "master" ] && [ "$branch" != "main" ]; then
+    branch_label="$(
+      printf '%s' "$branch" \
+        | tr '[:upper:]' '[:lower:]' \
+        | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//; s/-+/-/g'
+    )"
+
+    if [ -n "$branch_label" ]; then
+      echo "https://${branch_label}.seedit.localhost"
+      return
+    fi
+  fi
+
+  echo "https://seedit.localhost"
+}
+
 wait_timeout="${AGENT_INIT_TIMEOUT_SECONDS:-60}"
-app_url="${AGENT_APP_URL:-https://seedit.localhost}"
+app_url="${AGENT_APP_URL:-$(get_default_app_url)}"
 
 repo_root="$(git rev-parse --show-toplevel)"
 log_dir="$repo_root/.playwright-cli"
