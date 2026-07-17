@@ -1011,7 +1011,6 @@ Source: https://github.com/bitsocialnet/seedit/blob/master/CHANGELOG.md
 ### Bug Fixes
 
 * **account editor:** page reload was missing when saving account edit, as well as auto navigate back to settings ([b6ee58f](https://github.com/plebbit/seedit/commit/b6ee58fe0a4872c2421f32500265a636d529b346))
-* correct SNS v1 URLs ([f863aab](https://github.com/plebbit/seedit/commit/f863aab91209b009f9d25db5d2d29fe65c1fe1f5))
 * **embeds:** make iframe width fix truly Safari-specific ([1badab4](https://github.com/plebbit/seedit/commit/1badab4a68e00eb916a5672ee63e89d5a16232a4))
 * **embeds:** Safari iframe sizing in media previews ([c983de5](https://github.com/plebbit/seedit/commit/c983de555032e0a9760c0344a98054c5800a32cb))
 * implement bidirectional sync between subplebbit form and JSON editor ([3d29e1f](https://github.com/plebbit/seedit/commit/3d29e1fa7fecfec5af1ae583021e9bc25d2089fb))
@@ -1687,14 +1686,12 @@ Source: https://github.com/bitsocialnet/seedit/blob/master/CHANGELOG.md
 
 ### Features
 
-* **address settings:** update setting for sol addresses, with guide on how to set up ([430c597](https://github.com/plebbit/seedit/commit/430c5970761e3e3fd0af03ce230a543cea6be3ab))
 * **context:** allow any number as post context, always showing the top level reply ([b9d050c](https://github.com/plebbit/seedit/commit/b9d050c87c45b2e1c541a4ac45e7f23b6e5490f7))
 * **mod menu:** community moderators can ban their users ([22beb4e](https://github.com/plebbit/seedit/commit/22beb4e0ea6a2c300422fa8a21b5f230af985ec0))
 * **post page:** hide reply form and display 'loading comments...' while the post is loading ([a068691](https://github.com/plebbit/seedit/commit/a06869196d236f51ab8bfffae46bdf08aefd95df))
 * **scripts:** add old versions to folders e.g. seedit.eth.limo/0.1.1 ([a384e7b](https://github.com/plebbit/seedit/commit/a384e7b845f6a6071f7cf0cfab3347d82c8d2528))
 * **settings:** add link to nft whitelist ([f174602](https://github.com/plebbit/seedit/commit/f174602c81bab926ece3adb45c3fd14338c2f953))
 * **settings:** users can add crypto wallets to their plebbit account ([75b25e7](https://github.com/plebbit/seedit/commit/75b25e74cd6dba73aae7b3385669c5a80b2c2c75))
-* **subplebbit settings:** add info on how to set up .sol crypto domain as sub address ([5f54bbe](https://github.com/plebbit/seedit/commit/5f54bbe07ad6bf5acd8c6ff02da3e976a0730be0))
 
 
 

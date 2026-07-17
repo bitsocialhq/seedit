@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { setAccount, useAccount, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import { getBrowserGatewayPkcOptions, getBrowserPureP2PPkcOptions, setPureP2PBrowserPreference } from '../../../lib/p2p-browser-config';
 import { canConfigureBrowserPureP2P, isBrowserPureP2PEnabled } from '../../../lib/p2p-runtime';
+import { getSupportedChainProviders } from '../../../lib/utils/chain-provider-utils';
 import styles from './advanced-settings.module.css';
 
 interface SettingsProps {
@@ -11,7 +12,6 @@ interface SettingsProps {
   mediaIpfsGatewayUrlRef?: RefObject<HTMLInputElement | null>;
   pubsubProvidersRef?: RefObject<HTMLTextAreaElement | null>;
   ethRpcRef?: RefObject<HTMLTextAreaElement | null>;
-  solRpcRef?: RefObject<HTMLTextAreaElement | null>;
   maticRpcRef?: RefObject<HTMLTextAreaElement | null>;
   avaxRpcRef?: RefObject<HTMLTextAreaElement | null>;
   httpRoutersRef?: RefObject<HTMLTextAreaElement | null>;
@@ -127,11 +127,10 @@ const HttpRoutersSettings = ({ httpRoutersRef }: SettingsProps) => {
   );
 };
 
-const BlockchainProvidersSettings = ({ ethRpcRef, solRpcRef, maticRpcRef, avaxRpcRef }: SettingsProps) => {
+const BlockchainProvidersSettings = ({ ethRpcRef, maticRpcRef, avaxRpcRef }: SettingsProps) => {
   const account = useAccount();
   const chainProviders = getChainProviders(account);
   const ethRpcDefaultValue = chainProviders?.['eth']?.urls?.join('\n');
-  const solRpcDefaultValue = chainProviders?.['sol']?.urls?.join('\n');
   const maticRpcDefaultValue = chainProviders?.['matic']?.urls?.join('\n');
   const avaxRpcDefaultValue = chainProviders?.['avax']?.urls?.join('\n');
 
@@ -147,18 +146,6 @@ const BlockchainProvidersSettings = ({ ethRpcRef, solRpcRef, maticRpcRef, avaxRp
           autoComplete='off'
           spellCheck='false'
           rows={chainProviders?.['eth']?.urls?.length || 3}
-        />
-      </div>
-      <span className={styles.settingTitle}>solana rpc, for .sol addresses</span>
-      <div>
-        <textarea
-          aria-label='Solana RPC URLs'
-          defaultValue={solRpcDefaultValue}
-          ref={solRpcRef}
-          autoCorrect='off'
-          autoComplete='off'
-          spellCheck='false'
-          rows={chainProviders?.['sol']?.urls?.length || 1}
         />
       </div>
       <span className={styles.settingTitle}>polygon rpc, for nft profile pics</span>
@@ -297,7 +284,6 @@ const AdvancedSettings = () => {
   const mediaIpfsGatewayUrlRef = useRef<HTMLInputElement>(null);
   const pubsubProvidersRef = useRef<HTMLTextAreaElement>(null);
   const ethRpcRef = useRef<HTMLTextAreaElement>(null);
-  const solRpcRef = useRef<HTMLTextAreaElement>(null);
   const maticRpcRef = useRef<HTMLTextAreaElement>(null);
   const avaxRpcRef = useRef<HTMLTextAreaElement>(null);
   const httpRoutersRef = useRef<HTMLTextAreaElement>(null);
@@ -313,7 +299,6 @@ const AdvancedSettings = () => {
     const pubsubKuboRpcClientsOptions = pubsubProvidersRef.current ? getTrimmedLines(pubsubProvidersRef.current.value) : protocolOptions?.pubsubKuboRpcClientsOptions;
 
     const ethRpcUrls = getTrimmedLines(ethRpcRef.current?.value);
-    const solRpcUrls = getTrimmedLines(solRpcRef.current?.value);
     const maticRpcUrls = getTrimmedLines(maticRpcRef.current?.value);
     const avaxRpcUrls = getTrimmedLines(avaxRpcRef.current?.value);
 
@@ -323,9 +308,8 @@ const AdvancedSettings = () => {
     const dataPath = p2pDataPathRef.current?.value.trim() || undefined;
     const pureP2PBrowserPreference = canConfigurePureP2PBrowser ? browserPureP2PEnabled : undefined;
 
-    const chainProviders: NonNullable<AccountProtocolOptions['chainProviders']> = { ...getChainProviders(account) };
+    const chainProviders: NonNullable<AccountProtocolOptions['chainProviders']> = getSupportedChainProviders(getChainProviders(account)) ?? {};
     if (ethRpcUrls?.length) chainProviders.eth = { urls: ethRpcUrls, chainId: 1 };
-    if (solRpcUrls?.length) chainProviders.sol = { urls: solRpcUrls, chainId: 1 };
     if (maticRpcUrls?.length) chainProviders.matic = { urls: maticRpcUrls, chainId: 137 };
     if (avaxRpcUrls?.length) chainProviders.avax = { urls: avaxRpcUrls, chainId: 43114 };
 
@@ -336,6 +320,7 @@ const AdvancedSettings = () => {
       httpRoutersOptions,
       pkcRpcClientsOptions,
       dataPath,
+      chainProviders: getSupportedChainProviders(protocolOptions?.chainProviders),
     };
 
     if (pureP2PBrowserPreference !== undefined) {
@@ -407,7 +392,7 @@ const AdvancedSettings = () => {
       <div className={styles.category}>
         <span className={styles.categoryTitle}>blockchain providers</span>
         <span className={styles.categorySettings}>
-          <BlockchainProvidersSettings ethRpcRef={ethRpcRef} solRpcRef={solRpcRef} maticRpcRef={maticRpcRef} avaxRpcRef={avaxRpcRef} />
+          <BlockchainProvidersSettings ethRpcRef={ethRpcRef} maticRpcRef={maticRpcRef} avaxRpcRef={avaxRpcRef} />
         </span>
       </div>
       <div className={`${styles.category} ${location.hash === '#fullNodeRpc' ? styles.highlightedSetting : ''}`} id='fullNodeRpc'>

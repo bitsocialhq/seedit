@@ -34,10 +34,8 @@ export const LEGACY_DEFAULT_SUBSCRIPTIONS = [
   'plebmusic.eth',
   'videos-livestreams-podcasts.eth',
   'weaponized-autism.eth',
-  'vzgworld.sol',
   'plebwhales.eth',
   'pleblore.eth',
-  'redditdeath.sol',
   'fatpeoplehate.eth',
   'reddit-screenshots.eth',
   'censorship-watch.eth',
@@ -57,13 +55,15 @@ export const LEGACY_DEFAULT_SUBSCRIPTIONS = [
   'bitcoinbrothers.eth',
   '💩posting.eth',
   'plebbrothers.eth',
-  'socomfy.sol',
   'plebshelpingplebs.eth',
   'decentralizedscam.eth',
   'plebbitai.eth',
 ] as const;
 
 const LEGACY_DEFAULT_SUBSCRIPTIONS_SET: ReadonlySet<string> = new Set(LEGACY_DEFAULT_SUBSCRIPTIONS);
+const SUPPORTED_NAME_SUFFIXES = ['.eth', '.bso'] as const;
+
+const isSupportedSubscriptionAddress = (address: string): boolean => !address.includes('.') || SUPPORTED_NAME_SUFFIXES.some((suffix) => address.endsWith(suffix));
 
 export interface DirectoryCodeReplacement {
   code: LegacyDirectoryCode;
@@ -97,16 +97,18 @@ const getLegacyDirectoryAddress = (entry: string): string | undefined => {
 };
 
 /**
- * Convert persisted directory-code subscriptions to fixed community addresses. Direct
- * address-only accounts are left untouched. Finding any retired multisub default migrates
- * that legacy cohort to the complete starter set while preserving unrelated addresses.
+ * Convert persisted directory-code subscriptions to fixed community addresses and discard
+ * unsupported name aliases. Supported direct-address-only accounts are left untouched.
+ * Finding any retired multisub default migrates that legacy cohort to the complete starter
+ * set while preserving unrelated supported addresses.
  */
 export const computeAddressCanonicalSubscriptionMigration = (subscriptions: string[] | undefined): AddressCanonicalMigrationResult => {
   const current = (subscriptions ?? []).filter((entry): entry is string => typeof entry === 'string');
   const hasDirectoryCodes = current.some((entry) => getLegacyDirectoryAddress(entry) !== undefined);
   const hasLegacyDefaults = current.some((entry) => LEGACY_DEFAULT_SUBSCRIPTIONS_SET.has(entry));
+  const hasUnsupportedNamedAddresses = current.some((entry) => !isSupportedSubscriptionAddress(entry));
 
-  if (!hasDirectoryCodes && !hasLegacyDefaults) {
+  if (!hasDirectoryCodes && !hasLegacyDefaults && !hasUnsupportedNamedAddresses) {
     return {
       next: current,
       changed: false,
@@ -140,7 +142,7 @@ export const computeAddressCanonicalSubscriptionMigration = (subscriptions: stri
   };
 
   current.forEach((entry, sourceIndex) => {
-    if (LEGACY_DEFAULT_SUBSCRIPTIONS_SET.has(entry)) {
+    if (LEGACY_DEFAULT_SUBSCRIPTIONS_SET.has(entry) || !isSupportedSubscriptionAddress(entry)) {
       removedLegacyDefaults.push(entry);
       return;
     }

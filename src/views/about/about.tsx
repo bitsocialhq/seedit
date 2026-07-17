@@ -133,10 +133,6 @@ export const FAQ = () => {
           name service such as{' '}
           <a href='https://ens.domains/' target='_blank' rel='noopener noreferrer'>
             ENS
-          </a>{' '}
-          or{' '}
-          <a href='https://v1.sns.id/' target='_blank' rel='noopener noreferrer'>
-            SNS
           </a>
           .
         </p>

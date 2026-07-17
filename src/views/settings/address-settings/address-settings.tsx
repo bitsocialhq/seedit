@@ -112,7 +112,7 @@ const AddressSettings = () => {
         <div className={styles.usernameInput}>
           <input
             type='text'
-            placeholder='address.eth/.sol'
+            placeholder='address.eth'
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck='false'
@@ -139,20 +139,6 @@ const AddressSettings = () => {
                 </li>
                 <li>once you own the address, go to its page, click on "records", then "edit records"</li>
                 <li>add a new text record with name "plebbit-author-address" and value: {account?.signer?.address}</li>
-              </ol>
-              steps to set a .sol user address:
-              <br />
-              <ol>
-                <li>
-                  go to{' '}
-                  <a href='https://v1.sns.id/' target='_blank' rel='noopener noreferrer'>
-                    v1.sns.id
-                  </a>{' '}
-                  and search the address
-                </li>
-                <li>once you own the address, go to your profile, click the address menu "...", then "create subdomain"</li>
-                <li>enter subdomain "plebbit-author-address" and create</li>
-                <li>go to subdomain, "content", change content to: {account?.signer?.address}</li>
               </ol>
             </div>
           )}

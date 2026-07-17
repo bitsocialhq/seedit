@@ -18,7 +18,7 @@ const getSubscriptionDisplayName = (subscription: string) => {
     return routeSegment;
   }
   const shortAddress = getShortAddress(subscription);
-  return shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress.includes('.sol') ? shortAddress.slice(0, -4) : shortAddress;
+  return shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress;
 };
 
 const CommunitiesDropdown = () => {

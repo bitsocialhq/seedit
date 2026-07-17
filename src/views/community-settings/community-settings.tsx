@@ -101,8 +101,9 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { address, setCommunitySettingsStore } = useCommunitySettingsStore();
 
   const alertCryptoAddressInfo = () => {
-    alert(`steps to set a .eth community address:\n1. go to app.ens.domains and search the address\n2.  once you own the address, go to its page, click on "records", then "edit records"\n3. add a new text record with name "subplebbit-address" and value: ${address}\n\n steps to set a .sol community address:\n1. go to v1.sns.id and search the address\n2. once you own the address, go to your profile, click the address menu "...", then "create subdomain"\n3. enter subdomain "subplebbit-address" and create\n4. go to subdomain, "content", change content to: ${address}
-    `);
+    alert(
+      `steps to set a .eth community address:\n1. go to app.ens.domains and search the address\n2. once you own the address, go to its page, click on "records", then "edit records"\n3. add a new text record with name "subplebbit-address" and value: ${address}`,
+    );
   };
 
   return (
