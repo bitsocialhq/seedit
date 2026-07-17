@@ -8,7 +8,6 @@ import useTheme from '../../hooks/use-theme';
 import { VersionWithCommit } from '../../components/version';
 import AccountSettings from './account-settings';
 import AddressSettings from './address-settings';
-import AvatarSettings from './avatar-settings';
 import AdvancedSettings from './advanced-settings';
 import P2pStats from './p2p-stats';
 import ContentOptions from './content-options';
@@ -190,12 +189,6 @@ const GeneralSettings = () => {
         <span className={styles.categoryTitle}>{t('theme')}</span>
         <span className={styles.categorySettings}>
           <ThemeSettings />
-        </span>
-      </div>
-      <div className={styles.category}>
-        <span className={styles.categoryTitle}>{t('avatar')}</span>
-        <span className={styles.categorySettings}>
-          <AvatarSettings />
         </span>
       </div>
       <div className={`${styles.category} ${location.hash === '#displayName' ? styles.highlightedSetting : ''}`} id='displayName'>

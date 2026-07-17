@@ -452,10 +452,6 @@ const Header = () => {
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
-  const communitySuggestedAvatarUrl = isInCommunityView && !isHiddenNsfwCommunity ? community?.suggested?.avatarUrl : undefined;
-  const mascotSrc = communitySuggestedAvatarUrl || 'assets/sprout/sprout.png';
-  const logoLink = '/';
-
   const mobileSubmitButtonRoute =
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
@@ -475,13 +471,13 @@ const Header = () => {
         } ${hasStickyHeader && styles.increasedHeight}`}
       >
         <div className={styles.logoContainer}>
-          <Link to={logoLink} className={styles.logoLink}>
-            {!isInProfileView && !isInAuthorView && <img className={communitySuggestedAvatarUrl ? styles.avatar : styles.logo} src={mascotSrc} alt='' />}
+          <Link to='/' className={styles.logoLink}>
+            <img className={styles.logo} src='assets/sprout/sprout.png' alt='' />
             <img src={`assets/sprout/seedit-text-${theme === 'dark' ? 'dark' : 'light'}.svg`} className={styles.logoText} alt='' />
           </Link>
         </div>
         {!isInHomeView && !isInHomeAboutView && !isInModView && !isInAllView && (
-          <span className={`${styles.pageName} ${!communitySuggestedAvatarUrl && styles.soloPageName}`}>
+          <span className={`${styles.pageName} ${styles.soloPageName}`}>
             <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
           </span>
         )}

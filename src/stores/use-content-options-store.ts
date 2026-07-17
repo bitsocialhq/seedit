@@ -14,8 +14,6 @@ interface ContentOptionsState {
   setAutoplayVideosOnComments: (autoplay: boolean) => void;
   muteVideosOnComments: boolean;
   setMuteVideosOnComments: (mute: boolean) => void;
-  hideAvatars: boolean;
-  setHideAvatars: (hide: boolean) => void;
 }
 
 interface ContentOptionsStore extends ContentOptionsState {
@@ -35,7 +33,6 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
       hasAcceptedWarning: false,
       hideDefaultCommunities: false,
       enableLocalNotifications: false,
-      hideAvatars: false,
       thumbnailDisplayOption: 'show',
       mediaPreviewOption: 'autoExpandAll',
       autoplayVideosOnComments: true,
@@ -45,7 +42,6 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
       setHasAcceptedWarning: (value) => set({ hasAcceptedWarning: value }),
       setHideDefaultCommunities: (hide) => set({ hideDefaultCommunities: hide }),
       setEnableLocalNotifications: (enable) => set({ enableLocalNotifications: enable }),
-      setHideAvatars: (hide) => set({ hideAvatars: hide }),
       setThumbnailDisplayOption: (option) => set({ thumbnailDisplayOption: option }),
       setMediaPreviewOption: (option) => set({ mediaPreviewOption: option }),
       setAutoplayVideosOnComments: (autoplay) => set({ autoplayVideosOnComments: autoplay }),

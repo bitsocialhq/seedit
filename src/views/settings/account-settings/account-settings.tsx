@@ -6,6 +6,7 @@ import { processImportedAccount } from '../../../lib/utils/account-import-utils'
 import { exportFile } from '../../../lib/utils/file-export-utils';
 import styles from './account-settings.module.css';
 import { getDisplayAddress } from '../../../lib/utils/address-utils';
+import { getEditableAccountData } from '../../../lib/utils/account-data-utils';
 
 const CreateAccountButton = () => {
   const { accounts } = useAccounts();
@@ -136,13 +137,9 @@ const ExportAccountButton = () => {
       const exportedAccount = JSON.parse(accountString);
 
       // exportAccount might not include pkcOptions, so we need to include it from useAccount()
-      let accountDataToInclude;
-      if (includePlebbitOptions) {
-        const { pkc: _pkc, ...completeAccountData } = account;
-        accountDataToInclude = completeAccountData;
-      } else {
-        const { pkc: _pkc, pkcOptions: _pkcOptions, ...completeAccountData } = account;
-        accountDataToInclude = completeAccountData;
+      const accountDataToInclude = getEditableAccountData(account);
+      if (!includePlebbitOptions) {
+        delete accountDataToInclude.pkcOptions;
       }
       exportedAccount.account = accountDataToInclude;
 

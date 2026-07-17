@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
@@ -13,7 +13,6 @@ import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/
 import { CommentMediaInfo, getHasThumbnail } from '../../lib/utils/media-utils';
 import { formatLocalizedUTCTimestamp, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
-import useContentOptionsStore from '../../stores/use-content-options-store';
 import useDownvote from '../../hooks/use-downvote';
 import useReplies from '../../hooks/use-replies';
 import useStateString from '../../hooks/use-state-string';
@@ -38,8 +37,6 @@ interface ReplyAuthorProps {
   cid: string;
   deleted: boolean;
   displayName: string;
-  imageUrl: string | undefined;
-  isAvatarDefined: boolean;
   removed: boolean;
   shortAuthorAddress: string | undefined;
   submitterAddress: string;
@@ -54,8 +51,6 @@ const ReplyAuthor = ({
   cid,
   deleted,
   displayName,
-  imageUrl,
-  isAvatarDefined,
   pinned,
   removed,
   shortAuthorAddress,
@@ -64,8 +59,6 @@ const ReplyAuthor = ({
   postCid,
 }: ReplyAuthorProps) => {
   const { t } = useTranslation();
-  const hideAvatars = useContentOptionsStore((state) => state.hideAvatars);
-
   // TODO: implement comment.highlightRole once implemented in API
   const isAuthorAdmin = authorRole === 'admin';
   const isAuthorOwner = authorRole === 'owner';
@@ -82,11 +75,6 @@ const ReplyAuthor = ({
         <span className={styles.removedUsername}>[{removed ? t('removed') : deleted ? t('deleted') : ''}]</span>
       ) : (
         <>
-          {!hideAvatars && isAvatarDefined && (
-            <span className={styles.authorAvatar}>
-              <img src={imageUrl} alt='' />
-            </span>
-          )}
           {displayName && (
             <Link
               to={`/u/${address}/comments/${cid}`}
@@ -365,7 +353,6 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
 
   const authorRole = community?.roles?.[author?.address]?.role;
   const { shortAuthorAddress } = useAuthorAddress({ comment: reply });
-  const { imageUrl } = useAuthorAvatar({ author });
   const replies = useReplies(reply);
 
   const [expanded, setExpanded] = useState(false);
@@ -466,8 +453,6 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                   cid={cid}
                   deleted={deleted}
                   displayName={author?.displayName}
-                  imageUrl={imageUrl}
-                  isAvatarDefined={!!author?.avatar}
                   removed={removed}
                   shortAuthorAddress={shortAuthorAddress}
                   submitterAddress={post?.author?.address}

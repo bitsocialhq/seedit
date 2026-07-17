@@ -336,20 +336,6 @@
   margin: 5px 0 0 5px;
 }
 
-.authorAvatar {
-  width: 18px;
-  display: inline-block;
-  position: relative;
-  margin-left: -3px;
-}
-
-.authorAvatar img {
-  width: 18px;
-  max-height: 18px;
-  position: absolute;
-  bottom: -5px;
-}
-
 .viewParentComment {
   font-size: 13px;
   color: var(--text-primary);

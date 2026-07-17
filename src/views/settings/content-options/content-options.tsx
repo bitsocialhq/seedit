@@ -18,8 +18,6 @@ const MediaOptions = () => {
     setAutoplayVideosOnComments,
     muteVideosOnComments,
     setMuteVideosOnComments,
-    hideAvatars,
-    setHideAvatars,
   } = useContentOptionsStore();
 
   return (
@@ -121,14 +119,6 @@ const MediaOptions = () => {
         <label>
           <input type='checkbox' checked={blurNsfwThumbnails} onChange={(e) => setBlurNsfwThumbnails(e.target.checked)} />
           {t('blur_media')}
-        </label>
-      </div>
-      <br />
-      <div className={styles.contentOptionTitle}>{t('avatars')}</div>
-      <div>
-        <label>
-          <input type='checkbox' checked={hideAvatars} onChange={(e) => setHideAvatars(e.target.checked)} />
-          {t('hide_avatars_from_replies')}
         </label>
       </div>
     </div>

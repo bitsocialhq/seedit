@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, useCallback } from 'react';
+import { Fragment, useEffect, useMemo, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Community as CommunityType, useAccount, useAccountCommunities, useCommunities, useCommunityStats } from '@bitsocial/bitsocial-react-hooks';
@@ -175,14 +175,8 @@ const Infobar = () => {
 
 const CommunityItem = ({ subplebbit, nsfw, tags, index, isUnsubscribed, onUnsubscribe }: SubplebbitProps) => {
   const { t } = useTranslation();
-  const { address, createdAt, description, roles, shortAddress, settings, suggested, title } = subplebbit || {};
-  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
-  const showSprout = !suggested?.avatarUrl || avatarLoadFailed;
+  const { address, createdAt, description, roles, shortAddress, settings, title } = subplebbit || {};
   const location = useLocation();
-
-  useEffect(() => {
-    setAvatarLoadFailed(false);
-  }, [subplebbit?.address, suggested?.avatarUrl]);
 
   // subplebbit.settings is a private field that is only available to the owner of the subplebbit
   const isUserOwner = settings;
@@ -243,23 +237,6 @@ const CommunityItem = ({ subplebbit, nsfw, tags, index, isUnsubscribed, onUnsubs
                 }}
               />
             </div>
-          </div>
-          <div className={`${styles.avatar} ${showSprout ? styles.defaultAvatar : ''}`}>
-            <Link to={communityPath}>
-              {suggested?.avatarUrl ? (
-                <img
-                  key={suggested.avatarUrl}
-                  src={suggested.avatarUrl}
-                  alt=''
-                  className={styles.customAvatarImg}
-                  onError={() => {
-                    setAvatarLoadFailed(true);
-                  }}
-                />
-              ) : (
-                <img key='sprout' src={'assets/sprout/sprout.png'} alt='' className={styles.sproutImg} />
-              )}
-            </Link>
           </div>
         </div>
         <div className={styles.entry}>

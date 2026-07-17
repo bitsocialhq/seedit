@@ -7,10 +7,8 @@ import {
   AccountCommunity,
   Community,
   useAuthor,
-  useAuthorAvatar,
   useAuthorComments,
   useBlock,
-  useComment,
   useCommunities,
 } from '@bitsocial/bitsocial-react-hooks';
 import styles from './author-sidebar.module.css';
@@ -59,14 +57,10 @@ const AuthorSidebar = () => {
   const { blocked, unblock, block } = useBlock({ address: authorAddress });
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
 
-  const comment = useComment({ commentCid, onlyIfCached: true });
-  const { imageUrl: authorPageAvatar } = useAuthorAvatar({ author: comment?.author });
-
   const isInAuthorView = isAuthorView(location.pathname);
   const isInProfileView = isProfileView(location.pathname);
 
   const userAccount = useAccount();
-  const { imageUrl: profilePageAvatar } = useAuthorAvatar({ author: userAccount?.author });
   const { accountComments: oldestAccountComment } = useAccountComments({ page: 0, pageSize: 1, order: 'asc' });
   const { accountCommunities } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
@@ -115,11 +109,6 @@ const AuthorSidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      {((isInAuthorView && authorPageAvatar) || (isInProfileView && profilePageAvatar)) && (
-        <div className={styles.avatar}>
-          <img src={isInAuthorView ? authorPageAvatar : profilePageAvatar} alt='' />
-        </div>
-      )}
       <div className={styles.titleBox}>
         <div className={styles.title}>
           {getDisplayAddress(address || '')}

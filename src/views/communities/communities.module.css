@@ -110,33 +110,6 @@
   color: var(--icon);
 }
 
-.avatar {
-  float: left;
-  margin-right: 5px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.defaultAvatar {
-  width: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.customAvatarImg {
-  object-fit: cover;
-  width: 70px;
-  max-height: 70px;
-}
-
-.sproutImg {
-  object-fit: contain;
-  height: 50px;
-}
-
 .entry {
   overflow: hidden;
   opacity: 1;

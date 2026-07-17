@@ -319,29 +319,10 @@
   background-image: url("/assets/buttons/delete-button-hover.png");
 }
 
-.logoPreview {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  margin-top: 10px;
-  font-size: smaller;
-  text-transform: capitalize;
-}
-
-.logoError {
-  padding-left: 10px;
-}
-
 .error {
   color: var(--red);
   margin: 5px;
 }
-
-.logoPreview img {
-  max-height: 40px;
-  padding-left: 10px;
-}
-
 @media (min-width: 640px) {
   .content {
     padding: 7px 5px 0px 5px;

@@ -11,6 +11,7 @@ import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../../lib/utils/community-route-utils';
+import { removeSuggestedAvatarUrl } from './community-data-editor-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -91,7 +92,7 @@ const CommunityDataEditor = () => {
       title: hasStoreData ? storeTitle : title,
       description: hasStoreData ? storeDescription : description,
       address: hasStoreData ? storeAddress : address,
-      suggested: hasStoreData ? storeSuggested : suggested,
+      suggested: removeSuggestedAvatarUrl((hasStoreData ? storeSuggested : suggested) ?? {}),
       rules: hasStoreData ? storeRules : rules,
       roles: hasStoreData ? storeRoles : roles,
       settings: hasStoreData ? storeSettings : settings,
@@ -149,7 +150,7 @@ const CommunityDataEditor = () => {
         title: parsedSettings.title ?? '',
         description: parsedSettings.description ?? '',
         address: parsedSettings.address,
-        suggested: parsedSettings.suggested ?? {},
+        suggested: removeSuggestedAvatarUrl(parsedSettings.suggested ?? {}),
         rules: parsedSettings.rules ?? [],
         roles: parsedSettings.roles ?? {},
         settings: parsedSettings.settings ?? {},
@@ -243,7 +244,7 @@ const CommunityDataEditor = () => {
           title: title ?? '',
           description: description ?? '',
           address,
-          suggested: suggested ?? {},
+          suggested: removeSuggestedAvatarUrl(suggested ?? {}),
           rules: rules ?? [],
           roles: roles ?? {},
           settings: settings ?? {},

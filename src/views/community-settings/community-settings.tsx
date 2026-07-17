@@ -12,7 +12,6 @@ import {
   useSubscribe,
 } from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
-import { isValidURL } from '../../lib/utils/url-utils';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
 import useCommunitySettingsStore from '../../stores/use-community-settings-store';
@@ -119,47 +118,6 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
           <span className={styles.readOnlyAddress}>{getDisplayAddress(address || '')}</span>
         ) : (
           <input aria-label={t('address')} type='text' value={getDisplayAddress(address)} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
-        )}
-      </div>
-    </div>
-  );
-};
-
-const Logo = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
-  const { t } = useTranslation();
-  const { suggested, setCommunitySettingsStore } = useCommunitySettingsStore();
-
-  const [logoUrl, setLogoUrl] = useState(suggested?.avatarUrl);
-  const [imageError, setImageError] = useState(false);
-
-  useEffect(() => {
-    setLogoUrl(suggested?.avatarUrl);
-    setImageError(false);
-  }, [suggested?.avatarUrl]);
-
-  return (
-    <div className={`${styles.box} ${isReadOnly && !logoUrl ? styles.hidden : styles.visible}`}>
-      <div className={styles.boxTitle}>{t('logo')}</div>
-      <div className={styles.boxSubtitle}>{t('community_logo_info')}</div>
-      <div className={styles.boxInput}>
-        {isReadOnly ? (
-          <span>{logoUrl}</span>
-        ) : (
-          <input
-            type='text'
-            value={logoUrl ?? ''}
-            onChange={(e) => {
-              setLogoUrl(e.target.value.trim());
-              setImageError(false);
-              setCommunitySettingsStore({ suggested: { ...suggested, avatarUrl: e.target.value.trim() || undefined } });
-            }}
-          />
-        )}
-        {logoUrl && isValidURL(logoUrl) && (
-          <div className={styles.logoPreview}>
-            {t('preview')}:
-            {imageError ? <span className={styles.logoError}>{t('no_image_found')}</span> : <img src={logoUrl} alt='' onError={() => setImageError(true)} />}
-          </div>
         )}
       </div>
     </div>
@@ -598,7 +556,6 @@ const CommunitySettings = () => {
       <Title isReadOnly={isReadOnly} />
       <Description isReadOnly={isReadOnly} />
       {!isInCreateCommunityView && <Address isReadOnly={isReadOnly} />}
-      <Logo isReadOnly={isReadOnly} />
       <Rules isReadOnly={isReadOnly} />
       <Moderators isReadOnly={isReadOnly} />
       <Challenges isReadOnly={isChallengesReadOnly} readOnlyChallenges={community?.challenges} challengeNames={challengeNames} challengesSettings={rpcChallenges} />
