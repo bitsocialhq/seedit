@@ -407,7 +407,7 @@ const Header = () => {
   const params = useParams();
   const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
-  const { suggested, title } = community || {};
+  const { title } = community || {};
 
   const accountComment = useOptionalAccountComment(params?.accountCommentIndex);
 
@@ -452,8 +452,8 @@ const Header = () => {
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
-  const logoIsAvatar = isInCommunityView && suggested?.avatarUrl && !isHiddenNsfwCommunity;
-  const logoSrc = logoIsAvatar ? suggested?.avatarUrl : 'assets/sprout/sprout.png';
+  const communitySuggestedAvatarUrl = isInCommunityView && !isHiddenNsfwCommunity ? community?.suggested?.avatarUrl : undefined;
+  const mascotSrc = communitySuggestedAvatarUrl || 'assets/sprout/sprout.png';
   const logoLink = '/';
 
   const mobileSubmitButtonRoute =
@@ -476,16 +476,12 @@ const Header = () => {
       >
         <div className={styles.logoContainer}>
           <Link to={logoLink} className={styles.logoLink}>
-            {(logoIsAvatar || (!isInCommunityView && !isInProfileView && !isInAuthorView)) && (
-              <img className={`${logoIsAvatar ? styles.avatar : styles.logo}`} src={logoSrc} alt='' />
-            )}
-            {((!isInCommunityView && !isInProfileView && !isInAuthorView) || !logoIsAvatar) && (
-              <img src={`assets/sprout/seedit-text-${theme === 'dark' ? 'dark' : 'light'}.svg`} className={styles.logoText} alt='' />
-            )}
+            {!isInProfileView && !isInAuthorView && <img className={communitySuggestedAvatarUrl ? styles.avatar : styles.logo} src={mascotSrc} alt='' />}
+            <img src={`assets/sprout/seedit-text-${theme === 'dark' ? 'dark' : 'light'}.svg`} className={styles.logoText} alt='' />
           </Link>
         </div>
         {!isInHomeView && !isInHomeAboutView && !isInModView && !isInAllView && (
-          <span className={`${styles.pageName} ${!logoIsAvatar && styles.soloPageName}`}>
+          <span className={`${styles.pageName} ${!communitySuggestedAvatarUrl && styles.soloPageName}`}>
             <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
           </span>
         )}
