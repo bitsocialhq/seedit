@@ -9,6 +9,7 @@ import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -127,10 +128,11 @@ export const FAQ = () => {
         <hr />
         <h3 id='registerUsername'>Can I register a username?</h3>
         <p>
-          You can set a display name for your account in the <Link to='/settings#displayName'>preferences</Link>. Your account address (u/{account?.author?.shortAddress})
-          is generated randomly from a cryptographic hash of your public key, similarly to how a bitcoin address is generated. You can{' '}
-          <HashLink to='/settings#cryptoAddress'>change your account address</HashLink> to a unique readable name you own, by resolving it with a decentralized domain
-          name service such as{' '}
+          You can set a display name for your account in the <Link to='/settings#displayName'>preferences</Link>. Your account address (u/
+          {getDisplayAddress(account?.author?.shortAddress || '')}) is generated randomly from a cryptographic hash of your public key, similarly to how a bitcoin address
+          is generated. You can <HashLink to='/settings#cryptoAddress'>change your account address</HashLink> to a unique readable <code>.bso</code> name you own. A{' '}
+          <code>.bso</code> address is an ENS name shown by Seedit with a <code>.bso</code> ending instead of <code>.eth</code>. Register and configure the underlying{' '}
+          <code>.eth</code> name through{' '}
           <a href='https://ens.domains/' target='_blank' rel='noopener noreferrer'>
             ENS
           </a>

@@ -18,7 +18,7 @@ import { getFormattedTimeDuration } from '../../lib/utils/time-utils';
 import { getOldestAccountHistoryTimestamp } from '../../lib/utils/account-history-utils';
 import { isAuthorView, isProfileView } from '../../lib/utils/view-utils';
 import { findAuthorCommunities, estimateAuthorKarma } from '../../lib/utils/user-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
@@ -42,7 +42,7 @@ const AuthorModeratingList = ({ accountCommunities, authorCommunities, isAuthor 
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
           {communityAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={getCommunityPath(address)}>s/{getShortAddress(address)}</Link>
+              <Link to={getCommunityPath(address)}>s/{getShortDisplayAddress(address)}</Link>
             </li>
           ))}
         </ul>
@@ -122,7 +122,7 @@ const AuthorSidebar = () => {
       )}
       <div className={styles.titleBox}>
         <div className={styles.title}>
-          {address}
+          {getDisplayAddress(address || '')}
           {isInProfileView && !displayName && (
             <span className={styles.editButtonWrapper}>
               {' '}

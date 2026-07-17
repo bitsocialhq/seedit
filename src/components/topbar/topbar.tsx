@@ -3,23 +3,16 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-hooks';
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
-import { getCommunityPath, getCommunityRouteSegment, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
-const getSubscriptionDisplayName = (subscription: string) => {
-  const routeSegment = getCommunityRouteSegment(subscription);
-  if (routeSegment !== subscription) {
-    return routeSegment;
-  }
-  const shortAddress = getShortAddress(subscription);
-  return shortAddress.includes('.eth') ? shortAddress.slice(0, -4) : shortAddress;
-};
+const getSubscriptionDisplayName = (subscription: string) => getShortDisplayAddress(subscription);
 
 const CommunitiesDropdown = () => {
   const { t } = useTranslation();

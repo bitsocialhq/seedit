@@ -5,6 +5,7 @@ import { isCreateCommunityView } from '../../../lib/utils/view-utils';
 import useCommunitySettingsStore, { CommunitySettingsState } from '../../../stores/use-community-settings-store';
 import useChallengesOptions from '../../../hooks/use-challenges-options';
 import styles from '../community-settings.module.css';
+import { getDisplayAddress } from '../../../lib/utils/address-utils';
 
 interface ChallengeSettingsProps {
   challenge: any;
@@ -54,14 +55,14 @@ const ExcludeAddressesFromChallengeInput = ({
   handleExcludeAddress: (index: number, value: string) => void;
   isReadOnly: boolean;
 }) => {
-  const [addressInput, setAddressInput] = useState(exclude?.address?.join(', ') || '');
+  const [addressInput, setAddressInput] = useState(exclude?.address?.map((address: string) => getDisplayAddress(address)).join(', ') || '');
 
   return isReadOnly ? (
-    <span>{exclude?.address?.join(', ')}</span>
+    <span>{exclude?.address?.map((address: string) => getDisplayAddress(address)).join(', ')}</span>
   ) : (
     <input
       type='text'
-      placeholder='address1.eth, address2.eth, address3.eth'
+      placeholder='address1.bso, address2.bso, address3.bso'
       value={addressInput}
       onChange={(e) => {
         const newValue = e.target.value;

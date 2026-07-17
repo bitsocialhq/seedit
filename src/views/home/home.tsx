@@ -18,6 +18,7 @@ import StarterSubscriptionsNotice from '../../components/starter-subscriptions-n
 import { sortTypes } from '../../constants/sort-types';
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -267,7 +268,7 @@ const Home = () => {
             <br />
             <Trans
               i18nKey='no_subscriptions_message'
-              values={{ accountName: account?.author.displayName || account?.author.shortAddress }}
+              values={{ accountName: account?.author.displayName || getDisplayAddress(account?.author.shortAddress || '') }}
               components={{
                 // eslint-disable-next-line jsx-a11y/heading-has-content
                 1: <h1 key='no_subscriptions_message_1' />,

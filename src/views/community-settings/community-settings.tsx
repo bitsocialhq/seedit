@@ -27,6 +27,7 @@ import Challenges from './challenge-settings';
 import { FormattingHelpTable } from '../../components/reply-form';
 import styles from './community-settings.module.css';
 import _ from 'lodash';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const Title = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 
   const alertCryptoAddressInfo = () => {
     alert(
-      `steps to set a .eth community address:\n1. go to app.ens.domains and search the address\n2. once you own the address, go to its page, click on "records", then "edit records"\n3. add a new text record with name "subplebbit-address" and value: ${address}`,
+      `A .bso community address is an ENS name you own, shown by Seedit with a .bso ending instead of .eth.\n1. Register a name (e.g. yourcommunity.eth) at app.ens.domains.\n2. Open that name on ENS and go to Records, then Edit Records.\n3. Add a text record named "bitsocial" and set its value to: ${address}\n4. Enter the matching .bso name (e.g. yourcommunity.bso) as the community address.`,
     );
   };
 
@@ -115,9 +116,9 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
       </div>
       <div className={styles.boxInput}>
         {isReadOnly ? (
-          <span className={styles.readOnlyAddress}>{address}</span>
+          <span className={styles.readOnlyAddress}>{getDisplayAddress(address || '')}</span>
         ) : (
-          <input type='text' value={address ?? ''} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
+          <input aria-label={t('address')} type='text' value={getDisplayAddress(address)} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
         )}
       </div>
     </div>
@@ -291,7 +292,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
                 User address:
                 <br />
                 {isReadOnly ? (
-                  <span>{address}</span>
+                  <span>{getDisplayAddress(address)}</span>
                 ) : (
                   <input
                     ref={index === Object.keys(roles).length - 1 ? lastModeratorRef : null}
@@ -299,7 +300,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
                     autoCorrect='off'
                     autoComplete='off'
                     spellCheck='false'
-                    value={address}
+                    value={getDisplayAddress(address)}
                     onChange={(e) => handleAddressChange(index, e.target.value)}
                   />
                 )}
@@ -421,7 +422,7 @@ const CommunitySettings = () => {
 
   const [showDeleting, setShowDeleting] = useState(false);
   const _deleteCommunity = async () => {
-    if (communityAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
+    if (communityAddress && window.confirm(t('delete_confirm', { value: `s/${getDisplayAddress(shortAddress || '')}`, interpolation: { escapeValue: false } }))) {
       if (window.confirm(t('double_confirm'))) {
         try {
           setShowDeleting(true);
@@ -470,7 +471,7 @@ const CommunitySettings = () => {
   useEffect(() => {
     if (createdCommunity) {
       console.log('createdCommunity', createdCommunity);
-      alert(`community created, address: ${createdCommunity?.address}`);
+      alert(`community created, address: ${getDisplayAddress(createdCommunity.address || '')}`);
 
       if (account && createdCommunity.address) {
         subscribe();

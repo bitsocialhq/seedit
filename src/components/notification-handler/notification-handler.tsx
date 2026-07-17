@@ -5,6 +5,7 @@ import localForageLru from '@bitsocial/bitsocial-react-hooks/dist/lib/localforag
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { showLocalNotification } from '../../lib/push';
 import { getCommunityPostPath } from '../../lib/utils/community-route-utils';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 // Create LRU storage instance for tracking sent notifications
 const sentNotificationsDb = localForageLru.createInstance({ name: 'seeditSentNotifications', size: 1000 });
@@ -55,7 +56,7 @@ const NotificationHandler = () => {
         id: notification.timestamp,
         icon: '/icon.png',
         title: `You received a reply`,
-        body: `u/${notification.author.shortAddress} replied to your post in s/${notification.shortSubplebbitAddress}${
+        body: `u/${getDisplayAddress(notification.author.shortAddress)} replied to your post in s/${getDisplayAddress(notification.shortSubplebbitAddress)}${
           notification.content
             ? `: ${notification.content.length > 100 ? notification.content.slice(0, 100).trim() + '...' : notification.content.trim()}`
             : notification.link

@@ -23,6 +23,7 @@ import ReplyForm from '../../components/reply-form';
 import Sidebar from '../../components/sidebar';
 import styles from './post-page.module.css';
 import _ from 'lodash';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 type SortDropdownProps = {
   sortBy: string;
@@ -309,7 +310,7 @@ const PostPage = () => {
   }, [post?.error]);
 
   const postTitle = post.title?.slice(0, 40) || post?.content?.slice(0, 40);
-  const communityTitle = community?.title || community?.shortAddress;
+  const communityTitle = community?.title || getDisplayAddress(community?.shortAddress || '');
   useEffect(() => {
     document.title = `${postTitle || ''}${postTitle && communityTitle ? ' - ' : ''}${communityTitle || ''}${postTitle || communityTitle ? ' - Seedit' : 'Seedit'}`;
   }, [postTitle, communityTitle]);

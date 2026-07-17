@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Author, useBlock } from '@bitsocial/bitsocial-react-hooks';
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useClick, useDismiss, useFloating, useId, useInteractions, useRole } from '@floating-ui/react';
 import { isProfileHiddenView } from '../../../../lib/utils/view-utils';
-import getShortAddress from '../../../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../../../lib/utils/address-utils';
 import styles from './hide-menu.module.css';
 
 type HideMenuProps = {
@@ -27,7 +27,7 @@ const BlockAuthorButton = ({ author, toggleIsMenuOpen }: HideMenuProps) => {
         if (toggleIsMenuOpen) toggleIsMenuOpen();
       }}
     >
-      {blocked ? `${t('unblock')}` : `${t('block')}`} u/{author?.shortAddress}
+      {blocked ? `${t('unblock')}` : `${t('block')}`} u/{getDisplayAddress(author?.shortAddress || '')}
     </div>
   );
 };
@@ -38,7 +38,7 @@ const BlockCommunityButton = ({ communityAddress }: HideMenuProps) => {
 
   return (
     <div className={styles.menuItem} onClick={blocked ? unblock : block}>
-      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{communityAddress && getShortAddress(communityAddress)}
+      {blocked ? `${t('unblock')}` : `${t('block')}`} s/{communityAddress && getShortDisplayAddress(communityAddress)}
     </div>
   );
 };

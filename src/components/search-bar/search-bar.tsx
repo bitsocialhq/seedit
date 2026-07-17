@@ -13,7 +13,7 @@ import {
   isModView,
   isCommunityAboutView,
 } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import styles from './search-bar.module.css';
@@ -280,7 +280,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
                 onTouchEnd={() => handleCommunitySelect(address)}
                 onMouseEnter={() => setActiveDropdownIndex(index)}
               >
-                {getShortAddress(address)}
+                {getShortDisplayAddress(address)}
               </li>
             ))}
           </ul>

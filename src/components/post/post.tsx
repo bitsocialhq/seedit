@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useCommunity, useSubscribe } from '@bitsocial/bitsocial-react-hooks';
 import { getHasThumbnail } from '../../lib/utils/media-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getPostScore, formatScore } from '../../lib/utils/post-utils';
 import { getFormattedTimeAgo, formatLocalizedUTCTimestamp } from '../../lib/utils/time-utils';
 import { getHostname } from '../../lib/utils/url-utils';
@@ -62,8 +62,8 @@ const PostAuthor = ({ authorAddress, authorRole, cid, displayName, index, pinned
           </>
         )}{' '}
         <span className={`${styles.authorAddressWrapper} ${pinned && moderatorClass}`}>
-          <span className={styles.authorAddressHidden}>u/{shortAddress || shortAuthorAddress}</span>
-          <span className={`${styles.authorAddressVisible} ${authorAddressChanged && styles.authorAddressChanged}`}>u/{shortAuthorAddress}</span>
+          <span className={styles.authorAddressHidden}>u/{getDisplayAddress(shortAddress || shortAuthorAddress || '')}</span>
+          <span className={`${styles.authorAddressVisible} ${authorAddressChanged && styles.authorAddressChanged}`}>u/{getDisplayAddress(shortAuthorAddress || '')}</span>
         </span>
       </Link>
       {/* TODO: implement comment.highlightRole once implemented in API */}
@@ -137,6 +137,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const params = useParams();
   const location = useLocation();
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
+  const communityDisplayAddress = getDisplayAddress(community?.shortAddress || '') || (communityAddress ? getShortDisplayAddress(communityAddress) : '');
 
   const authorRole = community?.roles?.[post.author?.address]?.role;
 
@@ -267,9 +268,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                     {hostname ? (
                       <Link to={`/domain/${hostname}`}>{hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname}</Link>
                     ) : (
-                      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''}>
-                        self.{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}
-                      </Link>
+                      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''}>self.{communityDisplayAddress}</Link>
                     )}
                     )
                   </span>
@@ -319,7 +318,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                           className={`${styles.community} ${subscribed && hasClickedSubscribe ? styles.greenCommunityAddress : ''}`}
                           to={communityAddress ? getCommunityPath(communityAddress) : ''}
                         >
-                          s/{community?.shortAddress || (communityAddress && getShortAddress(communityAddress))}
+                          s/{communityDisplayAddress}
                         </Link>
                       </span>
                     </>

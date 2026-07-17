@@ -6,6 +6,7 @@ import useChallengesStore from '../../stores/use-challenges-store';
 import useTheme from '../../hooks/use-theme';
 import styles from './challenge-modal.module.css';
 import { getPublicationPreview, getPublicationType, getVotePreview } from '../../lib/utils/challenge-utils';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 interface ChallengeHeaderProps {
   publicationType: string | null;
@@ -53,7 +54,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
   const votePreview = getVotePreview(challenge?.[1]);
 
   const { parentCid, shortSubplebbitAddress, subplebbitAddress } = challenge?.[1] || {};
-  const parentAddress = useParentAddress(parentCid);
+  const parentAddress = getDisplayAddress(useParentAddress(parentCid) || '');
 
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -203,7 +204,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     return () => document.removeEventListener('keydown', onEscapeKey);
   }, [isIframeChallenge, onIframeClose, closeModal]);
 
-  const communityShortAddress = shortSubplebbitAddress || subplebbitAddress;
+  const communityShortAddress = getDisplayAddress(shortSubplebbitAddress || subplebbitAddress || '');
 
   // Render iframe challenge
   if (isIframeChallenge) {

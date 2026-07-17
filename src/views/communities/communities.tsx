@@ -27,6 +27,7 @@ import Label from '../../components/post/label';
 import Sidebar from '../../components/sidebar';
 import SubscribeButton from '../../components/subscribe-button';
 import _ from 'lodash';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 interface SubplebbitProps {
   index?: number;
@@ -265,7 +266,7 @@ const CommunityItem = ({ subplebbit, nsfw, tags, index, isUnsubscribed, onUnsubs
           <div className={styles.title}>
             <div className={styles.titleWrapper}>
               <Link to={communityPath}>
-                s/{address?.includes('.') ? address : shortAddress}
+                s/{getDisplayAddress(address?.includes('.') ? address : shortAddress || '')}
                 {title && `: ${title}`}
               </Link>
             </div>

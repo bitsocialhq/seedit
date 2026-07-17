@@ -132,7 +132,7 @@ const BlockchainProvidersSettings = ({ ethRpcRef }: SettingsProps) => {
 
   return (
     <div className={styles.blockchainProvidersSettings}>
-      <span className={styles.settingTitle}>ethereum rpc, for .eth addresses</span>
+      <span className={styles.settingTitle}>ethereum rpc, for .bso addresses</span>
       <div>
         <textarea
           aria-label='Ethereum RPC URLs'

@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Comment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
@@ -99,7 +99,7 @@ const ReplyAuthor = ({
             to={`/u/${address}/comments/${cid}`}
             className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
           >
-            {displayName ? `u/${shortAuthorAddress}` : shortAuthorAddress}
+            {displayName ? `u/${getDisplayAddress(shortAuthorAddress || '')}` : getDisplayAddress(shortAuthorAddress || '')}
           </Link>
           {/* TODO: implement comment.highlightRole once implemented in API */}
           {(authorRole || isAuthorSubmitter) && pinned && (
@@ -230,11 +230,11 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
       </Link>
       {t('post_by')}{' '}
       <Link to={`/u/${author?.address}/comments/${cid}`} className={styles.parentAuthor}>
-        u/{author?.shortAddress}{' '}
+        u/{getDisplayAddress(author?.shortAddress || '')}{' '}
       </Link>
       {t('via')}{' '}
       <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentSubplebbit}>
-        s/{communityAddress}
+        s/{getDisplayAddress(communityAddress || '')}
       </Link>
     </div>
   );
@@ -292,14 +292,14 @@ const InboxShowParentButton = ({ parentCid }: { parentCid: string | undefined })
 
 const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, communityAddress, timestamp }: ParentLinkProps) => {
   const { t } = useTranslation();
-  const shortCommunityAddress = communityAddress ? (communityAddress.includes('.') ? communityAddress : getShortAddress(communityAddress)) : '';
+  const shortCommunityAddress = communityAddress ? getShortDisplayAddress(communityAddress) : '';
 
   return (
     <>
       <div className={`${styles.inboxParentInfo} ${markedAsRead ? styles.inboxParentRead : styles.inboxParentUnread}`}>
         {t('from')}{' '}
         <Link to={`/u/${address}/comments/${cid}`} className={styles.inboxParentAuthor}>
-          u/{shortAddress}{' '}
+          u/{getDisplayAddress(shortAddress || '')}{' '}
         </Link>
         {t('via')}{' '}
         <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.inboxParentSubplebbit}>

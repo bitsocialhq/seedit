@@ -42,7 +42,7 @@ import {
   isPostPageAboutView,
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
@@ -350,13 +350,13 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
 
   const communityTitle = (
     <Link to={titleCommunityAddress ? getCommunityPath(titleCommunityAddress) : '/'}>
-      {title || (communityAddress && getShortAddress(communityAddress)) || (pendingPostCommunityAddress && getShortAddress(pendingPostCommunityAddress))}
+      {title || (communityAddress && getShortDisplayAddress(communityAddress)) || (pendingPostCommunityAddress && getShortDisplayAddress(pendingPostCommunityAddress))}
     </Link>
   );
   const domainTitle = <Link to={`/domain/${params.domain}`}>{params.domain}</Link>;
   const submitTitle = <span className={styles.submitTitle}>{t('submit')}</span>;
-  const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
-  const authorTitle = <Link to={`/u/${params.authorAddress}/comments/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
+  const profileTitle = <Link to='/profile'>{getDisplayAddress(account?.author?.shortAddress || '')}</Link>;
+  const authorTitle = <Link to={`/u/${params.authorAddress}/comments/${params.commentCid}`}>{params.authorAddress && getShortDisplayAddress(params.authorAddress)}</Link>;
 
   if (isHiddenNsfwCommunity) {
     return <span>{t('over_18')}</span>;

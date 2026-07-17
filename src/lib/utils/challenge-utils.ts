@@ -1,4 +1,5 @@
 import { ChallengeVerification } from '@bitsocial/bitsocial-react-hooks';
+import { getDisplayAddress } from './address-utils';
 
 export const alertChallengeVerificationFailed = (challengeVerification: ChallengeVerification, publication: any) => {
   if (challengeVerification?.challengeSuccess === false) {
@@ -25,7 +26,7 @@ export const alertChallengeVerificationFailed = (challengeVerification: Challeng
 
     const finalMessage = errorMessages.filter(Boolean).join(' ');
 
-    alert(`s/${publication?.subplebbitAddress} error: ${finalMessage || 'unknown error'}`);
+    alert(`s/${getDisplayAddress(publication?.subplebbitAddress || '')} error: ${finalMessage || 'unknown error'}`);
   } else {
     console.warn('Challenge verification succeeded but no action taken:', challengeVerification);
   }

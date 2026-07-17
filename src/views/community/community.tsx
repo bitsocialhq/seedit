@@ -23,6 +23,7 @@ import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { sortTypes } from '../../constants/sort-types';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -358,7 +359,7 @@ const CommunityView = () => {
 
   // page title
   useEffect(() => {
-    document.title = title ? title : shortAddress || rawCommunityIdentifier || communityAddress;
+    document.title = title ? title : getDisplayAddress(shortAddress || rawCommunityIdentifier || communityAddress);
   }, [title, shortAddress, rawCommunityIdentifier, communityAddress]);
 
   // Derive whether to show error directly from current feed state

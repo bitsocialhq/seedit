@@ -5,7 +5,7 @@ import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, useP
 import { getPostScore } from '../../lib/utils/post-utils';
 import { getFormattedDate, getFormattedTimeDuration, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { findCommunityCreator } from '../../lib/utils/user-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import {
   isAllView,
   isDomainView,
@@ -67,7 +67,7 @@ const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
       <ul className={`${styles.listContent} ${styles.modsList}`}>
         {rolesList.map(({ address }, index) => (
           <li key={index} onClick={() => window.alert('Direct profile links are not supported yet.')}>
-            u/{getShortAddress(address)}
+            u/{getShortDisplayAddress(address)}
           </li>
         ))}
         {/* TODO: https://github.com/bitsocialhq/seedit/issues/274
@@ -210,7 +210,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);
 
   const communityCreator = findCommunityCreator(roles);
-  const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : `${getShortAddress(communityCreator)}`;
+  const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : getShortDisplayAddress(communityCreator);
   const submitRoute =
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
@@ -305,7 +305,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
               <Link className={styles.title} to={address ? getCommunityPath(address) : '/communities'}>
-                {subplebbit?.address}
+                {getDisplayAddress(subplebbit?.address || '')}
               </Link>
               <div className={styles.subscribeContainer}>
                 <span className={styles.subscribeButton}>

@@ -5,6 +5,7 @@ import { createAccount, deleteAccount, exportAccount, importAccount, setActiveAc
 import { processImportedAccount } from '../../../lib/utils/account-import-utils';
 import { exportFile } from '../../../lib/utils/file-export-utils';
 import styles from './account-settings.module.css';
+import { getDisplayAddress } from '../../../lib/utils/address-utils';
 
 const CreateAccountButton = () => {
   const { accounts } = useAccounts();
@@ -231,7 +232,7 @@ const AccountSettings = () => {
 
   const accountsOptions = accounts.map((account) => (
     <option key={account?.id} value={account?.name}>
-      u/{account?.author?.shortAddress}
+      u/{getDisplayAddress(account?.author?.shortAddress || '')}
     </option>
   ));
 
