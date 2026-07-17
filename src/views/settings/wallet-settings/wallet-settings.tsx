@@ -122,7 +122,7 @@ const CryptoWalletsForm = ({ account }: { account: Account | undefined }) => {
               spellCheck='false'
               onChange={(e) => setWalletsArrayProperty(index, 'chainTicker', e.target.value)}
               value={wallet.chainTicker}
-              placeholder='eth/avax'
+              placeholder='eth'
             />
           </div>
           <div className={styles.walletField}>

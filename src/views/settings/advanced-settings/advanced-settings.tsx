@@ -12,8 +12,6 @@ interface SettingsProps {
   mediaIpfsGatewayUrlRef?: RefObject<HTMLInputElement | null>;
   pubsubProvidersRef?: RefObject<HTMLTextAreaElement | null>;
   ethRpcRef?: RefObject<HTMLTextAreaElement | null>;
-  maticRpcRef?: RefObject<HTMLTextAreaElement | null>;
-  avaxRpcRef?: RefObject<HTMLTextAreaElement | null>;
   httpRoutersRef?: RefObject<HTMLTextAreaElement | null>;
   fullNodeRpcRef?: RefObject<HTMLInputElement | null>;
   p2pDataPathRef?: RefObject<HTMLInputElement | null>;
@@ -127,12 +125,10 @@ const HttpRoutersSettings = ({ httpRoutersRef }: SettingsProps) => {
   );
 };
 
-const BlockchainProvidersSettings = ({ ethRpcRef, maticRpcRef, avaxRpcRef }: SettingsProps) => {
+const BlockchainProvidersSettings = ({ ethRpcRef }: SettingsProps) => {
   const account = useAccount();
   const chainProviders = getChainProviders(account);
   const ethRpcDefaultValue = chainProviders?.['eth']?.urls?.join('\n');
-  const maticRpcDefaultValue = chainProviders?.['matic']?.urls?.join('\n');
-  const avaxRpcDefaultValue = chainProviders?.['avax']?.urls?.join('\n');
 
   return (
     <div className={styles.blockchainProvidersSettings}>
@@ -146,30 +142,6 @@ const BlockchainProvidersSettings = ({ ethRpcRef, maticRpcRef, avaxRpcRef }: Set
           autoComplete='off'
           spellCheck='false'
           rows={chainProviders?.['eth']?.urls?.length || 3}
-        />
-      </div>
-      <span className={styles.settingTitle}>polygon rpc, for nft profile pics</span>
-      <div>
-        <textarea
-          aria-label='Polygon RPC URLs'
-          defaultValue={maticRpcDefaultValue}
-          ref={maticRpcRef}
-          autoCorrect='off'
-          autoComplete='off'
-          spellCheck='false'
-          rows={chainProviders?.['matic']?.urls?.length || 1}
-        />
-      </div>
-      <span className={styles.settingTitle}>avalanche rpc</span>
-      <div>
-        <textarea
-          aria-label='Avalanche RPC URLs'
-          defaultValue={avaxRpcDefaultValue}
-          ref={avaxRpcRef}
-          autoCorrect='off'
-          autoComplete='off'
-          spellCheck='false'
-          rows={chainProviders?.['avax']?.urls?.length || 1}
         />
       </div>
     </div>
@@ -284,8 +256,6 @@ const AdvancedSettings = () => {
   const mediaIpfsGatewayUrlRef = useRef<HTMLInputElement>(null);
   const pubsubProvidersRef = useRef<HTMLTextAreaElement>(null);
   const ethRpcRef = useRef<HTMLTextAreaElement>(null);
-  const maticRpcRef = useRef<HTMLTextAreaElement>(null);
-  const avaxRpcRef = useRef<HTMLTextAreaElement>(null);
   const httpRoutersRef = useRef<HTMLTextAreaElement>(null);
   const fullNodeRpcRef = useRef<HTMLInputElement>(null);
   const p2pDataPathRef = useRef<HTMLInputElement>(null);
@@ -299,8 +269,6 @@ const AdvancedSettings = () => {
     const pubsubKuboRpcClientsOptions = pubsubProvidersRef.current ? getTrimmedLines(pubsubProvidersRef.current.value) : protocolOptions?.pubsubKuboRpcClientsOptions;
 
     const ethRpcUrls = getTrimmedLines(ethRpcRef.current?.value);
-    const maticRpcUrls = getTrimmedLines(maticRpcRef.current?.value);
-    const avaxRpcUrls = getTrimmedLines(avaxRpcRef.current?.value);
 
     const httpRoutersOptions = httpRoutersRef.current ? getTrimmedLines(httpRoutersRef.current.value) : protocolOptions?.httpRoutersOptions;
 
@@ -310,8 +278,6 @@ const AdvancedSettings = () => {
 
     const chainProviders: NonNullable<AccountProtocolOptions['chainProviders']> = getSupportedChainProviders(getChainProviders(account)) ?? {};
     if (ethRpcUrls?.length) chainProviders.eth = { urls: ethRpcUrls, chainId: 1 };
-    if (maticRpcUrls?.length) chainProviders.matic = { urls: maticRpcUrls, chainId: 137 };
-    if (avaxRpcUrls?.length) chainProviders.avax = { urls: avaxRpcUrls, chainId: 43114 };
 
     let pkcOptions: AccountProtocolOptions = {
       ...protocolOptions,
@@ -392,7 +358,7 @@ const AdvancedSettings = () => {
       <div className={styles.category}>
         <span className={styles.categoryTitle}>blockchain providers</span>
         <span className={styles.categorySettings}>
-          <BlockchainProvidersSettings ethRpcRef={ethRpcRef} maticRpcRef={maticRpcRef} avaxRpcRef={avaxRpcRef} />
+          <BlockchainProvidersSettings ethRpcRef={ethRpcRef} />
         </span>
       </div>
       <div className={`${styles.category} ${location.hash === '#fullNodeRpc' ? styles.highlightedSetting : ''}`} id='fullNodeRpc'>

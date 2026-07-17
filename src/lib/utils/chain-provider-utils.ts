@@ -1,4 +1,4 @@
-const SUPPORTED_CHAIN_PROVIDER_TICKERS: ReadonlySet<string> = new Set(['eth', 'matic', 'avax']);
+const SUPPORTED_CHAIN_PROVIDER_TICKERS: ReadonlySet<string> = new Set(['eth']);
 
 export const getSupportedChainProviders = <T>(chainProviders: Record<string, T> | undefined): Record<string, T> | undefined => {
   if (!chainProviders) return undefined;

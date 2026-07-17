@@ -133,7 +133,7 @@ const AvatarSettings = () => {
             <span className={styles.settingTitle}>{t('chain_ticker')}</span>
             <input
               type='text'
-              placeholder='matic'
+              placeholder='eth'
               autoCorrect='off'
               autoComplete='off'
               spellCheck='false'

@@ -34,14 +34,6 @@ export const getDefaultWebConfig = (): PkcOptions => ({
       urls: ['ethers.js', 'https://ethrpc.xyz', 'viem'],
       chainId: 1,
     },
-    avax: {
-      urls: ['https://api.avax.network/ext/bc/C/rpc'],
-      chainId: 43114,
-    },
-    matic: {
-      urls: ['https://polygon-rpc.com'],
-      chainId: 137,
-    },
   },
   resolveAuthorAddresses: false,
   validatePages: false,
@@ -55,14 +47,6 @@ export const getDefaultElectronConfig = (): PkcOptions => ({
     eth: {
       urls: ['ethers.js', 'https://ethrpc.xyz', 'viem'],
       chainId: 1,
-    },
-    avax: {
-      urls: ['https://api.avax.network/ext/bc/C/rpc'],
-      chainId: 43114,
-    },
-    matic: {
-      urls: ['https://polygon-rpc.com'],
-      chainId: 137,
     },
   },
   resolveAuthorAddresses: false,

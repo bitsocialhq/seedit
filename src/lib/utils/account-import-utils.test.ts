@@ -3,8 +3,8 @@ import { getDefaultElectronConfig, getDefaultWebConfig, processImportedAccount }
 
 describe('account import PKC options', () => {
   it('includes only supported chain providers in platform defaults', () => {
-    expect(Object.keys(getDefaultWebConfig().chainProviders ?? {})).toEqual(['eth', 'avax', 'matic']);
-    expect(Object.keys(getDefaultElectronConfig().chainProviders ?? {})).toEqual(['eth', 'avax', 'matic']);
+    expect(Object.keys(getDefaultWebConfig().chainProviders ?? {})).toEqual(['eth']);
+    expect(Object.keys(getDefaultElectronConfig().chainProviders ?? {})).toEqual(['eth']);
   });
 
   it('keeps only supported providers from current and legacy locations', () => {
@@ -12,12 +12,16 @@ describe('account import PKC options', () => {
       account: {
         chainProviders: {
           eth: { urls: ['https://eth.example'], chainId: 1 },
+          avax: { urls: ['https://avax.example'], chainId: 43114 },
+          matic: { urls: ['https://matic.example'], chainId: 137 },
           unknown: { urls: ['https://unknown.example'], chainId: 123 },
         },
         pkcOptions: {
           pubsubKuboRpcClientsOptions: ['https://pubsub.example'],
           chainProviders: {
+            eth: { urls: ['https://legacy-eth.example'], chainId: 1 },
             avax: { urls: ['https://avax.example'], chainId: 43114 },
+            matic: { urls: ['https://matic.example'], chainId: 137 },
             unknown: { urls: ['https://legacy-unknown.example'], chainId: 123 },
           },
         },
@@ -30,7 +34,7 @@ describe('account import PKC options', () => {
       eth: { urls: ['https://eth.example'], chainId: 1 },
     });
     expect(result.account.pkcOptions.chainProviders).toEqual({
-      avax: { urls: ['https://avax.example'], chainId: 43114 },
+      eth: { urls: ['https://legacy-eth.example'], chainId: 1 },
     });
   });
 
@@ -40,6 +44,7 @@ describe('account import PKC options', () => {
         pkcOptions: {
           pubsubKuboRpcClientsOptions: ['https://pubsub.example'],
           chainProviders: {
+            eth: { urls: ['https://custom-eth.example'], chainId: 1 },
             matic: { urls: ['https://matic.example'], chainId: 137 },
           },
         },
@@ -50,8 +55,8 @@ describe('account import PKC options', () => {
 
     expect(result.account.pkcOptions.pkcRpcClientsOptions).toEqual(['ws://localhost:9138']);
     expect(result.account.pkcOptions.chainProviders).toMatchObject({
-      eth: { urls: ['ethers.js', 'https://ethrpc.xyz', 'viem'], chainId: 1 },
-      matic: { urls: ['https://matic.example'], chainId: 137 },
+      eth: { urls: ['https://custom-eth.example'], chainId: 1 },
     });
+    expect(Object.keys(result.account.pkcOptions.chainProviders)).toEqual(['eth']);
   });
 });
