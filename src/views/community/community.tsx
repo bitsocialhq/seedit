@@ -229,9 +229,9 @@ const CommunityView = () => {
   const rawCommunityIdentifier = params?.communityAddress || '';
   const communityAddress = resolveCommunityRouteAddress(rawCommunityIdentifier) || '';
   const canLoadCommunity = !!communityAddress && isResolvableCommunityAddress(communityAddress);
-  const subplebbit = useCommunity(canLoadCommunity ? { community: getCommunityIdentifier(communityAddress) } : undefined);
-  const { createdAt, error, shortAddress, started, title, updatedAt, settings } = subplebbit || {};
-  const { isOffline } = useIsCommunityOffline(subplebbit || {});
+  const community = useCommunity(canLoadCommunity ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const { createdAt, error, shortAddress, started, title, updatedAt, settings } = community || {};
+  const { isOffline } = useIsCommunityOffline(community || {});
   const isOnline = !isOffline;
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
@@ -370,7 +370,7 @@ const CommunityView = () => {
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar subplebbit={subplebbit} isSubCreatedButNotYetPublished={started && isSubCreatedButNotYetPublished} settings={settings} reset={reset} />
+        <Sidebar community={community} isSubCreatedButNotYetPublished={started && isSubCreatedButNotYetPublished} settings={settings} reset={reset} />
       </div>
       {shouldShowErrorToUser && (
         <div className={styles.error}>

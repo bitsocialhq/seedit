@@ -317,7 +317,7 @@ const CommunityAddressField = () => {
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 
   // Generate random suggestions derived from defaults without an effect
-  const randomCommunitySuggestions = useMemo(() => getRandomSubplebbits(defaultCommunityAddresses, 10), [defaultCommunityAddresses]);
+  const randomCommunitySuggestions = useMemo(() => getRandomCommunities(defaultCommunityAddresses, 10), [defaultCommunityAddresses]);
   const listSource = subscriptions?.length > 5 ? subscriptions : randomCommunitySuggestions;
 
   const handleKeyDown = useCallback(
@@ -351,7 +351,7 @@ const CommunityAddressField = () => {
     setActiveDropdownIndex(-1);
   };
 
-  function getRandomSubplebbits(addresses: string[], count: number) {
+  function getRandomCommunities(addresses: string[], count: number) {
     // Non-mutating shuffle (copy first), avoids side effects
     const shuffled = [...addresses].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);

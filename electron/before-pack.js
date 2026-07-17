@@ -12,12 +12,6 @@ const ipfsClientWindowsPath = path.join(ipfsClientsPath, 'win');
 const ipfsClientMacPath = path.join(ipfsClientsPath, 'mac');
 const ipfsClientLinuxPath = path.join(ipfsClientsPath, 'linux');
 
-// plebbit kubu download links https://github.com/plebbit/kubo/releases
-// const ipfsClientVersion = '0.20.0'
-// const ipfsClientWindowsUrl = `https://github.com/plebbit/kubo/releases/download/v${ipfsClientVersion}/ipfs-windows-amd64`
-// const ipfsClientMacUrl = `https://github.com/plebbit/kubo/releases/download/v${ipfsClientVersion}/ipfs-darwin-amd64`
-// const ipfsClientLinuxUrl = `https://github.com/plebbit/kubo/releases/download/v${ipfsClientVersion}/ipfs-linux-amd64`
-
 // official kubo download links https://docs.ipfs.tech/install/command-line/#install-official-binary-distributions
 // NOTE: Keep this version in sync with the kubo version in package.json to avoid repo version mismatches
 const ipfsClientVersion = '0.39.0';

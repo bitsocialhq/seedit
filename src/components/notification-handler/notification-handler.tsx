@@ -56,14 +56,14 @@ const NotificationHandler = () => {
         id: notification.timestamp,
         icon: '/icon.png',
         title: `You received a reply`,
-        body: `u/${getDisplayAddress(notification.author.shortAddress)} replied to your post in s/${getDisplayAddress(notification.shortSubplebbitAddress)}${
+        body: `u/${getDisplayAddress(notification.author.shortAddress)} replied to your post in s/${getDisplayAddress(notification.shortCommunityAddress)}${
           notification.content
             ? `: ${notification.content.length > 100 ? notification.content.slice(0, 100).trim() + '...' : notification.content.trim()}`
             : notification.link
               ? `: ${notification.link.length > 100 ? notification.link.slice(0, 100).trim() + '...' : notification.link.trim()}`
               : ''
         }`,
-        url: `/#${getCommunityPostPath(notification.subplebbitAddress, notification.cid)}`,
+        url: `/#${getCommunityPostPath(notification.communityAddress, notification.cid)}`,
       };
 
       showLocalNotification(payload);

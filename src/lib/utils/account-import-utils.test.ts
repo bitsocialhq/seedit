@@ -12,16 +12,12 @@ describe('account import PKC options', () => {
       account: {
         chainProviders: {
           eth: { urls: ['https://eth.example'], chainId: 1 },
-          avax: { urls: ['https://avax.example'], chainId: 43114 },
-          matic: { urls: ['https://matic.example'], chainId: 137 },
           unknown: { urls: ['https://unknown.example'], chainId: 123 },
         },
         pkcOptions: {
           pubsubKuboRpcClientsOptions: ['https://pubsub.example'],
           chainProviders: {
             eth: { urls: ['https://legacy-eth.example'], chainId: 1 },
-            avax: { urls: ['https://avax.example'], chainId: 43114 },
-            matic: { urls: ['https://matic.example'], chainId: 137 },
             unknown: { urls: ['https://legacy-unknown.example'], chainId: 123 },
           },
         },
@@ -45,7 +41,7 @@ describe('account import PKC options', () => {
           pubsubKuboRpcClientsOptions: ['https://pubsub.example'],
           chainProviders: {
             eth: { urls: ['https://custom-eth.example'], chainId: 1 },
-            matic: { urls: ['https://matic.example'], chainId: 137 },
+            unknown: { urls: ['https://unknown.example'], chainId: 123 },
           },
         },
       },
@@ -58,5 +54,37 @@ describe('account import PKC options', () => {
       eth: { urls: ['https://custom-eth.example'], chainId: 1 },
     });
     expect(Object.keys(result.account.pkcOptions.chainProviders)).toEqual(['eth']);
+  });
+
+  it('adds the legacy router baseline when imported protocol options omit routers', () => {
+    const result = JSON.parse(
+      processImportedAccount(
+        JSON.stringify({
+          account: {
+            pkcOptions: {
+              pubsubKuboRpcClientsOptions: ['https://pubsub.example'],
+            },
+          },
+        }),
+        false,
+      ),
+    );
+
+    expect(result.account.pkcOptions.httpRoutersOptions).toEqual(getDefaultWebConfig().httpRoutersOptions);
+  });
+
+  it('preserves explicit custom and empty router lists', () => {
+    const customRouters = JSON.parse(
+      processImportedAccount(
+        JSON.stringify({ account: { pkcOptions: { pubsubKuboRpcClientsOptions: ['https://pubsub.example'], httpRoutersOptions: ['https://custom.example'] } } }),
+        false,
+      ),
+    );
+    const emptyRouters = JSON.parse(
+      processImportedAccount(JSON.stringify({ account: { pkcOptions: { pubsubKuboRpcClientsOptions: ['https://pubsub.example'], httpRoutersOptions: [] } } }), false),
+    );
+
+    expect(customRouters.account.pkcOptions.httpRoutersOptions).toEqual(['https://custom.example']);
+    expect(emptyRouters.account.pkcOptions.httpRoutersOptions).toEqual([]);
   });
 });

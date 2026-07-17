@@ -69,7 +69,7 @@ const ImportAccountButton = () => {
             if (typeof fileContent !== 'string') {
               throw new Error('File content is not a string.');
             }
-            // Process the imported account with platform-appropriate plebbit options
+            // Process the imported account with platform-appropriate PKC options.
             const transformedAccountString = processImportedAccount(fileContent, isElectron);
             const newAccount = JSON.parse(transformedAccountString);
             await importAccount(transformedAccountString);
@@ -123,7 +123,7 @@ const ImportAccountButton = () => {
 const ExportAccountButton = () => {
   const account = useAccount();
   const [showExportAccountOptions, setShowExportAccountOptions] = useState(false);
-  const [includePlebbitOptions, setIncludePlebbitOptions] = useState(true);
+  const [includePkcOptions, setIncludePkcOptions] = useState(true);
   const [includePostHistory, setIncludePostHistory] = useState(true);
   const [includeVoteHistory, setIncludeVoteHistory] = useState(true);
 
@@ -138,7 +138,7 @@ const ExportAccountButton = () => {
 
       // exportAccount might not include pkcOptions, so we need to include it from useAccount()
       const accountDataToInclude = getEditableAccountData(account);
-      if (!includePlebbitOptions) {
+      if (!includePkcOptions) {
         delete accountDataToInclude.pkcOptions;
       }
       exportedAccount.account = accountDataToInclude;
@@ -186,14 +186,8 @@ const ExportAccountButton = () => {
       {showExportAccountOptions && (
         <div className={styles.exportAccountOptions}>
           <div className={styles.exportAccountOption}>
-            <input
-              type='checkbox'
-              id='includePlebbitOptions'
-              name='includePlebbitOptions'
-              checked={includePlebbitOptions}
-              onChange={(e) => setIncludePlebbitOptions(e.target.checked)}
-            />
-            <label htmlFor='includePlebbitOptions'>Include plebbit options</label>
+            <input type='checkbox' id='includePkcOptions' name='includePkcOptions' checked={includePkcOptions} onChange={(e) => setIncludePkcOptions(e.target.checked)} />
+            <label htmlFor='includePkcOptions'>Include PKC options</label>
           </div>
           <div className={styles.exportAccountOption}>
             <input

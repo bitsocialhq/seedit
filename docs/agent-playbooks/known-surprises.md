@@ -48,14 +48,14 @@ If uncertain, ask the developer before adding an entry.
 - **Mitigation:** Keep `.vercel` ignored and clean it before committing if Vercel tooling was used locally.
 - **Status:** confirmed
 
-### Do not add `@plebbit/plebbit-js` directly for Electron RPC
+### Electron RPC uses direct `pkc-js` imports
 
 - **Date:** 2026-03-19
 - **Observed by:** Codex
-- **Context:** `electron/start-plebbit-rpc.js` imports `@plebbit/plebbit-js/rpc` directly even though the repo depends on `@bitsocialnet/bitsocial-react-hooks`.
-- **What was surprising:** The direct import can make agents think `@plebbit/plebbit-js` should be added to `package.json`, but this repo intentionally relies on the transitive copy provided by `@bitsocialnet/bitsocial-react-hooks`.
-- **Impact:** Agents may add a redundant direct dependency and widen the upgrade surface unnecessarily.
-- **Mitigation:** Do not add `@plebbit/plebbit-js` just to satisfy a manifest audit. If a dependency audit complains, handle it with a targeted ignore or with the repo owner first.
+- **Context:** The desktop bootstrap imports `@pkcprotocol/pkc-js/rpc` directly from `electron/start-pkc-rpc.js`.
+- **What was surprising:** Most app data access goes through `@bitsocial/bitsocial-react-hooks`, but the Electron-local RPC bootstrap is intentionally a direct `pkc-js` integration.
+- **Impact:** Agents may try to route Electron RPC through hooks or remove the direct dependency while resolving tooling warnings.
+- **Mitigation:** Keep Electron RPC on the direct `@pkcprotocol/pkc-js` import and audit the runtime dependency before changing its manifest entry.
 - **Status:** confirmed
 
 ### Electron packaging can ship a broken `better-sqlite3` binary

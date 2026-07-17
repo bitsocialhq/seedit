@@ -81,7 +81,7 @@ const CommunityDataEditor = () => {
     communityAddress: storeCommunityAddress,
   } = useCommunitySettingsStore();
 
-  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
 
   // Use store state if available, otherwise fall back to original community data
   const currentSettings = useMemo(() => {
@@ -172,7 +172,7 @@ const CommunityDataEditor = () => {
       const performSave = async () => {
         try {
           console.log('Performing save with options:', publishCommunityEditOptions);
-          await publishSubplebbitEdit();
+          await publishCommunityEdit();
           setShowSaving(false);
           setTriggerSave(false);
 
@@ -324,7 +324,7 @@ const CommunityDataEditor = () => {
             i18nKey='save_reset_changes'
             components={{
               1: <button key='saveCommunitySettingsButton' onClick={saveCommunitySettings} />,
-              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(communitySettings)} />,
+              2: <button key='resetCommunitySettingsButton' onClick={() => setText(communitySettings)} />,
             }}
           />
           <div>

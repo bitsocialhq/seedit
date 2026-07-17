@@ -41,21 +41,21 @@ describe('account-history-utils', () => {
   it('filters optimistic local posts after narrowing account comments by community and recency', () => {
     const nowSeconds = 10_000;
     const accountComments: Comment[] = [
-      { cid: 'keep-subplebbit', postCid: 'keep-subplebbit', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
-      { cid: 'keep-community', postCid: 'keep-community', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
-      { cid: 'skip-existing', postCid: 'skip-existing', state: 'succeeded', timestamp: 9_800, subplebbitAddress: 'cats' },
-      { cid: 'skip-reply', postCid: 'parent', state: 'succeeded', timestamp: 9_900, subplebbitAddress: 'cats' },
-      { cid: 'skip-old', postCid: 'skip-old', state: 'succeeded', timestamp: 6_000, subplebbitAddress: 'cats' },
-      { cid: 'skip-removed', postCid: 'skip-removed', state: 'succeeded', timestamp: 9_900, subplebbitAddress: 'cats', removed: true },
-      { cid: 'skip-pending', postCid: 'skip-pending', state: 'pending', timestamp: 9_900, subplebbitAddress: 'cats' },
-      { cid: 'skip-other-community', postCid: 'skip-other-community', state: 'succeeded', timestamp: 9_900, subplebbitAddress: 'dogs' },
+      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
+      { cid: 'keep-newer', postCid: 'keep-newer', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
+      { cid: 'skip-existing', postCid: 'skip-existing', state: 'succeeded', timestamp: 9_800, communityAddress: 'cats' },
+      { cid: 'skip-reply', postCid: 'parent', state: 'succeeded', timestamp: 9_900, communityAddress: 'cats' },
+      { cid: 'skip-old', postCid: 'skip-old', state: 'succeeded', timestamp: 6_000, communityAddress: 'cats' },
+      { cid: 'skip-removed', postCid: 'skip-removed', state: 'succeeded', timestamp: 9_900, communityAddress: 'cats', removed: true },
+      { cid: 'skip-pending', postCid: 'skip-pending', state: 'pending', timestamp: 9_900, communityAddress: 'cats' },
+      { cid: 'skip-other-community', postCid: 'skip-other-community', state: 'succeeded', timestamp: 9_900, communityAddress: 'dogs' },
     ];
 
     const feed: Comment[] = [{ cid: 'skip-existing' }];
 
     expect(filterOptimisticLocalPosts(accountComments, feed, 'cats', nowSeconds)).toEqual([
-      { cid: 'keep-subplebbit', postCid: 'keep-subplebbit', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
-      { cid: 'keep-community', postCid: 'keep-community', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
+      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
+      { cid: 'keep-newer', postCid: 'keep-newer', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
     ]);
   });
 });

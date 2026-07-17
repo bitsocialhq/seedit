@@ -221,7 +221,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         u/{getDisplayAddress(author?.shortAddress || '')}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentSubplebbit}>
+      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentCommunity}>
         s/{getDisplayAddress(communityAddress || '')}
       </Link>
     </div>
@@ -290,7 +290,7 @@ const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, short
           u/{getDisplayAddress(shortAddress || '')}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.inboxParentSubplebbit}>
+        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentCommunity}>
           s/{shortCommunityAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}

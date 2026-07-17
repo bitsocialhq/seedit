@@ -95,6 +95,35 @@
   text-transform: capitalize;
 }
 
+.settingsUpgradeNotice {
+  position: sticky;
+  bottom: 5px;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 8px;
+  padding: 3px 5px;
+  background-color: var(--background-orange);
+  border: 1px solid var(--border-orange);
+  color: var(--text);
+  font-family: monospace;
+  font-size: 11px;
+  text-align: center;
+}
+
+.settingsUpgradeNotice button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--link-primary);
+  filter: none;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media (max-width: 640px) {
   .categoryTitle {
     flex: 0 0 65px;

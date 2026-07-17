@@ -5,7 +5,7 @@
 }
 
 .replyWrapper {
- margin-top: 10px;
+  margin-top: 10px;
 }
 
 .singleReplyWrapper {
@@ -45,19 +45,19 @@
 }
 
 .arrowUp {
-  background-image: url("/assets/buttons/arrow-up.png");
+  background-image: url('/assets/buttons/arrow-up.png');
 }
 
 .upvoted {
-  background-image: url("/assets/buttons/arrow-upvoted.png") !important;
+  background-image: url('/assets/buttons/arrow-upvoted.png') !important;
 }
 
 .arrowDown {
-  background-image: url("/assets/buttons/arrow-down.png");
+  background-image: url('/assets/buttons/arrow-down.png');
 }
 
 .downvoted {
-  background-image: url("/assets/buttons/arrow-downvoted.png") !important;
+  background-image: url('/assets/buttons/arrow-downvoted.png') !important;
 }
 
 .entry {
@@ -94,7 +94,7 @@
 .score {
   margin-left: 0.5em;
   color: var(--text-info);
-  font-size: x-small;  
+  font-size: x-small;
 }
 
 .time {
@@ -176,7 +176,8 @@
   padding: 2px 5px;
 }
 
-.removedContent, .deletedContent {
+.removedContent,
+.deletedContent {
   text-transform: lowercase;
   background-color: var(--removed-reply-backgrouhd-color);
   display: inline-block;
@@ -206,7 +207,9 @@
   color: var(--text-info);
 }
 
-.moderator, .admin, .owner {
+.moderator,
+.admin,
+.owner {
   color: var(--green);
 }
 
@@ -239,7 +242,7 @@
   margin-top: 10px;
   color: var(--link);
   outline: none;
-  margin-right: .4em;
+  margin-right: 0.4em;
   padding: 0px;
   overflow: hidden;
   unicode-bidi: isolate;
@@ -254,8 +257,8 @@
   font-weight: bold;
 }
 
-.parentSubplebbit {
-  color: var(--text-primary)
+.parentCommunity {
+  color: var(--text-primary);
 }
 
 .inboxParentLinkSubject {
@@ -301,7 +304,7 @@
   cursor: pointer;
   font-weight: 700;
   color: var(--text-primary);
-  display: inline-block
+  display: inline-block;
 }
 
 .addMargin {
@@ -329,7 +332,7 @@
 .continueThisThread a::after {
   background-image: var(--continue-thread-arrow);
   background-repeat: no-repeat;
-  content: " ";
+  content: ' ';
   display: inline-block;
   width: 25px;
   height: 9px;
@@ -340,7 +343,7 @@
   font-size: 13px;
   color: var(--text-primary);
   cursor: pointer;
-  display: inline-block
+  display: inline-block;
 }
 
 @media (max-width: 640px) {

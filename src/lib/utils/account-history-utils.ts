@@ -1,4 +1,5 @@
 import { type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { getCommentCommunityAddress } from './comment-utils';
 
 export const getAccountHistoryOrder = (sortType: string): 'asc' | 'desc' => (sortType === 'new' ? 'desc' : 'asc');
 
@@ -24,10 +25,9 @@ export const mergeRepliesWithPendingAccountReplies = (publishedReplies: Comment[
   ];
 };
 
-export const filterOptimisticLocalPosts = (accountComments: Comment[], feed: Comment[], subplebbitAddress: string, nowSeconds = Date.now() / 1000): Comment[] =>
+export const filterOptimisticLocalPosts = (accountComments: Comment[], feed: Comment[], communityAddress: string, nowSeconds = Date.now() / 1000): Comment[] =>
   accountComments.filter((comment) => {
     const { cid, deleted, postCid, removed, state, timestamp } = comment || {};
-    const commentCommunityAddress = comment?.subplebbitAddress || comment?.communityAddress;
 
     return (
       !deleted &&
@@ -36,7 +36,7 @@ export const filterOptimisticLocalPosts = (accountComments: Comment[], feed: Com
       state === 'succeeded' &&
       cid &&
       cid === postCid &&
-      commentCommunityAddress === subplebbitAddress &&
+      getCommentCommunityAddress(comment) === communityAddress &&
       !feed.some((post) => post.cid === cid)
     );
   });

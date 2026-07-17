@@ -153,6 +153,10 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean)
     delete importedAccount.account.plebbitOptions;
   }
 
+  if (importedAccount.account.pkcOptions && !Array.isArray(importedAccount.account.pkcOptions.httpRoutersOptions)) {
+    importedAccount.account.pkcOptions.httpRoutersOptions = (isElectron ? getDefaultElectronConfig() : getDefaultWebConfig()).httpRoutersOptions;
+  }
+
   // Transform pkcOptions based on platform and existing config
   if (importedAccount.account.pkcOptions) {
     importedAccount.account.pkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);

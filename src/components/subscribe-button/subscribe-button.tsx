@@ -20,7 +20,7 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
   const isInAuthorView = isAuthorView(location.pathname);
   const isInProfileView = isProfileView(location.pathname);
   const isInPendingPostView = isPendingPostView(location.pathname, params);
-  const subplebbitPageString = subscribed ? `${t('leave')}` : `${t('join')}`;
+  const communityPageString = subscribed ? `${t('leave')}` : `${t('join')}`;
   const authorPageString = '+ friends'; // TODO: add functionality once implemented in backend
 
   const handleSubscribe = async () => {
@@ -57,7 +57,7 @@ const SubscribeButton = ({ address, onUnsubscribe }: subscribeButtonProps) => {
       className={`${isInProfileView && !isInPendingPostView ? styles.hidden : ''} ${styles.subscribeButton} ${subscribed ? styles.leaveButton : styles.joinButton}`}
       onClick={handleSubscribe}
     >
-      {isInAuthorView ? authorPageString : subplebbitPageString}
+      {isInAuthorView ? authorPageString : communityPageString}
     </span>
   );
 };

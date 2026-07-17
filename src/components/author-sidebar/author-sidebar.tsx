@@ -65,9 +65,9 @@ const AuthorSidebar = () => {
   const { accountCommunities } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
 
-  const defaultSubplebbitAddresses = useDefaultSubscriptionAddresses();
+  const defaultCommunityAddresses = useDefaultSubscriptionAddresses();
   const accountSubscriptions = userAccount?.subscriptions || [];
-  const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultSubplebbitAddresses];
+  const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultCommunityAddresses];
 
   const communities =
     useCommunities({

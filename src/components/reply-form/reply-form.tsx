@@ -39,9 +39,9 @@ export const FormattingHelpTable = () => {
             </td>
           </tr>
           <tr>
-            <td>[plebbit!](https://plebbit.com)</td>
+            <td>[Bitsocial!](https://bitsocial.net)</td>
             <td>
-              <Markdown content='[plebbit!](https://plebbit.com)' />
+              <Markdown content='[Bitsocial!](https://bitsocial.net)' />
             </td>
           </tr>
           <tr>
@@ -99,9 +99,9 @@ export const FormattingHelpTable = () => {
             </td>
           </tr>
           <tr>
-            <td>{`<spoiler>plebbit<spoiler>`}</td>
+            <td>{`<spoiler>Bitsocial<spoiler>`}</td>
             <td>
-              <Markdown content={`<spoiler>plebbit<spoiler>`} />
+              <Markdown content={`<spoiler>Bitsocial<spoiler>`} />
             </td>
           </tr>
         </tbody>

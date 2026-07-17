@@ -340,8 +340,8 @@ const CommunitySettings = () => {
   const isChallengesReadOnly = (!isConnectedToRpc || !settings) && !isInCreateCommunityView;
 
   const { publishCommunityEditOptions, resetCommunitySettingsStore, setCommunitySettingsStore, title: storeTitle } = useCommunitySettingsStore();
-  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
-  const { error: createCommunityError, createdCommunity, createCommunity: createSubplebbit } = useCreateCommunity(publishCommunityEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
+  const { error: createCommunityError, createdCommunity, createCommunity } = useCreateCommunity(publishCommunityEditOptions);
 
   const [showSaving, setShowSaving] = useState(false);
   const [currentError, setCurrentError] = useState<Error | undefined>(undefined);
@@ -352,12 +352,12 @@ const CommunitySettings = () => {
     }
   }, [publishCommunityEditError, createCommunityError]);
 
-  const saveSubplebbit = async () => {
+  const saveCommunity = async () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
       console.log('Saving community with options:', publishCommunityEditOptions);
-      await publishSubplebbitEdit();
+      await publishCommunityEdit();
       setShowSaving(false);
 
       if (publishCommunityEditError) {
@@ -405,7 +405,7 @@ const CommunitySettings = () => {
       setShowSaving(true);
       setCurrentError(undefined);
       console.log('Creating community with settings:', publishCommunityEditOptions);
-      await createSubplebbit();
+      await createCommunity();
       setShowSaving(false);
 
       if (createCommunityError) {
@@ -547,7 +547,7 @@ const CommunitySettings = () => {
     <div className={styles.content}>
       {!isInCreateCommunityView && (
         <div className={styles.sidebar}>
-          <Sidebar subplebbit={community} />
+          <Sidebar community={community} />
         </div>
       )}
       {isReadOnly && !userIsOwnerOrAdmin && <div className={styles.infobar}>{t('owner_settings_notice')}</div>}
@@ -566,7 +566,7 @@ const CommunitySettings = () => {
             <div className={styles.boxTitle}>{t('delete_community')}</div>
             <div className={styles.boxSubtitle}>{t('delete_community_description')}</div>
             <div className={styles.boxInput}>
-              <div className={styles.deleteSubplebbit}>
+              <div className={styles.deleteCommunity}>
                 <button onClick={_deleteCommunity} disabled={showDeleting || showSaving}>
                   {t('delete')}
                 </button>
@@ -576,7 +576,7 @@ const CommunitySettings = () => {
           </div>
         )}
         {!isReadOnly && (
-          <button onClick={() => (isInCreateCommunityView ? _createCommunity() : saveSubplebbit())} disabled={showSaving || showDeleting}>
+          <button onClick={() => (isInCreateCommunityView ? _createCommunity() : saveCommunity())} disabled={showSaving || showDeleting}>
             {isInCreateCommunityView ? t('create_community') : t('save_options')}
           </button>
         )}

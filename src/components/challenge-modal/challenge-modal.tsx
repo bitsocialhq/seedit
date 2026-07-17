@@ -27,7 +27,7 @@ const ChallengeHeader = ({ publicationType, votePreview, parentCid, parentAddres
 
   return (
     <>
-      <div className={styles.title}>{t('challenge_from', { subplebbit: communityShortAddress })}</div>
+      <div className={styles.title}>{t('challenge_from', { community: communityShortAddress })}</div>
       <div className={styles.subTitle}>
         {publicationType === 'vote' && votePreview + ' '}
         {parentCid
@@ -53,7 +53,13 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
   const publicationContent = publicationType === 'vote' ? getPublicationPreview(publicationTarget) : getPublicationPreview(challenge?.[1]);
   const votePreview = getVotePreview(challenge?.[1]);
 
-  const { parentCid, shortSubplebbitAddress, subplebbitAddress } = challenge?.[1] || {};
+  const publication = challenge?.[1] as
+    | (NonNullable<ChallengeType[1]> & {
+        shortSubplebbitAddress?: string;
+        subplebbitAddress?: string;
+      })
+    | undefined;
+  const { parentCid, shortCommunityAddress, communityAddress, shortSubplebbitAddress, subplebbitAddress } = publication || {};
   const parentAddress = getDisplayAddress(useParentAddress(parentCid) || '');
 
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
@@ -170,7 +176,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
       iframeRef.current.contentWindow?.postMessage(
         {
           type: 'plebbit-theme',
-          theme: theme,
+          theme,
           source: 'plebbit-seedit',
         },
         iframeOrigin,
@@ -204,7 +210,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     return () => document.removeEventListener('keydown', onEscapeKey);
   }, [isIframeChallenge, onIframeClose, closeModal]);
 
-  const communityShortAddress = getDisplayAddress(shortSubplebbitAddress || subplebbitAddress || '');
+  const communityShortAddress = getDisplayAddress(shortCommunityAddress || shortSubplebbitAddress || communityAddress || subplebbitAddress || '');
 
   // Render iframe challenge
   if (isIframeChallenge) {
@@ -224,7 +230,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
             <div className={styles.challengeMediaWrapper}>
               <div className={`${styles.challengeMedia} ${styles.iframeChallengeWarning}`}>
                 {t('iframe_challenge_open_confirmation', {
-                  subplebbit: communityShortAddress,
+                  community: communityShortAddress,
                   url: decodeURIComponent(getChallengeUrl()),
                   defaultValue: `s/${communityShortAddress} challenge wants to open ${decodeURIComponent(getChallengeUrl())}`,
                 })}

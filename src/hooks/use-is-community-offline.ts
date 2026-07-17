@@ -5,9 +5,9 @@ import { getFormattedTimeAgo } from '../lib/utils/time-utils';
 import useCommunityOfflineStore from '../stores/use-community-offline-store';
 import useCommunitiesLoadingStartTimestamps from '../stores/use-communities-loading-start-timestamps-store';
 
-const useIsCommunityOffline = (subplebbit: Community) => {
+const useIsCommunityOffline = (community: Community) => {
   const { t } = useTranslation();
-  const { address, state, updatedAt, updatingState } = subplebbit || {};
+  const { address, state, updatedAt, updatingState } = community || {};
   const { communityOfflineState, setCommunityOfflineState, initializeCommunityOfflineState } = useCommunityOfflineStore();
   const communitiesLoadingStartTimestamps = useCommunitiesLoadingStartTimestamps([address]);
 
@@ -36,7 +36,7 @@ const useIsCommunityOffline = (subplebbit: Community) => {
     ? t('loading')
     : updatedAt
       ? isOffline && t('posts_last_synced_info', { time: getFormattedTimeAgo(updatedAt), interpolation: { escapeValue: false } })
-      : t('subplebbit_offline_info');
+      : t('community_offline_info');
 
   // ensure isOffline is false until we have enough information
   const hasEnoughInfo = communityOfflineStore.initialLoad === false || updatedAt !== undefined;

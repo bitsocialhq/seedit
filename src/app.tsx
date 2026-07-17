@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
@@ -32,6 +32,8 @@ import styles from './app.module.css';
 
 initializeNotificationSystem();
 
+const SettingsUpgradeModal = lazy(() => import('./components/settings-upgrade-modal'));
+
 const App = () => {
   useAutoSubscribe();
   useBrowserPureP2PAccountUpgrade();
@@ -40,6 +42,9 @@ const App = () => {
     <>
       <ChallengeModal />
       <NotificationHandler />
+      <Suspense fallback={null}>
+        <SettingsUpgradeModal />
+      </Suspense>
       <Outlet />
     </>
   );

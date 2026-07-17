@@ -51,6 +51,7 @@ import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import styles from './header.module.css';
 
 const AboutButton = () => {
@@ -410,6 +411,7 @@ const Header = () => {
   const { title } = community || {};
 
   const accountComment = useOptionalAccountComment(params?.accountCommentIndex);
+  const pendingPostCommunityAddress = getCommentCommunityAddress(accountComment);
 
   const isMobile = useWindowWidth() < 640;
   const isInAllAboutView = isAllAboutView(location.pathname);
@@ -456,8 +458,8 @@ const Header = () => {
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? accountComment?.subplebbitAddress
-          ? `${getCommunityPath(accountComment.subplebbitAddress)}/submit`
+        ? pendingPostCommunityAddress
+          ? `${getCommunityPath(pendingPostCommunityAddress)}/submit`
           : '/submit'
         : communityAddress
           ? `${getCommunityPath(communityAddress)}/submit`
@@ -478,12 +480,12 @@ const Header = () => {
         </div>
         {!isInHomeView && !isInHomeAboutView && !isInModView && !isInAllView && (
           <span className={`${styles.pageName} ${styles.soloPageName}`}>
-            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
+            <HeaderTitle title={title} pendingPostCommunityAddress={pendingPostCommunityAddress} />
           </span>
         )}
         {(isInModView || isInAllView) && (
           <div className={`${styles.pageName} ${styles.allOrModPageName}`}>
-            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
+            <HeaderTitle title={title} pendingPostCommunityAddress={pendingPostCommunityAddress} />
           </div>
         )}
         {!isMobile && !isHiddenNsfwCommunity && (
