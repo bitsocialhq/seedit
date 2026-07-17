@@ -32,7 +32,7 @@ const ModMenu = ({ cid, isCommentAuthorMod }: ModMenuProps) => {
 
   const defaultPublishOptions: PublishCommentModerationOptions = {
     commentCid: cid,
-    subplebbitAddress: communityAddress,
+    communityAddress,
     commentModeration: {
       removed: removed ?? false,
       purged: purged ?? false,

@@ -12,7 +12,7 @@ const useDownvote = (comment: Comment): [boolean, () => void] => {
     () => ({
       commentCid: comment?.cid,
       vote: vote !== -1 ? -1 : 0,
-      subplebbitAddress: getCommentCommunityAddress(comment),
+      communityAddress: getCommentCommunityAddress(comment),
       onChallenge: (...args: any) => {
         return new Promise<void>((resolve) => {
           addChallenge([...args, comment]);

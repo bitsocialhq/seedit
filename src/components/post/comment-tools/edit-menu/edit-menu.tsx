@@ -31,7 +31,7 @@ const EditMenu = ({ commentCid, showCommentEditForm }: EditMenuProps) => {
   const defaultPublishOptions: PublishCommentEditOptions = {
     commentCid,
     deleted,
-    subplebbitAddress: communityAddress,
+    communityAddress,
     onChallenge: (...args: any) => addChallenge([...args, post]),
     onChallengeVerification: alertChallengeVerificationFailed,
     onError: (error: Error) => {

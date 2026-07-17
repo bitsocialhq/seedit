@@ -40,7 +40,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
       if (nsfw !== undefined) nextState.nsfw = nsfw || undefined;
 
       nextState.publishCommentOptions = {
-        subplebbitAddress: nextState.communityAddress,
+        communityAddress: nextState.communityAddress,
         title: nextState.title,
         content: nextState.content,
         link: nextState.link,
