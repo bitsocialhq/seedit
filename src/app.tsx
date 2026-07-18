@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
 import { useAutoSubscribe } from './hooks/use-auto-subscribe';
 import { useBrowserPureP2PAccountUpgrade } from './hooks/use-browser-pure-p2p-account-upgrade';
+import useCanonicalCommunityRoute from './hooks/use-canonical-community-route';
 import AboutView from './views/about';
 import All from './views/all';
 import Author from './views/author';
@@ -32,14 +33,20 @@ import styles from './app.module.css';
 
 initializeNotificationSystem();
 
+const SettingsUpgradeModal = lazy(() => import('./components/settings-upgrade-modal'));
+
 const App = () => {
   useAutoSubscribe();
   useBrowserPureP2PAccountUpgrade();
+  useCanonicalCommunityRoute();
 
   const globalLayout = (
     <>
       <ChallengeModal />
       <NotificationHandler />
+      <Suspense fallback={null}>
+        <SettingsUpgradeModal />
+      </Suspense>
       <Outlet />
     </>
   );

@@ -21,28 +21,30 @@ export const resolveCommunityRouteAddress = (segment: string | undefined): strin
   return `${segment}${DEFAULT_COMMUNITY_TLD}`;
 };
 
-/**
- * Returns the shortest deterministic route segment for a community address.
- * Only single-label .bso names can be shortened without becoming ambiguous.
- */
-export const getCommunityRouteSegment = (address: string): string => {
-  if (!address.toLowerCase().endsWith(DEFAULT_COMMUNITY_TLD)) {
-    return address;
-  }
-
-  const label = address.slice(0, -DEFAULT_COMMUNITY_TLD.length);
-  if (!label || label.includes('.') || isReservedCommunityRouteSegment(label) || isLikelyBase58PublicKey(label)) {
-    return address;
-  }
-
-  return label;
-};
+export const getCommunityRouteSegment = (address: string): string => resolveCommunityRouteAddress(address) ?? address;
 
 export const getCommunityPath = (communityAddress: string): string => `/s/${encodeURIComponent(getCommunityRouteSegment(communityAddress))}`;
 
 export const getCommunityPostPath = (communityAddress: string, cid: string): string => `${getCommunityPath(communityAddress)}/comments/${encodeURIComponent(cid)}`;
 
 export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://seedit.app${getCommunityPostPath(communityAddress, cid)}`;
+
+export const getCanonicalCommunityRoutePathname = (pathname: string): string | undefined => {
+  const routeMatch = pathname.match(/^\/s\/([^/?#]+)(.*)$/);
+  if (!routeMatch) return undefined;
+
+  let routeSegment: string;
+  try {
+    routeSegment = decodeURIComponent(routeMatch[1]);
+  } catch {
+    return undefined;
+  }
+
+  const canonicalRouteSegment = getCommunityRouteSegment(routeSegment);
+  if (canonicalRouteSegment === routeSegment) return undefined;
+
+  return `/s/${encodeURIComponent(canonicalRouteSegment)}${routeMatch[2]}`;
+};
 
 export const getCanonicalCommunityPostRedirectPath = (
   routeCommunitySegment: string | undefined,

@@ -100,12 +100,12 @@ const FeedFooter = ({
     ) : null;
 
   // Add state to track initial loading
-  const [hasFetchedCommunityAddresses, setHasFetchedSubplebbitAddresses] = useState(false);
+  const [hasFetchedCommunityAddresses, setHasFetchedCommunityAddresses] = useState(false);
 
   // Set hasInitialized after a short delay
   useEffect(() => {
     const timer = setTimeout(() => {
-      setHasFetchedSubplebbitAddresses(true);
+      setHasFetchedCommunityAddresses(true);
     }, 500);
     return () => clearTimeout(timer);
   }, []);

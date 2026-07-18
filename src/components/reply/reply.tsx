@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Comment, useAuthorAddress, useAuthorAvatar, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { isInboxView, isPostContextView, isPostPageView } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
@@ -13,7 +13,6 @@ import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/
 import { CommentMediaInfo, getHasThumbnail } from '../../lib/utils/media-utils';
 import { formatLocalizedUTCTimestamp, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
-import useContentOptionsStore from '../../stores/use-content-options-store';
 import useDownvote from '../../hooks/use-downvote';
 import useReplies from '../../hooks/use-replies';
 import useStateString from '../../hooks/use-state-string';
@@ -38,8 +37,6 @@ interface ReplyAuthorProps {
   cid: string;
   deleted: boolean;
   displayName: string;
-  imageUrl: string | undefined;
-  isAvatarDefined: boolean;
   removed: boolean;
   shortAuthorAddress: string | undefined;
   submitterAddress: string;
@@ -54,8 +51,6 @@ const ReplyAuthor = ({
   cid,
   deleted,
   displayName,
-  imageUrl,
-  isAvatarDefined,
   pinned,
   removed,
   shortAuthorAddress,
@@ -64,8 +59,6 @@ const ReplyAuthor = ({
   postCid,
 }: ReplyAuthorProps) => {
   const { t } = useTranslation();
-  const hideAvatars = useContentOptionsStore((state) => state.hideAvatars);
-
   // TODO: implement comment.highlightRole once implemented in API
   const isAuthorAdmin = authorRole === 'admin';
   const isAuthorOwner = authorRole === 'owner';
@@ -82,11 +75,6 @@ const ReplyAuthor = ({
         <span className={styles.removedUsername}>[{removed ? t('removed') : deleted ? t('deleted') : ''}]</span>
       ) : (
         <>
-          {!hideAvatars && isAvatarDefined && (
-            <span className={styles.authorAvatar}>
-              <img src={imageUrl} alt='' />
-            </span>
-          )}
           {displayName && (
             <Link
               to={`/u/${address}/comments/${cid}`}
@@ -99,7 +87,7 @@ const ReplyAuthor = ({
             to={`/u/${address}/comments/${cid}`}
             className={`${styles.author} ${pinned && moderatorClass} ${!moderatorClass && isAuthorSubmitter ? styles.submitter : ''}`}
           >
-            {displayName ? `u/${shortAuthorAddress}` : shortAuthorAddress}
+            {displayName ? `u/${getDisplayAddress(shortAuthorAddress || '')}` : getDisplayAddress(shortAuthorAddress || '')}
           </Link>
           {/* TODO: implement comment.highlightRole once implemented in API */}
           {(authorRole || isAuthorSubmitter) && pinned && (
@@ -230,11 +218,11 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
       </Link>
       {t('post_by')}{' '}
       <Link to={`/u/${author?.address}/comments/${cid}`} className={styles.parentAuthor}>
-        u/{author?.shortAddress}{' '}
+        u/{getDisplayAddress(author?.shortAddress || '')}{' '}
       </Link>
       {t('via')}{' '}
-      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentSubplebbit}>
-        s/{communityAddress}
+      <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentCommunity}>
+        s/{getDisplayAddress(communityAddress || '')}
       </Link>
     </div>
   );
@@ -292,17 +280,17 @@ const InboxShowParentButton = ({ parentCid }: { parentCid: string | undefined })
 
 const InboxParentInfo = ({ address, cid, markedAsRead, parentCid, postCid, shortAddress, communityAddress, timestamp }: ParentLinkProps) => {
   const { t } = useTranslation();
-  const shortCommunityAddress = communityAddress ? (communityAddress.includes('.') ? communityAddress : getShortAddress(communityAddress)) : '';
+  const shortCommunityAddress = communityAddress ? getShortDisplayAddress(communityAddress) : '';
 
   return (
     <>
       <div className={`${styles.inboxParentInfo} ${markedAsRead ? styles.inboxParentRead : styles.inboxParentUnread}`}>
         {t('from')}{' '}
         <Link to={`/u/${address}/comments/${cid}`} className={styles.inboxParentAuthor}>
-          u/{shortAddress}{' '}
+          u/{getDisplayAddress(shortAddress || '')}{' '}
         </Link>
         {t('via')}{' '}
-        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.inboxParentSubplebbit}>
+        <Link to={communityAddress ? getCommunityPath(communityAddress) : ''} className={styles.parentCommunity}>
           s/{shortCommunityAddress}{' '}
         </Link>
         {t('sent')} {timestamp && getFormattedTimeAgo(timestamp)}
@@ -365,7 +353,6 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
 
   const authorRole = community?.roles?.[author?.address]?.role;
   const { shortAuthorAddress } = useAuthorAddress({ comment: reply });
-  const { imageUrl } = useAuthorAvatar({ author });
   const replies = useReplies(reply);
 
   const [expanded, setExpanded] = useState(false);
@@ -466,8 +453,6 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
                   cid={cid}
                   deleted={deleted}
                   displayName={author?.displayName}
-                  imageUrl={imageUrl}
-                  isAvatarDefined={!!author?.avatar}
                   removed={removed}
                   shortAuthorAddress={shortAuthorAddress}
                   submitterAddress={post?.author?.address}

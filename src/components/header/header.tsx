@@ -42,7 +42,7 @@ import {
   isPostPageAboutView,
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
@@ -51,6 +51,7 @@ import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import styles from './header.module.css';
 
 const AboutButton = () => {
@@ -350,13 +351,13 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
 
   const communityTitle = (
     <Link to={titleCommunityAddress ? getCommunityPath(titleCommunityAddress) : '/'}>
-      {title || (communityAddress && getShortAddress(communityAddress)) || (pendingPostCommunityAddress && getShortAddress(pendingPostCommunityAddress))}
+      {title || (communityAddress && getShortDisplayAddress(communityAddress)) || (pendingPostCommunityAddress && getShortDisplayAddress(pendingPostCommunityAddress))}
     </Link>
   );
   const domainTitle = <Link to={`/domain/${params.domain}`}>{params.domain}</Link>;
   const submitTitle = <span className={styles.submitTitle}>{t('submit')}</span>;
-  const profileTitle = <Link to='/profile'>{account?.author?.shortAddress}</Link>;
-  const authorTitle = <Link to={`/u/${params.authorAddress}/comments/${params.commentCid}`}>{params.authorAddress && getShortAddress(params.authorAddress)}</Link>;
+  const profileTitle = <Link to='/profile'>{getDisplayAddress(account?.author?.shortAddress || '')}</Link>;
+  const authorTitle = <Link to={`/u/${params.authorAddress}/comments/${params.commentCid}`}>{params.authorAddress && getShortDisplayAddress(params.authorAddress)}</Link>;
 
   if (isHiddenNsfwCommunity) {
     return <span>{t('over_18')}</span>;
@@ -410,6 +411,7 @@ const Header = () => {
   const { title } = community || {};
 
   const accountComment = useOptionalAccountComment(params?.accountCommentIndex);
+  const pendingPostCommunityAddress = getCommentCommunityAddress(accountComment);
 
   const isMobile = useWindowWidth() < 640;
   const isInAllAboutView = isAllAboutView(location.pathname);
@@ -452,16 +454,12 @@ const Header = () => {
   const { hideNsfwCommunities } = useContentOptionsStore();
   const isHiddenNsfwCommunity = useIsNsfwCommunity(communityAddress || '') && hideNsfwCommunities;
 
-  const communitySuggestedAvatarUrl = isInCommunityView && !isHiddenNsfwCommunity ? community?.suggested?.avatarUrl : undefined;
-  const mascotSrc = communitySuggestedAvatarUrl || 'assets/sprout/sprout.png';
-  const logoLink = '/';
-
   const mobileSubmitButtonRoute =
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? accountComment?.subplebbitAddress
-          ? `${getCommunityPath(accountComment.subplebbitAddress)}/submit`
+        ? pendingPostCommunityAddress
+          ? `${getCommunityPath(pendingPostCommunityAddress)}/submit`
           : '/submit'
         : communityAddress
           ? `${getCommunityPath(communityAddress)}/submit`
@@ -475,19 +473,19 @@ const Header = () => {
         } ${hasStickyHeader && styles.increasedHeight}`}
       >
         <div className={styles.logoContainer}>
-          <Link to={logoLink} className={styles.logoLink}>
-            {!isInProfileView && !isInAuthorView && <img className={communitySuggestedAvatarUrl ? styles.avatar : styles.logo} src={mascotSrc} alt='' />}
+          <Link to='/' className={styles.logoLink}>
+            <img className={styles.logo} src='assets/sprout/sprout.png' alt='' />
             <img src={`assets/sprout/seedit-text-${theme === 'dark' ? 'dark' : 'light'}.svg`} className={styles.logoText} alt='' />
           </Link>
         </div>
         {!isInHomeView && !isInHomeAboutView && !isInModView && !isInAllView && (
-          <span className={`${styles.pageName} ${!communitySuggestedAvatarUrl && styles.soloPageName}`}>
-            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
+          <span className={`${styles.pageName} ${styles.soloPageName}`}>
+            <HeaderTitle title={title} pendingPostCommunityAddress={pendingPostCommunityAddress} />
           </span>
         )}
         {(isInModView || isInAllView) && (
           <div className={`${styles.pageName} ${styles.allOrModPageName}`}>
-            <HeaderTitle title={title} pendingPostCommunityAddress={accountComment?.subplebbitAddress} />
+            <HeaderTitle title={title} pendingPostCommunityAddress={pendingPostCommunityAddress} />
           </div>
         )}
         {!isMobile && !isHiddenNsfwCommunity && (

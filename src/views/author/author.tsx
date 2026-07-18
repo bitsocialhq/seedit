@@ -11,6 +11,7 @@ import Reply from '../../components/reply/';
 import AuthorSidebar from '../../components/author-sidebar';
 import styles from './author.module.css';
 import ErrorDisplay from '../../components/error-display';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -81,7 +82,8 @@ const Author = () => {
     }
   }, [authorAddress, lastCommentCid, commentCid, navigate]);
 
-  const profileTitle = author?.author?.displayName ? `${author?.author?.displayName} (u/${author?.author?.shortAddress})` : `u/${author?.author?.shortAddress}`;
+  const displayAddress = getDisplayAddress(author?.author?.shortAddress || '');
+  const profileTitle = author?.author?.displayName ? `${author.author.displayName} (u/${displayAddress})` : `u/${displayAddress}`;
   useEffect(() => {
     document.title = profileTitle + ' - Seedit';
   }, [t, profileTitle]);

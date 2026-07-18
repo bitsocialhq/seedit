@@ -13,7 +13,7 @@ import {
   isModView,
   isCommunityAboutView,
 } from '../../lib/utils/view-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import styles from './search-bar.module.css';
@@ -60,16 +60,16 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const { setIsSearching } = useFeedFiltersStore();
 
   const account = useAccount();
-  const subplebbitAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
-  const defaultSubplebbitAddresses = useDefaultSubscriptionAddresses();
+  const communityAddresses = useMemo(() => account?.subscriptions || [], [account?.subscriptions]);
+  const defaultCommunityAddresses = useDefaultSubscriptionAddresses();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 
   const filteredCommunitySuggestions = useMemo(() => {
     if (!inputValue || isInCommunitySearch) return [];
-    const combinedAddresses = Array.from(new Set([...subplebbitAddresses, ...defaultSubplebbitAddresses]));
+    const combinedAddresses = Array.from(new Set([...communityAddresses, ...defaultCommunityAddresses]));
     return combinedAddresses.filter((address: string) => address?.toLowerCase()?.includes(inputValue.toLowerCase())).slice(0, 10);
-  }, [inputValue, subplebbitAddresses, defaultSubplebbitAddresses, isInCommunitySearch]);
+  }, [inputValue, communityAddresses, defaultCommunityAddresses, isInCommunitySearch]);
 
   const { x, y, strategy, refs, context } = useFloating({
     open: isInputFocused && filteredCommunitySuggestions.length > 0,
@@ -280,7 +280,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
                 onTouchEnd={() => handleCommunitySelect(address)}
                 onMouseEnter={() => setActiveDropdownIndex(index)}
               >
-                {getShortAddress(address)}
+                {getShortDisplayAddress(address)}
               </li>
             ))}
           </ul>

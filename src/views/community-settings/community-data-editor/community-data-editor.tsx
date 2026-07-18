@@ -11,6 +11,7 @@ import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../../lib/utils/community-route-utils';
+import { removeSuggestedAvatarUrl } from './community-data-editor-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -80,7 +81,7 @@ const CommunityDataEditor = () => {
     communityAddress: storeCommunityAddress,
   } = useCommunitySettingsStore();
 
-  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
 
   // Use store state if available, otherwise fall back to original community data
   const currentSettings = useMemo(() => {
@@ -91,7 +92,7 @@ const CommunityDataEditor = () => {
       title: hasStoreData ? storeTitle : title,
       description: hasStoreData ? storeDescription : description,
       address: hasStoreData ? storeAddress : address,
-      suggested: hasStoreData ? storeSuggested : suggested,
+      suggested: removeSuggestedAvatarUrl((hasStoreData ? storeSuggested : suggested) ?? {}),
       rules: hasStoreData ? storeRules : rules,
       roles: hasStoreData ? storeRoles : roles,
       settings: hasStoreData ? storeSettings : settings,
@@ -149,7 +150,7 @@ const CommunityDataEditor = () => {
         title: parsedSettings.title ?? '',
         description: parsedSettings.description ?? '',
         address: parsedSettings.address,
-        suggested: parsedSettings.suggested ?? {},
+        suggested: removeSuggestedAvatarUrl(parsedSettings.suggested ?? {}),
         rules: parsedSettings.rules ?? [],
         roles: parsedSettings.roles ?? {},
         settings: parsedSettings.settings ?? {},
@@ -171,7 +172,7 @@ const CommunityDataEditor = () => {
       const performSave = async () => {
         try {
           console.log('Performing save with options:', publishCommunityEditOptions);
-          await publishSubplebbitEdit();
+          await publishCommunityEdit();
           setShowSaving(false);
           setTriggerSave(false);
 
@@ -243,7 +244,7 @@ const CommunityDataEditor = () => {
           title: title ?? '',
           description: description ?? '',
           address,
-          suggested: suggested ?? {},
+          suggested: removeSuggestedAvatarUrl(suggested ?? {}),
           rules: rules ?? [],
           roles: roles ?? {},
           settings: settings ?? {},
@@ -323,7 +324,7 @@ const CommunityDataEditor = () => {
             i18nKey='save_reset_changes'
             components={{
               1: <button key='saveCommunitySettingsButton' onClick={saveCommunitySettings} />,
-              2: <button key='resetSubplebbitSettingsButton' onClick={() => setText(communitySettings)} />,
+              2: <button key='resetCommunitySettingsButton' onClick={() => setText(communitySettings)} />,
             }}
           />
           <div>

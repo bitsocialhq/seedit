@@ -23,6 +23,7 @@ import ReplyForm from '../../components/reply-form';
 import Sidebar from '../../components/sidebar';
 import styles from './post-page.module.css';
 import _ from 'lodash';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 type SortDropdownProps = {
   sortBy: string;
@@ -271,15 +272,16 @@ const PostPage = () => {
 
   const accountComment = useOptionalAccountComment(commentIndex);
   const pendingPost = accountComment;
+  const pendingPostCommunityAddress = getCommentCommunityAddress(pendingPost);
 
   // in pending post route, redirect to post page route when post is published (cid is defined)
   const resetFeed = useFeedResetStore((state) => state.reset);
   useEffect(() => {
-    if (pendingPost?.cid && pendingPost?.subplebbitAddress) {
+    if (pendingPost?.cid && pendingPostCommunityAddress) {
       if (resetFeed) resetFeed();
-      navigate(getCommunityPostPath(pendingPost.subplebbitAddress, pendingPost.cid), { replace: true });
+      navigate(getCommunityPostPath(pendingPostCommunityAddress, pendingPost.cid), { replace: true });
     }
-  }, [pendingPost?.cid, pendingPost?.subplebbitAddress, navigate, resetFeed]);
+  }, [pendingPost?.cid, pendingPostCommunityAddress, navigate, resetFeed]);
 
   const { commentCid } = params;
   const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
@@ -289,7 +291,7 @@ const PostPage = () => {
   }
   const postCommunityAddress = getCommentCommunityAddress(post);
   const resolvedPostCommunityAddress = resolveCommunityRouteAddress(postCommunityAddress);
-  const communityAddress = isInPendingPostView ? pendingPost?.subplebbitAddress : resolvedPostCommunityAddress || routeCommunityAddress;
+  const communityAddress = isInPendingPostView ? pendingPostCommunityAddress : resolvedPostCommunityAddress || routeCommunityAddress;
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const canonicalPostRedirectPath = getCanonicalCommunityPostRedirectPath(params.communityAddress, postCommunityAddress, commentCid);
 
@@ -309,7 +311,7 @@ const PostPage = () => {
   }, [post?.error]);
 
   const postTitle = post.title?.slice(0, 40) || post?.content?.slice(0, 40);
-  const communityTitle = community?.title || community?.shortAddress;
+  const communityTitle = community?.title || getDisplayAddress(community?.shortAddress || '');
   useEffect(() => {
     document.title = `${postTitle || ''}${postTitle && communityTitle ? ' - ' : ''}${communityTitle || ''}${postTitle || communityTitle ? ' - Seedit' : 'Seedit'}`;
   }, [postTitle, communityTitle]);
@@ -326,7 +328,7 @@ const PostPage = () => {
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar subplebbit={community} comment={post} settings={community?.settings} />
+        <Sidebar community={community} comment={post} settings={community?.settings} />
       </div>
       {isInPendingPostView && params?.accountCommentIndex ? <Post post={pendingPost} /> : isInPostContextView ? <PostWithContext post={post} /> : <Post post={post} />}
       {shouldShowErrorToUser && (

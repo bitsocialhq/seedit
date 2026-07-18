@@ -12,6 +12,7 @@ import styles from './profile.module.css';
 import ErrorDisplay from '../../components/error-display';
 import { getAccountHistoryOrder, getAccountHistoryPage } from '../../lib/utils/account-history-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const pageSize = 10;
 const sortTypes: string[] = ['new', 'old'];
@@ -326,7 +327,8 @@ const Profile = () => {
     return shouldShow;
   });
 
-  const profileTitle = account?.author?.displayName ? `${account?.author?.displayName} (u/${account?.author?.shortAddress})` : `u/${account?.author?.shortAddress}`;
+  const displayAddress = getDisplayAddress(account?.author?.shortAddress || '');
+  const profileTitle = account?.author?.displayName ? `${account.author.displayName} (u/${displayAddress})` : `u/${displayAddress}`;
   useEffect(() => {
     document.title = profileTitle + ' - Seedit';
   }, [t, profileTitle]);
@@ -341,7 +343,7 @@ const Profile = () => {
       <div className={styles.infoContent}>
         <Trans
           i18nKey='profile_info'
-          values={{ shortAddress: account?.author?.shortAddress }}
+          values={{ shortAddress: displayAddress }}
           components={{
             1: <HashLink key='displayNameLink' to='/settings#displayName' />,
             2: <HashLink key='exportAccountLink' to='/settings#exportAccount' />,

@@ -1,7 +1,4 @@
-// Helper to safely extract the community address from a Comment object.
-// The protocol may return the address as either the legacy `subplebbitAddress`
-// field or the new `communityAddress` field. Reading both ensures compatibility
-// with old and new protocol data at runtime.
+// Helper to safely extract the community address from current and legacy Comment objects.
 export const getCommentCommunityAddress = (comment?: unknown): string | undefined => {
   if (!comment || typeof comment !== 'object') {
     return undefined;

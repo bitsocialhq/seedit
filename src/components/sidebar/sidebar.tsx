@@ -5,7 +5,7 @@ import { Comment, useAccount, useBlock, Role, Community, useCommunityStats, useP
 import { getPostScore } from '../../lib/utils/post-utils';
 import { getFormattedDate, getFormattedTimeDuration, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { findCommunityCreator } from '../../lib/utils/user-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import {
   isAllView,
   isDomainView,
@@ -26,6 +26,7 @@ import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { getCommunityPath, getCommunityPostUrl } from '../../lib/utils/community-route-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
 import Markdown from '../markdown';
@@ -67,7 +68,7 @@ const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
       <ul className={`${styles.listContent} ${styles.modsList}`}>
         {rolesList.map(({ address }, index) => (
           <li key={index} onClick={() => window.alert('Direct profile links are not supported yet.')}>
-            u/{getShortAddress(address)}
+            u/{getShortDisplayAddress(address)}
           </li>
         ))}
         {/* TODO: https://github.com/bitsocialhq/seedit/issues/274
@@ -80,7 +81,8 @@ const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
 const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
   const { t, i18n } = useTranslation();
   const { language } = i18n;
-  const { upvoteCount, downvoteCount, timestamp, state, subplebbitAddress, cid } = comment || {};
+  const { upvoteCount, downvoteCount, timestamp, state, cid } = comment || {};
+  const communityAddress = getCommentCommunityAddress(comment);
   const postScore = getPostScore(upvoteCount, downvoteCount, state);
   const totalVotes = upvoteCount + downvoteCount;
   const upvotePercentage = totalVotes > 0 ? Math.round((upvoteCount / totalVotes) * 100) : 0;
@@ -96,9 +98,9 @@ const PostInfo = ({ comment }: { comment: Comment | undefined }) => {
         <span className={styles.postScoreWord}>{postScore === 1 ? t('point') : t('points')}</span>{' '}
         {`(${postScore === '?' ? '?' : `${upvotePercentage}`}% ${t('upvoted')})`}
       </div>
-      {subplebbitAddress && cid && (
+      {communityAddress && cid && (
         <div className={styles.shareLink}>
-          {t('share_link')}: <input type='text' value={getCommunityPostUrl(subplebbitAddress, cid)} aria-label={t('share_link')} readOnly={true} />
+          {t('share_link')}: <input type='text' value={getCommunityPostUrl(communityAddress, cid)} aria-label={t('share_link')} readOnly={true} />
         </div>
       )}
     </div>
@@ -129,7 +131,7 @@ interface SidebarProps {
   comment?: Comment;
   isSubCreatedButNotYetPublished?: boolean;
   settings?: any;
-  subplebbit?: Community;
+  community?: Community;
   reset?: () => void;
 }
 
@@ -182,11 +184,11 @@ export const Footer = () => {
   );
 };
 
-const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit, reset }: SidebarProps) => {
+const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, community, reset }: SidebarProps) => {
   const { t } = useTranslation();
-  const { address, createdAt, description, roles, rules, title, updatedAt } = subplebbit || {};
+  const { address, createdAt, description, roles, rules, title, updatedAt } = community || {};
   const { allActiveUserCount, hourActiveUserCount } = useCommunityStats(address ? { community: getCommunityIdentifier(address) } : undefined);
-  const { isOffline, offlineTitle } = useIsCommunityOffline(subplebbit || {});
+  const { isOffline, offlineTitle } = useIsCommunityOffline(community || {});
   const onlineNotice = t('users_online', { count: hourActiveUserCount || 0 });
   const offlineNotice = updatedAt ? t('posts_last_synced', { dateAgo: getFormattedTimeAgo(updatedAt) }) : offlineTitle;
   const onlineStatus = !isOffline ? onlineNotice : offlineNotice;
@@ -208,15 +210,16 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
   const isInCommunityView = isCommunityView(location.pathname, params);
 
   const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);
+  const pendingPostCommunityAddress = getCommentCommunityAddress(pendingPost);
 
   const communityCreator = findCommunityCreator(roles);
-  const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : `${getShortAddress(communityCreator)}`;
+  const creatorAddress = communityCreator === 'anonymous' ? 'anonymous' : getShortDisplayAddress(communityCreator);
   const submitRoute =
     isInHomeView || isInHomeAboutView || isInAllView || isInModView || isInDomainView
       ? '/submit'
       : isInPendingPostView
-        ? pendingPost?.subplebbitAddress
-          ? `${getCommunityPath(pendingPost.subplebbitAddress)}/submit`
+        ? pendingPostCommunityAddress
+          ? `${getCommunityPath(pendingPostCommunityAddress)}/submit`
           : '/submit'
         : address || params?.communityAddress
           ? `${getCommunityPath(address || params.communityAddress!)}/submit`
@@ -305,7 +308,7 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, subplebbit
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
               <Link className={styles.title} to={address ? getCommunityPath(address) : '/communities'}>
-                {subplebbit?.address}
+                {getDisplayAddress(community?.address || '')}
               </Link>
               <div className={styles.subscribeContainer}>
                 <span className={styles.subscribeButton}>

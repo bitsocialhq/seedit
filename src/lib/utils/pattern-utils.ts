@@ -260,7 +260,7 @@ export const commentMatchesPattern = (comment: Comment, pattern: string, communi
 
 /**
  * Custom hook version of commentMatchesPattern that can handle role filters
- * by fetching subplebbit data when needed
+ * by fetching community data when needed
  *
  * @param comment The comment to check
  * @param pattern The pattern to match

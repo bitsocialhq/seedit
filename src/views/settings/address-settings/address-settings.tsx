@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { setAccount, useAccount, useResolvedAuthorAddress } from '@bitsocial/bitsocial-react-hooks';
 import { useTranslation } from 'react-i18next';
 import styles from './address-settings.module.css';
+import { getDisplayAddress } from '../../../lib/utils/address-utils';
 
 const AddressSettings = () => {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ const AddressSettings = () => {
     if (!cryptoState.cryptoAddress || !cryptoState.cryptoAddress.includes('.')) {
       alert(t('enter_crypto_address'));
       return;
-    } else if (cryptoState.cryptoAddress === account?.author?.address) {
+    } else if (cryptoState.cryptoAddress === getDisplayAddress(account?.author?.address)) {
       setSavedCryptoAddress(true);
       setTimeout(() => {
         setSavedCryptoAddress(false);
@@ -112,11 +113,11 @@ const AddressSettings = () => {
         <div className={styles.usernameInput}>
           <input
             type='text'
-            placeholder='address.eth/.sol'
+            placeholder='myaddress.bso'
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck='false'
-            value={cryptoState.cryptoAddress}
+            value={getDisplayAddress(cryptoState.cryptoAddress)}
             onChange={(e) => setCryptoState((prevState) => ({ ...prevState, cryptoAddress: e.target.value }))}
           />
           <button className={styles.infoButton} onClick={() => setShowCryptoAddressInfo(!showCryptoAddressInfo)}>
@@ -127,32 +128,28 @@ const AddressSettings = () => {
           </button>
           {showCryptoAddressInfo && (
             <div className={styles.cryptoAddressInfo}>
-              steps to set a .eth user address:
-              <br />
+              A <code>.bso</code> address is an ENS name you own, shown by Seedit with a <code>.bso</code> ending instead of <code>.eth</code>. To use one as your account
+              name:
               <ol>
                 <li>
-                  go to{' '}
+                  Register a name (e.g. <code>yourname.eth</code>) at{' '}
                   <a href='https://app.ens.domains/' target='_blank' rel='noopener noreferrer'>
                     app.ens.domains
-                  </a>{' '}
-                  and search the address
+                  </a>
+                  .
                 </li>
-                <li>once you own the address, go to its page, click on "records", then "edit records"</li>
-                <li>add a new text record with name "plebbit-author-address" and value: {account?.signer?.address}</li>
-              </ol>
-              steps to set a .sol user address:
-              <br />
-              <ol>
                 <li>
-                  go to{' '}
-                  <a href='https://v1.sns.id/' target='_blank' rel='noopener noreferrer'>
-                    v1.sns.id
-                  </a>{' '}
-                  and search the address
+                  Open that name on ENS and go to <strong>Records</strong> → <strong>Edit Records</strong>.
                 </li>
-                <li>once you own the address, go to your profile, click the address menu "...", then "create subdomain"</li>
-                <li>enter subdomain "plebbit-author-address" and create</li>
-                <li>go to subdomain, "content", change content to: {account?.signer?.address}</li>
+                <li>
+                  Add a <strong>text record</strong> named <code>bitsocial</code> and paste this account&apos;s public key as its value:
+                  <br />
+                  <code>{account?.signer?.address}</code>
+                </li>
+                <li>
+                  Come back here, type your name ending in <code>.bso</code> (e.g. <code>yourname.bso</code>) in the field above, press <strong>Check</strong> to confirm
+                  it points to this account, then press <strong>Save</strong>.
+                </li>
               </ol>
             </div>
           )}

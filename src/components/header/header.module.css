@@ -32,11 +32,6 @@
   filter: var(--filter90);
 }
 
-.avatar {
-  max-height: 40px;
-  margin: 0 3px;
-}
-
 .logoText {
   width: 84px;
   max-height: 26px;

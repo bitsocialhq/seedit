@@ -5,6 +5,8 @@ import { createAccount, deleteAccount, exportAccount, importAccount, setActiveAc
 import { processImportedAccount } from '../../../lib/utils/account-import-utils';
 import { exportFile } from '../../../lib/utils/file-export-utils';
 import styles from './account-settings.module.css';
+import { getDisplayAddress } from '../../../lib/utils/address-utils';
+import { getEditableAccountData } from '../../../lib/utils/account-data-utils';
 
 const CreateAccountButton = () => {
   const { accounts } = useAccounts();
@@ -67,7 +69,7 @@ const ImportAccountButton = () => {
             if (typeof fileContent !== 'string') {
               throw new Error('File content is not a string.');
             }
-            // Process the imported account with platform-appropriate plebbit options
+            // Process the imported account with platform-appropriate PKC options.
             const transformedAccountString = processImportedAccount(fileContent, isElectron);
             const newAccount = JSON.parse(transformedAccountString);
             await importAccount(transformedAccountString);
@@ -121,7 +123,7 @@ const ImportAccountButton = () => {
 const ExportAccountButton = () => {
   const account = useAccount();
   const [showExportAccountOptions, setShowExportAccountOptions] = useState(false);
-  const [includePlebbitOptions, setIncludePlebbitOptions] = useState(true);
+  const [includePkcOptions, setIncludePkcOptions] = useState(true);
   const [includePostHistory, setIncludePostHistory] = useState(true);
   const [includeVoteHistory, setIncludeVoteHistory] = useState(true);
 
@@ -135,13 +137,9 @@ const ExportAccountButton = () => {
       const exportedAccount = JSON.parse(accountString);
 
       // exportAccount might not include pkcOptions, so we need to include it from useAccount()
-      let accountDataToInclude;
-      if (includePlebbitOptions) {
-        const { pkc: _pkc, ...completeAccountData } = account;
-        accountDataToInclude = completeAccountData;
-      } else {
-        const { pkc: _pkc, pkcOptions: _pkcOptions, ...completeAccountData } = account;
-        accountDataToInclude = completeAccountData;
+      const accountDataToInclude = getEditableAccountData(account);
+      if (!includePkcOptions) {
+        delete accountDataToInclude.pkcOptions;
       }
       exportedAccount.account = accountDataToInclude;
 
@@ -188,14 +186,8 @@ const ExportAccountButton = () => {
       {showExportAccountOptions && (
         <div className={styles.exportAccountOptions}>
           <div className={styles.exportAccountOption}>
-            <input
-              type='checkbox'
-              id='includePlebbitOptions'
-              name='includePlebbitOptions'
-              checked={includePlebbitOptions}
-              onChange={(e) => setIncludePlebbitOptions(e.target.checked)}
-            />
-            <label htmlFor='includePlebbitOptions'>Include plebbit options</label>
+            <input type='checkbox' id='includePkcOptions' name='includePkcOptions' checked={includePkcOptions} onChange={(e) => setIncludePkcOptions(e.target.checked)} />
+            <label htmlFor='includePkcOptions'>Include PKC options</label>
           </div>
           <div className={styles.exportAccountOption}>
             <input
@@ -231,7 +223,7 @@ const AccountSettings = () => {
 
   const accountsOptions = accounts.map((account) => (
     <option key={account?.id} value={account?.name}>
-      u/{account?.author?.shortAddress}
+      u/{getDisplayAddress(account?.author?.shortAddress || '')}
     </option>
   ));
 

@@ -6,7 +6,7 @@ import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocia
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
@@ -317,7 +317,7 @@ const CommunityAddressField = () => {
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 
   // Generate random suggestions derived from defaults without an effect
-  const randomCommunitySuggestions = useMemo(() => getRandomSubplebbits(defaultCommunityAddresses, 10), [defaultCommunityAddresses]);
+  const randomCommunitySuggestions = useMemo(() => getRandomCommunities(defaultCommunityAddresses, 10), [defaultCommunityAddresses]);
   const listSource = subscriptions?.length > 5 ? subscriptions : randomCommunitySuggestions;
 
   const handleKeyDown = useCallback(
@@ -351,7 +351,7 @@ const CommunityAddressField = () => {
     setActiveDropdownIndex(-1);
   };
 
-  function getRandomSubplebbits(addresses: string[], count: number) {
+  function getRandomCommunities(addresses: string[], count: number) {
     // Non-mutating shuffle (copy first), avoids side effects
     const shuffled = [...addresses].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
@@ -366,7 +366,7 @@ const CommunityAddressField = () => {
           onClick={() => handleCommunitySelect(communityAddress)}
           onMouseEnter={() => setActiveDropdownIndex(index)}
         >
-          {communityAddress}
+          {getDisplayAddress(communityAddress)}
         </li>
       ))}
     </ul>
@@ -380,7 +380,7 @@ const CommunityAddressField = () => {
         <input
           className={`${styles.input} ${styles.inputCommunity}`}
           type='text'
-          value={inputAddress ?? ''}
+          value={getDisplayAddress(inputAddress ?? '')}
           onChange={(e) => {
             setPublishPostStore({ communityAddress: e.target.value } as any);
           }}
@@ -407,7 +407,7 @@ const CommunityAddressField = () => {
                 setPublishPostStore({ communityAddress: subscription } as any);
               }}
             >
-              {getShortAddress(subscription)}
+              {getShortDisplayAddress(subscription)}
             </span>
           ))}
         </div>
@@ -477,7 +477,7 @@ const SubmitPage = () => {
 
   const selectedCommunityData = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { rules, title: communityTitle } = selectedCommunityData;
-  const shortAddress = communityAddress && getShortAddress(communityAddress);
+  const shortAddress = communityAddress && getShortDisplayAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
   const { index, publishComment } = usePublishComment(publishCommentOptions);

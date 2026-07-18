@@ -5,6 +5,7 @@ import { createAccount, setActiveAccount, useAccount, useAccounts } from '@bitso
 import { isSettingsView } from '../../lib/utils/view-utils';
 import styles from './account-bar.module.css';
 import SearchBar from '../search-bar';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const AccountBar = () => {
   const { t } = useTranslation();
@@ -75,7 +76,7 @@ const AccountBar = () => {
           setIsAccountDropdownOpen(false);
         }}
       >
-        u/{account.author.shortAddress}
+        u/{getDisplayAddress(account.author.shortAddress)}
       </span>
     ));
 
@@ -88,7 +89,7 @@ const AccountBar = () => {
   return (
     <div className={styles.content}>
       <span className={styles.user}>
-        <Link to='/profile'>{account?.author?.shortAddress}</Link>
+        <Link to='/profile'>{getDisplayAddress(account?.author?.shortAddress || '')}</Link>
         {karma && (
           <span className={styles.karma}>
             {' '}

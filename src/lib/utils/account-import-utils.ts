@@ -1,3 +1,5 @@
+import { getSupportedChainProviders } from './chain-provider-utils';
+
 interface PkcOptions {
   ipfsGatewayUrls?: string[];
   pubsubKuboRpcClientsOptions?: string[];
@@ -15,6 +17,7 @@ interface PkcOptions {
 
 interface ImportedAccount {
   account?: {
+    chainProviders?: PkcOptions['chainProviders'];
     pkcOptions?: PkcOptions;
     [key: string]: any;
   };
@@ -31,18 +34,6 @@ export const getDefaultWebConfig = (): PkcOptions => ({
       urls: ['ethers.js', 'https://ethrpc.xyz', 'viem'],
       chainId: 1,
     },
-    avax: {
-      urls: ['https://api.avax.network/ext/bc/C/rpc'],
-      chainId: 43114,
-    },
-    matic: {
-      urls: ['https://polygon-rpc.com'],
-      chainId: 137,
-    },
-    sol: {
-      urls: ['https://solrpc.xyz'],
-      chainId: 1,
-    },
   },
   resolveAuthorAddresses: false,
   validatePages: false,
@@ -55,18 +46,6 @@ export const getDefaultElectronConfig = (): PkcOptions => ({
   chainProviders: {
     eth: {
       urls: ['ethers.js', 'https://ethrpc.xyz', 'viem'],
-      chainId: 1,
-    },
-    avax: {
-      urls: ['https://api.avax.network/ext/bc/C/rpc'],
-      chainId: 43114,
-    },
-    matic: {
-      urls: ['https://polygon-rpc.com'],
-      chainId: 137,
-    },
-    sol: {
-      urls: ['https://solrpc.xyz'],
       chainId: 1,
     },
   },
@@ -106,7 +85,23 @@ const hasLocalhostRpc = (options: PkcOptions): boolean => {
  * - Sets platform-appropriate defaults for missing configurations
  */
 export const transformPkcOptionsForImport = (importedAccount: ImportedAccount, isElectron: boolean): PkcOptions => {
-  const currentOptions = importedAccount.account?.pkcOptions || {};
+  const importedOptions = importedAccount.account?.pkcOptions || {};
+  const currentOptions = {
+    ...importedOptions,
+    chainProviders: getSupportedChainProviders(importedOptions.chainProviders),
+  };
+  const getPlatformDefaults = () => {
+    const defaults = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
+    if (!currentOptions.chainProviders) return defaults;
+
+    return {
+      ...defaults,
+      chainProviders: {
+        ...defaults.chainProviders,
+        ...currentOptions.chainProviders,
+      },
+    };
+  };
 
   // Don't overwrite non-localhost RPC configurations
   if (hasNonLocalhostRpc(currentOptions)) {
@@ -116,17 +111,17 @@ export const transformPkcOptionsForImport = (importedAccount: ImportedAccount, i
   if (isElectron) {
     // On electron: if account has pubsub providers, replace with localhost RPC
     if (hasPubsubProviders(currentOptions)) {
-      return getDefaultElectronConfig();
+      return getPlatformDefaults();
     }
     // If already has localhost RPC or no providers, use electron defaults
-    return (currentOptions.pkcRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getDefaultElectronConfig();
+    return (currentOptions.pkcRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getPlatformDefaults();
   } else {
     // On web: if account has localhost RPC, replace with pubsub providers
     if (hasLocalhostRpc(currentOptions)) {
-      return getDefaultWebConfig();
+      return getPlatformDefaults();
     }
     // If no RPC or has pubsub providers, use web defaults
-    return (currentOptions.pubsubKuboRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getDefaultWebConfig();
+    return (currentOptions.pubsubKuboRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getPlatformDefaults();
   }
 };
 
@@ -148,10 +143,18 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean)
     importedAccount.account = {};
   }
 
+  if (importedAccount.account.chainProviders) {
+    importedAccount.account.chainProviders = getSupportedChainProviders(importedAccount.account.chainProviders);
+  }
+
   // Support accounts exported by older versions that used the legacy field name
   if (!importedAccount.account.pkcOptions && importedAccount.account.plebbitOptions) {
     importedAccount.account.pkcOptions = importedAccount.account.plebbitOptions;
     delete importedAccount.account.plebbitOptions;
+  }
+
+  if (importedAccount.account.pkcOptions && !Array.isArray(importedAccount.account.pkcOptions.httpRoutersOptions)) {
+    importedAccount.account.pkcOptions.httpRoutersOptions = (isElectron ? getDefaultElectronConfig() : getDefaultWebConfig()).httpRoutersOptions;
   }
 
   // Transform pkcOptions based on platform and existing config

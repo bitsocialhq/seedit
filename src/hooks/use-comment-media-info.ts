@@ -10,7 +10,7 @@ export const useCommentMediaInfo = (comment: Comment) => {
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInPendingPostView = isPendingPostView(location.pathname, params);
 
-  // some sites have CORS access, so the thumbnail can be fetched client-side, which is helpful if subplebbit.settings.fetchThumbnailUrls is false
+  // Some sites allow CORS access, so the thumbnail can be fetched client-side even when the community does not fetch thumbnail URLs.
   const fetchThumbnail = useCallback(async () => {
     let commentMediaInfo = getCommentMediaInfo(comment);
     if (commentMediaInfo?.type === 'webpage' && !commentMediaInfo.thumbnail) {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   getCanonicalCommunityPostRedirectPath,
+  getCanonicalCommunityRoutePathname,
   getCommunityPath,
   getCommunityPostPath,
   getCommunityPostUrl,
@@ -37,29 +38,26 @@ describe('resolveCommunityRouteAddress', () => {
 });
 
 describe('getCommunityRouteSegment', () => {
-  it('shortens single-label .bso addresses', () => {
-    expect(getCommunityRouteSegment('aww.bso')).toBe('aww');
-    expect(getCommunityRouteSegment('aww-posting.bso')).toBe('aww-posting');
+  it('uses explicit .bso addresses for bare and canonical names', () => {
+    expect(getCommunityRouteSegment('aww')).toBe('aww.bso');
+    expect(getCommunityRouteSegment('aww.bso')).toBe('aww.bso');
+    expect(getCommunityRouteSegment('aww-posting.bso')).toBe('aww-posting.bso');
   });
 
-  it('leaves other dotted names, multi-label .bso names and public keys unchanged', () => {
+  it('leaves other dotted names, reserved routes and public keys unchanged', () => {
     expect(getCommunityRouteSegment('business.eth')).toBe('business.eth');
     expect(getCommunityRouteSegment('topic.community.bso')).toBe('topic.community.bso');
+    expect(getCommunityRouteSegment('all')).toBe('all');
+    expect(getCommunityRouteSegment('mod')).toBe('mod');
     expect(getCommunityRouteSegment(PUBLIC_KEY)).toBe(PUBLIC_KEY);
-  });
-
-  it('does not shorten reserved or public-key-like .bso labels', () => {
-    expect(getCommunityRouteSegment('all.bso')).toBe('all.bso');
-    expect(getCommunityRouteSegment('ALL.bso')).toBe('ALL.bso');
-    expect(getCommunityRouteSegment('mod.bso')).toBe('mod.bso');
-    expect(getCommunityRouteSegment(`${PUBLIC_KEY}.bso`)).toBe(`${PUBLIC_KEY}.bso`);
   });
 });
 
 describe('community route builders', () => {
-  it('builds canonical shorthand paths for eligible .bso communities', () => {
-    expect(getCommunityPath('aww.bso')).toBe('/s/aww');
-    expect(getCommunityPostPath('aww.bso', 'bafy-post-cid')).toBe('/s/aww/comments/bafy-post-cid');
+  it('builds canonical paths with explicit .bso addresses', () => {
+    expect(getCommunityPath('aww')).toBe('/s/aww.bso');
+    expect(getCommunityPath('aww.bso')).toBe('/s/aww.bso');
+    expect(getCommunityPostPath('aww.bso', 'bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
   });
 
   it('keeps explicit addresses when shorthand would be ambiguous', () => {
@@ -69,13 +67,30 @@ describe('community route builders', () => {
   });
 
   it('builds the exact seedit.app external post URL', () => {
-    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww/comments/bafy-post-cid');
+    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww.bso/comments/bafy-post-cid');
   });
 
-  it('round-trips every shorthand-eligible address', () => {
+  it('round-trips every canonical address', () => {
     for (const address of ['aww.bso', 'aww-posting.bso']) {
       expect(resolveCommunityRouteAddress(getCommunityRouteSegment(address))).toBe(address);
     }
+  });
+});
+
+describe('getCanonicalCommunityRoutePathname', () => {
+  it('redirects bare community routes and preserves nested route suffixes', () => {
+    expect(getCanonicalCommunityRoutePathname('/s/aww')).toBe('/s/aww.bso');
+    expect(getCanonicalCommunityRoutePathname('/s/aww/comments/bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
+    expect(getCanonicalCommunityRoutePathname('/s/aww/settings')).toBe('/s/aww.bso/settings');
+  });
+
+  it('does not redirect canonical, reserved, public-key or unrelated routes', () => {
+    expect(getCanonicalCommunityRoutePathname('/s/aww.bso')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/s/business.eth')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/s/all')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/s/mod')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname(`/s/${PUBLIC_KEY}`)).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/settings')).toBeUndefined();
   });
 });
 
@@ -85,6 +100,6 @@ describe('getCanonicalCommunityPostRedirectPath', () => {
   });
 
   it('redirects a mismatched route to the canonical post community path', () => {
-    expect(getCanonicalCommunityPostRedirectPath('wrong', 'aww.bso', 'bafy-post-cid')).toBe('/s/aww/comments/bafy-post-cid');
+    expect(getCanonicalCommunityPostRedirectPath('wrong', 'aww.bso', 'bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
   });
 });

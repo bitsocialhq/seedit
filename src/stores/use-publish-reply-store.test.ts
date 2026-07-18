@@ -21,6 +21,17 @@ describe('usePublishReplyStore', () => {
       parentCid,
       content: 'Test reply',
     });
-    expect(publishCommentOptions).not.toHaveProperty('subplebbitAddress');
+    expect(Object.keys(publishCommentOptions).sort()).toEqual([
+      'communityAddress',
+      'content',
+      'link',
+      'nsfw',
+      'onChallenge',
+      'onChallengeVerification',
+      'onError',
+      'parentCid',
+      'postCid',
+      'spoiler',
+    ]);
   });
 });

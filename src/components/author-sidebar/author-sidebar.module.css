@@ -8,18 +8,6 @@
   padding-bottom: 5px;
 }
 
-.avatar {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 5px;
-  border: 1px solid var(--border-text);
-}
-
-.avatar img {
-  width: 70px;
-  height: 70px;
-}
-
 .titleBox {
   font-size: larger;
   color: var(--text);

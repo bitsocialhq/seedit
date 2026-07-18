@@ -9,6 +9,7 @@ import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -59,10 +60,10 @@ export const FAQ = () => {
         <hr />
         <h3 id='whatIsSeedit'>What is Seedit and how does it work?</h3>
         <p>
-          Seedit is a serverless, adminless, decentralized reddit alternative. Seedit is a client (interface) for the Plebbit protocol, which is a decentralized social
-          network to create and fully own unstoppable communities. To learn more about Plebbit and its clients, please visit{' '}
-          <a href='https://plebbit.com' target='_blank' rel='noopener noreferrer'>
-            plebbit.com
+          Seedit is a serverless, adminless, decentralized reddit alternative. Seedit is a client for the Bitsocial protocol, a decentralized social network for creating
+          and fully owning unstoppable communities. To learn more about Bitsocial and its clients, please visit{' '}
+          <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
+            bitsocial.net
           </a>
           .<br />
           <br />
@@ -104,13 +105,8 @@ export const FAQ = () => {
         <hr />
         <h3 id='defaultList'>How can others find my community?</h3>
         <p>
-          In the near future, it will be possible to submit your community to the <Link to='/communities/vote'>default community list</Link> by clicking on the "submit
-          your community" button in the sidebar.{' '}
-          <a href='https://www.coingecko.com/en/coins/plebbit' target='_blank' rel='noopener noreferrer'>
-            Plebbit ($PLEB)
-          </a>{' '}
-          token holders will be able to vote on which communities to list in the default community list. If your community gets enough upvotes, it will be listed in the
-          default community list, and all Seedit users will be able to see it in the default community list.
+          Share your community address directly with others or submit it to a public directory. Communities included in Seedit's{' '}
+          <Link to='/communities/vote'>default community list</Link> are visible to all Seedit users.
           <br />
           <br />
           Additionally, if a user of your community posts in it, your community address will be visible to others in the user's profile page. This means that even if your
@@ -122,21 +118,19 @@ export const FAQ = () => {
         <p>
           In the near future, it will be possible to progressively search for posts in a feed, by constantly looking for new posts in the p2p network (this search might
           be slow). As there are no servers, it's impossible to recreate a centralized search engine that will search for posts across the entire p2p network. However, we
-          expect to see third party archiver websites that will allow you to search for posts that have already been discovered by other users across the plebbit network.
+          expect to see third party archiver websites that will allow you to search for posts that have already been discovered by other users across the Bitsocial
+          network.
         </p>
         <hr />
         <h3 id='registerUsername'>Can I register a username?</h3>
         <p>
-          You can set a display name for your account in the <Link to='/settings#displayName'>preferences</Link>. Your account address (u/{account?.author?.shortAddress})
-          is generated randomly from a cryptographic hash of your public key, similarly to how a bitcoin address is generated. You can{' '}
-          <HashLink to='/settings#cryptoAddress'>change your account address</HashLink> to a unique readable name you own, by resolving it with a decentralized domain
-          name service such as{' '}
+          You can set a display name for your account in the <Link to='/settings#displayName'>preferences</Link>. Your account address (u/
+          {getDisplayAddress(account?.author?.shortAddress || '')}) is generated randomly from a cryptographic hash of your public key, similarly to how a bitcoin address
+          is generated. You can <HashLink to='/settings#cryptoAddress'>change your account address</HashLink> to a unique readable <code>.bso</code> name you own. A{' '}
+          <code>.bso</code> address is an ENS name shown by Seedit with a <code>.bso</code> ending instead of <code>.eth</code>. Register and configure the underlying{' '}
+          <code>.eth</code> name through{' '}
           <a href='https://ens.domains/' target='_blank' rel='noopener noreferrer'>
             ENS
-          </a>{' '}
-          or{' '}
-          <a href='https://v1.sns.id/' target='_blank' rel='noopener noreferrer'>
-            SNS
           </a>
           .
         </p>
@@ -162,7 +156,7 @@ const About = () => {
   const { commentCid, communityAddress: routeCommunityAddress } = useParams();
   const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
 
-  const subplebbit = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
+  const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
 
   useEffect(() => {
@@ -181,10 +175,10 @@ const About = () => {
       {isMobile ? (
         isInHomeAboutView ? (
           <>
-            <Sidebar comment={comment} subplebbit={subplebbit} />
+            <Sidebar comment={comment} community={community} />
           </>
         ) : (
-          <Sidebar comment={comment} subplebbit={subplebbit} />
+          <Sidebar comment={comment} community={community} />
         )
       ) : (
         <>

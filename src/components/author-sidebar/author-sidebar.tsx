@@ -7,10 +7,8 @@ import {
   AccountCommunity,
   Community,
   useAuthor,
-  useAuthorAvatar,
   useAuthorComments,
   useBlock,
-  useComment,
   useCommunities,
 } from '@bitsocial/bitsocial-react-hooks';
 import styles from './author-sidebar.module.css';
@@ -18,7 +16,7 @@ import { getFormattedTimeDuration } from '../../lib/utils/time-utils';
 import { getOldestAccountHistoryTimestamp } from '../../lib/utils/account-history-utils';
 import { isAuthorView, isProfileView } from '../../lib/utils/view-utils';
 import { findAuthorCommunities, estimateAuthorKarma } from '../../lib/utils/user-utils';
-import getShortAddress from '../../lib/utils/address-utils';
+import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useTranslation } from 'react-i18next';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
@@ -42,7 +40,7 @@ const AuthorModeratingList = ({ accountCommunities, authorCommunities, isAuthor 
         <ul className={`${styles.modListContent} ${styles.modsList}`}>
           {communityAddresses.map((address, index) => (
             <li key={index}>
-              <Link to={getCommunityPath(address)}>s/{getShortAddress(address)}</Link>
+              <Link to={getCommunityPath(address)}>s/{getShortDisplayAddress(address)}</Link>
             </li>
           ))}
         </ul>
@@ -59,21 +57,17 @@ const AuthorSidebar = () => {
   const { blocked, unblock, block } = useBlock({ address: authorAddress });
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
 
-  const comment = useComment({ commentCid, onlyIfCached: true });
-  const { imageUrl: authorPageAvatar } = useAuthorAvatar({ author: comment?.author });
-
   const isInAuthorView = isAuthorView(location.pathname);
   const isInProfileView = isProfileView(location.pathname);
 
   const userAccount = useAccount();
-  const { imageUrl: profilePageAvatar } = useAuthorAvatar({ author: userAccount?.author });
   const { accountComments: oldestAccountComment } = useAccountComments({ page: 0, pageSize: 1, order: 'asc' });
   const { accountCommunities } = useAccountCommunities();
   const profileOldestAccountTimestamp = getOldestAccountHistoryTimestamp(oldestAccountComment as { timestamp?: number }[]);
 
-  const defaultSubplebbitAddresses = useDefaultSubscriptionAddresses();
+  const defaultCommunityAddresses = useDefaultSubscriptionAddresses();
   const accountSubscriptions = userAccount?.subscriptions || [];
-  const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultSubplebbitAddresses];
+  const subscriptionsAndDefaults = [...accountSubscriptions, ...defaultCommunityAddresses];
 
   const communities =
     useCommunities({
@@ -115,14 +109,9 @@ const AuthorSidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      {((isInAuthorView && authorPageAvatar) || (isInProfileView && profilePageAvatar)) && (
-        <div className={styles.avatar}>
-          <img src={isInAuthorView ? authorPageAvatar : profilePageAvatar} alt='' />
-        </div>
-      )}
       <div className={styles.titleBox}>
         <div className={styles.title}>
-          {address}
+          {getDisplayAddress(address || '')}
           {isInProfileView && !displayName && (
             <span className={styles.editButtonWrapper}>
               {' '}

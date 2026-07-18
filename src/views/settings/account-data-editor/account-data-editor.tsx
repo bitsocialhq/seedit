@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, lazy, Suspense, Component } from 'react';
+import React, { useEffect, useState, lazy, Suspense, Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { setAccount, useAccount } from '@bitsocial/bitsocial-react-hooks';
@@ -8,6 +8,7 @@ import styles from './account-data-editor.module.css';
 import useIsMobile from '../../../hooks/use-is-mobile';
 import LoadingEllipsis from '../../../components/loading-ellipsis';
 import ErrorDisplay from '../../../components/error-display';
+import { getEditableAccountData } from '../../../lib/utils/account-data-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -60,7 +61,7 @@ const AccountDataEditor = () => {
   const [showEditor, setShowEditor] = useState(false);
   const [currentError, setCurrentError] = useState<Error | undefined>(undefined);
 
-  const accountJson = useMemo(() => stringify({ account: { ...account, pkc: undefined, karma: undefined, unreadNotificationCount: undefined } }), [account]);
+  const accountJson = stringify({ account: getEditableAccountData(account) });
 
   useEffect(() => {
     setText(accountJson);

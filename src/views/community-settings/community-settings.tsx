@@ -12,7 +12,6 @@ import {
   useSubscribe,
 } from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
-import { isValidURL } from '../../lib/utils/url-utils';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
 import useCommunitySettingsStore from '../../stores/use-community-settings-store';
@@ -27,6 +26,7 @@ import Challenges from './challenge-settings';
 import { FormattingHelpTable } from '../../components/reply-form';
 import styles from './community-settings.module.css';
 import _ from 'lodash';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 const Title = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
@@ -101,8 +101,9 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { address, setCommunitySettingsStore } = useCommunitySettingsStore();
 
   const alertCryptoAddressInfo = () => {
-    alert(`steps to set a .eth community address:\n1. go to app.ens.domains and search the address\n2.  once you own the address, go to its page, click on "records", then "edit records"\n3. add a new text record with name "subplebbit-address" and value: ${address}\n\n steps to set a .sol community address:\n1. go to v1.sns.id and search the address\n2. once you own the address, go to your profile, click the address menu "...", then "create subdomain"\n3. enter subdomain "subplebbit-address" and create\n4. go to subdomain, "content", change content to: ${address}
-    `);
+    alert(
+      `A .bso community address is an ENS name you own, shown by Seedit with a .bso ending instead of .eth.\n1. Register a name (e.g. yourcommunity.eth) at app.ens.domains.\n2. Open that name on ENS and go to Records, then Edit Records.\n3. Add a text record named "bitsocial" and set its value to: ${address}\n4. Enter the matching .bso name (e.g. yourcommunity.bso) as the community address.`,
+    );
   };
 
   return (
@@ -114,50 +115,9 @@ const Address = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
       </div>
       <div className={styles.boxInput}>
         {isReadOnly ? (
-          <span className={styles.readOnlyAddress}>{address}</span>
+          <span className={styles.readOnlyAddress}>{getDisplayAddress(address || '')}</span>
         ) : (
-          <input type='text' value={address ?? ''} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
-        )}
-      </div>
-    </div>
-  );
-};
-
-const Logo = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
-  const { t } = useTranslation();
-  const { suggested, setCommunitySettingsStore } = useCommunitySettingsStore();
-
-  const [logoUrl, setLogoUrl] = useState(suggested?.avatarUrl);
-  const [imageError, setImageError] = useState(false);
-
-  useEffect(() => {
-    setLogoUrl(suggested?.avatarUrl);
-    setImageError(false);
-  }, [suggested?.avatarUrl]);
-
-  return (
-    <div className={`${styles.box} ${isReadOnly && !logoUrl ? styles.hidden : styles.visible}`}>
-      <div className={styles.boxTitle}>{t('logo')}</div>
-      <div className={styles.boxSubtitle}>{t('community_logo_info')}</div>
-      <div className={styles.boxInput}>
-        {isReadOnly ? (
-          <span>{logoUrl}</span>
-        ) : (
-          <input
-            type='text'
-            value={logoUrl ?? ''}
-            onChange={(e) => {
-              setLogoUrl(e.target.value.trim());
-              setImageError(false);
-              setCommunitySettingsStore({ suggested: { ...suggested, avatarUrl: e.target.value.trim() || undefined } });
-            }}
-          />
-        )}
-        {logoUrl && isValidURL(logoUrl) && (
-          <div className={styles.logoPreview}>
-            {t('preview')}:
-            {imageError ? <span className={styles.logoError}>{t('no_image_found')}</span> : <img src={logoUrl} alt='' onError={() => setImageError(true)} />}
-          </div>
+          <input aria-label={t('address')} type='text' value={getDisplayAddress(address)} onChange={(e) => setCommunitySettingsStore({ address: e.target.value })} />
         )}
       </div>
     </div>
@@ -290,7 +250,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
                 User address:
                 <br />
                 {isReadOnly ? (
-                  <span>{address}</span>
+                  <span>{getDisplayAddress(address)}</span>
                 ) : (
                   <input
                     ref={index === Object.keys(roles).length - 1 ? lastModeratorRef : null}
@@ -298,7 +258,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
                     autoCorrect='off'
                     autoComplete='off'
                     spellCheck='false'
-                    value={address}
+                    value={getDisplayAddress(address)}
                     onChange={(e) => handleAddressChange(index, e.target.value)}
                   />
                 )}
@@ -380,8 +340,8 @@ const CommunitySettings = () => {
   const isChallengesReadOnly = (!isConnectedToRpc || !settings) && !isInCreateCommunityView;
 
   const { publishCommunityEditOptions, resetCommunitySettingsStore, setCommunitySettingsStore, title: storeTitle } = useCommunitySettingsStore();
-  const { error: publishCommunityEditError, publishCommunityEdit: publishSubplebbitEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
-  const { error: createCommunityError, createdCommunity, createCommunity: createSubplebbit } = useCreateCommunity(publishCommunityEditOptions);
+  const { error: publishCommunityEditError, publishCommunityEdit } = usePublishCommunityEdit(publishCommunityEditOptions);
+  const { error: createCommunityError, createdCommunity, createCommunity } = useCreateCommunity(publishCommunityEditOptions);
 
   const [showSaving, setShowSaving] = useState(false);
   const [currentError, setCurrentError] = useState<Error | undefined>(undefined);
@@ -392,12 +352,12 @@ const CommunitySettings = () => {
     }
   }, [publishCommunityEditError, createCommunityError]);
 
-  const saveSubplebbit = async () => {
+  const saveCommunity = async () => {
     try {
       setShowSaving(true);
       setCurrentError(undefined);
       console.log('Saving community with options:', publishCommunityEditOptions);
-      await publishSubplebbitEdit();
+      await publishCommunityEdit();
       setShowSaving(false);
 
       if (publishCommunityEditError) {
@@ -420,7 +380,7 @@ const CommunitySettings = () => {
 
   const [showDeleting, setShowDeleting] = useState(false);
   const _deleteCommunity = async () => {
-    if (communityAddress && window.confirm(t('delete_confirm', { value: `s/${shortAddress}`, interpolation: { escapeValue: false } }))) {
+    if (communityAddress && window.confirm(t('delete_confirm', { value: `s/${getDisplayAddress(shortAddress || '')}`, interpolation: { escapeValue: false } }))) {
       if (window.confirm(t('double_confirm'))) {
         try {
           setShowDeleting(true);
@@ -445,7 +405,7 @@ const CommunitySettings = () => {
       setShowSaving(true);
       setCurrentError(undefined);
       console.log('Creating community with settings:', publishCommunityEditOptions);
-      await createSubplebbit();
+      await createCommunity();
       setShowSaving(false);
 
       if (createCommunityError) {
@@ -469,7 +429,7 @@ const CommunitySettings = () => {
   useEffect(() => {
     if (createdCommunity) {
       console.log('createdCommunity', createdCommunity);
-      alert(`community created, address: ${createdCommunity?.address}`);
+      alert(`community created, address: ${getDisplayAddress(createdCommunity.address || '')}`);
 
       if (account && createdCommunity.address) {
         subscribe();
@@ -587,7 +547,7 @@ const CommunitySettings = () => {
     <div className={styles.content}>
       {!isInCreateCommunityView && (
         <div className={styles.sidebar}>
-          <Sidebar subplebbit={community} />
+          <Sidebar community={community} />
         </div>
       )}
       {isReadOnly && !userIsOwnerOrAdmin && <div className={styles.infobar}>{t('owner_settings_notice')}</div>}
@@ -596,7 +556,6 @@ const CommunitySettings = () => {
       <Title isReadOnly={isReadOnly} />
       <Description isReadOnly={isReadOnly} />
       {!isInCreateCommunityView && <Address isReadOnly={isReadOnly} />}
-      <Logo isReadOnly={isReadOnly} />
       <Rules isReadOnly={isReadOnly} />
       <Moderators isReadOnly={isReadOnly} />
       <Challenges isReadOnly={isChallengesReadOnly} readOnlyChallenges={community?.challenges} challengeNames={challengeNames} challengesSettings={rpcChallenges} />
@@ -607,7 +566,7 @@ const CommunitySettings = () => {
             <div className={styles.boxTitle}>{t('delete_community')}</div>
             <div className={styles.boxSubtitle}>{t('delete_community_description')}</div>
             <div className={styles.boxInput}>
-              <div className={styles.deleteSubplebbit}>
+              <div className={styles.deleteCommunity}>
                 <button onClick={_deleteCommunity} disabled={showDeleting || showSaving}>
                   {t('delete')}
                 </button>
@@ -617,7 +576,7 @@ const CommunitySettings = () => {
           </div>
         )}
         {!isReadOnly && (
-          <button onClick={() => (isInCreateCommunityView ? _createCommunity() : saveSubplebbit())} disabled={showSaving || showDeleting}>
+          <button onClick={() => (isInCreateCommunityView ? _createCommunity() : saveCommunity())} disabled={showSaving || showDeleting}>
             {isInCreateCommunityView ? t('create_community') : t('save_options')}
           </button>
         )}

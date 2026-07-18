@@ -24,9 +24,9 @@ describe('seedit starter community snapshot', () => {
 
 describe('computeAddressCanonicalSubscriptionMigration', () => {
   it('maps only the directory codes actually present and preserves manual-address order', () => {
-    const result = computeAddressCanonicalSubscriptionMigration(['first.bso', 'memes', 'middle.eth', 'aww', 'last.sol']);
+    const result = computeAddressCanonicalSubscriptionMigration(['first.bso', 'memes', 'middle.eth', 'aww', 'last.bso']);
 
-    expect(result.next).toEqual(['first.bso', 'memes-posting.bso', 'middle.eth', 'aww-posting.bso', 'last.sol']);
+    expect(result.next).toEqual(['first.bso', 'memes-posting.bso', 'middle.eth', 'aww-posting.bso', 'last.bso']);
     expect(result.replacedDirectoryCodes).toEqual([
       { code: 'memes', address: 'memes-posting.bso', sourceIndex: 1 },
       { code: 'aww', address: 'aww-posting.bso', sourceIndex: 3 },
@@ -79,9 +79,9 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
   });
 
   it('preserves unrelated addresses while replacing a legacy cohort with the starter set', () => {
-    const result = computeAddressCanonicalSubscriptionMigration(['manual-before.bso', 'plebtoken.eth', 'manual-after.sol', '💩posting.eth']);
+    const result = computeAddressCanonicalSubscriptionMigration(['manual-before.bso', 'plebtoken.eth', 'manual-after.bso', '💩posting.eth']);
 
-    expect(result.next).toEqual(['manual-before.bso', 'manual-after.sol', ...STARTER_COMMUNITY_ADDRESSES]);
+    expect(result.next).toEqual(['manual-before.bso', 'manual-after.bso', ...STARTER_COMMUNITY_ADDRESSES]);
     expect(result.removed).toEqual(['plebtoken.eth', '💩posting.eth']);
   });
 
@@ -109,8 +109,18 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
     expect(computeAddressCanonicalSubscriptionMigration(undefined)).toMatchObject({ next: [], changed: false, added: [], removed: [] });
   });
 
+  it('removes unsupported named addresses without changing supported direct addresses', () => {
+    const publicKey = '12D3KooWQmV9xN1wJ5rL8hP7dZ6cB4sT2yF3gK9aE1uR';
+    const result = computeAddressCanonicalSubscriptionMigration(['manual.bso', 'retired.example', publicKey]);
+
+    expect(result.next).toEqual(['manual.bso', publicKey]);
+    expect(result.removed).toEqual(['retired.example']);
+    expect(result.addedStarterAddresses).toEqual([]);
+    expect(result.changed).toBe(true);
+  });
+
   it('does not touch addresses that only resemble retired defaults or codes', () => {
-    const subscriptions = ['plebtoken.eth.mycopy', 'notplebtoken.eth', 'memes.bso', 'MEMES'];
+    const subscriptions = ['plebtoken-copy.eth', 'notplebtoken.eth', 'memes.bso', 'MEMES'];
     const result = computeAddressCanonicalSubscriptionMigration(subscriptions);
 
     expect(result.next).toEqual(subscriptions);

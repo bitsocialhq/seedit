@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Capacitor } from '@capacitor/core';
-import { setAccount, useAccount } from '@bitsocial/bitsocial-react-hooks';
+import { setAccount, useAccount, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 import { isSettingsAdvancedView, isSettingsP2pStatsView, isSettingsContentOptionsView } from '../../lib/utils/view-utils';
+import { getReviewableSettingsUpgrades, getSettingsUpgradeKey, type SettingsUpgradeAccount } from '../../lib/settings-upgrades';
 import useTheme from '../../hooks/use-theme';
+import useSettingsUpgradeReviewStore from '../../stores/use-settings-upgrade-review-store';
 import { VersionWithCommit } from '../../components/version';
 import AccountSettings from './account-settings';
 import AddressSettings from './address-settings';
-import AvatarSettings from './avatar-settings';
 import AdvancedSettings from './advanced-settings';
 import P2pStats from './p2p-stats';
 import ContentOptions from './content-options';
@@ -28,7 +29,7 @@ const CheckForUpdates = () => {
   const checkForUpdates = async () => {
     try {
       setLoading(true);
-      const packageRes = await fetch('https://raw.githubusercontent.com/plebbit/seedit/master/package.json', { cache: 'no-cache' });
+      const packageRes = await fetch('https://raw.githubusercontent.com/bitsocialnet/seedit/master/package.json', { cache: 'no-cache' });
       const packageData = await packageRes.json();
       let updateAvailable = false;
 
@@ -50,7 +51,7 @@ const CheckForUpdates = () => {
       }
 
       if (commitRef && commitRef.length > 0) {
-        const commitRes = await fetch('https://api.github.com/repos/plebbit/seedit/commits?per_page=1&sha=development', { cache: 'no-cache' });
+        const commitRes = await fetch('https://api.github.com/repos/bitsocialnet/seedit/commits?per_page=1&sha=development', { cache: 'no-cache' });
         const commitData = await commitRes.json();
 
         const latestCommitHash = commitData[0].sha;
@@ -192,12 +193,6 @@ const GeneralSettings = () => {
           <ThemeSettings />
         </span>
       </div>
-      <div className={styles.category}>
-        <span className={styles.categoryTitle}>{t('avatar')}</span>
-        <span className={styles.categorySettings}>
-          <AvatarSettings />
-        </span>
-      </div>
       <div className={`${styles.category} ${location.hash === '#displayName' ? styles.highlightedSetting : ''}`} id='displayName'>
         <span className={styles.categoryTitle}>{t('display_name')}</span>
         <span className={styles.categorySettings}>
@@ -239,6 +234,15 @@ const Settings = () => {
   const isInSettingsP2pStatsView = isSettingsP2pStatsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
   const account = useAccount();
+  const pkcRpc = usePkcRpcSettings();
+  const hiddenReviewUpgradeKeys = useSettingsUpgradeReviewStore((state) => state.hiddenReviewUpgradeKeys);
+  const reviewUpgradeKeys = useSettingsUpgradeReviewStore((state) => state.reviewUpgradeKeys);
+  const settingsUpgradeAccount = account as SettingsUpgradeAccount | undefined;
+  const settingsUpgradeKeys =
+    settingsUpgradeAccount && pkcRpc?.state !== 'connected'
+      ? getReviewableSettingsUpgrades(settingsUpgradeAccount).map((upgrade) => getSettingsUpgradeKey(settingsUpgradeAccount, upgrade))
+      : [];
+  const visibleSettingsUpgradeKeys = settingsUpgradeKeys.filter((upgradeKey) => !hiddenReviewUpgradeKeys.includes(upgradeKey));
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -259,6 +263,16 @@ const Settings = () => {
         <ContentOptions />
       ) : (
         <GeneralSettings key={account?.id} />
+      )}
+      {visibleSettingsUpgradeKeys.length > 0 && (
+        <output className={styles.settingsUpgradeNotice} aria-live='polite' data-testid='settings-upgrade-review-banner'>
+          <span>{t('settings_upgrade_review_notice')}</span>
+          {' ['}
+          <button type='button' onClick={() => reviewUpgradeKeys(visibleSettingsUpgradeKeys)}>
+            {t('settings_upgrade_review_button')}
+          </button>
+          {']'}
+        </output>
       )}
     </div>
   );

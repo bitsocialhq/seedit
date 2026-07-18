@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useStarterSubscriptions } from '../../hooks/use-starter-subscriptions';
 import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import styles from './starter-subscriptions.module.css';
+import { getDisplayAddress } from '../../lib/utils/address-utils';
 
 type StarterSubscriptionsState = ReturnType<typeof useStarterSubscriptions>;
 
@@ -48,7 +49,7 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
           <h2>{t('removed_starter_communities')}</h2>
           <ul>
             {delta.removedAddresses.map((address) => (
-              <li key={address}>{address}</li>
+              <li key={address}>{getDisplayAddress(address)}</li>
             ))}
           </ul>
         </section>
@@ -63,9 +64,9 @@ const StarterSubscriptionsReview = ({ initialSelectedAddresses, state }: Starter
             <label className={styles.community} key={community.address}>
               <input type='checkbox' checked={selected} disabled={subscribed || saving} onChange={() => toggleAddress(community.address)} />
               <span>
-                <Link to={getCommunityPath(community.address)}>{community.title || community.address}</Link>
+                <Link to={getCommunityPath(community.address)}>{community.title || getDisplayAddress(community.address)}</Link>
                 {isNew && <span className={styles.newLabel}>{t('new')}</span>}
-                <small>s/{community.address}</small>
+                <small>s/{getDisplayAddress(community.address)}</small>
                 {community.description && <span className={styles.description}>{community.description}</span>}
               </span>
             </label>
