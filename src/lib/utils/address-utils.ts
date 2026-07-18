@@ -16,4 +16,6 @@ export const getDisplayAddress = (address?: string | null): string => (address ?
 
 export const getShortDisplayAddress = (address?: string | null): string => getDisplayAddress(getShortAddress(address));
 
+export const getCompactCommunityDisplayName = (address?: string | null): string => getShortDisplayAddress(address).replace(/\.bso$/i, '');
+
 export default getShortAddress;

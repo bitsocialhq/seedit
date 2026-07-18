@@ -4,6 +4,7 @@ import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
 import { useAutoSubscribe } from './hooks/use-auto-subscribe';
 import { useBrowserPureP2PAccountUpgrade } from './hooks/use-browser-pure-p2p-account-upgrade';
+import useCanonicalCommunityRoute from './hooks/use-canonical-community-route';
 import AboutView from './views/about';
 import All from './views/all';
 import Author from './views/author';
@@ -37,6 +38,7 @@ const SettingsUpgradeModal = lazy(() => import('./components/settings-upgrade-mo
 const App = () => {
   useAutoSubscribe();
   useBrowserPureP2PAccountUpgrade();
+  useCanonicalCommunityRoute();
 
   const globalLayout = (
     <>

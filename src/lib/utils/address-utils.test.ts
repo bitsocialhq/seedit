@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import getShortAddress, { getDisplayAddress, getShortDisplayAddress } from './address-utils';
+import getShortAddress, { getCompactCommunityDisplayName, getDisplayAddress, getShortDisplayAddress } from './address-utils';
 
 describe('getShortAddress', () => {
   it('keeps named addresses unchanged', () => {
@@ -41,5 +41,18 @@ describe('getShortDisplayAddress', () => {
   it('preserves raw-address shortening behavior', () => {
     expect(getShortDisplayAddress('0x1234567890abcdef1234567890abcdef12345678')).toBe('7890abcdef12');
     expect(getShortDisplayAddress('short-address')).toBe('');
+  });
+});
+
+describe('getCompactCommunityDisplayName', () => {
+  it('removes the canonical .bso suffix from compact community labels', () => {
+    expect(getCompactCommunityDisplayName('music-posting.bso')).toBe('music-posting');
+    expect(getCompactCommunityDisplayName('music-posting.eth')).toBe('music-posting');
+    expect(getCompactCommunityDisplayName('topic.community.bso')).toBe('topic.community');
+  });
+
+  it('preserves non-Bitsocial names and shortens public keys', () => {
+    expect(getCompactCommunityDisplayName('music-posting.example')).toBe('music-posting.example');
+    expect(getCompactCommunityDisplayName('12D3KooWFnLrUYHpvqki7gbL4w9JzdxjpQPKE2JBDEd23Ly6X82X')).toBe('FnLrUYHpvqki');
   });
 });

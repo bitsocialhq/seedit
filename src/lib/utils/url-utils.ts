@@ -1,5 +1,5 @@
 import { copyToClipboard } from './clipboard-utils';
-import { getCommunityPath, getCommunityPostPath, getCommunityPostUrl, resolveCommunityRouteAddress } from './community-route-utils';
+import { getCanonicalCommunityRoutePathname, getCommunityPath, getCommunityPostPath, getCommunityPostUrl, resolveCommunityRouteAddress } from './community-route-utils';
 
 export const getHostname = (url: string) => {
   try {
@@ -75,11 +75,11 @@ export const transformSeeditLinkToInternal = (url: string): string | null => {
     if (parsedUrl.hash && parsedUrl.hash.startsWith('#/')) {
       // Extract the route from the hash, preserving any query params within the hash
       const hashPath = parsedUrl.hash.substring(1); // Remove the #
-      return hashPath;
+      return getCanonicalCommunityRoutePathname(hashPath) ?? hashPath;
     }
 
     // For regular pathname-based routes
-    return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+    return (getCanonicalCommunityRoutePathname(parsedUrl.pathname) ?? parsedUrl.pathname) + parsedUrl.search + parsedUrl.hash;
   } catch {
     return null;
   }

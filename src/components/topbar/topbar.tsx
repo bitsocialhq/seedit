@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-hooks';
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
-import { getShortDisplayAddress } from '../../lib/utils/address-utils';
+import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
 import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
@@ -12,7 +12,7 @@ import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
-const getSubscriptionDisplayName = (subscription: string) => getShortDisplayAddress(subscription);
+const getSubscriptionDisplayName = (subscription: string) => getCompactCommunityDisplayName(subscription);
 
 const CommunitiesDropdown = () => {
   const { t } = useTranslation();
