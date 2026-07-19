@@ -1,0 +1,98 @@
+{
+  "task": "directory-routes",
+  "last_updated": "2026-07-19",
+  "items": [
+    {
+      "id": "F001",
+      "priority": 1,
+      "status": "completed",
+      "description": "Load and validate the small Seedit directory registry without allowing directory slugs into account subscriptions.",
+      "verification": [
+        "Focused directory-list normalization and winner-selection tests pass."
+      ],
+      "files": [
+        "src/data/seedit-directories",
+        "src/data/vendored-directory-lists.ts",
+        "src/hooks/use-directory-list.ts",
+        "src/lib/utils/directory-list-utils.ts"
+      ],
+      "notes": "Directory data is allowed only for short-route discovery and consented update offers."
+    },
+    {
+      "id": "F002",
+      "priority": 2,
+      "status": "completed",
+      "description": "Resolve reserved /s/<slug> routes to the current winning community while keeping explicit address and post routes canonical.",
+      "verification": [
+        "/s/funny renders the current winner, /s/funny.bso remains exact, and all /comments/<cid> paths contain an exact address."
+      ],
+      "files": [
+        "src/hooks/use-resolved-community-route.ts",
+        "src/lib/utils/community-route-utils.ts",
+        "src/views/community/community.tsx",
+        "src/views/post-page/post-page.tsx",
+        "src/components/exact-community-action-route"
+      ],
+      "notes": "Home and subscription navigation must never resolve directory slugs at read time."
+    },
+    {
+      "id": "F003",
+      "priority": 3,
+      "status": "completed",
+      "description": "Disclose the exact winner on directory routes and make the existing Join action subscribe only to that exact address.",
+      "verification": [
+        "Desktop and mobile browser checks confirm one Join meaning and a keyboard-accessible exact-address link."
+      ],
+      "files": [
+        "src/components/sidebar/sidebar.tsx",
+        "src/components/header/header.tsx",
+        "src/components/subscribe-button/subscribe-button.tsx",
+        "src/components/directory-auto-switch-control"
+      ],
+      "notes": "Preserve Seedit's compact old.reddit visual language."
+    },
+    {
+      "id": "F004",
+      "priority": 4,
+      "status": "completed",
+      "description": "Offer consented add, keep, keep-both, or per-directory auto-follow behavior when a directory winner changes, while persisting exact addresses only.",
+      "verification": [
+        "Focused transition tests prove manual subscriptions survive and auto-follow rewrites only subscriptions attributable to the changed slot."
+      ],
+      "files": [
+        "src/components/directory-subscription-reconciler",
+        "src/components/directory-subscription-updates-notice",
+        "src/lib/utils/directory-subscriptions.ts",
+        "src/lib/utils/directory-account-transforms.ts",
+        "src/lib/utils/starter-account.ts"
+      ],
+      "notes": "No silent changes without a prior explicit opt-in, and every automatic change receives an informational notice."
+    },
+    {
+      "id": "F005",
+      "priority": 5,
+      "status": "completed",
+      "description": "Document the route-only directory boundary and update user-facing copy and generated AI context where required.",
+      "verification": [
+        "Documentation states that directories govern entry routes, while subscriptions and permalinks remain exact."
+      ],
+      "files": [
+        "docs/architecture/directory-routes.md",
+        "public/translations"
+      ],
+      "notes": "Run yarn llms:generate for public-facing documentation changes."
+    },
+    {
+      "id": "F006",
+      "priority": 6,
+      "status": "completed",
+      "description": "Complete static, unit, React quality, multi-engine browser, responsive, theme, and throttled navigation verification.",
+      "verification": [
+        "168 tests, production build, lint, type-check, Knip, AI workflow parity, changed-scope React Doctor, generated LLM context, and git diff --check pass.",
+        "Chrome, Firefox, and WebKit pass at 1440x1000 and 390x844; Chromium also passes warm navigation under the repository's mid-throttle profile."
+      ],
+      "files": [],
+      "notes": "Verified with Node 22.12.0 and fresh isolated browser sessions. Full-repository React Doctor retains pre-existing findings outside this change; changed-scope React Doctor reports no issues."
+    }
+  ]
+}
