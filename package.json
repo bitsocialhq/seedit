@@ -146,7 +146,7 @@
     "oxfmt": "0.24.0",
     "oxlint": "1.39.0",
     "progress": "2.0.3",
-    "react-doctor": "0.5.2",
+    "react-doctor": "0.8.1",
     "react-grab": "0.1.37",
     "react-scan": "0.5.3",
     "stream-browserify": "3.0.0",
