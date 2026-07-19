@@ -6487,22 +6487,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-grab/cli@npm:0.1.37":
-  version: 0.1.37
-  resolution: "@react-grab/cli@npm:0.1.37"
+"@react-grab/cli@npm:0.1.48":
+  version: 0.1.48
+  resolution: "@react-grab/cli@npm:0.1.48"
   dependencies:
+    agent-install: "npm:^0.0.6"
     commander: "npm:^14.0.3"
     ignore: "npm:^7.0.5"
-    jsonc-parser: "npm:^3.3.1"
     ora: "npm:^9.4.0"
     package-manager-detector: "npm:^1.6.0"
     picocolors: "npm:^1.1.1"
     prompts: "npm:^2.4.2"
-    smol-toml: "npm:^1.6.1"
     tinyexec: "npm:^1.1.2"
   bin:
     react-grab: bin/cli.js
-  checksum: 10c0/ff4b09f22f1c25c31a14649847f22411c5cbbd7f3ee6c4cf8de8424994b0febd4c0bad32ae439002e613401056fa6b4f8d04a8258fd7012881fad555506d1f95
+  checksum: 10c0/97398e48a82efe95bb5b7476714feca128a676bd3921e3df56b58c93a0ef058c9258a9d7fa433ed2ca53aec66a6d37659742e1113f1ed9e88164dada11dcba85
   languageName: node
   linkType: hard
 
@@ -7729,6 +7728,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"agent-install@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "agent-install@npm:0.0.6"
+  dependencies:
+    "@iarna/toml": "npm:^2.2.5"
+    commander: "npm:^14.0.0"
+    jsonc-parser: "npm:^3.3.1"
+    picocolors: "npm:^1.1.1"
+    prompts: "npm:^2.4.2"
+    yaml: "npm:^2.8.3"
+  bin:
+    agent-install: bin/agent-install.mjs
+  checksum: 10c0/39b8305dc97cfe39f64ce3a6432a79f3450ddd5791b3d53ffa90cc938832476a04966912f313d659d9db1e3218b812fddad9ffe2b73be2d0d35b114e44247eaa
+  languageName: node
+  linkType: hard
+
 "agentkeepalive@npm:^4.2.1":
   version: 4.6.0
   resolution: "agentkeepalive@npm:4.6.0"
@@ -8219,21 +8234,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bippy@npm:^0.5.32":
+"bippy@npm:^0.5.32, bippy@npm:^0.5.43":
   version: 0.5.43
   resolution: "bippy@npm:0.5.43"
   peerDependencies:
     react: ">=17.0.1"
   checksum: 10c0/e7c50a8f3e8fdc2af3357f2dc620fa18443f4cb6dea4d5beeaf1cc5da094ad8e330b0b756d537a4291fd1575883aff300acb99f2b3e2aeb5098e4533c4dd60c0
-  languageName: node
-  linkType: hard
-
-"bippy@npm:^0.5.41":
-  version: 0.5.41
-  resolution: "bippy@npm:0.5.41"
-  peerDependencies:
-    react: ">=17.0.1"
-  checksum: 10c0/436e89203404f29088546debbbad9527b7e3d5f2312954b108381452db4bbda42e5366e4f764cd32d02e823e7e84ce33649eb832f283652a7a530324808590ec
   languageName: node
   linkType: hard
 
@@ -18966,12 +18972,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-grab@npm:0.1.37":
-  version: 0.1.37
-  resolution: "react-grab@npm:0.1.37"
+"react-grab@npm:0.1.48":
+  version: 0.1.48
+  resolution: "react-grab@npm:0.1.48"
   dependencies:
-    "@react-grab/cli": "npm:0.1.37"
-    bippy: "npm:^0.5.41"
+    "@react-grab/cli": "npm:0.1.48"
+    bippy: "npm:^0.5.43"
   peerDependencies:
     react: ">=17.0.0"
   peerDependenciesMeta:
@@ -18979,7 +18985,7 @@ __metadata:
       optional: true
   bin:
     react-grab: bin/cli.js
-  checksum: 10c0/971de11ba6f2f862edd4988d48a34b029695307b5757b43bc7c2f922964f24c5ec7487e13290038afe695655b90a6d862bc848058834b6f03114337d36b9565f
+  checksum: 10c0/02652be1ce5971ec68828812780ea10dd9c5d07a3a7e0fec65d57c1c300d843ffe04e165f38032ca3d84d501313187b917f8a9c13ce0f02aeadab0d2f8b6e3c0
   languageName: node
   linkType: hard
 
@@ -19994,7 +20000,7 @@ __metadata:
     react-doctor: "npm:0.8.1"
     react-dom: "npm:19.2.7"
     react-dropzone: "npm:14.3.8"
-    react-grab: "npm:0.1.37"
+    react-grab: "npm:0.1.48"
     react-i18next: "npm:16.6.6"
     react-markdown: "npm:10.1.0"
     react-router-dom: "npm:6.30.4"
