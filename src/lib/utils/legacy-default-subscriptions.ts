@@ -15,8 +15,8 @@ export const LEGACY_DIRECTORY_ADDRESS_BY_CODE = {
 
 export type LegacyDirectoryCode = keyof typeof LEGACY_DIRECTORY_ADDRESS_BY_CODE;
 
-export const STARTER_COMMUNITIES_SCHEMA_VERSION = 1;
-export const STARTER_COMMUNITIES_REVISION = 1;
+export const STARTER_COMMUNITIES_SCHEMA_VERSION = 2;
+export const STARTER_COMMUNITIES_REVISION = 2;
 export const STARTER_COMMUNITY_ADDRESSES = Object.values(LEGACY_DIRECTORY_ADDRESS_BY_CODE);
 
 // Dead defaults from the multisub that preceded directory subscriptions. Their presence

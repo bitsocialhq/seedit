@@ -1,8 +1,11 @@
 import type { Account } from '@bitsocial/bitsocial-react-hooks';
 import { computeAddressCanonicalSubscriptionMigration, STARTER_COMMUNITIES_REVISION, STARTER_COMMUNITY_ADDRESSES } from './legacy-default-subscriptions';
+import { joinDirectorySubscription, normalizeDirectoryPreferences, type SeeditDirectoryPreferences } from './directory-subscriptions';
+import type { SeeditDirectoryCode } from './directory-codes';
 import { bootstrapStarterSubscriptions, initializeStarterSubscriptions, type SeeditStarterSubscriptions } from './starter-subscriptions';
 
 export type StarterAccount = Account & {
+  seeditDirectoryPreferences?: SeeditDirectoryPreferences;
   seeditStarterSubscriptions?: SeeditStarterSubscriptions;
 };
 
@@ -15,7 +18,7 @@ interface RebasedStarterAccountPersistence {
 
 interface StarterListInput {
   revision: number;
-  communities: readonly { address: string }[];
+  communities: readonly { address: string; directoryCode?: SeeditDirectoryCode; directoryRevision?: number }[];
 }
 
 const OLD_AUTO_SUBSCRIBE_KEY_PREFIX = 'seedit-auto-subscribe-done-';
@@ -35,6 +38,10 @@ const sameAddresses = (first: readonly string[] | undefined, second: readonly st
 
 export const hasStarterAccountStateChanged = (previous: StarterAccount, next: StarterAccount): boolean => {
   if (!sameAddresses(previous.subscriptions, next.subscriptions)) return true;
+  if (
+    JSON.stringify(normalizeDirectoryPreferences(previous.seeditDirectoryPreferences)) !== JSON.stringify(normalizeDirectoryPreferences(next.seeditDirectoryPreferences))
+  )
+    return true;
   const previousProvenance = previous.seeditStarterSubscriptions;
   const nextProvenance = next.seeditStarterSubscriptions;
   if (!previousProvenance || !nextProvenance) return previousProvenance !== nextProvenance;
@@ -44,6 +51,31 @@ export const hasStarterAccountStateChanged = (previous: StarterAccount, next: St
     !sameAddresses(previousProvenance.knownAddresses, nextProvenance.knownAddresses) ||
     !sameAddresses(previousProvenance.managedAddresses, nextProvenance.managedAddresses)
   );
+};
+
+const addManagedDirectoryPreferences = (
+  subscriptions: readonly string[],
+  preferences: SeeditDirectoryPreferences | undefined,
+  managedAddresses: readonly string[],
+  starterList: StarterListInput,
+): SeeditDirectoryPreferences => {
+  const managedSet = new Set(managedAddresses);
+  let state = { subscriptions: [...subscriptions], preferences: normalizeDirectoryPreferences(preferences) };
+
+  for (const community of starterList.communities) {
+    if (!community.directoryCode || !community.directoryRevision || !managedSet.has(community.address)) continue;
+    state = joinDirectorySubscription({
+      ...state,
+      winner: {
+        directoryCode: community.directoryCode,
+        address: community.address,
+        revision: community.directoryRevision,
+        authoritative: true,
+      },
+    });
+  }
+
+  return state.preferences;
 };
 
 /** Persist a starter-state transform and rebase it until the same store snapshot survives the async write. */
@@ -82,16 +114,17 @@ export const computeStarterAccount = (account: StarterAccount, isKnownExistingAc
   const currentProvenance = account.seeditStarterSubscriptions;
 
   if (currentProvenance) {
-    if (!migration.changed) return account;
     const managedAddresses = [...new Set([...currentProvenance.managedAddresses, ...migratedManagedAddresses])];
-    return {
+    const nextAccount = {
       ...account,
       subscriptions: migratedSubscriptions,
       seeditStarterSubscriptions: {
         ...currentProvenance,
         managedAddresses,
       },
+      seeditDirectoryPreferences: addManagedDirectoryPreferences(migratedSubscriptions, account.seeditDirectoryPreferences, managedAddresses, starterList),
     };
+    return hasStarterAccountStateChanged(account, nextAccount) ? nextAccount : account;
   }
 
   if (migration.changed) {
@@ -100,14 +133,16 @@ export const computeStarterAccount = (account: StarterAccount, isKnownExistingAc
       revision: STARTER_COMMUNITIES_REVISION,
       starterAddresses: STARTER_COMMUNITY_ADDRESSES,
     });
-    return {
+    const nextAccount = {
       ...account,
       subscriptions: initialized.subscriptions,
       seeditStarterSubscriptions: {
         ...initialized.provenance,
         managedAddresses: migratedManagedAddresses,
       },
+      seeditDirectoryPreferences: addManagedDirectoryPreferences(initialized.subscriptions, account.seeditDirectoryPreferences, migratedManagedAddresses, starterList),
     };
+    return nextAccount;
   }
 
   const result =
@@ -119,5 +154,6 @@ export const computeStarterAccount = (account: StarterAccount, isKnownExistingAc
     ...account,
     subscriptions: result.subscriptions,
     seeditStarterSubscriptions: result.provenance,
+    seeditDirectoryPreferences: addManagedDirectoryPreferences(result.subscriptions, account.seeditDirectoryPreferences, result.provenance.managedAddresses, starterList),
   };
 };
