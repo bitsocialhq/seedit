@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "directoryCode": "gaming",
+  "description": "Communities competing for Seedit's /s/gaming route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-gaming-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "gaming-posting.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWRHbY2AS9oComoTVpMF4iF33d3GPzKCW7MSfHEJT8qeZc",
+      "owner": "bitsocialist.bso"
+    }
+  ]
+}

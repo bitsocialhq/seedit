@@ -62,6 +62,7 @@
     "start:preview": "node scripts/start-preview.js",
     "ai-workflow:check": "node scripts/validate-ai-workflow.mjs",
     "llms:generate": "node scripts/generate-llms-files.mjs",
+    "sync:directories": "node scripts/sync-directories.js",
     "build": "cross-env NODE_ENV=production PUBLIC_URL=./ GENERATE_SOURCEMAP=false vite build",
     "build:preload": "cross-env NODE_ENV=production vite build --config electron/vite.preload.config.js",
     "build-netlify": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" NODE_ENV=production PUBLIC_URL=./ GENERATE_SOURCEMAP=true VITE_COMMIT_REF=$COMMIT_REF CI='' vite build",
