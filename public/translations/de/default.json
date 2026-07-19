@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Das Einstellungs-Upgrade konnte nicht gespeichert werden.",
   "settings_upgrade_review_notice": "Upgrade für Einstellungen verfügbar",
   "settings_upgrade_review_button": "prüfen",
-  "settings_upgrade_never_show_again": "nie wieder anzeigen"
+  "settings_upgrade_never_show_again": "nie wieder anzeigen",
+  "directory_route_currently_recommends": "s/{{directoryCode}} empfiehlt derzeit",
+  "directory_auto_switch_label": "dieses Abonnement automatisch wechseln, wenn sich s/{{directoryCode}} ändert",
+  "directory_recommendation_changed": "s/{{directoryCode}} empfiehlt jetzt",
+  "directory_auto_switch_help": "Seedit ersetzt dieses Abonnement durch die neu empfohlene Community. Du kannst dies jederzeit deaktivieren.",
+  "directory_you_still_follow": "Du folgst weiterhin",
+  "switch_to_community": "zu {{communityAddress}} wechseln",
+  "keep_both_communities": "beide behalten",
+  "keep_community": "{{communityAddress}} behalten",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} hat sich geändert, daher hat Seedit dein Abonnement von {{fromAddress}} zu {{toAddress}} gewechselt.",
+  "dismiss": "Ausblenden"
 }

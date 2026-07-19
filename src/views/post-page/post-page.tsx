@@ -13,6 +13,7 @@ import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useReplies from '../../hooks/use-replies';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -284,7 +285,7 @@ const PostPage = () => {
   }, [pendingPost?.cid, pendingPostCommunityAddress, navigate, resetFeed]);
 
   const { commentCid } = params;
-  const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
   let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;

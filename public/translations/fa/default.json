@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "ذخیره ارتقای تنظیمات ممکن نشد.",
   "settings_upgrade_review_notice": "ارتقای تنظیمات در دسترس است",
   "settings_upgrade_review_button": "بررسی",
-  "settings_upgrade_never_show_again": "دیگر نشان نده"
+  "settings_upgrade_never_show_again": "دیگر نشان نده",
+  "directory_route_currently_recommends": "پیشنهاد فعلی s/{{directoryCode}}:",
+  "directory_auto_switch_label": "وقتی s/{{directoryCode}} تغییر می‌کند، این اشتراک به‌طور خودکار تغییر کند",
+  "directory_recommendation_changed": "s/{{directoryCode}} اکنون پیشنهاد می‌کند",
+  "directory_auto_switch_help": "Seedit این اشتراک را با جامعهٔ تازه پیشنهادی جایگزین می‌کند. هر زمان بخواهید می‌توانید این گزینه را غیرفعال کنید.",
+  "directory_you_still_follow": "شما همچنان دنبال می‌کنید",
+  "switch_to_community": "تغییر به {{communityAddress}}",
+  "keep_both_communities": "هر دو را نگه دارید",
+  "keep_community": "حفظ {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} تغییر کرد، بنابراین Seedit اشتراک شما را از {{fromAddress}} به {{toAddress}} منتقل کرد.",
+  "dismiss": "بستن"
 }

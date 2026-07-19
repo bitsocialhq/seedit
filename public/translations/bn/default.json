@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "সেটিংস আপগ্রেড সংরক্ষণ করা যায়নি।",
   "settings_upgrade_review_notice": "সেটিংস আপগ্রেড উপলভ্য",
   "settings_upgrade_review_button": "পর্যালোচনা করুন",
-  "settings_upgrade_never_show_again": "আর কখনও দেখাবেন না"
+  "settings_upgrade_never_show_again": "আর কখনও দেখাবেন না",
+  "directory_route_currently_recommends": "s/{{directoryCode}}-এর বর্তমান সুপারিশ:",
+  "directory_auto_switch_label": "s/{{directoryCode}} পরিবর্তন হলে স্বয়ংক্রিয়ভাবে এই সাবস্ক্রিপশনটি পরিবর্তন করুন",
+  "directory_recommendation_changed": "s/{{directoryCode}} এখন সুপারিশ করছে",
+  "directory_auto_switch_help": "Seedit এই সাবস্ক্রিপশনটি নতুনভাবে সুপারিশ করা কমিউনিটি দিয়ে প্রতিস্থাপন করবে। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।",
+  "directory_you_still_follow": "আপনি এখনও অনুসরণ করছেন",
+  "switch_to_community": "{{communityAddress}}-এ স্যুইচ করুন",
+  "keep_both_communities": "দুটিই রাখুন",
+  "keep_community": "{{communityAddress}} রাখুন",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} পরিবর্তিত হয়েছে, তাই Seedit আপনার সাবস্ক্রিপশন {{fromAddress}} থেকে {{toAddress}}-এ পরিবর্তন করেছে।",
+  "dismiss": "খারিজ করুন"
 }

@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "설정 업그레이드를 저장하지 못했습니다.",
   "settings_upgrade_review_notice": "설정 업그레이드 사용 가능",
   "settings_upgrade_review_button": "검토",
-  "settings_upgrade_never_show_again": "다시 표시하지 않기"
+  "settings_upgrade_never_show_again": "다시 표시하지 않기",
+  "directory_route_currently_recommends": "s/{{directoryCode}}의 현재 추천:",
+  "directory_auto_switch_label": "s/{{directoryCode}} 변경 시 이 구독을 자동으로 전환",
+  "directory_recommendation_changed": "s/{{directoryCode}}에서 현재 추천하는 커뮤니티:",
+  "directory_auto_switch_help": "Seedit이 이 구독을 새로 추천된 커뮤니티로 교체합니다. 언제든지 이 기능을 끌 수 있습니다.",
+  "directory_you_still_follow": "아직 팔로우 중",
+  "switch_to_community": "{{communityAddress}} 커뮤니티로 전환",
+  "keep_both_communities": "둘 다 유지",
+  "keep_community": "{{communityAddress}} 유지",
+  "directory_automatic_switch_notice": "s/{{directoryCode}}의 추천이 변경되어 Seedit에서 구독 대상을 {{fromAddress}}에서 {{toAddress}}로 전환했습니다.",
+  "dismiss": "닫기"
 }

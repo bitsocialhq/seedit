@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import { isValidURL } from '../../lib/utils/url-utils';
-import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
@@ -466,14 +467,14 @@ const SubmitOptions = () => {
 
 const SubmitPage = () => {
   const { t } = useTranslation();
-  const params = useParams();
   const navigate = useNavigate();
 
   const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
+  const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
 
   useEffect(() => {
-    setPublishPostStore({ communityAddress: resolveCommunityRouteAddress(params.communityAddress) || '' } as any);
-  }, [params.communityAddress, setPublishPostStore]);
+    setPublishPostStore({ communityAddress: routeCommunityAddress || '' } as any);
+  }, [routeCommunityAddress, setPublishPostStore]);
 
   const selectedCommunityData = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { rules, title: communityTitle } = selectedCommunityData;

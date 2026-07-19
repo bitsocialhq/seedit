@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Tidak dapat menyimpan peningkatan pengaturan.",
   "settings_upgrade_review_notice": "peningkatan pengaturan tersedia",
   "settings_upgrade_review_button": "tinjau",
-  "settings_upgrade_never_show_again": "jangan tampilkan lagi"
+  "settings_upgrade_never_show_again": "jangan tampilkan lagi",
+  "directory_route_currently_recommends": "s/{{directoryCode}} saat ini merekomendasikan",
+  "directory_auto_switch_label": "alihkan langganan ini secara otomatis saat s/{{directoryCode}} berubah",
+  "directory_recommendation_changed": "s/{{directoryCode}} sekarang merekomendasikan",
+  "directory_auto_switch_help": "Seedit akan mengganti langganan ini dengan komunitas yang baru direkomendasikan. Anda dapat menonaktifkannya kapan saja.",
+  "directory_you_still_follow": "Anda masih mengikuti",
+  "switch_to_community": "beralih ke {{communityAddress}}",
+  "keep_both_communities": "simpan keduanya",
+  "keep_community": "pertahankan {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} berubah, jadi Seedit mengalihkan langganan Anda dari {{fromAddress}} ke {{toAddress}}.",
+  "dismiss": "Tutup"
 }

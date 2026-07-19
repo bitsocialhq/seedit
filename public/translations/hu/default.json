@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Nem sikerült menteni a beállítások frissítését.",
   "settings_upgrade_review_notice": "beállításfrissítés érhető el",
   "settings_upgrade_review_button": "áttekintés",
-  "settings_upgrade_never_show_again": "soha ne jelenjen meg újra"
+  "settings_upgrade_never_show_again": "soha ne jelenjen meg újra",
+  "directory_route_currently_recommends": "Az s/{{directoryCode}} jelenleg ezt ajánlja:",
+  "directory_auto_switch_label": "automatikusan váltsa át ezt a feliratkozást, amikor az s/{{directoryCode}} megváltozik",
+  "directory_recommendation_changed": "Az s/{{directoryCode}} most ezt ajánlja:",
+  "directory_auto_switch_help": "A Seedit ezt a feliratkozást az újonnan ajánlott közösségre cseréli. Ezt bármikor kikapcsolhatod.",
+  "directory_you_still_follow": "Továbbra is követed",
+  "switch_to_community": "váltás erre: {{communityAddress}}",
+  "keep_both_communities": "mindkettő megtartása",
+  "keep_community": "{{communityAddress}} megtartása",
+  "directory_automatic_switch_notice": "Az s/{{directoryCode}} megváltozott, ezért a Seedit a feliratkozásodat {{fromAddress}} címről {{toAddress}} címre váltotta.",
+  "dismiss": "Bezárás"
 }

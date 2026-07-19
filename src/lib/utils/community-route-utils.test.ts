@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
   getCanonicalCommunityPostRedirectPath,
+  getCanonicalCommunityPostAboutRedirectPath,
   getCanonicalCommunityRoutePathname,
   getCommunityPath,
   getCommunityPostPath,
   getCommunityPostUrl,
+  getCommunityReferencePath,
+  getCommunityReferencePostPath,
   getCommunityRouteSegment,
+  getDirectoryPath,
+  getExactCommunityActionRedirectPath,
   resolveCommunityRouteAddress,
 } from './community-route-utils';
 
@@ -70,18 +75,42 @@ describe('community route builders', () => {
     expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww.bso/comments/bafy-post-cid');
   });
 
+  it('keeps explicit directory paths separate from exact community paths', () => {
+    expect(getDirectoryPath('funny')).toBe('/s/funny');
+    expect(getCommunityPath('funny')).toBe('/s/funny.bso');
+    expect(getCommunityReferencePath('funny')).toBe('/s/funny');
+    expect(getCommunityReferencePath('funny.bso')).toBe('/s/funny.bso');
+    expect(getCommunityReferencePath('unreserved-name')).toBe('/s/unreserved-name.bso');
+    expect(getCommunityReferencePostPath('funny', 'bafy-post-cid')).toBe('/s/funny/comments/bafy-post-cid');
+    expect(getCommunityReferencePostPath('funny.bso', 'bafy-post-cid')).toBe('/s/funny.bso/comments/bafy-post-cid');
+  });
+
   it('round-trips every canonical address', () => {
     for (const address of ['aww.bso', 'aww-posting.bso']) {
       expect(resolveCommunityRouteAddress(getCommunityRouteSegment(address))).toBe(address);
     }
   });
+
+  it('canonicalizes mutable directory action routes to the exact winner', () => {
+    expect(getExactCommunityActionRedirectPath('/s/funny/submit', 'funny', 'funny-posting.bso')).toBe('/s/funny-posting.bso/submit');
+    expect(getExactCommunityActionRedirectPath('/s/funny/settings/editor', 'funny', 'funny-posting.bso', '?mode=raw', '#roles')).toBe(
+      '/s/funny-posting.bso/settings/editor?mode=raw#roles',
+    );
+    expect(getExactCommunityActionRedirectPath('/s/news/submit', 'funny', 'funny-posting.bso')).toBeUndefined();
+  });
 });
 
 describe('getCanonicalCommunityRoutePathname', () => {
   it('redirects bare community routes and preserves nested route suffixes', () => {
-    expect(getCanonicalCommunityRoutePathname('/s/aww')).toBe('/s/aww.bso');
-    expect(getCanonicalCommunityRoutePathname('/s/aww/comments/bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
-    expect(getCanonicalCommunityRoutePathname('/s/aww/settings')).toBe('/s/aww.bso/settings');
+    expect(getCanonicalCommunityRoutePathname('/s/unreserved-name')).toBe('/s/unreserved-name.bso');
+    expect(getCanonicalCommunityRoutePathname('/s/unreserved-name/comments/bafy-post-cid')).toBe('/s/unreserved-name.bso/comments/bafy-post-cid');
+    expect(getCanonicalCommunityRoutePathname('/s/unreserved-name/settings')).toBe('/s/unreserved-name.bso/settings');
+  });
+
+  it('preserves known directory routes for route-only winner resolution', () => {
+    expect(getCanonicalCommunityRoutePathname('/s/aww')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/s/aww/comments/bafy-post-cid')).toBeUndefined();
+    expect(getCanonicalCommunityRoutePathname('/s/aww/settings')).toBeUndefined();
   });
 
   it('does not redirect canonical, reserved, public-key or unrelated routes', () => {
@@ -95,11 +124,22 @@ describe('getCanonicalCommunityRoutePathname', () => {
 });
 
 describe('getCanonicalCommunityPostRedirectPath', () => {
-  it('does not redirect when a bare route and bare post address resolve to the same community', () => {
-    expect(getCanonicalCommunityPostRedirectPath('aww', 'aww', 'bafy-post-cid')).toBeUndefined();
+  it('does not redirect when an unreserved bare route resolves to the post community', () => {
+    expect(getCanonicalCommunityPostRedirectPath('unreserved-name', 'unreserved-name', 'bafy-post-cid')).toBeUndefined();
+  });
+
+  it('always redirects directory post routes to the post owner exact address', () => {
+    expect(getCanonicalCommunityPostRedirectPath('aww', 'aww.bso', 'bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
+    expect(getCanonicalCommunityPostRedirectPath('funny', 'funny-posting.bso', 'bafy-post-cid')).toBe('/s/funny-posting.bso/comments/bafy-post-cid');
   });
 
   it('redirects a mismatched route to the canonical post community path', () => {
     expect(getCanonicalCommunityPostRedirectPath('wrong', 'aww.bso', 'bafy-post-cid')).toBe('/s/aww.bso/comments/bafy-post-cid');
+  });
+});
+
+describe('getCanonicalCommunityPostAboutRedirectPath', () => {
+  it('canonicalizes a directory-coded mobile about route to the post owner', () => {
+    expect(getCanonicalCommunityPostAboutRedirectPath('funny', 'archived-funny.bso', 'bafy-post-cid')).toBe('/s/archived-funny.bso/comments/bafy-post-cid/about');
   });
 });

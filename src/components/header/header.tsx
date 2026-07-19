@@ -43,7 +43,7 @@ import {
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
-import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, getCommunityPostPath } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -51,6 +51,7 @@ import useTheme from '../../hooks/use-theme';
 import useWindowWidth from '../../hooks/use-window-width';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import styles from './header.module.css';
 
@@ -58,7 +59,7 @@ const AboutButton = () => {
   const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
-  const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
   const aboutLink = routeCommunityAddress
     ? params.commentCid
       ? `${getCommunityPostPath(routeCommunityAddress, params.commentCid)}/about`
@@ -83,7 +84,7 @@ const CommentsButton = () => {
   const isInPendingPostView = isPendingPostView(location.pathname, params);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
 
   return (
     <li className={(isInPostPageView || isInPendingPostView) && !isInHomeAboutView && !isInPostPageAboutView ? styles.selected : styles.choice}>
@@ -108,7 +109,7 @@ const SortItems = () => {
   const isInModView = isModView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
   const isInCommunityView = isCommunityView(location.pathname, params);
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
   // Derive selection directly from route instead of syncing via an effect
   const selectedSortType = isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? '' : params.sortType || 'hot';
   const timeFilterName = params.timeFilterName;
@@ -343,7 +344,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const isInCreateCommunityView = isCreateCommunityView(location.pathname);
   const isInNotFoundView = useNotFoundStore((state) => state.isNotFound);
 
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
   const titleCommunityAddress = isInPendingPostView ? pendingPostCommunityAddress : communityAddress;
 
   const { hideNsfwCommunities } = useContentOptionsStore();
@@ -406,7 +407,7 @@ const Header = () => {
   const [theme] = useTheme();
   const location = useLocation();
   const params = useParams();
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress, directoryCode } = useResolvedCommunityRoute();
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress), onlyIfCached: true } : undefined);
   const { title } = community || {};
 
@@ -495,6 +496,11 @@ const Header = () => {
           </ul>
         )}
       </div>
+      {isMobile && directoryCode && communityAddress && isInCommunityView && !isInPostPageView && !isInCommunitySubmitView && !isInCommunitySettingsView && (
+        <div className={styles.mobileDirectoryDisclosure}>
+          {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(communityAddress)}>{getDisplayAddress(communityAddress)}</Link>
+        </div>
+      )}
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
         <ul className={`${styles.tabMenu} ${isInProfileView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />

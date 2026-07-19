@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Nu s-a putut salva actualizarea setărilor.",
   "settings_upgrade_review_notice": "upgrade pentru setări disponibil",
   "settings_upgrade_review_button": "revizuiește",
-  "settings_upgrade_never_show_again": "nu mai afișa"
+  "settings_upgrade_never_show_again": "nu mai afișa",
+  "directory_route_currently_recommends": "s/{{directoryCode}} recomandă în prezent",
+  "directory_auto_switch_label": "schimbă automat acest abonament când se modifică s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} recomandă acum",
+  "directory_auto_switch_help": "Seedit va înlocui acest abonament cu noua comunitate recomandată. Poți dezactiva oricând această opțiune.",
+  "directory_you_still_follow": "Urmărești în continuare",
+  "switch_to_community": "comută la {{communityAddress}}",
+  "keep_both_communities": "păstrează-le pe ambele",
+  "keep_community": "păstrează {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} s-a schimbat, așa că Seedit ți-a mutat abonamentul de la {{fromAddress}} la {{toAddress}}.",
+  "dismiss": "Închide"
 }

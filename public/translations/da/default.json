@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Indstillingsopgraderingen kunne ikke gemmes.",
   "settings_upgrade_review_notice": "opgradering af indstillinger er tilgængelig",
   "settings_upgrade_review_button": "gennemgå",
-  "settings_upgrade_never_show_again": "vis aldrig igen"
+  "settings_upgrade_never_show_again": "vis aldrig igen",
+  "directory_route_currently_recommends": "s/{{directoryCode}} anbefaler i øjeblikket",
+  "directory_auto_switch_label": "skift automatisk dette abonnement, når s/{{directoryCode}} ændres",
+  "directory_recommendation_changed": "s/{{directoryCode}} anbefaler nu",
+  "directory_auto_switch_help": "Seedit erstatter dette abonnement med det nyligt anbefalede fællesskab. Du kan til enhver tid slå dette fra.",
+  "directory_you_still_follow": "Du følger stadig",
+  "switch_to_community": "skift til {{communityAddress}}",
+  "keep_both_communities": "behold begge",
+  "keep_community": "behold {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} er ændret, så Seedit skiftede dit abonnement fra {{fromAddress}} til {{toAddress}}.",
+  "dismiss": "Luk"
 }
