@@ -245,6 +245,7 @@ const PostWithContext = ({ post }: { post: Comment }) => {
 };
 
 const PostPage = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
   const locationSearch = location.search;
@@ -285,7 +286,7 @@ const PostPage = () => {
   }, [pendingPost?.cid, pendingPostCommunityAddress, navigate, resetFeed]);
 
   const { commentCid } = params;
-  const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
+  const { communityAddress: routeCommunityAddress, directoryCode } = useResolvedCommunityRoute();
   let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;
@@ -329,7 +330,11 @@ const PostPage = () => {
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar community={community} comment={post} settings={community?.settings} />
+        {directoryCode && !isInPendingPostView ? (
+          <LoadingEllipsis string={t('loading')} />
+        ) : (
+          <Sidebar community={community} comment={post} settings={community?.settings} />
+        )}
       </div>
       {isInPendingPostView && params?.accountCommentIndex ? <Post post={pendingPost} /> : isInPostContextView ? <PostWithContext post={post} /> : <Post post={post} />}
       {shouldShowErrorToUser && (

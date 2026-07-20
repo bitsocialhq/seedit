@@ -374,7 +374,13 @@ export const switchDirectorySubscription = (input: DirectoryWinnerActionInput): 
   const state = prepareState(input);
   if (!isUsableWinner(input.winner)) return state;
   const slot = state.preferences.slots[input.winner.directoryCode];
-  if (!slot || !isNewerWinner(slot, input.winner)) return state;
+  if (
+    !slot ||
+    input.winner.revision < slot.acknowledgedWinner.revision ||
+    (input.winner.revision === slot.acknowledgedWinner.revision && input.winner.address !== slot.acknowledgedWinner.address)
+  ) {
+    return state;
+  }
 
   const preservePrevious = isTrackedByAnotherSlot(state.preferences, input.winner.directoryCode, slot.subscriptionAddress);
   const kept = preservePrevious ? state.subscriptions : state.subscriptions.filter((address) => address !== slot.subscriptionAddress);

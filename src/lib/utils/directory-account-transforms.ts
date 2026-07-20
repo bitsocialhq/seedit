@@ -86,7 +86,9 @@ export const joinDirectoryWinnerAccount = (account: StarterAccount, winner: Auth
 export const setDirectoryWinnerAutoSwitchAccount = (account: StarterAccount, winner: AuthoritativeDirectoryWinnerSnapshot, enabled: boolean): StarterAccount => {
   const previousAddress = account.seeditDirectoryPreferences?.slots?.[winner.directoryCode]?.subscriptionAddress;
   const joined = enabled
-    ? joinDirectorySubscription({ subscriptions: account.subscriptions ?? [], preferences: account.seeditDirectoryPreferences, winner })
+    ? previousAddress && previousAddress !== winner.address
+      ? switchDirectorySubscription({ subscriptions: account.subscriptions ?? [], preferences: account.seeditDirectoryPreferences, winner })
+      : joinDirectorySubscription({ subscriptions: account.subscriptions ?? [], preferences: account.seeditDirectoryPreferences, winner })
     : { subscriptions: account.subscriptions ?? [], preferences: account.seeditDirectoryPreferences };
   const result = setDirectoryAutoSwitch({ ...joined, directoryCode: winner.directoryCode, enabled });
   const provenance =

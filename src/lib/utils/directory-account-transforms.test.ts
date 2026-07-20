@@ -5,6 +5,7 @@ import {
   joinDirectoryWinnerAccount,
   reconcileDirectoryWinnerAccount,
   resolveAutomaticDirectoryNoticeAccount,
+  setDirectoryWinnerAutoSwitchAccount,
 } from './directory-account-transforms';
 import type { AuthoritativeDirectoryWinnerSnapshot, SeeditDirectoryPreferences } from './directory-subscriptions';
 
@@ -56,6 +57,25 @@ describe('directory account transforms', () => {
     expect(result.subscriptions).toEqual(newer.subscriptions);
     expect(result.seeditDirectoryPreferences).toEqual(newer.seeditDirectoryPreferences);
     expect(result.seeditStarterSubscriptions).toEqual(newer.seeditStarterSubscriptions);
+  });
+
+  it('adopts the current winner when auto-switch is enabled after a previously acknowledged change', () => {
+    const keptPrevious = account();
+    keptPrevious.subscriptions = ['funny-a.bso', 'funny-b.bso'];
+    keptPrevious.seeditDirectoryPreferences!.slots.funny!.acknowledgedWinner = { address: 'funny-b.bso', revision: 2 };
+
+    const result = setDirectoryWinnerAutoSwitchAccount(keptPrevious, winner('funny-b.bso', 2), true);
+
+    expect(result.subscriptions).toEqual(['funny-b.bso']);
+    expect(result.seeditDirectoryPreferences?.slots.funny).toEqual({
+      subscriptionAddress: 'funny-b.bso',
+      autoSwitch: true,
+      acknowledgedWinner: { address: 'funny-b.bso', revision: 2 },
+    });
+    expect(result.seeditStarterSubscriptions).toMatchObject({
+      knownAddresses: ['funny-b.bso'],
+      managedAddresses: ['funny-b.bso'],
+    });
   });
 
   it('restores starter ownership when an automatic switch is undone', () => {
