@@ -44,6 +44,19 @@ a {
   text-decoration: underline !important;
 }
 
+.directoryRouteDisclosure {
+  margin-top: 2px;
+  color: var(--text-info);
+  font-size: 10px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.directoryRouteDisclosure a {
+  color: var(--link-primary);
+  text-decoration: underline;
+}
+
 .subscribeContainer {
   margin-top: 5px;
 }

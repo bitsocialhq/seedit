@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Не удалось сохранить обновление настроек.",
   "settings_upgrade_review_notice": "доступно обновление настроек",
   "settings_upgrade_review_button": "просмотреть",
-  "settings_upgrade_never_show_again": "больше не показывать"
+  "settings_upgrade_never_show_again": "больше не показывать",
+  "directory_route_currently_recommends": "s/{{directoryCode}} сейчас рекомендует",
+  "directory_auto_switch_label": "автоматически переключать эту подписку при изменении s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} теперь рекомендует",
+  "directory_auto_switch_help": "Seedit заменит эту подписку на новое рекомендованное сообщество. Вы можете отключить это в любое время.",
+  "directory_you_still_follow": "Вы всё ещё подписаны на",
+  "switch_to_community": "переключиться на {{communityAddress}}",
+  "keep_both_communities": "оставить оба",
+  "keep_community": "оставить {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} изменился, поэтому Seedit переключил вашу подписку с {{fromAddress}} на {{toAddress}}.",
+  "dismiss": "Закрыть"
 }

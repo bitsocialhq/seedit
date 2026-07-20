@@ -1,0 +1,45 @@
+.notice {
+  display: block;
+  margin: 0 315px 7px 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border-orange);
+  background: var(--background-orange);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.notice a,
+.notice button {
+  color: var(--link-primary);
+  font-weight: 700;
+}
+
+.actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 7px;
+}
+
+.actions button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.actions button:not(:last-child)::after {
+  content: ' |';
+  color: var(--text-info);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+@media (max-width: 639px) {
+  .notice {
+    margin: 0 2px 7px;
+  }
+}

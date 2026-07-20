@@ -21,6 +21,23 @@ describe('computeStarterAccount', () => {
     });
   });
 
+  it('bootstraps exact subscriptions with route provenance but never stores directory slugs', () => {
+    const account = { subscriptions: [] } as StarterAccount;
+
+    const result = computeStarterAccount(account, false, {
+      revision: 2,
+      communities: [{ address: 'funny-posting.bso', directoryCode: 'funny', directoryRevision: 3 }, { address: 'manual-default.bso' }],
+    });
+
+    expect(result.subscriptions).toEqual(['funny-posting.bso', 'manual-default.bso']);
+    expect(result.subscriptions).not.toContain('funny');
+    expect(result.seeditDirectoryPreferences?.slots.funny).toEqual({
+      subscriptionAddress: 'funny-posting.bso',
+      autoSwitch: false,
+      acknowledgedWinner: { address: 'funny-posting.bso', revision: 3 },
+    });
+  });
+
   it('merges migrated directory ownership into existing provenance', () => {
     const account = {
       subscriptions: ['aww', 'manual.bso'],
@@ -48,7 +65,7 @@ describe('computeStarterAccount', () => {
     expect(computeStarterAccount(account, true, { revision: 2, communities: [{ address: 'new-default.bso' }] })).toMatchObject({
       subscriptions: ['aww-posting.bso', 'manual.bso'],
       seeditStarterSubscriptions: {
-        acknowledgedRevision: 1,
+        acknowledgedRevision: 2,
         knownAddresses: STARTER_COMMUNITY_ADDRESSES,
         managedAddresses: ['aww-posting.bso'],
       },

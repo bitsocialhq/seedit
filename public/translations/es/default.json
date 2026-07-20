@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "No se pudo guardar la actualización de la configuración.",
   "settings_upgrade_review_notice": "actualización de ajustes disponible",
   "settings_upgrade_review_button": "revisar",
-  "settings_upgrade_never_show_again": "no volver a mostrar"
+  "settings_upgrade_never_show_again": "no volver a mostrar",
+  "directory_route_currently_recommends": "s/{{directoryCode}} recomienda actualmente",
+  "directory_auto_switch_label": "cambiar automáticamente esta suscripción cuando cambie s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} ahora recomienda",
+  "directory_auto_switch_help": "Seedit reemplazará esta suscripción por la nueva comunidad recomendada. Puedes desactivar esta opción en cualquier momento.",
+  "directory_you_still_follow": "Sigues siguiendo",
+  "switch_to_community": "cambiar a {{communityAddress}}",
+  "keep_both_communities": "conservar ambas",
+  "keep_community": "conservar {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} cambió, así que Seedit cambió tu suscripción de {{fromAddress}} a {{toAddress}}.",
+  "dismiss": "descartar"
 }

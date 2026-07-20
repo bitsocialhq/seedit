@@ -8,8 +8,15 @@ import { Capacitor } from '@capacitor/core';
 import { isHomeAboutView } from '../../lib/utils/view-utils';
 import { useEffect } from 'react';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
-import { getCommunityPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
+import {
+  getCanonicalCommunityPostAboutRedirectPath,
+  getCanonicalCommunityPostRedirectPath,
+  getCommunityPath,
+  getCommunityPostPath,
+} from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 
@@ -153,22 +160,32 @@ const About = () => {
   const navigate = useNavigate();
   const { pathname, search, hash } = location;
   const isInHomeAboutView = isHomeAboutView(pathname);
-  const { commentCid, communityAddress: routeCommunityAddress } = useParams();
-  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
+  const { commentCid, communityAddress: routeCommunitySegment } = useParams();
+  const { communityAddress } = useResolvedCommunityRoute();
 
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
-  const comment = useComment({ commentCid: commentCid as string, onlyIfCached: true });
+  const comment = useComment({ commentCid: commentCid as string });
+  const postCommunityAddress = getCommentCommunityAddress(comment);
 
   useEffect(() => {
+    if (commentCid && postCommunityAddress) {
+      const canonicalPostPath = isMobile
+        ? getCanonicalCommunityPostAboutRedirectPath(routeCommunitySegment, postCommunityAddress, commentCid)
+        : getCanonicalCommunityPostRedirectPath(routeCommunitySegment, postCommunityAddress, commentCid);
+      if (canonicalPostPath) {
+        navigate(`${canonicalPostPath}${search}${hash}`, { replace: true });
+        return;
+      }
+    }
     if (!isMobile && pathname.endsWith('/about') && !isInHomeAboutView) {
       const newPath = communityAddress
         ? commentCid
           ? getCommunityPostPath(communityAddress, commentCid)
           : getCommunityPath(communityAddress)
         : pathname.replace(/\/about$/, '') || '/';
-      navigate(`${newPath}${search}${hash}`);
+      navigate(`${newPath}${search}${hash}`, { replace: true });
     }
-  }, [commentCid, communityAddress, hash, isMobile, isInHomeAboutView, navigate, pathname, search]);
+  }, [commentCid, communityAddress, hash, isMobile, isInHomeAboutView, navigate, pathname, postCommunityAddress, routeCommunitySegment, search]);
 
   return (
     <div className={styles.content}>

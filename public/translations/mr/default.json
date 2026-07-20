@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "सेटिंग्ज अपग्रेड सेव्ह करता आले नाही.",
   "settings_upgrade_review_notice": "सेटिंग्ज अपग्रेड उपलब्ध आहे",
   "settings_upgrade_review_button": "पुनरावलोकन करा",
-  "settings_upgrade_never_show_again": "पुन्हा कधीही दाखवू नका"
+  "settings_upgrade_never_show_again": "पुन्हा कधीही दाखवू नका",
+  "directory_route_currently_recommends": "s/{{directoryCode}} ची सध्याची शिफारस:",
+  "directory_auto_switch_label": "s/{{directoryCode}} बदलल्यावर ही सदस्यता आपोआप बदला",
+  "directory_recommendation_changed": "s/{{directoryCode}} आता शिफारस करते:",
+  "directory_auto_switch_help": "Seedit ही सदस्यता नव्याने शिफारस केलेल्या समुदायाने बदलेल. तुम्ही हे कधीही बंद करू शकता.",
+  "directory_you_still_follow": "तुम्ही अजूनही फॉलो करता",
+  "switch_to_community": "{{communityAddress}} वर स्विच करा",
+  "keep_both_communities": "दोन्ही ठेवा",
+  "keep_community": "{{communityAddress}} ठेवा",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} बदलले, त्यामुळे Seedit ने तुमचे सदस्यत्व {{fromAddress}} वरून {{toAddress}} वर बदलले.",
+  "dismiss": "बंद करा"
 }

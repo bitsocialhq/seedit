@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Impossibile salvare l'aggiornamento delle impostazioni.",
   "settings_upgrade_review_notice": "aggiornamento delle impostazioni disponibile",
   "settings_upgrade_review_button": "rivedi",
-  "settings_upgrade_never_show_again": "non mostrare più"
+  "settings_upgrade_never_show_again": "non mostrare più",
+  "directory_route_currently_recommends": "s/{{directoryCode}} attualmente consiglia",
+  "directory_auto_switch_label": "cambia automaticamente questo abbonamento quando cambia s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} ora consiglia",
+  "directory_auto_switch_help": "Seedit sostituirà questa iscrizione con la nuova community consigliata. Puoi disattivare questa opzione in qualsiasi momento.",
+  "directory_you_still_follow": "Segui ancora",
+  "switch_to_community": "passa a {{communityAddress}}",
+  "keep_both_communities": "mantieni entrambe",
+  "keep_community": "mantieni {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} è cambiato, quindi Seedit ha spostato la tua iscrizione da {{fromAddress}} a {{toAddress}}.",
+  "dismiss": "ignora"
 }

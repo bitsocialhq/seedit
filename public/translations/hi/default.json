@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "सेटिंग अपग्रेड को सहेजा नहीं जा सका।",
   "settings_upgrade_review_notice": "सेटिंग्स अपग्रेड उपलब्ध है",
   "settings_upgrade_review_button": "समीक्षा करें",
-  "settings_upgrade_never_show_again": "फिर कभी न दिखाएँ"
+  "settings_upgrade_never_show_again": "फिर कभी न दिखाएँ",
+  "directory_route_currently_recommends": "s/{{directoryCode}} की मौजूदा सिफ़ारिश:",
+  "directory_auto_switch_label": "s/{{directoryCode}} बदलने पर इस सदस्यता को अपने-आप बदलें",
+  "directory_recommendation_changed": "s/{{directoryCode}} अब सुझाता है",
+  "directory_auto_switch_help": "Seedit इस सदस्यता को नई सुझाई गई कम्युनिटी से बदल देगा। आप इसे कभी भी बंद कर सकते हैं।",
+  "directory_you_still_follow": "आप अभी भी फ़ॉलो करते हैं",
+  "switch_to_community": "{{communityAddress}} पर स्विच करें",
+  "keep_both_communities": "दोनों रखें",
+  "keep_community": "{{communityAddress}} को रखें",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} बदल गया, इसलिए Seedit ने आपकी सदस्यता {{fromAddress}} से {{toAddress}} पर बदल दी।",
+  "dismiss": "बंद करें"
 }

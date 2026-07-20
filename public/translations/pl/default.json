@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Nie udało się zapisać uaktualnienia ustawień.",
   "settings_upgrade_review_notice": "dostępna aktualizacja ustawień",
   "settings_upgrade_review_button": "przejrzyj",
-  "settings_upgrade_never_show_again": "nie pokazuj ponownie"
+  "settings_upgrade_never_show_again": "nie pokazuj ponownie",
+  "directory_route_currently_recommends": "s/{{directoryCode}} obecnie poleca",
+  "directory_auto_switch_label": "automatycznie przełącz tę subskrypcję, gdy s/{{directoryCode}} się zmieni",
+  "directory_recommendation_changed": "s/{{directoryCode}} poleca teraz",
+  "directory_auto_switch_help": "Seedit zastąpi tę subskrypcję nowo polecaną społecznością. Możesz to wyłączyć w dowolnym momencie.",
+  "directory_you_still_follow": "Nadal obserwujesz",
+  "switch_to_community": "przełącz na {{communityAddress}}",
+  "keep_both_communities": "zachowaj obie",
+  "keep_community": "zachowaj {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} zmieniło się, więc Seedit zmienił Twoją subskrypcję z {{fromAddress}} na {{toAddress}}.",
+  "dismiss": "Zamknij"
 }

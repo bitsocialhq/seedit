@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   SEEDIT_STARTER_SUBSCRIPTIONS_SCHEMA_VERSION,
   addSelectedStarterSubscriptions,
+  acknowledgeStarterDirectoryChange,
   bootstrapStarterSubscriptions,
   getStarterSetDelta,
   initializeStarterSubscriptions,
@@ -253,6 +254,22 @@ describe('manual subscription changes', () => {
 
     expect(replaced.subscriptions).toEqual(['old.bso', 'new.bso']);
     expect(replaced.provenance.managedAddresses).toEqual(['new.bso']);
+  });
+});
+
+describe('directory winner provenance', () => {
+  it('moves managed ownership to the winner when the user switches or keeps both', () => {
+    expect(acknowledgeStarterDirectoryChange(provenance(), 'old.bso', 'new.bso', 'trackWinner')).toMatchObject({
+      knownAddresses: ['new.bso', 'stays.bso'],
+      managedAddresses: ['stays.bso', 'new.bso'],
+    });
+  });
+
+  it('relinquishes managed ownership when the user keeps the previous community', () => {
+    expect(acknowledgeStarterDirectoryChange(provenance(), 'old.bso', 'new.bso', 'keep')).toMatchObject({
+      knownAddresses: ['new.bso', 'stays.bso'],
+      managedAddresses: ['stays.bso'],
+    });
   });
 });
 

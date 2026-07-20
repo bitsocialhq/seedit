@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Hindi ma-save ang pag-upgrade ng mga setting.",
   "settings_upgrade_review_notice": "magagamit na ang pag-upgrade ng mga setting",
   "settings_upgrade_review_button": "suriin",
-  "settings_upgrade_never_show_again": "huwag nang ipakita muli"
+  "settings_upgrade_never_show_again": "huwag nang ipakita muli",
+  "directory_route_currently_recommends": "Kasalukuyang inirerekomenda ng s/{{directoryCode}} ang",
+  "directory_auto_switch_label": "awtomatikong ilipat ang subscription na ito kapag nagbago ang s/{{directoryCode}}",
+  "directory_recommendation_changed": "Inirerekomenda na ngayon ng s/{{directoryCode}} ang",
+  "directory_auto_switch_help": "Papalitan ng Seedit ang subscription na ito ng bagong inirerekomendang komunidad. Maaari mo itong i-off anumang oras.",
+  "directory_you_still_follow": "Sinusubaybayan mo pa rin",
+  "switch_to_community": "lumipat sa {{communityAddress}}",
+  "keep_both_communities": "panatilihin pareho",
+  "keep_community": "panatilihin ang {{communityAddress}}",
+  "directory_automatic_switch_notice": "Nagbago ang s/{{directoryCode}}, kaya inilipat ng Seedit ang subscription mo mula {{fromAddress}} papuntang {{toAddress}}.",
+  "dismiss": "Isara"
 }

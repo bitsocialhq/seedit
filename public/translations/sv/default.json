@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Det gick inte att spara inställningsuppgraderingen.",
   "settings_upgrade_review_notice": "uppgradering av inställningar tillgänglig",
   "settings_upgrade_review_button": "granska",
-  "settings_upgrade_never_show_again": "visa aldrig igen"
+  "settings_upgrade_never_show_again": "visa aldrig igen",
+  "directory_route_currently_recommends": "s/{{directoryCode}} rekommenderar för närvarande",
+  "directory_auto_switch_label": "byt automatiskt den här prenumerationen när s/{{directoryCode}} ändras",
+  "directory_recommendation_changed": "s/{{directoryCode}} rekommenderar nu",
+  "directory_auto_switch_help": "Seedit ersätter den här prenumerationen med den nya rekommenderade communityn. Du kan stänga av detta när som helst.",
+  "directory_you_still_follow": "Du följer fortfarande",
+  "switch_to_community": "byt till {{communityAddress}}",
+  "keep_both_communities": "behåll båda",
+  "keep_community": "behåll {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} ändrades, så Seedit bytte din prenumeration från {{fromAddress}} till {{toAddress}}.",
+  "dismiss": "Stäng"
 }

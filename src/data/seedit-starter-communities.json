@@ -1,12 +1,14 @@
 {
-  "schemaVersion": 1,
-  "revision": 1,
+  "schemaVersion": 2,
+  "revision": 2,
   "title": "Seedit Default Communities",
   "description": "Communities new Seedit accounts subscribe to by default.",
   "createdAt": 1745707200,
-  "updatedAt": 1784049342,
+  "updatedAt": 1784467859,
   "communities": [
     {
+      "directoryCode": "askseedit",
+      "directoryRevision": 1,
       "address": "askseedit.bso",
       "publicKey": "12D3KooWNv5HzmkcKZkxMn1SrfMyozTdTJSr7kA1bzEKKa7PTS5N",
       "title": "AskSeedit",
@@ -17,6 +19,8 @@
       ]
     },
     {
+      "directoryCode": "memes",
+      "directoryRevision": 1,
       "address": "memes-posting.bso",
       "publicKey": "12D3KooWFkZorC92RxQAwMBYMido8xBM88ghpLWA26mrE9W9Xmxd",
       "title": "Memes",
@@ -27,6 +31,8 @@
       ]
     },
     {
+      "directoryCode": "news",
+      "directoryRevision": 1,
       "address": "news-posting.bso",
       "publicKey": "12D3KooWMxE8DtkGLL5LBm2ENdPJJX9DnimfHDh1uvDgKF8nrwX5",
       "title": "News",
@@ -37,6 +43,8 @@
       ]
     },
     {
+      "directoryCode": "pics",
+      "directoryRevision": 1,
       "address": "pics-posting.bso",
       "publicKey": "12D3KooWR39v9RaLHXXsJC9NSqdmWgrw5FMjJJAECEAsras4AztU",
       "title": "Pics",
@@ -47,6 +55,8 @@
       ]
     },
     {
+      "directoryCode": "todayilearned",
+      "directoryRevision": 1,
       "address": "til-posting.bso",
       "publicKey": "12D3KooWEXNQaBi1xWXW9ksm8Fa5LpAP46YsmV44oGaHrsCJ41Jt",
       "title": "Today I Learned",
@@ -57,6 +67,8 @@
       ]
     },
     {
+      "directoryCode": "interestingasfuck",
+      "directoryRevision": 1,
       "address": "interestingasfuck.bso",
       "publicKey": "12D3KooWDexsEFuP8wt4vPKjLn3ZaxEyQJv4EWMU3abnLk7NxEhd",
       "title": "Interesting As Fuck",
@@ -66,6 +78,8 @@
       ]
     },
     {
+      "directoryCode": "gaming",
+      "directoryRevision": 1,
       "address": "gaming-posting.bso",
       "publicKey": "12D3KooWRHbY2AS9oComoTVpMF4iF33d3GPzKCW7MSfHEJT8qeZc",
       "title": "Gaming",
@@ -76,6 +90,8 @@
       ]
     },
     {
+      "directoryCode": "videos",
+      "directoryRevision": 1,
       "address": "videos-posting.bso",
       "publicKey": "12D3KooWQt3UJ6A3AeZxJSFJnspVmYQK1Epj8VeSzrFG1tHiZC9o",
       "title": "Videos",
@@ -85,6 +101,8 @@
       ]
     },
     {
+      "directoryCode": "funny",
+      "directoryRevision": 1,
       "address": "funny-posting.bso",
       "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
       "title": "Funny",
@@ -95,6 +113,8 @@
       ]
     },
     {
+      "directoryCode": "aww",
+      "directoryRevision": 1,
       "address": "aww-posting.bso",
       "publicKey": "12D3KooWDniAeB2eenHaA25vxk4wt2v8H39dAi42L5bfrMSxtpEs",
       "title": "Aww",

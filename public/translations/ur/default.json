@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "ترتیبات کی اپ گریڈ محفوظ نہیں کی جا سکی۔",
   "settings_upgrade_review_notice": "ترتیبات کا اپ گریڈ دستیاب ہے",
   "settings_upgrade_review_button": "جائزہ لیں",
-  "settings_upgrade_never_show_again": "دوبارہ کبھی نہ دکھائیں"
+  "settings_upgrade_never_show_again": "دوبارہ کبھی نہ دکھائیں",
+  "directory_route_currently_recommends": "s/{{directoryCode}} کی موجودہ تجویز:",
+  "directory_auto_switch_label": "s/{{directoryCode}} تبدیل ہونے پر اس سبسکرپشن کو خودکار طور پر تبدیل کریں",
+  "directory_recommendation_changed": "s/{{directoryCode}} اب تجویز کرتا ہے:",
+  "directory_auto_switch_help": "Seedit اس سبسکرپشن کو نئی تجویز کردہ کمیونٹی سے بدل دے گا۔ آپ اسے کسی بھی وقت بند کر سکتے ہیں۔",
+  "directory_you_still_follow": "آپ اب بھی فالو کر رہے ہیں",
+  "switch_to_community": "{{communityAddress}} پر سوئچ کریں",
+  "keep_both_communities": "دونوں رکھیں",
+  "keep_community": "{{communityAddress}} برقرار رکھیں",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} تبدیل ہو گیا، اس لیے Seedit نے آپ کی سبسکرپشن {{fromAddress}} سے {{toAddress}} پر منتقل کر دی۔",
+  "dismiss": "بند کریں"
 }

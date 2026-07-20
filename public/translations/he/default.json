@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "לא ניתן היה לשמור את שדרוג ההגדרות.",
   "settings_upgrade_review_notice": "שדרוג הגדרות זמין",
   "settings_upgrade_review_button": "סקירה",
-  "settings_upgrade_never_show_again": "לא להציג שוב"
+  "settings_upgrade_never_show_again": "לא להציג שוב",
+  "directory_route_currently_recommends": "s/{{directoryCode}} ממליץ כרגע על",
+  "directory_auto_switch_label": "להחליף את המינוי הזה אוטומטית כאשר s/{{directoryCode}} משתנה",
+  "directory_recommendation_changed": "s/{{directoryCode}} ממליץ עכשיו על",
+  "directory_auto_switch_help": "Seedit יחליף את המינוי הזה בקהילה החדשה שהומלצה. אפשר לכבות את האפשרות הזו בכל עת.",
+  "directory_you_still_follow": "עדיין במעקב אחר",
+  "switch_to_community": "מעבר אל {{communityAddress}}",
+  "keep_both_communities": "להשאיר את שניהם",
+  "keep_community": "להשאיר את {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} השתנה, ולכן Seedit החליף את המינוי שלך מ־{{fromAddress}} ל־{{toAddress}}.",
+  "dismiss": "סגירה"
 }

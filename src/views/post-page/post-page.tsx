@@ -13,6 +13,7 @@ import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useReplies from '../../hooks/use-replies';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -244,6 +245,7 @@ const PostWithContext = ({ post }: { post: Comment }) => {
 };
 
 const PostPage = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
   const locationSearch = location.search;
@@ -284,7 +286,7 @@ const PostPage = () => {
   }, [pendingPost?.cid, pendingPostCommunityAddress, navigate, resetFeed]);
 
   const { commentCid } = params;
-  const routeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress: routeCommunityAddress, directoryCode } = useResolvedCommunityRoute();
   let post = useComment({ commentCid }) as any;
   if (isInPendingPostView) {
     post = pendingPost;
@@ -328,7 +330,11 @@ const PostPage = () => {
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar community={community} comment={post} settings={community?.settings} />
+        {directoryCode && !isInPendingPostView ? (
+          <LoadingEllipsis string={t('loading')} />
+        ) : (
+          <Sidebar community={community} comment={post} settings={community?.settings} />
+        )}
       </div>
       {isInPendingPostView && params?.accountCommentIndex ? <Post post={pendingPost} /> : isInPostContextView ? <PostWithContext post={post} /> : <Post post={post} />}
       {shouldShowErrorToUser && (

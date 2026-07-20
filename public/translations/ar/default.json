@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "تعذّر حفظ ترقية الإعدادات.",
   "settings_upgrade_review_notice": "تتوفر ترقية للإعدادات",
   "settings_upgrade_review_button": "مراجعة",
-  "settings_upgrade_never_show_again": "عدم العرض مرة أخرى"
+  "settings_upgrade_never_show_again": "عدم العرض مرة أخرى",
+  "directory_route_currently_recommends": "يوصي s/{{directoryCode}} حاليًا بـ",
+  "directory_auto_switch_label": "تبديل هذا الاشتراك تلقائيًا عندما يتغير s/{{directoryCode}}",
+  "directory_recommendation_changed": "يوصي s/{{directoryCode}} الآن بـ",
+  "directory_auto_switch_help": "سيستبدل Seedit هذا الاشتراك بالمجتمع الموصى به حديثًا. يمكنك إيقاف هذا الخيار في أي وقت.",
+  "directory_you_still_follow": "لا تزال تتابع",
+  "switch_to_community": "التبديل إلى {{communityAddress}}",
+  "keep_both_communities": "الاحتفاظ بكليهما",
+  "keep_community": "الاحتفاظ بـ {{communityAddress}}",
+  "directory_automatic_switch_notice": "تغيّر s/{{directoryCode}}، لذا حوّل Seedit اشتراكك من {{fromAddress}} إلى {{toAddress}}.",
+  "dismiss": "تجاهل"
 }

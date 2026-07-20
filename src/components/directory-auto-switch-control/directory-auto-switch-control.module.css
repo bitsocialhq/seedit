@@ -1,0 +1,13 @@
+.control {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-info);
+  font-size: 10px;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.control input {
+  margin: 1px 5px 0 0;
+  vertical-align: top;
+}

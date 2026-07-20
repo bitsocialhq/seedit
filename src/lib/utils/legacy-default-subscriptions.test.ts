@@ -15,7 +15,7 @@ describe('seedit starter community snapshot', () => {
     expect(starterCommunities.schemaVersion).toBe(STARTER_COMMUNITIES_SCHEMA_VERSION);
     expect(starterCommunities.revision).toBe(STARTER_COMMUNITIES_REVISION);
     expect(starterCommunities.createdAt).toBe(1745707200);
-    expect(starterCommunities.updatedAt).toBe(1784049342);
+    expect(starterCommunities.updatedAt).toBe(1784467859);
     expect(starterCommunities.communities).toHaveLength(10);
     expect(starterCommunities.communities.map(({ address }) => address)).toEqual(STARTER_COMMUNITY_ADDRESSES);
     expect(new Set(starterCommunities.communities.map(({ publicKey }) => publicKey))).toHaveLength(10);

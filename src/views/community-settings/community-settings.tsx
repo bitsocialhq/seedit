@@ -12,10 +12,11 @@ import {
   useSubscribe,
 } from '@bitsocial/bitsocial-react-hooks';
 import { isUserOwnerOrAdmin, Roles } from '../../lib/utils/user-utils';
-import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import { isCreateCommunityView, isCommunitySettingsView } from '../../lib/utils/view-utils';
 import useCommunitySettingsStore from '../../stores/use-community-settings-store';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useStateString from '../../hooks/use-state-string';
 import ErrorDisplay from '../../components/error-display';
@@ -287,8 +288,7 @@ const Moderators = ({ isReadOnly = false }: { isReadOnly?: boolean }) => {
 const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolean }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
-  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
 
   return (
     <div className={`${styles.box}`}>
@@ -305,8 +305,7 @@ const JSONSettings = ({ isReadOnly: _isReadOnly = false }: { isReadOnly?: boolea
 
 const CommunitySettings = () => {
   const { t } = useTranslation();
-  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
-  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, challenges, createdAt, description, error, rules, shortAddress, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;

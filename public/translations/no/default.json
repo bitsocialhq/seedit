@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Kunne ikke lagre innstillingsoppgraderingen.",
   "settings_upgrade_review_notice": "oppgradering av innstillinger tilgjengelig",
   "settings_upgrade_review_button": "gjennomgå",
-  "settings_upgrade_never_show_again": "vis aldri igjen"
+  "settings_upgrade_never_show_again": "vis aldri igjen",
+  "directory_route_currently_recommends": "s/{{directoryCode}} anbefaler for øyeblikket",
+  "directory_auto_switch_label": "bytt dette abonnementet automatisk når s/{{directoryCode}} endres",
+  "directory_recommendation_changed": "s/{{directoryCode}} anbefaler nå",
+  "directory_auto_switch_help": "Seedit erstatter dette abonnementet med det nylig anbefalte fellesskapet. Du kan slå av dette når som helst.",
+  "directory_you_still_follow": "Du følger fortsatt",
+  "switch_to_community": "bytt til {{communityAddress}}",
+  "keep_both_communities": "behold begge",
+  "keep_community": "behold {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} ble endret, så Seedit byttet abonnementet ditt fra {{fromAddress}} til {{toAddress}}.",
+  "dismiss": "Lukk"
 }

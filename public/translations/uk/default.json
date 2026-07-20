@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Не вдалося зберегти оновлення налаштувань.",
   "settings_upgrade_review_notice": "доступне оновлення налаштувань",
   "settings_upgrade_review_button": "переглянути",
-  "settings_upgrade_never_show_again": "більше не показувати"
+  "settings_upgrade_never_show_again": "більше не показувати",
+  "directory_route_currently_recommends": "s/{{directoryCode}} наразі рекомендує",
+  "directory_auto_switch_label": "автоматично перемикати цю підписку, коли змінюється s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} тепер рекомендує",
+  "directory_auto_switch_help": "Seedit замінить цю підписку на щойно рекомендовану спільноту. Ви можете вимкнути це будь-коли.",
+  "directory_you_still_follow": "Ви все ще підписані на",
+  "switch_to_community": "перемкнутися на {{communityAddress}}",
+  "keep_both_communities": "залишити обидві",
+  "keep_community": "залишити {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} змінився, тому Seedit перемкнув вашу підписку з {{fromAddress}} на {{toAddress}}.",
+  "dismiss": "Закрити"
 }

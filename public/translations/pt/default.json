@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Não foi possível salvar a atualização das configurações.",
   "settings_upgrade_review_notice": "atualização das configurações disponível",
   "settings_upgrade_review_button": "rever",
-  "settings_upgrade_never_show_again": "não mostrar novamente"
+  "settings_upgrade_never_show_again": "não mostrar novamente",
+  "directory_route_currently_recommends": "s/{{directoryCode}} recomenda atualmente",
+  "directory_auto_switch_label": "mudar automaticamente esta assinatura quando s/{{directoryCode}} mudar",
+  "directory_recommendation_changed": "s/{{directoryCode}} agora recomenda",
+  "directory_auto_switch_help": "O Seedit substituirá esta assinatura pela nova comunidade recomendada. Você pode desativar esta opção a qualquer momento.",
+  "directory_you_still_follow": "Você ainda segue",
+  "switch_to_community": "mudar para {{communityAddress}}",
+  "keep_both_communities": "manter ambas",
+  "keep_community": "manter {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} mudou, então o Seedit alterou sua assinatura de {{fromAddress}} para {{toAddress}}.",
+  "dismiss": "dispensar"
 }

@@ -11,8 +11,8 @@ describe('Seedit comments permalinks', () => {
   });
 
   it('transforms external comments URLs to the matching internal route', () => {
-    expect(transformSeeditLinkToInternal(`https://seedit.app/s/aww/comments/${CID}`)).toBe(`/s/aww.bso/comments/${CID}`);
-    expect(transformSeeditLinkToInternal(`https://seedit.app/#/s/aww/comments/${CID}`)).toBe(`/s/aww.bso/comments/${CID}`);
+    expect(transformSeeditLinkToInternal(`https://seedit.app/s/aww/comments/${CID}`)).toBe(`/s/aww/comments/${CID}`);
+    expect(transformSeeditLinkToInternal(`https://seedit.app/#/s/aww/comments/${CID}`)).toBe(`/s/aww/comments/${CID}`);
   });
 
   it('recognizes and links plain-text comments permalinks', () => {
@@ -23,11 +23,15 @@ describe('Seedit comments permalinks', () => {
 
   it('recognizes and links default-TLD shorthand references', () => {
     expect(isValidCommunityPattern('s/aww')).toBe(true);
-    expect(preprocessSeeditPatterns('See s/aww.')).toBe('See [s/aww](/s/aww.bso).');
+    expect(preprocessSeeditPatterns('See s/aww.')).toBe('See [s/aww](/s/aww).');
 
     const pattern = `s/aww/comments/${CID}`;
     expect(isValidCommunityPattern(pattern)).toBe(true);
-    expect(preprocessSeeditPatterns(pattern)).toBe(`[${pattern}](/s/aww.bso/comments/${CID})`);
+    expect(preprocessSeeditPatterns(pattern)).toBe(`[${pattern}](/s/aww/comments/${CID})`);
+  });
+
+  it('continues expanding unreserved default-TLD shorthand references', () => {
+    expect(preprocessSeeditPatterns('See s/unreserved-name.')).toBe('See [s/unreserved-name](/s/unreserved-name.bso).');
   });
 
   it('does not interpret reserved feed routes as default-TLD community shorthand', () => {

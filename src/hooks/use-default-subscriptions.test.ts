@@ -30,35 +30,40 @@ describe('normalizeStarterCommunityList', () => {
   it('accepts a versioned starter list and deduplicates addresses', () => {
     expect(
       normalizeStarterCommunityList({
-        schemaVersion: 1,
+        schemaVersion: 2,
         revision: 2,
         title: 'Starter communities',
         communities: [
-          { address: 'aww.bso', title: 'Aww', tags: ['cute', 'cute'] },
+          { directoryCode: 'aww', directoryRevision: 1, address: 'aww.bso', title: 'Aww', tags: ['cute', 'cute'] },
           { address: 'aww.bso', title: 'Duplicate' },
+          { directoryCode: 'unknown', address: 'unknown.bso' },
+          { address: 'funny' },
           { address: 'news.bso', nsfw: false },
         ],
       }),
     ).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       revision: 2,
       communities: [
-        { address: 'aww.bso', title: 'Aww', tags: ['cute'] },
+        { directoryCode: 'aww', directoryRevision: 1, address: 'aww.bso', title: 'Aww', tags: ['cute'] },
+        { address: 'unknown.bso' },
         { address: 'news.bso', nsfw: false },
       ],
     });
   });
 
   it('rejects unversioned, empty, and malformed remote payloads', () => {
-    expect(normalizeStarterCommunityList({ schemaVersion: 1, revision: 1 })).toBeNull();
-    expect(normalizeStarterCommunityList({ schemaVersion: 1, revision: 1, communities: [] })).toBeNull();
-    expect(normalizeStarterCommunityList({ schemaVersion: 1, revision: 0, communities: [{ address: 'aww.bso' }] })).toBeNull();
+    expect(normalizeStarterCommunityList({ schemaVersion: 2, revision: 1 })).toBeNull();
+    expect(normalizeStarterCommunityList({ schemaVersion: 2, revision: 1, communities: [] })).toBeNull();
+    expect(normalizeStarterCommunityList({ schemaVersion: 2, revision: 0, communities: [{ address: 'aww.bso' }] })).toBeNull();
+    expect(normalizeStarterCommunityList({ schemaVersion: 2, revision: Number.MAX_SAFE_INTEGER + 1, communities: [{ address: 'aww.bso' }] })).toBeNull();
+    expect(normalizeStarterCommunityList({ schemaVersion: 1, revision: 1, communities: [{ address: 'aww.bso' }] })).toBeNull();
   });
 });
 
 describe('normalizeRemoteStarterCommunityList', () => {
   const payload = (revision: number) => ({
-    schemaVersion: 1,
+    schemaVersion: 2,
     revision,
     communities: [{ address: `revision-${revision}.bso` }],
   });
@@ -79,6 +84,6 @@ describe('normalizeRemoteStarterCommunityList', () => {
   });
 
   it('throws for a malformed successful response so the caller enters its fallback state', () => {
-    expect(() => normalizeRemoteStarterCommunityList({ schemaVersion: 1, revision: 2, communities: [] }, currentList)).toThrow('Invalid default communities response');
+    expect(() => normalizeRemoteStarterCommunityList({ schemaVersion: 2, revision: 2, communities: [] }, currentList)).toThrow('Invalid default communities response');
   });
 });

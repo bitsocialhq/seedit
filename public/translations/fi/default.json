@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Asetusten päivitystä ei voitu tallentaa.",
   "settings_upgrade_review_notice": "asetusten päivitys saatavilla",
   "settings_upgrade_review_button": "tarkista",
-  "settings_upgrade_never_show_again": "älä näytä enää"
+  "settings_upgrade_never_show_again": "älä näytä enää",
+  "directory_route_currently_recommends": "s/{{directoryCode}} suosittelee tällä hetkellä",
+  "directory_auto_switch_label": "vaihda tämä tilaus automaattisesti, kun s/{{directoryCode}} muuttuu",
+  "directory_recommendation_changed": "s/{{directoryCode}} suosittelee nyt",
+  "directory_auto_switch_help": "Seedit korvaa tämän tilauksen uudella suositellulla yhteisöllä. Voit poistaa tämän käytöstä milloin tahansa.",
+  "directory_you_still_follow": "Seuraat edelleen",
+  "switch_to_community": "vaihda yhteisöön {{communityAddress}}",
+  "keep_both_communities": "pidä molemmat",
+  "keep_community": "säilytä {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} muuttui, joten Seedit vaihtoi tilauksesi yhteisöstä {{fromAddress}} yhteisöön {{toAddress}}.",
+  "dismiss": "Sulje"
 }

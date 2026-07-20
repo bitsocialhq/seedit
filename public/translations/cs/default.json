@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Upgrade nastavení se nepodařilo uložit.",
   "settings_upgrade_review_notice": "je k dispozici upgrade nastavení",
   "settings_upgrade_review_button": "zkontrolovat",
-  "settings_upgrade_never_show_again": "již nikdy nezobrazovat"
+  "settings_upgrade_never_show_again": "již nikdy nezobrazovat",
+  "directory_route_currently_recommends": "s/{{directoryCode}} aktuálně doporučuje",
+  "directory_auto_switch_label": "automaticky přepnout toto předplatné, když se s/{{directoryCode}} změní",
+  "directory_recommendation_changed": "s/{{directoryCode}} nyní doporučuje",
+  "directory_auto_switch_help": "Seedit nahradí toto předplatné nově doporučenou komunitou. Tuto možnost můžete kdykoli vypnout.",
+  "directory_you_still_follow": "Stále sledujete",
+  "switch_to_community": "přejít na {{communityAddress}}",
+  "keep_both_communities": "ponechat obě",
+  "keep_community": "ponechat {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} se změnilo, takže Seedit převedl vaše předplatné z {{fromAddress}} na {{toAddress}}.",
+  "dismiss": "Zavřít"
 }

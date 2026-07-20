@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Ayar yükseltmesi kaydedilemedi.",
   "settings_upgrade_review_notice": "ayar yükseltmesi mevcut",
   "settings_upgrade_review_button": "incele",
-  "settings_upgrade_never_show_again": "bir daha gösterme"
+  "settings_upgrade_never_show_again": "bir daha gösterme",
+  "directory_route_currently_recommends": "s/{{directoryCode}} şu anda şunu öneriyor:",
+  "directory_auto_switch_label": "s/{{directoryCode}} değiştiğinde bu aboneliği otomatik olarak değiştir",
+  "directory_recommendation_changed": "s/{{directoryCode}} şimdi şunu öneriyor:",
+  "directory_auto_switch_help": "Seedit bu aboneliği yeni önerilen toplulukla değiştirecek. Bunu istediğiniz zaman kapatabilirsiniz.",
+  "directory_you_still_follow": "Hâlâ takip ediyorsunuz",
+  "switch_to_community": "{{communityAddress}} topluluğuna geç",
+  "keep_both_communities": "ikisini de tut",
+  "keep_community": "{{communityAddress}} topluluğunu koru",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} değişti, bu nedenle Seedit aboneliğinizi {{fromAddress}} adresinden {{toAddress}} adresine geçirdi.",
+  "dismiss": "Kapat"
 }

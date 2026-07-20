@@ -1,6 +1,8 @@
 import { useMemo, useSyncExternalStore } from 'react';
 import useContentOptionsStore from '../stores/use-content-options-store';
 import vendoredStarterCommunities from '../data/seedit-starter-communities.json';
+import { isDirectoryCode, type SeeditDirectoryCode } from '../lib/utils/directory-codes';
+import { isExactCommunitySubscriptionAddress } from '../lib/utils/directory-subscriptions';
 
 const STARTER_COMMUNITIES_URL = 'https://raw.githubusercontent.com/bitsocialnet/lists/master/seedit-default-subscriptions.json';
 const REVALIDATE_INTERVAL_MS = 60 * 60 * 1000;
@@ -9,6 +11,8 @@ const FETCH_TIMEOUT_MS = 10 * 1000;
 export interface DefaultSubscription {
   title?: string;
   description?: string;
+  directoryCode?: SeeditDirectoryCode;
+  directoryRevision?: number;
   address: string;
   publicKey?: string;
   nsfw?: boolean;
@@ -16,7 +20,7 @@ export interface DefaultSubscription {
 }
 
 export interface StarterCommunityList {
-  schemaVersion: 1;
+  schemaVersion: 2;
   revision: number;
   title: string;
   description: string;
@@ -40,11 +44,14 @@ const normalizeStringArray = (value: unknown): string[] | undefined => {
 };
 
 const normalizeCommunity = (value: unknown): DefaultSubscription | null => {
-  if (!isRecord(value) || typeof value.address !== 'string' || value.address.length === 0) return null;
+  if (!isRecord(value) || !isExactCommunitySubscriptionAddress(value.address)) return null;
   const tags = normalizeStringArray(value.tags);
+  const directoryCode = typeof value.directoryCode === 'string' && isDirectoryCode(value.directoryCode) ? value.directoryCode : undefined;
+  const directoryRevision = Number.isSafeInteger(value.directoryRevision) && (value.directoryRevision as number) >= 1 ? (value.directoryRevision as number) : undefined;
 
   return {
     address: value.address,
+    ...(directoryCode && directoryRevision ? { directoryCode, directoryRevision } : {}),
     ...(typeof value.title === 'string' && value.title ? { title: value.title } : {}),
     ...(typeof value.description === 'string' && value.description ? { description: value.description } : {}),
     ...(typeof value.publicKey === 'string' && value.publicKey ? { publicKey: value.publicKey } : {}),
@@ -54,7 +61,7 @@ const normalizeCommunity = (value: unknown): DefaultSubscription | null => {
 };
 
 export const normalizeStarterCommunityList = (value: unknown): StarterCommunityList | null => {
-  if (!isRecord(value) || value.schemaVersion !== 1 || !Number.isInteger(value.revision) || (value.revision as number) < 1) return null;
+  if (!isRecord(value) || value.schemaVersion !== 2 || !Number.isSafeInteger(value.revision) || (value.revision as number) < 1) return null;
   const rawCommunities = Array.isArray(value.communities) ? value.communities : null;
   if (!rawCommunities) return null;
 
@@ -63,7 +70,7 @@ export const normalizeStarterCommunityList = (value: unknown): StarterCommunityL
   if (uniqueCommunities.length === 0) return null;
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     revision: value.revision as number,
     title: typeof value.title === 'string' ? value.title : 'Seedit Default Communities',
     description: typeof value.description === 'string' ? value.description : '',
@@ -73,17 +80,15 @@ export const normalizeStarterCommunityList = (value: unknown): StarterCommunityL
   };
 };
 
-const hasSameCommunityAddresses = (first: StarterCommunityList, second: StarterCommunityList): boolean => {
-  if (first.communities.length !== second.communities.length) return false;
-  const firstAddresses = new Set(first.communities.map(({ address }) => address));
-  return second.communities.every(({ address }) => firstAddresses.has(address));
+const hasSameCommunities = (first: StarterCommunityList, second: StarterCommunityList): boolean => {
+  return JSON.stringify(first.communities) === JSON.stringify(second.communities);
 };
 
 export const normalizeRemoteStarterCommunityList = (value: unknown, currentList: StarterCommunityList): StarterCommunityList | null => {
   const remoteList = normalizeStarterCommunityList(value);
   if (!remoteList) throw new Error('Invalid default communities response');
   if (remoteList.revision < currentList.revision) return null;
-  if (remoteList.revision === currentList.revision && !hasSameCommunityAddresses(remoteList, currentList)) {
+  if (remoteList.revision === currentList.revision && !hasSameCommunities(remoteList, currentList)) {
     throw new Error('Default community membership changed without a new revision');
   }
   return remoteList;

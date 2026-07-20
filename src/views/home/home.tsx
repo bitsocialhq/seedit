@@ -15,6 +15,7 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
+import DirectorySubscriptionUpdatesNotice from '../../components/directory-subscription-updates-notice';
 import { sortTypes } from '../../constants/sort-types';
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
@@ -252,6 +253,7 @@ const Home = () => {
 
   return (
     <div>
+      <DirectorySubscriptionUpdatesNotice />
       <StarterSubscriptionsNotice />
       <div className={styles.content}>
         <div className={`${styles.sidebar}`}>
