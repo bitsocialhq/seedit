@@ -10,8 +10,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const GITHUB_CONTENTS_URL = 'https://api.github.com/repos/bitsocialnet/lists/contents/seedit-directories?ref=master';
-const GITHUB_RAW_BASE_URL = 'https://raw.githubusercontent.com/bitsocialnet/lists/master/seedit-directories';
+const GITHUB_REPOSITORY_API_URL = 'https://api.github.com/repos/bitsocialnet/lists';
+const GITHUB_RAW_BASE_URL = 'https://raw.githubusercontent.com/bitsocialnet/lists';
 const DIRECTORIES_SOURCE_PATH = process.env.DIRECTORIES_SOURCE_PATH;
 const OUTPUT_DIR = join(__dirname, '..', 'src', 'data', 'seedit-directories');
 const TIMEOUT_MS = 5000;
@@ -22,7 +22,7 @@ const isJsonFile = (fileName) =>
 const isRecord = (value) => typeof value === 'object' && value !== null;
 const getErrorMessage = (error) => (error instanceof Error ? error.message : String(error));
 const getSourceLabel = () => {
-  if (!DIRECTORIES_SOURCE_PATH) return `GitHub folder: ${GITHUB_CONTENTS_URL}`;
+  if (!DIRECTORIES_SOURCE_PATH) return `GitHub repository: ${GITHUB_REPOSITORY_API_URL}`;
   const sourcePath = isAbsolute(DIRECTORIES_SOURCE_PATH) ? DIRECTORIES_SOURCE_PATH : resolve(process.cwd(), DIRECTORIES_SOURCE_PATH);
   return `local directory: ${sourcePath}`;
 };
@@ -49,8 +49,15 @@ const loadFromLocalDirectory = (directoryPath) => {
 };
 
 const loadFromGitHub = async () => {
-  console.log(`Mirroring directories from GitHub folder: ${GITHUB_CONTENTS_URL}`);
-  const contents = await fetchWithTimeout(GITHUB_CONTENTS_URL, true);
+  const commit = await fetchWithTimeout(`${GITHUB_REPOSITORY_API_URL}/commits/master`, true);
+  if (!isRecord(commit) || typeof commit.sha !== 'string' || !/^[0-9a-f]{40}$/.test(commit.sha)) {
+    throw new Error('Invalid GitHub master commit response');
+  }
+
+  const snapshotRef = commit.sha;
+  const contentsUrl = `${GITHUB_REPOSITORY_API_URL}/contents/seedit-directories?ref=${snapshotRef}`;
+  console.log(`Mirroring directories from GitHub commit: ${snapshotRef}`);
+  const contents = await fetchWithTimeout(contentsUrl, true);
   if (!Array.isArray(contents)) throw new Error('Invalid GitHub directory listing');
 
   const fileNames = contents
@@ -60,7 +67,7 @@ const loadFromGitHub = async () => {
   const files = {};
   await Promise.all(
     fileNames.map(async (fileName) => {
-      files[fileName] = await fetchWithTimeout(`${GITHUB_RAW_BASE_URL}/${fileName}`, false);
+      files[fileName] = await fetchWithTimeout(`${GITHUB_RAW_BASE_URL}/${snapshotRef}/seedit-directories/${fileName}`, false);
     }),
   );
   return files;
