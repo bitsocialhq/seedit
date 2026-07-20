@@ -6,11 +6,12 @@ import styles from '../../settings/account-data-editor/account-data-editor.modul
 import useIsMobile from '../../../hooks/use-is-mobile';
 import LoadingEllipsis from '../../../components/loading-ellipsis';
 import useCommunitySettingsStore from '../../../stores/use-community-settings-store';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ErrorDisplay from '../../../components/error-display';
 import useStateString from '../../../hooks/use-state-string';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
-import { getCommunityPath, resolveCommunityRouteAddress } from '../../../lib/utils/community-route-utils';
+import useResolvedCommunityRoute from '../../../hooks/use-resolved-community-route';
+import { getCommunityPath } from '../../../lib/utils/community-route-utils';
 import { removeSuggestedAvatarUrl } from './community-data-editor-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
@@ -61,8 +62,7 @@ const CommunityDataEditor = () => {
   const theme = useTheme((state) => state.theme);
   const [text, setText] = useState('');
 
-  const { communityAddress: routeCommunityAddress } = useParams<{ communityAddress: string }>();
-  const communityAddress = resolveCommunityRouteAddress(routeCommunityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
   const community = useCommunity(communityAddress ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { address, createdAt, description, error, rules, settings, suggested, roles, title } = community || {};
   const hasLoaded = !!createdAt;

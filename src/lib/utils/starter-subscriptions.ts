@@ -39,6 +39,8 @@ interface ManualLeaveStarterSubscriptionResult {
   provenance?: SeeditStarterSubscriptions;
 }
 
+export type StarterDirectoryChangeChoice = 'keep' | 'trackWinner';
+
 const uniqueAddresses = (addresses: readonly string[]): string[] => {
   const seen = new Set<string>();
   const unique: string[] = [];
@@ -203,4 +205,21 @@ export const leaveStarterSubscription = ({ subscriptions, provenance, address }:
         }
       : undefined,
   };
+};
+
+/** Keep the default-list provenance aligned when a directory handles an address replacement. */
+export const acknowledgeStarterDirectoryChange = (
+  provenance: SeeditStarterSubscriptions | undefined,
+  fromAddress: string,
+  toAddress: string,
+  choice: StarterDirectoryChangeChoice,
+): SeeditStarterSubscriptions | undefined => {
+  if (!provenance) return undefined;
+  const current = normalizeProvenance(provenance);
+  const knownAddresses = uniqueAddresses(current.knownAddresses.map((address) => (address === fromAddress ? toAddress : address)));
+  const previousWasManaged = current.managedAddresses.includes(fromAddress);
+  const managedWithoutPrevious = current.managedAddresses.filter((address) => address !== fromAddress);
+  const managedAddresses = choice === 'trackWinner' && previousWasManaged ? uniqueAddresses([...managedWithoutPrevious, toAddress]) : managedWithoutPrevious;
+
+  return { ...current, knownAddresses, managedAddresses };
 };

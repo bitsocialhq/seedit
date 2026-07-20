@@ -1,3 +1,5 @@
+import { isDirectoryCode, type SeeditDirectoryCode } from './directory-codes';
+
 const DEFAULT_COMMUNITY_TLD = '.bso';
 const RESERVED_COMMUNITY_ROUTE_SEGMENTS = new Set(['all', 'mod']);
 const BASE58_PUBLIC_KEY_PATTERN = /^[1-9A-HJ-NP-Za-km-z]{30,}$/;
@@ -25,9 +27,31 @@ export const getCommunityRouteSegment = (address: string): string => resolveComm
 
 export const getCommunityPath = (communityAddress: string): string => `/s/${encodeURIComponent(getCommunityRouteSegment(communityAddress))}`;
 
+export const getDirectoryPath = (directoryCode: SeeditDirectoryCode): string => `/s/${encodeURIComponent(directoryCode)}`;
+
+/** Use for typed or linked references that may intentionally name a directory route. */
+export const getCommunityReferencePath = (communityReference: string): string =>
+  isDirectoryCode(communityReference) ? getDirectoryPath(communityReference) : getCommunityPath(communityReference);
+
 export const getCommunityPostPath = (communityAddress: string, cid: string): string => `${getCommunityPath(communityAddress)}/comments/${encodeURIComponent(cid)}`;
 
+/** Preserve an explicitly typed directory reference; generated post permalinks use getCommunityPostPath instead. */
+export const getCommunityReferencePostPath = (communityReference: string, cid: string): string =>
+  `${getCommunityReferencePath(communityReference)}/comments/${encodeURIComponent(cid)}`;
+
 export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://seedit.app${getCommunityPostPath(communityAddress, cid)}`;
+
+export const getExactCommunityActionRedirectPath = (
+  pathname: string,
+  directoryCode: SeeditDirectoryCode,
+  communityAddress: string,
+  search = '',
+  hash = '',
+): string | undefined => {
+  const directoryPath = getDirectoryPath(directoryCode);
+  if (!pathname.startsWith(`${directoryPath}/`)) return undefined;
+  return `${getCommunityPath(communityAddress)}${pathname.slice(directoryPath.length)}${search}${hash}`;
+};
 
 export const getCanonicalCommunityRoutePathname = (pathname: string): string | undefined => {
   const routeMatch = pathname.match(/^\/s\/([^/?#]+)(.*)$/);
@@ -39,6 +63,8 @@ export const getCanonicalCommunityRoutePathname = (pathname: string): string | u
   } catch {
     return undefined;
   }
+
+  if (isDirectoryCode(routeSegment)) return undefined;
 
   const canonicalRouteSegment = getCommunityRouteSegment(routeSegment);
   if (canonicalRouteSegment === routeSegment) return undefined;
@@ -53,6 +79,16 @@ export const getCanonicalCommunityPostRedirectPath = (
 ): string | undefined => {
   const routeCommunityAddress = resolveCommunityRouteAddress(routeCommunitySegment);
   const resolvedPostCommunityAddress = resolveCommunityRouteAddress(postCommunityAddress);
-  if (!cid || !resolvedPostCommunityAddress || routeCommunityAddress === resolvedPostCommunityAddress) return undefined;
+  if (!cid || !resolvedPostCommunityAddress) return undefined;
+  if (!isDirectoryCode(routeCommunitySegment) && routeCommunityAddress === resolvedPostCommunityAddress) return undefined;
   return getCommunityPostPath(resolvedPostCommunityAddress, cid);
+};
+
+export const getCanonicalCommunityPostAboutRedirectPath = (
+  routeCommunitySegment: string | undefined,
+  postCommunityAddress: string | undefined,
+  cid: string | undefined,
+): string | undefined => {
+  const postRedirectPath = getCanonicalCommunityPostRedirectPath(routeCommunitySegment, postCommunityAddress, cid);
+  return postRedirectPath ? `${postRedirectPath}/about` : undefined;
 };

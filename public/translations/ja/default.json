@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "設定のアップグレードを保存できませんでした。",
   "settings_upgrade_review_notice": "設定のアップグレードが利用可能です",
   "settings_upgrade_review_button": "確認",
-  "settings_upgrade_never_show_again": "今後表示しない"
+  "settings_upgrade_never_show_again": "今後表示しない",
+  "directory_route_currently_recommends": "s/{{directoryCode}}の現在のおすすめ：",
+  "directory_auto_switch_label": "s/{{directoryCode}} が変更されたときに、この購読を自動的に切り替える",
+  "directory_recommendation_changed": "s/{{directoryCode}} が現在おすすめしているコミュニティ：",
+  "directory_auto_switch_help": "Seedit はこの購読を新たにおすすめされたコミュニティに置き換えます。この設定はいつでもオフにできます。",
+  "directory_you_still_follow": "引き続きフォロー中",
+  "switch_to_community": "{{communityAddress}}に切り替える",
+  "keep_both_communities": "両方を維持",
+  "keep_community": "{{communityAddress}}を維持する",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} が変更されたため、Seedit がサブスクリプションを {{fromAddress}} から {{toAddress}} に切り替えました。",
+  "dismiss": "閉じる"
 }

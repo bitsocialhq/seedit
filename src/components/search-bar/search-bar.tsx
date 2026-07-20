@@ -16,9 +16,10 @@ import {
 import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import styles from './search-bar.module.css';
 import _ from 'lodash';
-import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, getCommunityReferencePath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
 
 interface SearchBarProps {
   isFocused?: boolean;
@@ -30,6 +31,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
+  const { communityAddress: currentCommunityAddress } = useResolvedCommunityRoute();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const isInHomeAboutView = isHomeAboutView(location.pathname);
@@ -150,13 +152,13 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     if (searchInput) {
       const communityAddress = resolveCommunityRouteAddress(searchInput);
       if (!communityAddress) return;
-      const currentCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
-      if (communityAddress?.toLowerCase() === currentCommunityAddress?.toLowerCase()) {
+      const isCurrentDirectoryRoute = params.communityAddress?.toLowerCase() === searchInput.toLowerCase();
+      if (isCurrentDirectoryRoute || communityAddress.toLowerCase() === currentCommunityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
       }
       setInputValue('');
-      navigate(getCommunityPath(communityAddress));
+      navigate(getCommunityReferencePath(searchInput));
     }
   };
 
@@ -193,7 +195,6 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const handleCommunitySelect = useCallback(
     (address: string) => {
-      const currentCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
       if (address.toLowerCase() === currentCommunityAddress?.toLowerCase()) {
         alert(t('already_in_community'));
         return;
@@ -205,7 +206,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       searchInputRef.current?.blur();
       navigate(getCommunityPath(address));
     },
-    [navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, params.communityAddress, t],
+    [currentCommunityAddress, navigate, setInputValue, setIsInputFocused, setActiveDropdownIndex, t],
   );
 
   const handleKeyDown = useCallback(

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "directoryCode": "todayilearned",
+  "description": "Communities competing for Seedit's /s/todayilearned route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-todayilearned-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "til-posting.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWEXNQaBi1xWXW9ksm8Fa5LpAP46YsmV44oGaHrsCJ41Jt",
+      "owner": "bitsocialist.bso"
+    }
+  ]
+}

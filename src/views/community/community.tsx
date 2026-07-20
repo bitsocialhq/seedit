@@ -13,7 +13,8 @@ import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
-import { getCommunityPath, isResolvableCommunityAddress, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
+import { getCommunityPath, isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
@@ -227,7 +228,8 @@ const CommunityView = () => {
   const searchQuery = searchParams.get('q') || '';
 
   const rawCommunityIdentifier = params?.communityAddress || '';
-  const communityAddress = resolveCommunityRouteAddress(rawCommunityIdentifier) || '';
+  const { communityAddress: resolvedCommunityAddress, directoryCode, directoryList } = useResolvedCommunityRoute(rawCommunityIdentifier);
+  const communityAddress = resolvedCommunityAddress || '';
   const canLoadCommunity = !!communityAddress && isResolvableCommunityAddress(communityAddress);
   const community = useCommunity(canLoadCommunity ? { community: getCommunityIdentifier(communityAddress) } : undefined);
   const { createdAt, error, shortAddress, started, title, updatedAt, settings } = community || {};
@@ -359,8 +361,8 @@ const CommunityView = () => {
 
   // page title
   useEffect(() => {
-    document.title = title ? title : getDisplayAddress(shortAddress || rawCommunityIdentifier || communityAddress);
-  }, [title, shortAddress, rawCommunityIdentifier, communityAddress]);
+    document.title = directoryList?.title || title || getDisplayAddress(shortAddress || rawCommunityIdentifier || communityAddress);
+  }, [title, shortAddress, rawCommunityIdentifier, communityAddress, directoryList?.title]);
 
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);
@@ -370,7 +372,15 @@ const CommunityView = () => {
   ) : (
     <div className={styles.content}>
       <div className={styles.sidebar}>
-        <Sidebar community={community} isSubCreatedButNotYetPublished={started && isSubCreatedButNotYetPublished} settings={settings} reset={reset} />
+        <Sidebar
+          community={community}
+          communityAddress={communityAddress}
+          directoryCode={directoryCode}
+          directoryRevision={directoryList?.revision}
+          isSubCreatedButNotYetPublished={started && isSubCreatedButNotYetPublished}
+          settings={settings}
+          reset={reset}
+        />
       </div>
       {shouldShowErrorToUser && (
         <div className={styles.error}>

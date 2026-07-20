@@ -6,8 +6,9 @@ import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from 
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
-import { getCommunityPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
+import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
+import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { sortTypes } from '../../constants/sort-types';
 import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
@@ -70,7 +71,7 @@ const SortTypesDropdown = () => {
   const { timeFilterName } = useTimeFilter();
 
   const selectedSortType = params.sortType || 'hot';
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
 
   const getSelectedSortLabel = () => {
     const index = sortTypes.indexOf(selectedSortType);
@@ -133,7 +134,7 @@ const TimeFilterDropdown = () => {
   const timeFilterDropdownClass = isTimeFilterDropdownOpen ? styles.visible : styles.hidden;
 
   const selectedSortType = params.sortType || 'hot';
-  const communityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress } = useResolvedCommunityRoute();
 
   const getTimeFilterLink = (timeFilterName: string) => {
     return isInCommunityView
@@ -182,7 +183,6 @@ const TimeFilterDropdown = () => {
 const TopBar = memo(() => {
   const { t } = useTranslation();
   const location = useLocation();
-  const params = useParams();
 
   const isinAllView = isAllView(location.pathname);
   const isInHomeView = isHomeView(location.pathname);
@@ -203,7 +203,7 @@ const TopBar = memo(() => {
   for (const { address } of defaultCommunities) {
     if (!subscriptionSet.has(address)) filteredCommunityAddresses.push(address);
   }
-  const activeCommunityAddress = resolveCommunityRouteAddress(params.communityAddress);
+  const { communityAddress: activeCommunityAddress } = useResolvedCommunityRoute();
 
   return (
     <div className={styles.headerArea}>

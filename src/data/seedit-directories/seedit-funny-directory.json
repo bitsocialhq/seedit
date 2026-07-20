@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "directoryCode": "funny",
+  "description": "Communities competing for Seedit's /s/funny route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-funny-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "funny-posting.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWFL5oGc9p9CYs25eeK5cCpPXXhibECsnqmuxinq2jbtjP",
+      "owner": "bitsocialist.bso"
+    }
+  ]
+}

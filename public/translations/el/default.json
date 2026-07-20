@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Δεν ήταν δυνατή η αποθήκευση της αναβάθμισης ρυθμίσεων.",
   "settings_upgrade_review_notice": "διατίθεται αναβάθμιση ρυθμίσεων",
   "settings_upgrade_review_button": "έλεγχος",
-  "settings_upgrade_never_show_again": "να μην εμφανιστεί ξανά"
+  "settings_upgrade_never_show_again": "να μην εμφανιστεί ξανά",
+  "directory_route_currently_recommends": "Το s/{{directoryCode}} προτείνει αυτή τη στιγμή",
+  "directory_auto_switch_label": "αυτόματη αλλαγή αυτής της συνδρομής όταν αλλάζει το s/{{directoryCode}}",
+  "directory_recommendation_changed": "Το s/{{directoryCode}} προτείνει τώρα",
+  "directory_auto_switch_help": "Το Seedit θα αντικαταστήσει αυτήν τη συνδρομή με τη νέα προτεινόμενη κοινότητα. Μπορείτε να απενεργοποιήσετε αυτήν την επιλογή ανά πάσα στιγμή.",
+  "directory_you_still_follow": "Εξακολουθείτε να ακολουθείτε",
+  "switch_to_community": "μετάβαση στο {{communityAddress}}",
+  "keep_both_communities": "διατήρηση και των δύο",
+  "keep_community": "διατήρηση του {{communityAddress}}",
+  "directory_automatic_switch_notice": "Το s/{{directoryCode}} άλλαξε, οπότε το Seedit μετέφερε τη συνδρομή σας από το {{fromAddress}} στο {{toAddress}}.",
+  "dismiss": "Κλείσιμο"
 }

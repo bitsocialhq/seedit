@@ -27,6 +27,8 @@ import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
 import NotificationHandler from './components/notification-handler';
+import DirectorySubscriptionReconciler from './components/directory-subscription-reconciler';
+import ExactCommunityActionRoute from './components/exact-community-action-route';
 import StickyHeader from './components/sticky-header';
 import TopBar from './components/topbar';
 import styles from './app.module.css';
@@ -44,6 +46,7 @@ const App = () => {
     <>
       <ChallengeModal />
       <NotificationHandler />
+      <DirectorySubscriptionReconciler />
       <Suspense fallback={null}>
         <SettingsUpgradeModal />
       </Suspense>
@@ -103,12 +106,33 @@ const App = () => {
             <Route path='/s/:communityAddress/comments/:commentCid' element={<PostPage />} />
             <Route path='/s/:communityAddress/comments/:commentCid/about' element={<AboutView />} />
 
-            <Route path='/s/:communityAddress/submit' element={<SubmitPage />} />
+            <Route
+              path='/s/:communityAddress/submit'
+              element={
+                <ExactCommunityActionRoute>
+                  <SubmitPage />
+                </ExactCommunityActionRoute>
+              }
+            />
             <Route path='/s/:communityAddress/about' element={<AboutView />} />
 
             <Route path='/settings' element={<Settings />} />
-            <Route path='/s/:communityAddress/settings' element={<CommunitySettings />} />
-            <Route path='/s/:communityAddress/settings/editor' element={<CommunityDataEditor />} />
+            <Route
+              path='/s/:communityAddress/settings'
+              element={
+                <ExactCommunityActionRoute>
+                  <CommunitySettings />
+                </ExactCommunityActionRoute>
+              }
+            />
+            <Route
+              path='/s/:communityAddress/settings/editor'
+              element={
+                <ExactCommunityActionRoute>
+                  <CommunityDataEditor />
+                </ExactCommunityActionRoute>
+              }
+            />
             <Route path='/settings/advanced' element={<Settings />} />
             <Route path='/settings/p2p-stats' element={<Settings />} />
             <Route path='/settings/content-options' element={<Settings />} />

@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Impossible d’enregistrer la mise à niveau des paramètres.",
   "settings_upgrade_review_notice": "mise à niveau des paramètres disponible",
   "settings_upgrade_review_button": "examiner",
-  "settings_upgrade_never_show_again": "ne plus afficher"
+  "settings_upgrade_never_show_again": "ne plus afficher",
+  "directory_route_currently_recommends": "s/{{directoryCode}} recommande actuellement",
+  "directory_auto_switch_label": "changer automatiquement cet abonnement lorsque s/{{directoryCode}} change",
+  "directory_recommendation_changed": "s/{{directoryCode}} recommande maintenant",
+  "directory_auto_switch_help": "Seedit remplacera cet abonnement par la nouvelle communauté recommandée. Vous pouvez désactiver cette option à tout moment.",
+  "directory_you_still_follow": "Vous suivez toujours",
+  "switch_to_community": "passer à {{communityAddress}}",
+  "keep_both_communities": "garder les deux",
+  "keep_community": "conserver {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} a changé, Seedit a donc remplacé votre abonnement à {{fromAddress}} par {{toAddress}}.",
+  "dismiss": "ignorer"
 }

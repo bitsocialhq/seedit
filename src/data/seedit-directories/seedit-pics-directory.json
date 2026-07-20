@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "directoryCode": "pics",
+  "description": "Communities competing for Seedit's /s/pics route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-pics-directory.json",
+  "createdAt": 1783123200,
+  "updatedAt": 1783123200,
+  "communities": [
+    {
+      "address": "pics-posting.bso",
+      "addedAt": 1783123200,
+      "publicKey": "12D3KooWR39v9RaLHXXsJC9NSqdmWgrw5FMjJJAECEAsras4AztU",
+      "owner": "bitsocialist.bso"
+    }
+  ]
+}

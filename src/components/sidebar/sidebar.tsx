@@ -26,12 +26,14 @@ import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { getCommunityPath, getCommunityPostUrl } from '../../lib/utils/community-route-utils';
+import type { SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
 import Markdown from '../markdown';
 import SearchBar from '../search-bar';
 import SubscribeButton from '../subscribe-button';
+import DirectoryAutoSwitchControl from '../directory-auto-switch-control';
 import { Version } from '../version';
 import styles from './sidebar.module.css';
 
@@ -129,6 +131,9 @@ const ModerationTools = ({ address }: { address?: string }) => {
 
 interface SidebarProps {
   comment?: Comment;
+  communityAddress?: string;
+  directoryCode?: SeeditDirectoryCode;
+  directoryRevision?: number;
   isSubCreatedButNotYetPublished?: boolean;
   settings?: any;
   community?: Community;
@@ -184,9 +189,10 @@ export const Footer = () => {
   );
 };
 
-const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, community, reset }: SidebarProps) => {
+const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, isSubCreatedButNotYetPublished, settings, community, reset }: SidebarProps) => {
   const { t } = useTranslation();
-  const { address, createdAt, description, roles, rules, title, updatedAt } = community || {};
+  const { address: loadedCommunityAddress, createdAt, description, roles, rules, title, updatedAt } = community || {};
+  const address = loadedCommunityAddress || communityAddress;
   const { allActiveUserCount, hourActiveUserCount } = useCommunityStats(address ? { community: getCommunityIdentifier(address) } : undefined);
   const { isOffline, offlineTitle } = useIsCommunityOffline(community || {});
   const onlineNotice = t('users_online', { count: hourActiveUserCount || 0 });
@@ -307,15 +313,23 @@ const Sidebar = ({ comment, isSubCreatedButNotYetPublished, settings, community,
           !isInDomainView &&
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
-              <Link className={styles.title} to={address ? getCommunityPath(address) : '/communities'}>
-                {getDisplayAddress(community?.address || '')}
+              <Link className={styles.title} to={directoryCode ? `/s/${directoryCode}` : address ? getCommunityPath(address) : '/communities'}>
+                {directoryCode ? `s/${directoryCode}` : getDisplayAddress(community?.address || '')}
               </Link>
+              {directoryCode && address && (
+                <div className={styles.directoryRouteDisclosure}>
+                  {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
+                </div>
+              )}
               <div className={styles.subscribeContainer}>
                 <span className={styles.subscribeButton}>
-                  <SubscribeButton address={address} />
+                  <SubscribeButton address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
                 </span>
                 <span className={styles.subscribers}>{t('members_count', { count: allActiveUserCount })}</span>
               </div>
+              {directoryCode && directoryRevision && address && (
+                <DirectoryAutoSwitchControl address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
+              )}
               <div className={styles.onlineLine}>
                 <span className={`${styles.onlineIndicator} ${!isOffline ? styles.online : styles.offline}`} title={!isOffline ? t('online') : t('offline')} />
                 <span>{isSubCreatedButNotYetPublished ? subCreatedButNotYetPublishedStatus : onlineStatus}</span>

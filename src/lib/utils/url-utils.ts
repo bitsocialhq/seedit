@@ -1,5 +1,11 @@
 import { copyToClipboard } from './clipboard-utils';
-import { getCanonicalCommunityRoutePathname, getCommunityPath, getCommunityPostPath, getCommunityPostUrl, resolveCommunityRouteAddress } from './community-route-utils';
+import {
+  getCanonicalCommunityRoutePathname,
+  getCommunityPostUrl,
+  getCommunityReferencePath,
+  getCommunityReferencePostPath,
+  resolveCommunityRouteAddress,
+} from './community-route-utils';
 
 export const getHostname = (url: string) => {
   try {
@@ -138,7 +144,7 @@ export const preprocessSeeditPatterns = (content: string): string => {
 
     if (isValidCommunityPattern(fullPattern)) {
       const postMatch = capturedPath.match(/^([^/]+)\/comments\/([^/]+)$/);
-      const internalPath = postMatch ? getCommunityPostPath(postMatch[1], postMatch[2]) : getCommunityPath(capturedPath);
+      const internalPath = postMatch ? getCommunityReferencePostPath(postMatch[1], postMatch[2]) : getCommunityReferencePath(capturedPath);
       // Convert to markdown link format and preserve trailing punctuation
       return `[${fullPattern}](${internalPath})${trailingPunctuation}`;
     }

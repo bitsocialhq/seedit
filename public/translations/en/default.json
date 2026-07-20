@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Could not save the settings upgrade.",
   "settings_upgrade_review_notice": "settings upgrade available",
   "settings_upgrade_review_button": "review",
-  "settings_upgrade_never_show_again": "never show again"
+  "settings_upgrade_never_show_again": "never show again",
+  "directory_route_currently_recommends": "s/{{directoryCode}} currently recommends",
+  "directory_auto_switch_label": "automatically switch this subscription when s/{{directoryCode}} changes",
+  "directory_recommendation_changed": "s/{{directoryCode}} now recommends",
+  "directory_auto_switch_help": "Seedit will replace this subscription with the newly recommended community. You can turn this off anytime.",
+  "directory_you_still_follow": "You still follow",
+  "switch_to_community": "switch to {{communityAddress}}",
+  "keep_both_communities": "keep both",
+  "keep_community": "keep {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} changed, so Seedit switched your subscription from {{fromAddress}} to {{toAddress}}.",
+  "dismiss": "dismiss"
 }

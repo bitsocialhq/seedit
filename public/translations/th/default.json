@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "ไม่สามารถบันทึกการอัปเกรดการตั้งค่าได้",
   "settings_upgrade_review_notice": "มีการอัปเกรดการตั้งค่า",
   "settings_upgrade_review_button": "ตรวจสอบ",
-  "settings_upgrade_never_show_again": "ไม่ต้องแสดงอีก"
+  "settings_upgrade_never_show_again": "ไม่ต้องแสดงอีก",
+  "directory_route_currently_recommends": "คำแนะนำปัจจุบันจาก s/{{directoryCode}}:",
+  "directory_auto_switch_label": "สลับการสมัครรับข้อมูลนี้โดยอัตโนมัติเมื่อ s/{{directoryCode}} เปลี่ยนแปลง",
+  "directory_recommendation_changed": "ตอนนี้ s/{{directoryCode}} แนะนำ",
+  "directory_auto_switch_help": "Seedit จะแทนที่การสมัครสมาชิกนี้ด้วยชุมชนใหม่ที่ได้รับการแนะนำ คุณสามารถปิดตัวเลือกนี้ได้ทุกเมื่อ",
+  "directory_you_still_follow": "คุณยังคงติดตาม",
+  "switch_to_community": "เปลี่ยนไปใช้ {{communityAddress}}",
+  "keep_both_communities": "เก็บไว้ทั้งคู่",
+  "keep_community": "เก็บ {{communityAddress}} ไว้",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} มีการเปลี่ยนแปลง ดังนั้น Seedit จึงเปลี่ยนการสมัครของคุณจาก {{fromAddress}} เป็น {{toAddress}}",
+  "dismiss": "ปิด"
 }

@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Përmirësimi i cilësimeve nuk mund të ruhej.",
   "settings_upgrade_review_notice": "disponohet përmirësimi i rregullimeve",
   "settings_upgrade_review_button": "rishiko",
-  "settings_upgrade_never_show_again": "mos e shfaq më"
+  "settings_upgrade_never_show_again": "mos e shfaq më",
+  "directory_route_currently_recommends": "s/{{directoryCode}} rekomandon aktualisht",
+  "directory_auto_switch_label": "kalo automatikisht këtë abonim kur ndryshon s/{{directoryCode}}",
+  "directory_recommendation_changed": "s/{{directoryCode}} tani rekomandon",
+  "directory_auto_switch_help": "Seedit do ta zëvendësojë këtë abonim me komunitetin e rekomanduar rishtazi. Mund ta çaktivizoni këtë në çdo kohë.",
+  "directory_you_still_follow": "Vazhdon ta ndjekësh",
+  "switch_to_community": "kalo te {{communityAddress}}",
+  "keep_both_communities": "mbaji të dyja",
+  "keep_community": "mbaj {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} ndryshoi, ndaj Seedit e kaloi abonimin tënd nga {{fromAddress}} te {{toAddress}}.",
+  "dismiss": "Mbyll"
 }

@@ -180,3 +180,17 @@
 .lowercase {
   text-transform: lowercase;
 }
+
+.mobileDirectoryDisclosure {
+  padding: 2px 5px;
+  color: var(--text-info);
+  font-size: 10px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.mobileDirectoryDisclosure a {
+  color: var(--link-primary);
+  text-decoration: underline;
+}

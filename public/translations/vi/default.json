@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "Không thể lưu bản nâng cấp cài đặt.",
   "settings_upgrade_review_notice": "có bản nâng cấp cài đặt",
   "settings_upgrade_review_button": "xem lại",
-  "settings_upgrade_never_show_again": "không hiển thị lại"
+  "settings_upgrade_never_show_again": "không hiển thị lại",
+  "directory_route_currently_recommends": "s/{{directoryCode}} hiện đề xuất",
+  "directory_auto_switch_label": "tự động chuyển đăng ký này khi s/{{directoryCode}} thay đổi",
+  "directory_recommendation_changed": "s/{{directoryCode}} giờ đề xuất",
+  "directory_auto_switch_help": "Seedit sẽ thay thế đăng ký này bằng cộng đồng mới được đề xuất. Bạn có thể tắt tính năng này bất cứ lúc nào.",
+  "directory_you_still_follow": "Bạn vẫn theo dõi",
+  "switch_to_community": "chuyển sang {{communityAddress}}",
+  "keep_both_communities": "giữ cả hai",
+  "keep_community": "giữ {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} đã thay đổi, vì vậy Seedit đã chuyển đăng ký của bạn từ {{fromAddress}} sang {{toAddress}}.",
+  "dismiss": "Đóng"
 }

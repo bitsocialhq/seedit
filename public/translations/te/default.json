@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "సెట్టింగ్‌ల అప్‌గ్రేడ్‌ను సేవ్ చేయడం సాధ్యపడలేదు.",
   "settings_upgrade_review_notice": "సెట్టింగ్‌ల అప్‌గ్రేడ్ అందుబాటులో ఉంది",
   "settings_upgrade_review_button": "సమీక్షించండి",
-  "settings_upgrade_never_show_again": "మళ్లీ ఎప్పుడూ చూపవద్దు"
+  "settings_upgrade_never_show_again": "మళ్లీ ఎప్పుడూ చూపవద్దు",
+  "directory_route_currently_recommends": "s/{{directoryCode}} యొక్క ప్రస్తుత సిఫార్సు:",
+  "directory_auto_switch_label": "s/{{directoryCode}} మారినప్పుడు ఈ సబ్‌స్క్రిప్షన్‌ను ఆటోమేటిక్‌గా మార్చండి",
+  "directory_recommendation_changed": "s/{{directoryCode}} ఇప్పుడు సిఫార్సు చేస్తోంది",
+  "directory_auto_switch_help": "Seedit ఈ సబ్‌స్క్రిప్షన్‌ను కొత్తగా సిఫార్సు చేసిన కమ్యూనిటీతో భర్తీ చేస్తుంది. మీరు దీన్ని ఎప్పుడైనా ఆఫ్ చేయవచ్చు.",
+  "directory_you_still_follow": "మీరు ఇప్పటికీ ఫాలో అవుతున్నారు",
+  "switch_to_community": "{{communityAddress}}కి మారండి",
+  "keep_both_communities": "రెండింటినీ ఉంచు",
+  "keep_community": "{{communityAddress}}ను అలాగే ఉంచండి",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} మారింది, కాబట్టి Seedit మీ సబ్‌స్క్రిప్షన్‌ను {{fromAddress}} నుండి {{toAddress}}కి మార్చింది.",
+  "dismiss": "మూసివేయి"
 }

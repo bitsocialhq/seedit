@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "无法保存设置升级。",
   "settings_upgrade_review_notice": "设置升级可用",
   "settings_upgrade_review_button": "查看",
-  "settings_upgrade_never_show_again": "不再显示"
+  "settings_upgrade_never_show_again": "不再显示",
+  "directory_route_currently_recommends": "s/{{directoryCode}} 当前推荐：",
+  "directory_auto_switch_label": "当 s/{{directoryCode}} 更改时自动切换此订阅",
+  "directory_recommendation_changed": "s/{{directoryCode}} 现推荐：",
+  "directory_auto_switch_help": "Seedit 会将此订阅替换为新推荐的社区。你可以随时关闭此功能。",
+  "directory_you_still_follow": "你仍在关注",
+  "switch_to_community": "切换到 {{communityAddress}}",
+  "keep_both_communities": "两者都保留",
+  "keep_community": "保留 {{communityAddress}}",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} 已更改，因此 Seedit 已将你的订阅从 {{fromAddress}} 切换到 {{toAddress}}。",
+  "dismiss": "关闭"
 }

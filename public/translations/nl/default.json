@@ -391,5 +391,15 @@
   "settings_upgrade_error_saving": "De instellingenupgrade kon niet worden opgeslagen.",
   "settings_upgrade_review_notice": "upgrade voor instellingen beschikbaar",
   "settings_upgrade_review_button": "bekijken",
-  "settings_upgrade_never_show_again": "nooit meer tonen"
+  "settings_upgrade_never_show_again": "nooit meer tonen",
+  "directory_route_currently_recommends": "Huidige aanbeveling van s/{{directoryCode}}:",
+  "directory_auto_switch_label": "schakel dit abonnement automatisch om wanneer s/{{directoryCode}} verandert",
+  "directory_recommendation_changed": "s/{{directoryCode}} beveelt nu aan",
+  "directory_auto_switch_help": "Seedit vervangt dit abonnement door de nieuw aanbevolen gemeenschap. Je kunt dit op elk moment uitschakelen.",
+  "directory_you_still_follow": "Je volgt nog steeds",
+  "switch_to_community": "overschakelen naar {{communityAddress}}",
+  "keep_both_communities": "beide behouden",
+  "keep_community": "{{communityAddress}} behouden",
+  "directory_automatic_switch_notice": "s/{{directoryCode}} is gewijzigd, dus Seedit heeft je abonnement van {{fromAddress}} naar {{toAddress}} overgezet.",
+  "dismiss": "Sluiten"
 }
