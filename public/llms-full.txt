@@ -63,6 +63,12 @@ Peers can connect to your bitsocial community using any bitsocial client, such a
 
 Seedit's versioned default communities are published in Bitsocial's [seedit-default-subscriptions.json list](https://github.com/bitsocialnet/lists/blob/master/seedit-default-subscriptions.json). New accounts subscribe to these communities by default. When the list changes, existing users can review the update and choose which additions to join; Seedit never removes a manually chosen subscription. You can open a pull request in that repository to propose a community for the list.
 
+### How directory routes work
+
+Seedit separates short discovery routes from subscriptions. A route such as `/s/pics` always opens the finalized winner of the `pics` directory, so valuable short routes are not permanently controlled by squatters or global administrators. The topbar therefore displays `pics`, regardless of the winner's exact address. The directory model is designed for decentralized voting; during bootstrap, finalized snapshots are published through [bitsocialnet/lists](https://github.com/bitsocialnet/lists).
+
+Joining still subscribes to that winner's exact community address, and the home feed reads those exact subscriptions directly. Directory winner changes never silently replace a subscription unless the user explicitly enabled automatic switching; otherwise Seedit lets the user switch, keep both communities, or keep the current one. Post permalinks also use exact community addresses so shared links remain durable. See the [directory-routes architecture decision](docs/architecture/directory-routes.md) for the complete model.
+
 ## Contributor setup
 
 1. `nvm install && nvm use`
