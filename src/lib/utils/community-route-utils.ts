@@ -39,7 +39,7 @@ export const getCommunityPostPath = (communityAddress: string, cid: string): str
 export const getCommunityReferencePostPath = (communityReference: string, cid: string): string =>
   `${getCommunityReferencePath(communityReference)}/comments/${encodeURIComponent(cid)}`;
 
-export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://seedit.app${getCommunityPostPath(communityAddress, cid)}`;
+export const getCommunityPostUrl = (communityAddress: string, cid: string): string => `https://s.seedit.app${getCommunityPostPath(communityAddress, cid)}`;
 
 export const getExactCommunityActionRedirectPath = (
   pathname: string,

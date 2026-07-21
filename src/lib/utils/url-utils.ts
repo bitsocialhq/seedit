@@ -29,7 +29,7 @@ export const copyShareLinkToClipboard = async (communityAddress: string, cid: st
   await copyToClipboard(shareLink);
 };
 
-const SEEDIT_HOSTNAMES = ['seedit.app', 'seedit.eth.limo', 'seedit.eth.link', 'seedit.eth.sucks', 'seedit.netlify.app', 'pleb.bz'];
+const SEEDIT_HOSTNAMES = ['seedit.app', 's.seedit.app', 'seedit.eth.limo', 'seedit.eth.link', 'seedit.eth.sucks', 'seedit.netlify.app', 'pleb.bz'];
 
 // Check if a URL is a valid seedit link that should be handled internally
 export const isSeeditLink = (url: string): boolean => {

@@ -71,8 +71,8 @@ describe('community route builders', () => {
     expect(getCommunityPostPath(PUBLIC_KEY, 'bafy-post-cid')).toBe(`/s/${PUBLIC_KEY}/comments/bafy-post-cid`);
   });
 
-  it('builds the exact seedit.app external post URL', () => {
-    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://seedit.app/s/aww.bso/comments/bafy-post-cid');
+  it('builds the exact s.seedit.app external post URL', () => {
+    expect(getCommunityPostUrl('aww.bso', 'bafy-post-cid')).toBe('https://s.seedit.app/s/aww.bso/comments/bafy-post-cid');
   });
 
   it('keeps explicit directory paths separate from exact community paths', () => {
