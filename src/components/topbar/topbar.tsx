@@ -5,8 +5,8 @@ import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-ho
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import { useFilteredDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
-import { getCommunityPath } from '../../lib/utils/community-route-utils';
+import { useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
+import { getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { sortTypes } from '../../constants/sort-types';
@@ -14,6 +14,11 @@ import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
 const getSubscriptionDisplayName = (subscription: string) => getCompactCommunityDisplayName(subscription);
+
+const getTopbarCommunityLink = ({ address, directoryCode }: Pick<DefaultSubscription, 'address' | 'directoryCode'>) => ({
+  displayName: directoryCode ?? getSubscriptionDisplayName(address),
+  path: directoryCode ? getDirectoryPath(directoryCode) : getCommunityPath(address),
+});
 
 const CommunitiesDropdown = () => {
   const { t } = useTranslation();
@@ -199,11 +204,9 @@ const TopBar = memo(() => {
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
 
   const subscriptionSet = new Set(subscriptions ?? []);
-  const filteredCommunityAddresses: string[] = [];
-  for (const { address } of defaultCommunities) {
-    if (!subscriptionSet.has(address)) filteredCommunityAddresses.push(address);
-  }
-  const { communityAddress: activeCommunityAddress } = useResolvedCommunityRoute();
+  const defaultCommunityByAddress = new Map(defaultCommunities.map((community) => [community.address, community]));
+  const filteredDefaultCommunities = defaultCommunities.filter(({ address }) => !subscriptionSet.has(address));
+  const { communityAddress: activeCommunityAddress, directoryCode: activeDirectoryCode } = useResolvedCommunityRoute();
 
   return (
     <div className={styles.headerArea}>
@@ -234,25 +237,28 @@ const TopBar = memo(() => {
             )}
             {subscriptions?.length > 0 && <span className={styles.separator}> | </span>}
             {reversedSubscriptions?.map((subscription: string, index: number) => {
-              const displayAddress = getSubscriptionDisplayName(subscription);
+              const directoryCode = defaultCommunityByAddress.get(subscription)?.directoryCode;
+              const { displayName, path } = getTopbarCommunityLink({ address: subscription, directoryCode });
+              const isActive = directoryCode ? activeDirectoryCode === directoryCode : activeCommunityAddress === subscription;
               return (
                 <li key={subscription}>
                   {index !== 0 && <span className={styles.separator}>-</span>}
-                  <Link to={getCommunityPath(subscription)} className={activeCommunityAddress === subscription ? styles.selected : styles.choice}>
-                    {displayAddress}
+                  <Link to={path} className={isActive ? styles.selected : styles.choice}>
+                    {displayName}
                   </Link>
                 </li>
               );
             })}
-            {!hideDefaultCommunities && filteredCommunityAddresses?.length > 0 && <span className={styles.separator}> | </span>}
+            {!hideDefaultCommunities && filteredDefaultCommunities.length > 0 && <span className={styles.separator}> | </span>}
             {!hideDefaultCommunities &&
-              filteredCommunityAddresses?.map((address, index) => {
-                const displayAddress = getSubscriptionDisplayName(address);
+              filteredDefaultCommunities.map(({ address, directoryCode }, index) => {
+                const { displayName, path } = getTopbarCommunityLink({ address, directoryCode });
+                const isActive = directoryCode ? activeDirectoryCode === directoryCode : activeCommunityAddress === address;
                 return (
                   <li key={address}>
                     {index !== 0 && <span className={styles.separator}>-</span>}
-                    <Link to={getCommunityPath(address)} className={activeCommunityAddress === address ? styles.selected : styles.choice}>
-                      {displayAddress}
+                    <Link to={path} className={isActive ? styles.selected : styles.choice}>
+                      {displayName}
                     </Link>
                   </li>
                 );
