@@ -314,7 +314,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
           !isInPostPageAboutView && (
             <div className={styles.titleBox}>
               <Link className={styles.title} to={directoryCode ? `/s/${directoryCode}` : address ? getCommunityPath(address) : '/communities'}>
-                {directoryCode ? `s/${directoryCode}` : getDisplayAddress(community?.address || '')}
+                {directoryCode || getDisplayAddress(community?.address || '')}
               </Link>
               {directoryCode && address && (
                 <div className={styles.directoryRouteDisclosure}>
