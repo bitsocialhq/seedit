@@ -127,8 +127,6 @@ For every linked issue, bring it into the same final state expected from `make-c
 
 - closed
 - assigned to the current GitHub user
-- added to the `seedit` project if missing
-- project status `Done`
 
 Before editing issue assignees, determine the current contributor's GitHub username from the authenticated `gh` session.
 If `gh` is not signed in or cannot resolve the login, stop and ask the contributor for their GitHub username before proceeding.
@@ -147,10 +145,6 @@ fi
 ISSUE_NUMBERS=$(gh pr view <pr-number> --repo bitsocialnet/seedit --json closingIssuesReferences --jq '.closingIssuesReferences[].number')
 
 if [ -n "$ISSUE_NUMBERS" ]; then
-  FIELD_JSON=$(gh project field-list 1 --owner bitsocialnet --format json)
-  STATUS_FIELD_ID=$(echo "$FIELD_JSON" | jq -r '.fields[] | select(.name=="Status") | .id')
-  DONE_OPTION_ID=$(echo "$FIELD_JSON" | jq -r '.fields[] | select(.name=="Status") | .options[] | select(.name=="Done") | .id')
-
   for ISSUE_NUMBER in $ISSUE_NUMBERS; do
     ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --repo bitsocialnet/seedit --json state --jq '.state')
     if [ "$ISSUE_STATE" != "CLOSED" ]; then
@@ -160,14 +154,6 @@ if [ -n "$ISSUE_NUMBERS" ]; then
     if ! gh issue view "$ISSUE_NUMBER" --repo bitsocialnet/seedit --json assignees --jq '.assignees[].login' | grep -qx "$GH_LOGIN"; then
       gh issue edit "$ISSUE_NUMBER" --repo bitsocialnet/seedit --add-assignee "$GH_LOGIN"
     fi
-
-    ITEM_ID=$(gh project item-list 1 --owner bitsocialnet --limit 1000 --format json --jq ".items[] | select(.content.number == $ISSUE_NUMBER) | .id" | head -n1)
-    if [ -z "$ITEM_ID" ]; then
-      ITEM_JSON=$(gh project item-add 1 --owner bitsocialnet --url "https://github.com/bitsocialnet/seedit/issues/$ISSUE_NUMBER" --format json)
-      ITEM_ID=$(echo "$ITEM_JSON" | jq -r '.id')
-    fi
-
-    gh project item-edit --id "$ITEM_ID" --project-id PVT_kwDODohK7M4BM4wg --field-id "$STATUS_FIELD_ID" --single-select-option-id "$DONE_OPTION_ID"
   done
 fi
 ```
@@ -206,6 +192,5 @@ Tell the user:
 - whether the PR was merged
 - whether linked issues were confirmed closed
 - whether linked issues were assigned to the current GitHub user
-- whether linked project items were confirmed `Done`
 - whether stale remote-tracking refs were pruned
 - whether the feature branch, local `pr/<number>` alias, and any worktree were cleaned up

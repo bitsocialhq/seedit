@@ -149,32 +149,7 @@ If the user later explicitly asks to merge after reviews pass, a separate merge 
 gh pr merge --squash --delete-branch
 ```
 
-### 9. Add to project board
-
-Use **gh CLI** for project operations (never GitHub MCP).
-
-Add the issue to the project when the PR is opened, but do **not** force it to `Done` yet.
-
-```bash
-ITEM_JSON=$(gh project item-add 1 --owner bitsocialnet --url "https://github.com/bitsocialnet/seedit/issues/ISSUE_NUMBER" --format json)
-ITEM_ID=$(echo "$ITEM_JSON" | jq -r '.id')
-```
-
-If the user later explicitly asks to merge the reviewed PR in the same run, reuse `ITEM_ID` and then set the project item to `Done`:
-
-```bash
-# Get Status field ID and Done option ID from project
-FIELD_JSON=$(gh project field-list 1 --owner bitsocialnet --format json)
-STATUS_FIELD_ID=$(echo "$FIELD_JSON" | jq -r '.fields[] | select(.name=="Status") | .id')
-DONE_OPTION_ID=$(echo "$FIELD_JSON" | jq -r '.fields[] | select(.name=="Status") | .options[] | select(.name=="Done") | .id')
-
-# Set status to Done
-gh project item-edit --id "$ITEM_ID" --project-id PVT_kwDODohK7M4BM4wg --field-id "$STATUS_FIELD_ID" --single-select-option-id "$DONE_OPTION_ID"
-```
-
-Assignees and labels are inherited from the issue (set in step 6) — no separate project update needed.
-
-### 10. Report summary
+### 9. Report summary
 
 Print a summary to the user:
 
@@ -184,7 +159,6 @@ Issue #NUMBER created, committed, pushed, and linked to a PR into master.
   Commit: HASH
   Labels: label1, label2
   PR: PR_URL
-  Project: seedit
   URL: https://github.com/bitsocialnet/seedit/issues/NUMBER
 ```
 
