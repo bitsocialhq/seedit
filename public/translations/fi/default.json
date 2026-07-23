@@ -290,7 +290,7 @@
   "invalid_url_alert": "Annettu linkki ei ole voimassa oleva URL.",
   "empty_comment_alert": "Ei voi julkaista tyhjää kommenttia.",
   "no_subscriptions_message": "<1>{{accountName}}, tämä on kotisi Seeditissä</1><2>Kun löydät yhteisön, josta pidät, <3>liity siihen <4></4></3></2>",
-  "find_communities": "etsi yhteisöjä p/all:lla",
+  "find_communities": "etsi yhteisöjä s/all:lla",
   "community_deleted": "Yhteisö poistettiin onnistuneesti.",
   "go_to_a_community": "Mene yhteisöön",
   "enter_community_address": "Syötä yhteisön osoite",

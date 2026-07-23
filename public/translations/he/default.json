@@ -290,7 +290,7 @@
   "invalid_url_alert": "הלינק שסופק אינו כתובת URL חוקית.",
   "empty_comment_alert": "לא ניתן לפרסם תגובה ריקה.",
   "no_subscriptions_message": "<1>{{accountName}}, זו הבית שלך ב-Seedit</1><2>כשאתה מוצא קהילה שאתה אוהב, <3>הצטרף עם ה<4></4></3></2>",
-  "find_communities": "מצא קהילות ב-p/all",
+  "find_communities": "מצא קהילות ב-s/all",
   "community_deleted": "הקהילה נמחקה בהצלחה.",
   "go_to_a_community": "עבור לקהילה",
   "enter_community_address": "הזן כתובת קהילה",

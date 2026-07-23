@@ -290,7 +290,7 @@
   "invalid_url_alert": "Il link fornito non è un URL valido.",
   "empty_comment_alert": "Impossibile pubblicare un commento vuoto.",
   "no_subscriptions_message": "<1>{{accountName}}, questa è la tua home su Seedit</1><2>Quando trovi una comunità che ti piace, <3>unisciti con il <4></4></3></2>",
-  "find_communities": "trova comunità su p/all",
+  "find_communities": "trova comunità su s/all",
   "community_deleted": "Comunità eliminata con successo.",
   "go_to_a_community": "Vai a una comunità",
   "enter_community_address": "Inserisci un indirizzo della comunità",

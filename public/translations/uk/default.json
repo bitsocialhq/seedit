@@ -290,7 +290,7 @@
   "invalid_url_alert": "Надане посилання не є дійсною URL-адресою.",
   "empty_comment_alert": "Не можна опублікувати порожній коментар.",
   "no_subscriptions_message": "<1>{{accountName}}, це ваш дім на Seedit</1><2>Коли ви знайдете спільноту, яка вам подобається, <3>приєднайтесь до <4></4></3></2>",
-  "find_communities": "знайти спільноти на p/all",
+  "find_communities": "знайти спільноти на s/all",
   "community_deleted": "Спільнота успішно видалена.",
   "go_to_a_community": "Перейти до спільноти",
   "enter_community_address": "Введіть адресу спільноти",

@@ -290,7 +290,7 @@
   "invalid_url_alert": "Det angivne link er ikke en gyldig URL.",
   "empty_comment_alert": "Kan ikke poste en tom kommentar.",
   "no_subscriptions_message": "<1>{{accountName}}, dette er dit hjem på Seedit</1><2>Når du finder et fællesskab, du kan lide, <3>tilmeld dig med <4></4></3></2>",
-  "find_communities": "find fællesskaber på p/all",
+  "find_communities": "find fællesskaber på s/all",
   "community_deleted": "Fællesskabet blev slettet med succes.",
   "go_to_a_community": "Gå til et fællesskab",
   "enter_community_address": "Indtast en fællesskabsadresse",

@@ -290,7 +290,7 @@
   "invalid_url_alert": "提供的链接不是有效的 URL。",
   "empty_comment_alert": "无法发布空评论。",
   "no_subscriptions_message": "<1>{{accountName}}, 这是你在 Seedit 上的家</1><2>当你找到一个你喜欢的社区时， <3>加入 <4></4></3></2>",
-  "find_communities": "在p/all上查找社区",
+  "find_communities": "在s/all上查找社区",
   "community_deleted": "社区已成功删除。",
   "go_to_a_community": "去一个社区",
   "enter_community_address": "输入社区地址",

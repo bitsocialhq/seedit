@@ -290,7 +290,7 @@
   "invalid_url_alert": "Lidhja e ofruar nuk është një URL e vlefshme.",
   "empty_comment_alert": "Nuk mund të postoni një koment bosh.",
   "no_subscriptions_message": "<1>{{accountName}}, ky është shtëpia juaj në Seedit</1><2>Kur të gjesh një komunitet që të pëlqen, <3>bashkohu me <4></4></3></2>",
-  "find_communities": "gjeni komunitete në p/all",
+  "find_communities": "gjeni komunitete në s/all",
   "community_deleted": "Komuniteti u fshi me sukses.",
   "go_to_a_community": "Shkoni në një komunitet",
   "enter_community_address": "Shkruani një adresë komuniteti",

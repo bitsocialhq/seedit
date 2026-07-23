@@ -290,7 +290,7 @@
   "invalid_url_alert": "Poskytnutý odkaz není platná adresa URL.",
   "empty_comment_alert": "Nelze publikovat prázdný komentář.",
   "no_subscriptions_message": "<1>{{accountName}}, toto je váš domov na Seedit</1><2>Až najdete komunitu, která se vám líbí, <3>připojte se k <4></4></3></2>",
-  "find_communities": "hledat komunity na p/all",
+  "find_communities": "hledat komunity na s/all",
   "community_deleted": "Komunita byla úspěšně smazána.",
   "go_to_a_community": "Přejít do komunity",
   "enter_community_address": "Zadejte adresu komunity",

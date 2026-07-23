@@ -290,7 +290,7 @@
   "invalid_url_alert": "Verilen bağlantı geçerli bir URL değildir.",
   "empty_comment_alert": "Boş yorum gönderilemez.",
   "no_subscriptions_message": "<1>{{accountName}}, burası Seedit’teki evinizdir</1><2>Beğendiğiniz bir topluluk bulduğunuzda, <3>ona katılın <4></4></3></2>",
-  "find_communities": "p/all üzerinde toplulukları bulun",
+  "find_communities": "s/all üzerinde toplulukları bulun",
   "community_deleted": "Topluluk başarıyla silindi.",
   "go_to_a_community": "Bir topluluğa git",
   "enter_community_address": "Bir topluluk adresi girin",

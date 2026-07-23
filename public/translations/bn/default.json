@@ -290,7 +290,7 @@
   "invalid_url_alert": "দেওয়া লিঙ্কটি একটি বৈধ URL নয়।",
   "empty_comment_alert": "খালি মন্তব্য পোস্ট করা যাবে না।",
   "no_subscriptions_message": "<1>{{accountName}}, এটি আপনার হোম Seedit এ</1><2>যখন আপনি এমন একটি কমিউনিটি খুঁজে পান যা আপনাকে পছন্দ হয়, <3>এতে যোগ দিন <4></4></3></2>",
-  "find_communities": "p/all এ কমিউনিটি খুঁজুন",
+  "find_communities": "s/all এ কমিউনিটি খুঁজুন",
   "community_deleted": "কমিউনিটি সফলভাবে মুছে ফেলা হয়েছে।",
   "go_to_a_community": "একটি সম্প্রদায়ে যান",
   "enter_community_address": "একটি কমিউনিটি ঠিকানা লিখুন",

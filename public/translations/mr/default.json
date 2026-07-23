@@ -290,7 +290,7 @@
   "invalid_url_alert": "दिलेला लिंक वैध URL नाही.",
   "empty_comment_alert": "रिक्त टिप्पणी पोस्ट करू शकत नाही.",
   "no_subscriptions_message": "<1>{{accountName}}, हा तुमचा घर Seedit वर आहे</1><2>जेव्हा तुम्हाला एक समुदाय आवडेल, <3>त्यात सामील व्हा <4></4></3></2>",
-  "find_communities": "p/all वर समुदाय शोधा",
+  "find_communities": "s/all वर समुदाय शोधा",
   "community_deleted": "समुदाय यशस्वीपणे हटवले गेले.",
   "go_to_a_community": "एका समुदायावर जा",
   "enter_community_address": "एक समुदायाचा पत्ता प्रविष्ट करा",

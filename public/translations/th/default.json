@@ -290,7 +290,7 @@
   "invalid_url_alert": "ลิงก์ที่ให้ไม่ใช่ URL ที่ถูกต้อง",
   "empty_comment_alert": "ไม่สามารถโพสต์ความคิดเห็นว่างเปล่าได้",
   "no_subscriptions_message": "<1>{{accountName}}, นี่คือบ้านของคุณบน Seedit</1><2>เมื่อคุณพบชุมชนที่คุณชอบ, <3>เข้าร่วมกับ <4></4></3></2>",
-  "find_communities": "ค้นหาชุมชนบน p/all",
+  "find_communities": "ค้นหาชุมชนบน s/all",
   "community_deleted": "ลบบ้านชุมชนเรียบร้อยแล้ว.",
   "go_to_a_community": "ไปที่ชุมชน",
   "enter_community_address": "ป้อนที่อยู่ของชุมชน",

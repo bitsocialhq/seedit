@@ -290,7 +290,7 @@
   "invalid_url_alert": "Ang ibinigay na link ay hindi isang wastong URL.",
   "empty_comment_alert": "Hindi makapag-post ng walang laman na komento.",
   "no_subscriptions_message": "<1>{{accountName}}, ito ang iyong tahanan sa Seedit</1><2>Kapag nakakita ka ng isang komunidad na gusto mo, <3>sumali gamit ang <4></4></3></2>",
-  "find_communities": "maghanap ng mga komunidad sa p/all",
+  "find_communities": "maghanap ng mga komunidad sa s/all",
   "community_deleted": "Matagumpay na natanggal ang komunidad.",
   "go_to_a_community": "Pumunta sa isang komunidad",
   "enter_community_address": "Ilagay ang isang address ng komunidad",
