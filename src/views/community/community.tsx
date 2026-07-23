@@ -224,7 +224,7 @@ const Footer = ({
         </>
       )}
       {footerSecondLine}
-      <FeedPagination feedLength={paginationFeedLength} hasMore={hasMore} onLoadMore={onLoadMore} />
+      <FeedPagination feedLength={paginationFeedLength} hasMore={hasMore} canLoadMore={isOnline} onLoadMore={onLoadMore} />
     </div>
   );
 };

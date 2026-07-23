@@ -33,4 +33,4 @@ interface ShouldShowFeedLoadingOptions {
 }
 
 export const shouldShowFeedLoading = ({ feedLength, hasMore, infiniteFeedEnabled }: ShouldShowFeedLoadingOptions): boolean =>
-  feedLength === 0 || infiniteFeedEnabled || !hasMore;
+  feedLength === 0 || (infiniteFeedEnabled && hasMore);

@@ -7,15 +7,16 @@ import styles from './feed-footer.module.css';
 interface FeedPaginationProps {
   feedLength: number;
   hasMore: boolean;
+  canLoadMore?: boolean;
   onLoadMore: () => void | Promise<void>;
 }
 
-const FeedPagination = ({ feedLength, hasMore, onLoadMore }: FeedPaginationProps) => {
+const FeedPagination = ({ feedLength, hasMore, canLoadMore = true, onLoadMore }: FeedPaginationProps) => {
   const { t } = useTranslation();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [isLoading, setIsLoading] = useState(false);
 
-  if (infiniteFeedEnabled || !hasMore || feedLength === 0) return null;
+  if (!canLoadMore || infiniteFeedEnabled || !hasMore || feedLength === 0) return null;
 
   const handleLoadMore = () => {
     if (isLoading) return;

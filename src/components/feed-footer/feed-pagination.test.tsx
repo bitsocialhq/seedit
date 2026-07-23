@@ -83,6 +83,14 @@ describe('FeedPagination', () => {
     expect(container.querySelector('button')).toBeNull();
   });
 
+  it('hides manual pagination when loading more is unavailable', async () => {
+    await act(async () => {
+      root.render(createElement(FeedPagination, { feedLength: 25, hasMore: true, canLoadMore: false, onLoadMore: vi.fn() }));
+    });
+
+    expect(container.querySelector('button')).toBeNull();
+  });
+
   it('hides manual pagination when infinite feed is enabled', async () => {
     paginationState.infiniteFeedEnabled = true;
 

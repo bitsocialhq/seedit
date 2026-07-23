@@ -53,4 +53,8 @@ describe('shouldShowFeedLoading', () => {
   it('hides the loading message once manual pagination can be used', () => {
     expect(shouldShowFeedLoading({ feedLength: 25, hasMore: true, infiniteFeedEnabled: false })).toBe(false);
   });
+
+  it.each([false, true])('hides the loading message when a feed is exhausted and infinite mode is %s', (infiniteFeedEnabled) => {
+    expect(shouldShowFeedLoading({ feedLength: 25, hasMore: false, infiniteFeedEnabled })).toBe(false);
+  });
 });
