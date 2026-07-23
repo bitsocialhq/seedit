@@ -1,7 +1,6 @@
 import { PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
 import { ChallengeVerification, Comment } from '@bitsocial/bitsocial-react-hooks';
 import { create } from 'zustand';
-import useChallengesStore from './use-challenges-store';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
 import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
 
@@ -15,8 +14,6 @@ type ReplyState = {
   setReplyStore: (comment: Comment) => void;
   resetReplyStore: (parentCid: string) => void;
 };
-
-const { addChallenge } = useChallengesStore.getState();
 
 const usePublishReplyStore = create<ReplyState>((set) => ({
   content: {},
@@ -37,7 +34,6 @@ const usePublishReplyStore = create<ReplyState>((set) => ({
         link,
         spoiler,
         nsfw,
-        onChallenge: (...args: any) => addChallenge(args),
         onChallengeVerification: (challengeVerification: ChallengeVerification, comment: Comment) => {
           alertChallengeVerificationFailed(challengeVerification, comment);
         },

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
@@ -14,6 +14,7 @@ import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscri
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import usePublishCommentWithChallengeAbandon from '../../hooks/use-publish-comment-with-challenge-abandon';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
 import Embed from '../../components/post/embed';
@@ -481,7 +482,7 @@ const SubmitPage = () => {
   const shortAddress = communityAddress && getShortDisplayAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
-  const { index, publishComment } = usePublishComment(publishCommentOptions);
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
 
   const onPublish = () => {
     if (!title) {

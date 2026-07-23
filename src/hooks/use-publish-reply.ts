@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { usePublishComment } from '@bitsocial/bitsocial-react-hooks';
 import usePublishReplyStore from '../stores/use-publish-reply-store';
+import usePublishCommentWithChallengeAbandon from './use-publish-comment-with-challenge-abandon';
 
 const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; communityAddress: string; postCid: string | undefined }) => {
   const parentCid = cid;
@@ -64,7 +64,7 @@ const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; comm
 
   const resetPublishReplyOptions = useMemo(() => () => resetReplyStore(parentCid), [parentCid, resetReplyStore]);
 
-  const { index, publishComment } = usePublishComment(publishCommentOptions);
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
 
   return { setPublishReplyOptions, resetPublishReplyOptions, replyIndex: index, publishReply: publishComment, publishReplyOptions };
 };

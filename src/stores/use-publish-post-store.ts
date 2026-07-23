@@ -1,10 +1,7 @@
 import { create } from 'zustand';
-import challengesStore from './use-challenges-store';
 import { Comment, PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
 import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
-
-const { addChallenge } = challengesStore.getState();
 
 type SubmitState = {
   communityAddress: string | undefined;
@@ -46,7 +43,6 @@ const usePublishPostStore = create<SubmitState>((set) => ({
         link: nextState.link,
         spoiler: nextState.spoiler,
         nsfw: nextState.nsfw,
-        onChallenge: (...args: any) => addChallenge(args),
         onChallengeVerification: alertChallengeVerificationFailed,
         onError: (error: Error) => {
           console.error(error);
