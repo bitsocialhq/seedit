@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { shouldShowEmptyFeed } from './feed-footer-utils';
+import { shouldShowEmptyFeed, shouldShowFeedLoading } from './feed-footer-utils';
 
 describe('shouldShowEmptyFeed', () => {
   it.each([0, 1, 60, 1000])('shows the empty state after all %i requested communities load even when pagination has more', (requestedCommunityCount) => {
@@ -42,5 +42,19 @@ describe('shouldShowEmptyFeed', () => {
     expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, isLoadingCommunityData: true })).toBe(false);
     expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, isSearching: true })).toBe(false);
     expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, searchQuery: 'query' })).toBe(false);
+  });
+});
+
+describe('shouldShowFeedLoading', () => {
+  it('keeps the loading message visible during the first manual page fetch', () => {
+    expect(shouldShowFeedLoading({ feedLength: 0, hasMore: true, infiniteFeedEnabled: false })).toBe(true);
+  });
+
+  it('hides the loading message once manual pagination can be used', () => {
+    expect(shouldShowFeedLoading({ feedLength: 25, hasMore: true, infiniteFeedEnabled: false })).toBe(false);
+  });
+
+  it.each([false, true])('hides the loading message when a feed is exhausted and infinite mode is %s', (infiniteFeedEnabled) => {
+    expect(shouldShowFeedLoading({ feedLength: 25, hasMore: false, infiniteFeedEnabled })).toBe(false);
   });
 });

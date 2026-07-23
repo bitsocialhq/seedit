@@ -16,9 +16,11 @@ import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommunityPath, isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
 import EmptyFeedMessage from '../../components/empty-feed-message/empty-feed-message';
+import FeedPagination from '../../components/feed-footer/feed-pagination';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
@@ -32,6 +34,7 @@ interface FooterProps {
   communityAddresses: string[];
   communityAddress: string;
   feedLength: number;
+  paginationFeedLength: number;
   isOnline: boolean;
   hasCommunityLoaded: boolean;
   started: boolean;
@@ -42,12 +45,14 @@ interface FooterProps {
   searchQuery: string;
   isSearching: boolean;
   setSearchParams: ReturnType<typeof useSearchParams>[1];
+  onLoadMore: () => void;
 }
 
 const Footer = ({
   communityAddresses,
   communityAddress,
   feedLength,
+  paginationFeedLength,
   isOnline,
   hasCommunityLoaded,
   started: _started,
@@ -58,12 +63,14 @@ const Footer = ({
   searchQuery,
   isSearching,
   setSearchParams,
+  onLoadMore,
 }: FooterProps) => {
   const { t } = useTranslation();
   let footerFirstLine;
   let footerSecondLine;
   const feedStateString = useFeedStateString(communityAddresses);
   const loadingStateString = feedStateString || t('loading');
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
@@ -187,9 +194,9 @@ const Footer = ({
     }
   } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString) {
     footerFirstLine = <EmptyFeedMessage />;
-  } else if (feedLength === 0 || !isOnline) {
+  } else if (paginationFeedLength === 0 || !isOnline) {
     footerFirstLine = loadingString;
-  } else if (hasMore) {
+  } else if (hasMore && infiniteFeedEnabled) {
     footerFirstLine = loadingString;
   }
 
@@ -217,6 +224,7 @@ const Footer = ({
         </>
       )}
       {footerSecondLine}
+      <FeedPagination feedLength={paginationFeedLength} hasMore={hasMore} canLoadMore={isOnline} onLoadMore={onLoadMore} />
     </div>
   );
 };
@@ -256,10 +264,12 @@ const CommunityView = () => {
   const timeFilterName = params.timeFilterName || 'all';
   const { timeFilterSeconds } = useTimeFilter();
   const { isSearching } = useFeedFiltersStore();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
   const feedOptions = useMemo(() => {
     const options: any = {
       communities: getCommunityIdentifiers(communityAddresses),
+      postsPerPage: FEED_POSTS_PER_PAGE,
       sortType,
       newerThan: searchQuery ? 0 : timeFilterSeconds,
     };
@@ -320,6 +330,7 @@ const CommunityView = () => {
     communityAddresses,
     communityAddress,
     feedLength: combinedFeed.length || 0,
+    paginationFeedLength: feed?.length ?? 0,
     isOnline,
     hasCommunityLoaded: Boolean(updatedAt),
     started,
@@ -330,6 +341,7 @@ const CommunityView = () => {
     searchQuery,
     isSearching,
     setSearchParams,
+    onLoadMore: loadMore,
   };
 
   // scrolling position state for virtuoso feed
@@ -401,7 +413,7 @@ const CommunityView = () => {
           itemContent={(index, post) => <Post key={post?.cid} index={index} post={post} />}
           useWindowScroll={true}
           components={{ Footer: () => <Footer {...footerProps} /> }}
-          endReached={loadMore}
+          endReached={infiniteFeedEnabled ? loadMore : undefined}
           ref={virtuosoRef}
           restoreStateFrom={lastVirtuosoState}
           initialScrollTop={lastVirtuosoState?.scrollTop}

@@ -4,6 +4,7 @@ import styles from './content-options.module.css';
 import useContentOptionsStore from '../../../stores/use-content-options-store';
 import { useDefaultSubscriptions } from '../../../hooks/use-default-subscriptions';
 import { handleNSFWSubscriptionPrompt } from '../../../lib/utils/nsfw-subscription-utils';
+import { useInfiniteFeedEnabled } from '../../../hooks/use-feed-pagination';
 
 const MediaOptions = () => {
   const { t } = useTranslation();
@@ -163,6 +164,21 @@ const CommunitiesOptions = () => {
   );
 };
 
+const FeedOptions = () => {
+  const { t } = useTranslation();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
+  const setInfiniteFeedEnabled = useContentOptionsStore((state) => state.setInfiniteFeedEnabled);
+
+  return (
+    <div className={styles.contentOptions}>
+      <label>
+        <input type='checkbox' checked={infiniteFeedEnabled} onChange={(event) => setInfiniteFeedEnabled(event.target.checked)} />
+        {t('enable_infinite_feed')}
+      </label>
+    </div>
+  );
+};
+
 const ContentOptions = () => {
   const { t } = useTranslation();
 
@@ -178,6 +194,12 @@ const ContentOptions = () => {
         <span className={styles.categoryTitle}>{t('communities')}</span>
         <span className={styles.categorySettings}>
           <CommunitiesOptions />
+        </span>
+      </div>
+      <div className={styles.category}>
+        <span className={styles.categoryTitle}>{t('feeds')}</span>
+        <span className={styles.categorySettings}>
+          <FeedOptions />
         </span>
       </div>
     </div>

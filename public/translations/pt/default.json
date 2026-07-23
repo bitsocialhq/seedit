@@ -401,5 +401,8 @@
   "keep_both_communities": "manter ambas",
   "keep_community": "manter {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} mudou, então o Seedit alterou sua assinatura de {{fromAddress}} para {{toAddress}}.",
-  "dismiss": "dispensar"
+  "dismiss": "dispensar",
+  "load_more": "Carregar mais",
+  "enable_infinite_feed": "Ativar feed infinito",
+  "feeds": "feeds"
 }

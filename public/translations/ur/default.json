@@ -401,5 +401,8 @@
   "keep_both_communities": "دونوں رکھیں",
   "keep_community": "{{communityAddress}} برقرار رکھیں",
   "directory_automatic_switch_notice": "s/{{directoryCode}} تبدیل ہو گیا، اس لیے Seedit نے آپ کی سبسکرپشن {{fromAddress}} سے {{toAddress}} پر منتقل کر دی۔",
-  "dismiss": "بند کریں"
+  "dismiss": "بند کریں",
+  "load_more": "مزید لوڈ کریں",
+  "enable_infinite_feed": "لامحدود فیڈ فعال کریں",
+  "feeds": "فیڈز"
 }

@@ -6,8 +6,10 @@ import { isAllView, isModView } from '../../lib/utils/view-utils';
 import { useCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import EmptyFeedMessage from '../empty-feed-message/empty-feed-message';
+import { useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
+import FeedPagination from './feed-pagination';
 import LoadingEllipsis from '../loading-ellipsis';
-import { shouldShowEmptyFeed } from './feed-footer-utils';
+import { shouldShowEmptyFeed, shouldShowFeedLoading } from './feed-footer-utils';
 import styles from './feed-footer.module.css';
 import React from 'react';
 
@@ -26,6 +28,7 @@ interface FeedFooterProps {
   isSearching?: boolean;
   showNoResults?: boolean;
   onClearSearch?: () => void;
+  onLoadMore: () => void;
 }
 
 const FeedFooter = ({
@@ -41,6 +44,7 @@ const FeedFooter = ({
   isSearching,
   showNoResults,
   onClearSearch,
+  onLoadMore,
 }: FeedFooterProps) => {
   let footerContent;
   const { t } = useTranslation();
@@ -48,6 +52,7 @@ const FeedFooter = ({
   const location = useLocation();
   const isInModView = isModView(location.pathname);
   const isInAllView = isAllView(location.pathname);
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
   const feedCommunityIdentifiers = useCommunityIdentifiers(communityAddresses);
   const { communities } = useCommunities({ communities: feedCommunityIdentifiers });
@@ -181,13 +186,20 @@ const FeedFooter = ({
               </div>
             )
           ) : !searchQuery ? (
-            <LoadingEllipsis string={feedStateString || loadingStateString} />
+            shouldShowFeedLoading({ feedLength, hasMore, infiniteFeedEnabled }) ? (
+              <LoadingEllipsis string={feedStateString || loadingStateString} />
+            ) : null
           ) : null}
         </div>
       </>
     );
   }
-  return <div className={styles.footer}>{footerContent}</div>;
+  return (
+    <div className={styles.footer}>
+      {footerContent}
+      <FeedPagination feedLength={feedLength} hasMore={hasMore} onLoadMore={onLoadMore} />
+    </div>
+  );
 };
 
 export default React.memo(FeedFooter);

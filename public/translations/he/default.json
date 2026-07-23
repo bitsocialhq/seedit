@@ -401,5 +401,8 @@
   "keep_both_communities": "להשאיר את שניהם",
   "keep_community": "להשאיר את {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} השתנה, ולכן Seedit החליף את המינוי שלך מ־{{fromAddress}} ל־{{toAddress}}.",
-  "dismiss": "סגירה"
+  "dismiss": "סגירה",
+  "load_more": "טען עוד",
+  "enable_infinite_feed": "הפעלת פיד אינסופי",
+  "feeds": "פידים"
 }

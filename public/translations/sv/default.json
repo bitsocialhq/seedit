@@ -401,5 +401,8 @@
   "keep_both_communities": "behåll båda",
   "keep_community": "behåll {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} ändrades, så Seedit bytte din prenumeration från {{fromAddress}} till {{toAddress}}.",
-  "dismiss": "Stäng"
+  "dismiss": "Stäng",
+  "load_more": "Ladda fler",
+  "enable_infinite_feed": "Aktivera oändligt flöde",
+  "feeds": "flöden"
 }

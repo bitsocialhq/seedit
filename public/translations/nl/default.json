@@ -401,5 +401,8 @@
   "keep_both_communities": "beide behouden",
   "keep_community": "{{communityAddress}} behouden",
   "directory_automatic_switch_notice": "s/{{directoryCode}} is gewijzigd, dus Seedit heeft je abonnement van {{fromAddress}} naar {{toAddress}} overgezet.",
-  "dismiss": "Sluiten"
+  "dismiss": "Sluiten",
+  "load_more": "Meer laden",
+  "enable_infinite_feed": "Oneindige feed inschakelen",
+  "feeds": "feeds"
 }

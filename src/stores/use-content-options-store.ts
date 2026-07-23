@@ -14,6 +14,8 @@ interface ContentOptionsState {
   setAutoplayVideosOnComments: (autoplay: boolean) => void;
   muteVideosOnComments: boolean;
   setMuteVideosOnComments: (mute: boolean) => void;
+  infiniteFeedEnabled: boolean | null;
+  setInfiniteFeedEnabled: (enabled: boolean) => void;
 }
 
 interface ContentOptionsStore extends ContentOptionsState {
@@ -37,6 +39,7 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
       mediaPreviewOption: 'autoExpandAll',
       autoplayVideosOnComments: true,
       muteVideosOnComments: true,
+      infiniteFeedEnabled: null,
       setBlurNsfwThumbnails: (blur) => set({ blurNsfwThumbnails: blur }),
       setHideNsfwCommunities: (hide) => set({ hideNsfwCommunities: hide }),
       setHasAcceptedWarning: (value) => set({ hasAcceptedWarning: value }),
@@ -46,6 +49,7 @@ const useContentOptionsStore = create<ContentOptionsStore>()(
       setMediaPreviewOption: (option) => set({ mediaPreviewOption: option }),
       setAutoplayVideosOnComments: (autoplay) => set({ autoplayVideosOnComments: autoplay }),
       setMuteVideosOnComments: (mute) => set({ muteVideosOnComments: mute }),
+      setInfiniteFeedEnabled: (enabled) => set({ infiniteFeedEnabled: enabled }),
     }),
     {
       name: 'content-options',

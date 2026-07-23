@@ -401,5 +401,8 @@
   "keep_both_communities": "behold begge",
   "keep_community": "behold {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} ble endret, så Seedit byttet abonnementet ditt fra {{fromAddress}} til {{toAddress}}.",
-  "dismiss": "Lukk"
+  "dismiss": "Lukk",
+  "load_more": "Last inn mer",
+  "enable_infinite_feed": "Aktiver uendelig feed",
+  "feeds": "feeder"
 }

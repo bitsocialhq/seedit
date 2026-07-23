@@ -401,5 +401,8 @@
   "keep_both_communities": "διατήρηση και των δύο",
   "keep_community": "διατήρηση του {{communityAddress}}",
   "directory_automatic_switch_notice": "Το s/{{directoryCode}} άλλαξε, οπότε το Seedit μετέφερε τη συνδρομή σας από το {{fromAddress}} στο {{toAddress}}.",
-  "dismiss": "Κλείσιμο"
+  "dismiss": "Κλείσιμο",
+  "load_more": "Φόρτωση περισσότερων",
+  "enable_infinite_feed": "Ενεργοποίηση ατελείωτης ροής",
+  "feeds": "ροές"
 }

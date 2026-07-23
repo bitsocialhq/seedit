@@ -25,3 +25,12 @@ export const shouldShowEmptyFeed = ({
 
   return haveAllRequestedCommunitiesLoaded && feedLength === 0 && !isLoadingCommunityData && !isSearching && !searchQuery;
 };
+
+interface ShouldShowFeedLoadingOptions {
+  feedLength: number;
+  hasMore: boolean;
+  infiniteFeedEnabled: boolean;
+}
+
+export const shouldShowFeedLoading = ({ feedLength, hasMore, infiniteFeedEnabled }: ShouldShowFeedLoadingOptions): boolean =>
+  feedLength === 0 || (infiniteFeedEnabled && hasMore);

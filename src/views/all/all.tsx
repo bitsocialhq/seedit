@@ -7,6 +7,7 @@ import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -48,12 +49,14 @@ const All = () => {
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
 
   const { isSearching } = useFeedFiltersStore();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   const feedOptions = useMemo(() => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
+      postsPerPage: FEED_POSTS_PER_PAGE,
       sortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
@@ -130,13 +133,14 @@ const All = () => {
   });
 
   // Combined loadMore function for better performance when sort type isn't 'top'
-  const combinedLoadMore = () => {
-    loadMore();
+  const combinedLoadMore = async () => {
+    const loadMorePromises = [loadMore()];
     if (sortType !== 'top') {
-      if (hasMoreWeekly) loadMoreWeekly();
-      if (hasMoreMonthly) loadMoreMonthly();
-      if (hasMoreYearly) loadMoreYearly();
+      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
+      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
+      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
     }
+    await Promise.all(loadMorePromises);
   };
 
   const documentTitle = 'seedit: ' + t('all_communities');
@@ -161,7 +165,7 @@ const All = () => {
   const lastVirtuosoState = lastVirtuosoStates?.[sortType + currentTimeFilterName + 'all' + searchQuery];
 
   const footerProps = {
-    feedLength: feed?.length,
+    feedLength: feed?.length ?? 0,
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
@@ -174,6 +178,7 @@ const All = () => {
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
+    onLoadMore: combinedLoadMore,
   };
 
   const handleClearSearch = () => {
@@ -228,7 +233,7 @@ const All = () => {
               itemContent={(index, post) => <Post key={post?.cid} index={index} post={post} />}
               useWindowScroll={true}
               components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-              endReached={combinedLoadMore}
+              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

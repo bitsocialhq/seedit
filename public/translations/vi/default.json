@@ -401,5 +401,8 @@
   "keep_both_communities": "giữ cả hai",
   "keep_community": "giữ {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} đã thay đổi, vì vậy Seedit đã chuyển đăng ký của bạn từ {{fromAddress}} sang {{toAddress}}.",
-  "dismiss": "Đóng"
+  "dismiss": "Đóng",
+  "load_more": "Tải thêm",
+  "enable_infinite_feed": "Bật bảng tin vô hạn",
+  "feeds": "bảng tin"
 }

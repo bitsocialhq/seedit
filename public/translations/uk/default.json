@@ -401,5 +401,8 @@
   "keep_both_communities": "залишити обидві",
   "keep_community": "залишити {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} змінився, тому Seedit перемкнув вашу підписку з {{fromAddress}} на {{toAddress}}.",
-  "dismiss": "Закрити"
+  "dismiss": "Закрити",
+  "load_more": "Завантажити ще",
+  "enable_infinite_feed": "Увімкнути нескінченну стрічку",
+  "feeds": "стрічки"
 }
