@@ -9,7 +9,7 @@ import EmptyFeedMessage from '../empty-feed-message/empty-feed-message';
 import { useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedPagination from './feed-pagination';
 import LoadingEllipsis from '../loading-ellipsis';
-import { shouldShowEmptyFeed } from './feed-footer-utils';
+import { shouldShowEmptyFeed, shouldShowFeedLoading } from './feed-footer-utils';
 import styles from './feed-footer.module.css';
 import React from 'react';
 
@@ -186,7 +186,7 @@ const FeedFooter = ({
               </div>
             )
           ) : !searchQuery ? (
-            infiniteFeedEnabled || !hasMore ? (
+            shouldShowFeedLoading({ feedLength, hasMore, infiniteFeedEnabled }) ? (
               <LoadingEllipsis string={feedStateString || loadingStateString} />
             ) : null
           ) : null}
