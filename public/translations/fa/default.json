@@ -290,7 +290,7 @@
   "invalid_url_alert": "لینک ارائه شده یک URL معتبر نیست.",
   "empty_comment_alert": "نمی‌توان نظر خالی ارسال کرد.",
   "no_subscriptions_message": "<1>{{accountName}}, این خانه شما در Seedit است</1><2>وقتی جامعه‌ای که دوست دارید پیدا کردید، <3>با <4></4></3></2> به آن بپیوندید",
-  "find_communities": "یافتن جوامع در p/all",
+  "find_communities": "یافتن جوامع در s/all",
   "community_deleted": "جامعه با موفقیت حذف شد.",
   "go_to_a_community": "برو به یک جامعه",
   "enter_community_address": "آدرس جامعه را وارد کنید",

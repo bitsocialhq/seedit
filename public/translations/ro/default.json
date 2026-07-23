@@ -290,7 +290,7 @@
   "invalid_url_alert": "Linkul furnizat nu este un URL valid.",
   "empty_comment_alert": "Nu se poate publica un comentariu gol.",
   "no_subscriptions_message": "<1>{{accountName}}, aceasta este casa ta pe Seedit</1><2>Când găsești o comunitate care îți place, <3>alătură-te cu <4></4></3></2>",
-  "find_communities": "găsiți comunități pe p/all",
+  "find_communities": "găsiți comunități pe s/all",
   "community_deleted": "Comunitatea a fost ștearsă cu succes.",
   "go_to_a_community": "Mergi într-o comunitate",
   "enter_community_address": "Introduceți o adresă de comunitate",

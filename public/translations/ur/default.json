@@ -290,7 +290,7 @@
   "invalid_url_alert": "فراہم کردہ لنک درست URL نہیں ہے۔",
   "empty_comment_alert": "خالی تبصرہ پوسٹ نہیں کیا جا سکتا۔",
   "no_subscriptions_message": "<1>{{accountName}}, یہ Seedit پر آپ کا گھر ہے</1><2>جب آپ کوئی کمیونٹی پائیں جو آپ کو پسند ہو، <3>اس سے جڑیں <4></4></3></2>",
-  "find_communities": "p/all پر کمیونٹیز تلاش کریں",
+  "find_communities": "s/all پر کمیونٹیز تلاش کریں",
   "community_deleted": "کمیونٹی کامیابی کے ساتھ حذف ہوگئی۔",
   "go_to_a_community": "کمیونٹی میں جائیں",
   "enter_community_address": "کمیونٹی کا پتہ درج کریں",

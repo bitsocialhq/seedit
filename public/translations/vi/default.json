@@ -290,7 +290,7 @@
   "invalid_url_alert": "Liên kết được cung cấp không phải là một URL hợp lệ.",
   "empty_comment_alert": "Không thể đăng bình luận trống.",
   "no_subscriptions_message": "<1>{{accountName}}, đây là nhà của bạn trên Seedit</1><2>Khi bạn tìm thấy một cộng đồng mà bạn thích, <3>gia nhập với <4></4></3></2>",
-  "find_communities": "tìm cộng đồng trên p/all",
+  "find_communities": "tìm cộng đồng trên s/all",
   "community_deleted": "Cộng đồng đã được xóa thành công.",
   "go_to_a_community": "Đi đến một cộng đồng",
   "enter_community_address": "Nhập địa chỉ cộng đồng",

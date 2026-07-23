@@ -290,7 +290,7 @@
   "invalid_url_alert": "Den angivna länken är inte en giltig URL.",
   "empty_comment_alert": "Kan inte posta tom kommentar.",
   "no_subscriptions_message": "<1>{{accountName}}, detta är ditt hem på Seedit</1><2>När du hittar ett samhälle du gillar, <3>gå med i <4></4></3></2>",
-  "find_communities": "hitta gemenskaper på p/all",
+  "find_communities": "hitta gemenskaper på s/all",
   "community_deleted": "Community raderades framgångsrikt.",
   "go_to_a_community": "Gå till ett samhälle",
   "enter_community_address": "Ange en gemenskapsadress",

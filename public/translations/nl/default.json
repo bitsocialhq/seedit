@@ -290,7 +290,7 @@
   "invalid_url_alert": "De opgegeven link is geen geldige URL.",
   "empty_comment_alert": "Kan geen lege opmerking plaatsen.",
   "no_subscriptions_message": "<1>{{accountName}}, dit is je thuis op Seedit</1><2>Wanneer je een gemeenschap vindt die je leuk vindt, <3>meld je aan met de <4></4></3></2>",
-  "find_communities": "vind gemeenschappen op p/all",
+  "find_communities": "vind gemeenschappen op s/all",
   "community_deleted": "Gemeente succesvol verwijderd.",
   "go_to_a_community": "Ga naar een community",
   "enter_community_address": "Voer een gemeenschapsadres in",

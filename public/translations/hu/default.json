@@ -290,7 +290,7 @@
   "invalid_url_alert": "A megadott hivatkozás nem érvényes URL.",
   "empty_comment_alert": "Üres hozzászólást nem lehet közzétenni.",
   "no_subscriptions_message": "<1>{{accountName}}, ez a te otthonod a Seedit-en</1><2>Amikor találsz egy közösséget, amit szeretsz, <3>csatlakozz a <4></4></3></2>",
-  "find_communities": "keressen közösségeket a p/all-on",
+  "find_communities": "keressen közösségeket a s/all-on",
   "community_deleted": "A közösség sikeresen törölve lett.",
   "go_to_a_community": "Menj egy közösségbe",
   "enter_community_address": "Adjon meg egy közösségi címet",

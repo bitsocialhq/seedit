@@ -290,7 +290,7 @@
   "invalid_url_alert": "Podany link nie jest poprawnym adresem URL.",
   "empty_comment_alert": "Nie można opublikować pustego komentarza.",
   "no_subscriptions_message": "<1>{{accountName}}, to jest twój dom na Seedit</1><2>Kiedy znajdziesz społeczność, którą lubisz, <3>dołącz do <4></4></3></2>",
-  "find_communities": "znajdź społeczności na p/all",
+  "find_communities": "znajdź społeczności na s/all",
   "community_deleted": "Społeczność została pomyślnie usunięta.",
   "go_to_a_community": "Przejdź do społeczności",
   "enter_community_address": "Wprowadź adres społeczności",

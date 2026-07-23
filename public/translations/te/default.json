@@ -290,7 +290,7 @@
   "invalid_url_alert": "నివేదిక ఇవ్వబడిన లింక్ చెల్లుబాటులో లేని URL.",
   "empty_comment_alert": "ఖాళీ వ్యాఖ్యను పోస్ట్ చేయలేరు.",
   "no_subscriptions_message": "<1>{{accountName}}, ఇది Seedit లోని మీ ఇంటి స్థలము</1><2>మీకు నచ్చే సముదాయాన్ని కనుగొంటే, <3>దానికి జత చేయండి <4></4></3></2>",
-  "find_communities": "p/all పై కమ్యూనిటీస్ కనుగొనండి",
+  "find_communities": "s/all పై కమ్యూనిటీస్ కనుగొనండి",
   "community_deleted": "కమ్యూనిటీ విజయవంతంగా డిలీట్ అయింది.",
   "go_to_a_community": "ఒక కమ్యూనిటీలోకి వెళ్లి",
   "enter_community_address": "ఒక కమ్యూనిటీ చిరునామా నమోదు చేయండి",

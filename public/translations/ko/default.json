@@ -290,7 +290,7 @@
   "invalid_url_alert": "제공된 링크는 유효한 URL이 아닙니다.",
   "empty_comment_alert": "빈 댓글을 게시할 수 없습니다.",
   "no_subscriptions_message": "<1>{{accountName}}, 이것은 Seedit에서의 당신의 집입니다</1><2>당신이 좋아하는 커뮤니티를 찾으면, <3>그 커뮤니티에 가입하세요 <4></4></3></2>",
-  "find_communities": "p/all에서 커뮤니티 찾기",
+  "find_communities": "s/all에서 커뮤니티 찾기",
   "community_deleted": "커뮤니티가 성공적으로 삭제되었습니다.",
   "go_to_a_community": "커뮤니티로 이동",
   "enter_community_address": "커뮤니티 주소를 입력하세요",

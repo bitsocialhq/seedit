@@ -290,7 +290,7 @@
   "invalid_url_alert": "الرابط المقدم ليس عنوان URL صالحًا.",
   "empty_comment_alert": "لا يمكن نشر تعليق فارغ.",
   "no_subscriptions_message": "<1>{{accountName}}, هذه هي الصفحة الرئيسية الخاصة بك على Seedit</1><2>عندما تجد مجتمعًا يعجبك، <3>انضم إلى <4></4></3></2>",
-  "find_communities": "ابحث عن المجتمعات على p/all",
+  "find_communities": "ابحث عن المجتمعات على s/all",
   "community_deleted": "تم حذف المجتمع بنجاح.",
   "go_to_a_community": "اذهب إلى مجتمع",
   "enter_community_address": "أدخل عنوان المجتمع",
