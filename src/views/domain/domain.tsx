@@ -155,7 +155,7 @@ const Domain = () => {
   const lastVirtuosoState = lastVirtuosoStates?.[sortType + currentTimeFilterName + 'domain'];
 
   const footerProps = {
-    feedLength: feed?.length,
+    feedLength: feed?.length ?? 0,
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,

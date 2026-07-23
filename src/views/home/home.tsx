@@ -157,13 +157,14 @@ const Home = () => {
     newerThan: 60 * 60 * 24 * 365,
   });
 
-  const combinedLoadMore = useCallback(() => {
-    loadMore();
+  const combinedLoadMore = useCallback(async () => {
+    const loadMorePromises = [loadMore()];
     if (shouldLoadAdditionalFeeds) {
-      if (hasMoreWeekly) loadMoreWeekly();
-      if (hasMoreMonthly) loadMoreMonthly();
-      if (hasMoreYearly) loadMoreYearly();
+      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
+      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
+      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
     }
+    await Promise.all(loadMorePromises);
   }, [loadMore, shouldLoadAdditionalFeeds, hasMoreWeekly, loadMoreWeekly, hasMoreMonthly, loadMoreMonthly, hasMoreYearly, loadMoreYearly]);
 
   const virtuosoRef = useRef<VirtuosoHandle | null>(null);
@@ -201,7 +202,7 @@ const Home = () => {
 
   const footerProps = useMemo(
     () => ({
-      feedLength: feed?.length,
+      feedLength: feed?.length ?? 0,
       hasFeedLoaded: !!feed,
       hasMore,
       communityAddresses,

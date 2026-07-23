@@ -97,13 +97,14 @@ const Mod = () => {
   });
 
   // Combined loadMore function for better performance when sort type isn't 'top'
-  const combinedLoadMore = () => {
-    loadMore();
+  const combinedLoadMore = async () => {
+    const loadMorePromises = [loadMore()];
     if (sortType !== 'top') {
-      if (hasMoreWeekly) loadMoreWeekly();
-      if (hasMoreMonthly) loadMoreMonthly();
-      if (hasMoreYearly) loadMoreYearly();
+      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
+      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
+      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
     }
+    await Promise.all(loadMorePromises);
   };
 
   // Reset no results state when search query changes
@@ -154,7 +155,7 @@ const Mod = () => {
   const lastVirtuosoState = lastVirtuosoStates?.[sortType + currentTimeFilterName + 'mod' + searchQuery];
 
   const footerProps = {
-    feedLength: feed?.length,
+    feedLength: feed?.length ?? 0,
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,

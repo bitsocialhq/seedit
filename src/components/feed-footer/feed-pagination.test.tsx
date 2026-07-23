@@ -49,6 +49,40 @@ describe('FeedPagination', () => {
     expect(onLoadMore).toHaveBeenCalledOnce();
   });
 
+  it('shows loading feedback and prevents repeated loads until the next page resolves', async () => {
+    let resolveLoadMore: (() => void) | undefined;
+    const onLoadMore = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveLoadMore = resolve;
+        }),
+    );
+
+    await act(async () => {
+      root.render(createElement(FeedPagination, { feedLength: 25, hasMore: true, onLoadMore }));
+    });
+
+    await act(async () => {
+      container.querySelector('button')?.click();
+    });
+
+    expect(container.querySelector('button')).toBeNull();
+    expect(container.textContent).toContain('looking_for_more_posts');
+    expect(onLoadMore).toHaveBeenCalledOnce();
+
+    await act(async () => resolveLoadMore?.());
+
+    expect(container.querySelector('button')?.textContent).toBe('load_more');
+  });
+
+  it('hides manual pagination until the first page exists', async () => {
+    await act(async () => {
+      root.render(createElement(FeedPagination, { feedLength: 0, hasMore: true, onLoadMore: vi.fn() }));
+    });
+
+    expect(container.querySelector('button')).toBeNull();
+  });
+
   it('hides manual pagination when infinite feed is enabled', async () => {
     paginationState.infiniteFeedEnabled = true;
 
