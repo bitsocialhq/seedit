@@ -401,5 +401,8 @@
   "keep_both_communities": "ponechat obě",
   "keep_community": "ponechat {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} se změnilo, takže Seedit převedl vaše předplatné z {{fromAddress}} na {{toAddress}}.",
-  "dismiss": "Zavřít"
+  "dismiss": "Zavřít",
+  "load_more": "Načíst další",
+  "enable_infinite_feed": "Povolit nekonečný kanál",
+  "feeds": "kanály"
 }

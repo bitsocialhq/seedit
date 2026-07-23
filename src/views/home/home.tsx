@@ -8,6 +8,7 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
+import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useStarterCommunityList } from '../../hooks/use-default-subscriptions';
 import FeedFooter from '../../components/feed-footer';
@@ -65,6 +66,7 @@ const Home = () => {
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
 
   const { isSearching } = useFeedFiltersStore();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
@@ -79,7 +81,7 @@ const Home = () => {
   const feedOptions = useMemo(() => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
-      postsPerPage: 10,
+      postsPerPage: FEED_POSTS_PER_PAGE,
       sortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
@@ -213,6 +215,7 @@ const Home = () => {
       isSearching,
       showNoResults,
       onClearSearch,
+      onLoadMore: combinedLoadMore,
     }),
     [
       feed,
@@ -228,6 +231,7 @@ const Home = () => {
       isSearching,
       showNoResults,
       onClearSearch,
+      combinedLoadMore,
     ],
   );
 
@@ -301,7 +305,7 @@ const Home = () => {
               components={{
                 Footer: () => <FeedFooter {...footerProps} />,
               }}
-              endReached={combinedLoadMore}
+              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

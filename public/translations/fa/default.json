@@ -401,5 +401,8 @@
   "keep_both_communities": "هر دو را نگه دارید",
   "keep_community": "حفظ {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} تغییر کرد، بنابراین Seedit اشتراک شما را از {{fromAddress}} به {{toAddress}} منتقل کرد.",
-  "dismiss": "بستن"
+  "dismiss": "بستن",
+  "load_more": "بارگذاری بیشتر",
+  "enable_infinite_feed": "فعال‌سازی خوراک بی‌نهایت",
+  "feeds": "فیدها"
 }

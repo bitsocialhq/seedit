@@ -401,5 +401,8 @@
   "keep_both_communities": "両方を維持",
   "keep_community": "{{communityAddress}}を維持する",
   "directory_automatic_switch_notice": "s/{{directoryCode}} が変更されたため、Seedit がサブスクリプションを {{fromAddress}} から {{toAddress}} に切り替えました。",
-  "dismiss": "閉じる"
+  "dismiss": "閉じる",
+  "load_more": "さらに読み込む",
+  "enable_infinite_feed": "無限フィードを有効にする",
+  "feeds": "フィード"
 }

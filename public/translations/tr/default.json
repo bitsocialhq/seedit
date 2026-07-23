@@ -401,5 +401,8 @@
   "keep_both_communities": "ikisini de tut",
   "keep_community": "{{communityAddress}} topluluğunu koru",
   "directory_automatic_switch_notice": "s/{{directoryCode}} değişti, bu nedenle Seedit aboneliğinizi {{fromAddress}} adresinden {{toAddress}} adresine geçirdi.",
-  "dismiss": "Kapat"
+  "dismiss": "Kapat",
+  "load_more": "Daha fazla yükle",
+  "enable_infinite_feed": "Sonsuz akışı etkinleştir",
+  "feeds": "akışlar"
 }

@@ -401,5 +401,8 @@
   "keep_both_communities": "mbaji të dyja",
   "keep_community": "mbaj {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} ndryshoi, ndaj Seedit e kaloi abonimin tënd nga {{fromAddress}} te {{toAddress}}.",
-  "dismiss": "Mbyll"
+  "dismiss": "Mbyll",
+  "load_more": "Ngarko më shumë",
+  "enable_infinite_feed": "Aktivizo feed-in e pafund",
+  "feeds": "prurjet"
 }

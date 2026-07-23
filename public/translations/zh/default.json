@@ -401,5 +401,8 @@
   "keep_both_communities": "两者都保留",
   "keep_community": "保留 {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} 已更改，因此 Seedit 已将你的订阅从 {{fromAddress}} 切换到 {{toAddress}}。",
-  "dismiss": "关闭"
+  "dismiss": "关闭",
+  "load_more": "加载更多",
+  "enable_infinite_feed": "启用无限信息流",
+  "feeds": "信息流"
 }

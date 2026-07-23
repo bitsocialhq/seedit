@@ -401,5 +401,8 @@
   "keep_both_communities": "రెండింటినీ ఉంచు",
   "keep_community": "{{communityAddress}}ను అలాగే ఉంచండి",
   "directory_automatic_switch_notice": "s/{{directoryCode}} మారింది, కాబట్టి Seedit మీ సబ్‌స్క్రిప్షన్‌ను {{fromAddress}} నుండి {{toAddress}}కి మార్చింది.",
-  "dismiss": "మూసివేయి"
+  "dismiss": "మూసివేయి",
+  "load_more": "మరిన్ని లోడ్ చేయండి",
+  "enable_infinite_feed": "అనంత ఫీడ్‌ను ప్రారంభించండి",
+  "feeds": "ఫీడ్‌లు"
 }

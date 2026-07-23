@@ -401,5 +401,8 @@
   "keep_both_communities": "الاحتفاظ بكليهما",
   "keep_community": "الاحتفاظ بـ {{communityAddress}}",
   "directory_automatic_switch_notice": "تغيّر s/{{directoryCode}}، لذا حوّل Seedit اشتراكك من {{fromAddress}} إلى {{toAddress}}.",
-  "dismiss": "تجاهل"
+  "dismiss": "تجاهل",
+  "load_more": "تحميل المزيد",
+  "enable_infinite_feed": "تمكين الخلاصة اللانهائية",
+  "feeds": "الخلاصات"
 }

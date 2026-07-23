@@ -401,5 +401,8 @@
   "keep_both_communities": "conservar ambas",
   "keep_community": "conservar {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} cambió, así que Seedit cambió tu suscripción de {{fromAddress}} a {{toAddress}}.",
-  "dismiss": "descartar"
+  "dismiss": "descartar",
+  "load_more": "Cargar más",
+  "enable_infinite_feed": "Activar feed infinito",
+  "feeds": "feeds"
 }

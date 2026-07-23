@@ -7,6 +7,7 @@ import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -48,12 +49,14 @@ const All = () => {
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
 
   const { isSearching } = useFeedFiltersStore();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   const feedOptions = useMemo(() => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
+      postsPerPage: FEED_POSTS_PER_PAGE,
       sortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
@@ -174,6 +177,7 @@ const All = () => {
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
+    onLoadMore: combinedLoadMore,
   };
 
   const handleClearSearch = () => {
@@ -228,7 +232,7 @@ const All = () => {
               itemContent={(index, post) => <Post key={post?.cid} index={index} post={post} />}
               useWindowScroll={true}
               components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-              endReached={combinedLoadMore}
+              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

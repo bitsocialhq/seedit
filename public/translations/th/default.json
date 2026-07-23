@@ -401,5 +401,8 @@
   "keep_both_communities": "เก็บไว้ทั้งคู่",
   "keep_community": "เก็บ {{communityAddress}} ไว้",
   "directory_automatic_switch_notice": "s/{{directoryCode}} มีการเปลี่ยนแปลง ดังนั้น Seedit จึงเปลี่ยนการสมัครของคุณจาก {{fromAddress}} เป็น {{toAddress}}",
-  "dismiss": "ปิด"
+  "dismiss": "ปิด",
+  "load_more": "โหลดเพิ่มเติม",
+  "enable_infinite_feed": "เปิดใช้งานฟีดแบบไม่สิ้นสุด",
+  "feeds": "ฟีด"
 }

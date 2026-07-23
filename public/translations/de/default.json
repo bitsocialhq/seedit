@@ -401,5 +401,8 @@
   "keep_both_communities": "beide behalten",
   "keep_community": "{{communityAddress}} behalten",
   "directory_automatic_switch_notice": "s/{{directoryCode}} hat sich geändert, daher hat Seedit dein Abonnement von {{fromAddress}} zu {{toAddress}} gewechselt.",
-  "dismiss": "Ausblenden"
+  "dismiss": "Ausblenden",
+  "load_more": "Mehr laden",
+  "enable_infinite_feed": "Endlosen Feed aktivieren",
+  "feeds": "Feeds"
 }

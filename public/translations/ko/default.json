@@ -401,5 +401,8 @@
   "keep_both_communities": "둘 다 유지",
   "keep_community": "{{communityAddress}} 유지",
   "directory_automatic_switch_notice": "s/{{directoryCode}}의 추천이 변경되어 Seedit에서 구독 대상을 {{fromAddress}}에서 {{toAddress}}로 전환했습니다.",
-  "dismiss": "닫기"
+  "dismiss": "닫기",
+  "load_more": "더 불러오기",
+  "enable_infinite_feed": "무한 피드 활성화",
+  "feeds": "피드"
 }

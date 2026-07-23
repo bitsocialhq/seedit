@@ -401,5 +401,8 @@
   "keep_both_communities": "दोन्ही ठेवा",
   "keep_community": "{{communityAddress}} ठेवा",
   "directory_automatic_switch_notice": "s/{{directoryCode}} बदलले, त्यामुळे Seedit ने तुमचे सदस्यत्व {{fromAddress}} वरून {{toAddress}} वर बदलले.",
-  "dismiss": "बंद करा"
+  "dismiss": "बंद करा",
+  "load_more": "आणखी लोड करा",
+  "enable_infinite_feed": "अमर्याद फीड सुरू करा",
+  "feeds": "फीड"
 }

@@ -401,5 +401,8 @@
   "keep_both_communities": "দুটিই রাখুন",
   "keep_community": "{{communityAddress}} রাখুন",
   "directory_automatic_switch_notice": "s/{{directoryCode}} পরিবর্তিত হয়েছে, তাই Seedit আপনার সাবস্ক্রিপশন {{fromAddress}} থেকে {{toAddress}}-এ পরিবর্তন করেছে।",
-  "dismiss": "খারিজ করুন"
+  "dismiss": "খারিজ করুন",
+  "load_more": "আরও লোড করুন",
+  "enable_infinite_feed": "অসীম ফিড চালু করুন",
+  "feeds": "ফিডসমূহ"
 }

@@ -6,6 +6,7 @@ import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
@@ -28,6 +29,7 @@ const Domain = () => {
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
   const { isSearching } = useFeedFiltersStore();
+  const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [showNoResults, setShowNoResults] = useState(false);
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
@@ -67,11 +69,13 @@ const Domain = () => {
 
     const options: {
       newerThan: number;
+      postsPerPage: number;
       sortType: string;
       communities: ReturnType<typeof getCommunityIdentifiers>;
       filter: CommentsFilter;
     } = {
       newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
+      postsPerPage: FEED_POSTS_PER_PAGE,
       sortType,
       communities: getCommunityIdentifiers(communityAddresses),
       filter: { filter: filterFunc, key: filterKey },
@@ -165,6 +169,7 @@ const Domain = () => {
     isSearching,
     showNoResults,
     domain,
+    onLoadMore: loadMore,
   };
 
   const handleClearSearch = () => {
@@ -220,7 +225,7 @@ const Domain = () => {
             itemContent={(index, post) => <Post index={index} post={post} />}
             useWindowScroll={true}
             components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-            endReached={loadMore}
+            endReached={infiniteFeedEnabled ? loadMore : undefined}
             ref={virtuosoRef}
             restoreStateFrom={lastVirtuosoState}
             initialScrollTop={lastVirtuosoState?.scrollTop}

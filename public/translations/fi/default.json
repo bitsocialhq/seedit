@@ -401,5 +401,8 @@
   "keep_both_communities": "pidä molemmat",
   "keep_community": "säilytä {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} muuttui, joten Seedit vaihtoi tilauksesi yhteisöstä {{fromAddress}} yhteisöön {{toAddress}}.",
-  "dismiss": "Sulje"
+  "dismiss": "Sulje",
+  "load_more": "Lataa lisää",
+  "enable_infinite_feed": "Ota loputon syöte käyttöön",
+  "feeds": "syötteet"
 }

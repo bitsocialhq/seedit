@@ -401,5 +401,8 @@
   "keep_both_communities": "simpan keduanya",
   "keep_community": "pertahankan {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} berubah, jadi Seedit mengalihkan langganan Anda dari {{fromAddress}} ke {{toAddress}}.",
-  "dismiss": "Tutup"
+  "dismiss": "Tutup",
+  "load_more": "Muat lebih banyak",
+  "enable_infinite_feed": "Aktifkan feed tanpa batas",
+  "feeds": "feed"
 }

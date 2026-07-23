@@ -401,5 +401,8 @@
   "keep_both_communities": "panatilihin pareho",
   "keep_community": "panatilihin ang {{communityAddress}}",
   "directory_automatic_switch_notice": "Nagbago ang s/{{directoryCode}}, kaya inilipat ng Seedit ang subscription mo mula {{fromAddress}} papuntang {{toAddress}}.",
-  "dismiss": "Isara"
+  "dismiss": "Isara",
+  "load_more": "Mag-load pa",
+  "enable_infinite_feed": "I-enable ang walang katapusang feed",
+  "feeds": "mga feed"
 }

@@ -401,5 +401,8 @@
   "keep_both_communities": "păstrează-le pe ambele",
   "keep_community": "păstrează {{communityAddress}}",
   "directory_automatic_switch_notice": "s/{{directoryCode}} s-a schimbat, așa că Seedit ți-a mutat abonamentul de la {{fromAddress}} la {{toAddress}}.",
-  "dismiss": "Închide"
+  "dismiss": "Închide",
+  "load_more": "Încarcă mai multe",
+  "enable_infinite_feed": "Activează fluxul infinit",
+  "feeds": "fluxuri"
 }
