@@ -14,16 +14,6 @@ describe('usePublishPostStore', () => {
       communityAddress: 'interestingasfuck.bso',
       title: 'Test post',
     });
-    expect(Object.keys(publishCommentOptions).sort()).toEqual([
-      'communityAddress',
-      'content',
-      'link',
-      'nsfw',
-      'onChallenge',
-      'onChallengeVerification',
-      'onError',
-      'spoiler',
-      'title',
-    ]);
+    expect(Object.keys(publishCommentOptions).sort()).toEqual(['communityAddress', 'content', 'link', 'nsfw', 'onChallengeVerification', 'onError', 'spoiler', 'title']);
   });
 });

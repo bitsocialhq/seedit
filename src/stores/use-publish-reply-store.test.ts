@@ -26,7 +26,6 @@ describe('usePublishReplyStore', () => {
       'content',
       'link',
       'nsfw',
-      'onChallenge',
       'onChallengeVerification',
       'onError',
       'parentCid',

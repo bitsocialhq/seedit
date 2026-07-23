@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/addre
 import { isValidURL } from '../../lib/utils/url-utils';
 import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
+import useChallengesStore from '../../stores/use-challenges-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
@@ -470,6 +471,11 @@ const SubmitPage = () => {
   const navigate = useNavigate();
 
   const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
+  const addChallenge = useChallengesStore((state) => state.addChallenge);
+  const abandonPublishRef = useRef<(() => Promise<void>) | undefined>(undefined);
+  const abandonCurrentPublish = useCallback(async () => {
+    await abandonPublishRef.current?.();
+  }, []);
   const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
 
   useEffect(() => {
@@ -481,7 +487,19 @@ const SubmitPage = () => {
   const shortAddress = communityAddress && getShortDisplayAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
-  const { index, publishComment } = usePublishComment(publishCommentOptions);
+  const publishOptionsWithAbandon = useMemo(
+    () => ({
+      ...publishCommentOptions,
+      onChallenge: async (...args: any[]) => {
+        addChallenge(args, abandonCurrentPublish);
+      },
+    }),
+    [abandonCurrentPublish, addChallenge, publishCommentOptions],
+  );
+  const { index, publishComment, abandonPublish } = usePublishComment(publishOptionsWithAbandon);
+  useEffect(() => {
+    abandonPublishRef.current = abandonPublish;
+  }, [abandonPublish]);
 
   const onPublish = () => {
     if (!title) {

@@ -41,9 +41,10 @@ const ChallengeHeader = ({ publicationType, votePreview, parentCid, parentAddres
 interface RegularChallengeContentProps {
   challenge: ChallengeType;
   closeModal: () => void;
+  abandonModal: () => void;
 }
 
-const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeContentProps) => {
+const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: RegularChallengeContentProps) => {
   const { t } = useTranslation();
   const account = useAccount();
   const [theme] = useTheme();
@@ -92,7 +93,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     closeModal();
   }, [challenge, answers, closeModal]);
 
-  const onIframeClose = useCallback(() => {
+  const onIframeDone = useCallback(() => {
     // Submit empty string as answer for iframe challenges
     challenge[1].publishChallengeAnswers(['']);
     closeModal();
@@ -163,7 +164,7 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     } catch (error) {
       console.error('Invalid iframe challenge URL', { error });
       alert('Error: Invalid URL for authentication challenge');
-      closeModal();
+      abandonModal();
     }
   };
 
@@ -196,20 +197,6 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
     }
   }, [iframeOrigin, iframeUrlState, sendThemeToIframe, showIframeConfirmation]);
 
-  useEffect(() => {
-    const onEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isIframeChallenge) {
-          onIframeClose();
-        } else {
-          closeModal();
-        }
-      }
-    };
-    document.addEventListener('keydown', onEscapeKey);
-    return () => document.removeEventListener('keydown', onEscapeKey);
-  }, [isIframeChallenge, onIframeClose, closeModal]);
-
   const communityShortAddress = getDisplayAddress(shortCommunityAddress || shortSubplebbitAddress || communityAddress || subplebbitAddress || '');
 
   // Render iframe challenge
@@ -238,8 +225,12 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
             </div>
             <div className={styles.challengeFooter}>
               <span className={styles.buttons}>
-                <button onClick={handleLoadIframe}>{t('open', { defaultValue: 'open' })}</button>
-                <button onClick={closeModal}>{t('cancel')}</button>
+                <button type='button' onClick={handleLoadIframe}>
+                  {t('open', { defaultValue: 'open' })}
+                </button>
+                <button type='button' onClick={abandonModal}>
+                  {t('cancel')}
+                </button>
               </span>
             </div>
           </>
@@ -260,7 +251,9 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
                 {t('iframe_challenge_keep_open', { defaultValue: 'Complete the challenge in the box above. Keep this window open until done.' })}
               </div>
               <div className={styles.iframeCloseButton}>
-                <button onClick={onIframeClose}>{t('done', { defaultValue: 'done' })}</button>
+                <button type='button' onClick={onIframeDone}>
+                  {t('done', { defaultValue: 'done' })}
+                </button>
               </div>
             </div>
           </>
@@ -299,42 +292,52 @@ const RegularChallengeContent = ({ challenge, closeModal }: RegularChallengeCont
         <div className={styles.counter}>{t('challenge_counter', { index: currentChallengeIndex + 1, total: challenges?.length })}</div>
         <span className={styles.buttons}>
           {!challenges?.[currentChallengeIndex + 1] && (
-            <button onClick={onSubmit} disabled={!isValidAnswer(currentChallengeIndex)}>
+            <button type='button' onClick={onSubmit} disabled={!isValidAnswer(currentChallengeIndex)}>
               {t('submit')}
             </button>
           )}
-          <button onClick={closeModal}>{t('cancel')}</button>
+          <button type='button' onClick={abandonModal}>
+            {t('cancel')}
+          </button>
           {challenges && challenges.length > 1 && (
-            <button disabled={!challenges[currentChallengeIndex - 1]} onClick={() => setCurrentChallengeIndex((prev) => prev - 1)}>
+            <button type='button' disabled={!challenges[currentChallengeIndex - 1]} onClick={() => setCurrentChallengeIndex((prev) => prev - 1)}>
               {t('previous')}
             </button>
           )}
-          {challenges?.[currentChallengeIndex + 1] && <button onClick={() => setCurrentChallengeIndex((prev) => prev + 1)}>{t('next')}</button>}
+          {challenges?.[currentChallengeIndex + 1] && (
+            <button type='button' onClick={() => setCurrentChallengeIndex((prev) => prev + 1)}>
+              {t('next')}
+            </button>
+          )}
         </span>
       </div>
     </>
   );
 };
 
-const ChallengeContent = ({ challenge, closeModal }: { challenge?: ChallengeType; closeModal: () => void }) => {
+const ChallengeContent = ({ challenge, closeModal, abandonModal }: { challenge?: ChallengeType; closeModal: () => void; abandonModal: () => void }) => {
   if (challenge) {
-    return <RegularChallengeContent challenge={challenge} closeModal={closeModal} />;
+    return <RegularChallengeContent challenge={challenge} closeModal={closeModal} abandonModal={abandonModal} />;
   }
 
   return null;
 };
 
 const ChallengeModal = () => {
-  const { challenges, removeChallenge } = useChallengesStore();
+  const { challenges, removeChallenge, abandonCurrentChallenge } = useChallengesStore();
 
   const isOpen = !!challenges.length;
-  const closeModal = () => {
-    removeChallenge();
+  const closeModal = () => removeChallenge();
+  const abandonModal = () => {
+    void abandonCurrentChallenge();
   };
+  const currentChallenge = challenges[0];
 
   const { refs, context } = useFloating({
     open: isOpen,
-    onOpenChange: closeModal,
+    onOpenChange: (open) => {
+      if (!open) abandonModal();
+    },
   });
   const click = useClick(context);
   const dismiss = useDismiss(context, { outsidePress: false });
@@ -344,11 +347,11 @@ const ChallengeModal = () => {
 
   return (
     <>
-      {isOpen && (
+      {isOpen && currentChallenge && (
         <FloatingFocusManager context={context} modal={false}>
           <div className={styles.modal} ref={refs.setFloating} aria-labelledby={headingId} {...getFloatingProps()}>
             <div className={styles.container}>
-              <ChallengeContent challenge={challenges[0]} closeModal={closeModal} />
+              <ChallengeContent key={currentChallenge.id} challenge={currentChallenge.challenge} closeModal={closeModal} abandonModal={abandonModal} />
             </div>
           </div>
         </FloatingFocusManager>
