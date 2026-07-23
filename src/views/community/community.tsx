@@ -34,6 +34,7 @@ interface FooterProps {
   communityAddresses: string[];
   communityAddress: string;
   feedLength: number;
+  paginationFeedLength: number;
   isOnline: boolean;
   hasCommunityLoaded: boolean;
   started: boolean;
@@ -51,6 +52,7 @@ const Footer = ({
   communityAddresses,
   communityAddress,
   feedLength,
+  paginationFeedLength,
   isOnline,
   hasCommunityLoaded,
   started: _started,
@@ -192,7 +194,7 @@ const Footer = ({
     }
   } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString) {
     footerFirstLine = <EmptyFeedMessage />;
-  } else if (feedLength === 0 || !isOnline) {
+  } else if (paginationFeedLength === 0 || !isOnline) {
     footerFirstLine = loadingString;
   } else if (hasMore && infiniteFeedEnabled) {
     footerFirstLine = loadingString;
@@ -222,7 +224,7 @@ const Footer = ({
         </>
       )}
       {footerSecondLine}
-      <FeedPagination feedLength={feedLength} hasMore={hasMore} onLoadMore={onLoadMore} />
+      <FeedPagination feedLength={paginationFeedLength} hasMore={hasMore} onLoadMore={onLoadMore} />
     </div>
   );
 };
@@ -328,6 +330,7 @@ const CommunityView = () => {
     communityAddresses,
     communityAddress,
     feedLength: combinedFeed.length || 0,
+    paginationFeedLength: feed?.length ?? 0,
     isOnline,
     hasCommunityLoaded: Boolean(updatedAt),
     started,
