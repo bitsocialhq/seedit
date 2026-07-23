@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAccount, usePublishComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
@@ -10,11 +10,11 @@ import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/addre
 import { isValidURL } from '../../lib/utils/url-utils';
 import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import usePublishPostStore from '../../stores/use-publish-post-store';
-import useChallengesStore from '../../stores/use-challenges-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import usePublishCommentWithChallengeAbandon from '../../hooks/use-publish-comment-with-challenge-abandon';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Markdown from '../../components/markdown';
 import Embed from '../../components/post/embed';
@@ -471,11 +471,6 @@ const SubmitPage = () => {
   const navigate = useNavigate();
 
   const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
-  const addChallenge = useChallengesStore((state) => state.addChallenge);
-  const abandonPublishRef = useRef<(() => Promise<void>) | undefined>(undefined);
-  const abandonCurrentPublish = useCallback(async () => {
-    await abandonPublishRef.current?.();
-  }, []);
   const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
 
   useEffect(() => {
@@ -487,19 +482,7 @@ const SubmitPage = () => {
   const shortAddress = communityAddress && getShortDisplayAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
-  const publishOptionsWithAbandon = useMemo(
-    () => ({
-      ...publishCommentOptions,
-      onChallenge: async (...args: any[]) => {
-        addChallenge(args, abandonCurrentPublish);
-      },
-    }),
-    [abandonCurrentPublish, addChallenge, publishCommentOptions],
-  );
-  const { index, publishComment, abandonPublish } = usePublishComment(publishOptionsWithAbandon);
-  useEffect(() => {
-    abandonPublishRef.current = abandonPublish;
-  }, [abandonPublish]);
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
 
   const onPublish = () => {
     if (!title) {

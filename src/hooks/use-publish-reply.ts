@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { usePublishComment } from '@bitsocial/bitsocial-react-hooks';
+import { useMemo } from 'react';
 import usePublishReplyStore from '../stores/use-publish-reply-store';
-import useChallengesStore from '../stores/use-challenges-store';
+import usePublishCommentWithChallengeAbandon from './use-publish-comment-with-challenge-abandon';
 
 const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; communityAddress: string; postCid: string | undefined }) => {
   const parentCid = cid;
@@ -16,11 +15,6 @@ const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; comm
 
   const setReplyStore = usePublishReplyStore((state) => state.setReplyStore);
   const resetReplyStore = usePublishReplyStore((state) => state.resetReplyStore);
-  const addChallenge = useChallengesStore((state) => state.addChallenge);
-  const abandonPublishRef = useRef<(() => Promise<void>) | undefined>(undefined);
-  const abandonCurrentPublish = useCallback(async () => {
-    await abandonPublishRef.current?.();
-  }, []);
 
   const setPublishReplyOptions = useMemo(
     () => ({
@@ -70,20 +64,7 @@ const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; comm
 
   const resetPublishReplyOptions = useMemo(() => () => resetReplyStore(parentCid), [parentCid, resetReplyStore]);
 
-  const publishOptionsWithAbandon = useMemo(
-    () => ({
-      ...publishCommentOptions,
-      onChallenge: async (...args: any[]) => {
-        addChallenge(args, abandonCurrentPublish);
-      },
-    }),
-    [abandonCurrentPublish, addChallenge, publishCommentOptions],
-  );
-
-  const { index, publishComment, abandonPublish } = usePublishComment(publishOptionsWithAbandon);
-  useEffect(() => {
-    abandonPublishRef.current = abandonPublish;
-  }, [abandonPublish]);
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
 
   return { setPublishReplyOptions, resetPublishReplyOptions, replyIndex: index, publishReply: publishComment, publishReplyOptions };
 };
