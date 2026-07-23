@@ -1,6 +1,6 @@
 ---
 name: review-and-merge-pr
-description: Review an open GitHub pull request, inspect feedback from Cursor Bugbot, CodeRabbit, CI, and human reviewers, decide which findings are valid, implement fixes on the PR branch, merge the PR into master when it is ready, and finalize any linked GitHub issue so it matches the make-closed-issue workflow after merge. Use when the user says "check the PR", "address bugbot comments", "handle CodeRabbit feedback", "review PR feedback", or "merge this PR".
+description: Review an open GitHub pull request, inspect feedback from Cursor Bugbot, CodeRabbit, CI, and human reviewers, decide which findings are valid, implement fixes on the PR branch, and merge the PR into master when it is ready. Use when the user says "check the PR", "address bugbot comments", "handle CodeRabbit feedback", "review PR feedback", or "merge this PR".
 ---
 
 # Review And Merge Pr
@@ -11,6 +11,7 @@ Use this skill after a feature branch already has an open PR into `master`.
 Stay on the PR branch, treat review bots as input rather than authority, and only merge once the branch is verified and the remaining comments are either fixed, explicitly deferred, or explicitly declined with a reason.
 Do not let repeated nitpicks, speculative future-work comments, or low-value bot suggestions keep the PR open once they have been triaged as non-blocking.
 Finish the workflow by cleaning up local git state yourself; do not assume GitHub, `gh pr merge --delete-branch`, or GitHub Desktop removed the local feature branch or any local `pr/<number>` alias.
+Do not create or update GitHub issues or projects as part of this workflow.
 
 ## Workflow
 
@@ -18,7 +19,7 @@ Finish the workflow by cleaning up local git state yourself; do not assume GitHu
 
 Prefer the PR for the current branch when the branch is not `master`.
 If the current branch is `master`, inspect open PRs and choose the one that matches the user request.
-If there is no open PR yet, stop and use `make-closed-issue` first.
+If there is no open PR yet, stop and report that this skill requires an existing PR.
 
 Useful commands:
 
@@ -120,45 +121,7 @@ Preferred merge command:
 gh pr merge <pr-number> --repo bitsocialnet/seedit --squash --delete-branch
 ```
 
-### 7. Finalize linked issues to match `make-closed-issue`
-
-After merge, inspect the PR's linked closing issues.
-For every linked issue, bring it into the same final state expected from `make-closed-issue`:
-
-- closed
-- assigned to the current GitHub user
-
-Before editing issue assignees, determine the current contributor's GitHub username from the authenticated `gh` session.
-If `gh` is not signed in or cannot resolve the login, stop and ask the contributor for their GitHub username before proceeding.
-If the PR has no linked issue, explicitly tell the user that there was no associated issue to finalize.
-
-Useful commands:
-
-```bash
-GH_LOGIN=$(gh api user --jq '.login' 2>/dev/null || true)
-
-if [ -z "$GH_LOGIN" ]; then
-  echo "GitHub username could not be determined from gh auth. Ask the contributor for their GitHub username before proceeding."
-  exit 1
-fi
-
-ISSUE_NUMBERS=$(gh pr view <pr-number> --repo bitsocialnet/seedit --json closingIssuesReferences --jq '.closingIssuesReferences[].number')
-
-if [ -n "$ISSUE_NUMBERS" ]; then
-  for ISSUE_NUMBER in $ISSUE_NUMBERS; do
-    ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --repo bitsocialnet/seedit --json state --jq '.state')
-    if [ "$ISSUE_STATE" != "CLOSED" ]; then
-      gh issue close "$ISSUE_NUMBER" --repo bitsocialnet/seedit
-    fi
-
-    if ! gh issue view "$ISSUE_NUMBER" --repo bitsocialnet/seedit --json assignees --jq '.assignees[].login' | grep -qx "$GH_LOGIN"; then
-      gh issue edit "$ISSUE_NUMBER" --repo bitsocialnet/seedit --add-assignee "$GH_LOGIN"
-    fi
-  done
-fi
-```
-
-### 8. Clean up local state after merge
+### 7. Clean up local state after merge
 
 After the PR is merged:
 
@@ -181,7 +144,7 @@ git worktree list
 git worktree remove /path/to/worktree
 ```
 
-### 9. Report the outcome
+### 8. Report the outcome
 
 Tell the user:
 
@@ -190,7 +153,5 @@ Tell the user:
 - which findings were declined and why
 - which verification commands ran
 - whether the PR was merged
-- whether linked issues were confirmed closed
-- whether linked issues were assigned to the current GitHub user
 - whether stale remote-tracking refs were pruned
 - whether the feature branch, local `pr/<number>` alias, and any worktree were cleaned up

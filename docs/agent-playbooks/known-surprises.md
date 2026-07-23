@@ -28,6 +28,16 @@ If uncertain, ask the developer before adding an entry.
 
 ## Entries
 
+### PR review/merge workflow is independent of GitHub issues and Projects
+
+- **Date:** 2026-07-23
+- **Observed by:** Tommaso + Claude
+- **Context:** porting the `review-and-merge-pr` skill fix from `bitsocial-react-hooks`, where a merged PR was finalized against workflow state the repo no longer uses
+- **What was surprising:** the `review-and-merge-pr` skill still closed and re-assigned linked issues after merge, even though the review/merge workflow should stay independent of issue management.
+- **Impact:** agents can spend time mutating issue state nobody asked for, or report a successful merge as incomplete when issue finalization fails.
+- **Mitigation:** keep pull-request review and merge workflows independent of GitHub issues and Projects; only create or manage an issue when the user explicitly requests one (for example via `make-closed-issue`).
+- **Status:** confirmed
+
 ### Portless 0.11 reuses legacy proxy state unless the launcher forces HTTPS
 
 - **Date:** 2026-04-28
