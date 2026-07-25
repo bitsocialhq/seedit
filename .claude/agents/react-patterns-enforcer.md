@@ -1,6 +1,5 @@
 ---
 name: react-patterns-enforcer
-model: sonnet
 description: Reviews React code for anti-pattern violations specific to the seedit project (useState/useEffect misuse, missing Zustand, copy-pasted logic) and fixes them. Use after writing or modifying React components, hooks, or state management code.
 ---
 

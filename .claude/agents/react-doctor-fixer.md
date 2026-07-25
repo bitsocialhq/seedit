@@ -1,6 +1,5 @@
 ---
 name: react-doctor-fixer
-model: sonnet
 description: Fixes React issues identified by react-doctor. Use when the parent agent has validated a react-doctor diagnostic and has a detailed fix plan. The parent agent provides the plan; this subagent implements the fix and re-runs react-doctor to verify.
 ---
 
