@@ -91,7 +91,7 @@ After code changes, follow repo verification rules from `AGENTS.md`:
 - run `yarn build`, `yarn lint`, and `yarn type-check`
 - run `yarn test` after adding or changing tests
 - run the repo-standard verification commands after React UI logic changes, plus browser checks for visible UI changes
-- use `playwright-cli` for UI/visual changes across `chrome`, `firefox`, and `webkit`, plus a mobile viewport flow in each engine when relevant
+- use `./scripts/pw-session.sh` for UI/visual changes across `chrome`, `firefox`, and `webkit` sequentially, plus a mobile viewport flow in each engine when relevant
 
 ### 5. Report back on the PR before merging
 

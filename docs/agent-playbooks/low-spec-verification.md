@@ -29,7 +29,7 @@ CDP throttling is **Chromium-only**. Run Firefox and WebKit checks unthrottled.
 ## Usage
 
 ```bash
-playwright-cli -s=lowspec open https://seedit.localhost --browser=chrome
+./scripts/pw-session.sh open lowspec https://seedit.localhost --browser=chrome
 ./scripts/pw-throttle.sh lowspec mid
 playwright-cli -s=lowspec snapshot
 playwright-cli -s=lowspec screenshot --filename=lowspec-mid.png
@@ -38,7 +38,7 @@ playwright-cli -s=lowspec screenshot --filename=lowspec-mid.png
 ./scripts/pw-throttle.sh lowspec cpu4
 
 ./scripts/pw-throttle.sh lowspec off
-playwright-cli -s=lowspec close
+./scripts/pw-session.sh close lowspec
 ```
 
 For a non-`master` worktree, use the branch-scoped `*.seedit.localhost` URL printed by `yarn start`.
@@ -58,6 +58,7 @@ Seedit is a React Router SPA, so in-app route changes do not create new navigati
 ## Caveats
 
 - Chromium-only; keep Firefox and WebKit unthrottled.
+- Low-spec emulation is a measurement pass, not a machine-resource control. Hold the machine-wide browser slot for the whole pass and close it immediately afterward.
 - The `low` profile is intentionally aggressive. Fall back to `mid` if decentralized requests time out rather than treating the timeout alone as a rendering regression.
 - Separate network delay from render cost with `cpu4` or `cpu6`.
 - For rerender hotspots, use the `profile-browsing` skill on the already-throttled session.

@@ -30,8 +30,10 @@ Since each `goto` creates a new document, data resets per route — collect **be
 Open a blank page, inject instrumentation via `addInitScript` (runs before any page script in every new document), then navigate:
 
 ```bash
-playwright-cli -s=SESSION open about:blank
+./scripts/pw-session.sh open SESSION about:blank
 ```
+
+If the wrapper exits 75 another browser workflow owns the slot. Block on `./scripts/pw-session.sh open --wait SESSION about:blank`, or report that to the parent and stop. Never bypass the lock.
 
 ```bash
 playwright-cli -s=SESSION run-code "async page => await page.addInitScript(() => {
@@ -93,7 +95,7 @@ playwright-cli -s=SESSION console error
 playwright-cli -s=SESSION console warning
 playwright-cli -s=SESSION network
 playwright-cli -s=SESSION tracing-stop
-playwright-cli -s=SESSION close
+./scripts/pw-session.sh close SESSION
 ```
 
 ### Step 4: Analyze and Report
@@ -166,6 +168,7 @@ Routes profiled: /route1, /route2, ...
 - If `__getReactScanReport` returns null, note "react-scan report unavailable" and rely on commit counts
 - If a route has no content or fails to load, note it in Info and move on
 - **Always stop tracing and close the browser when done, even on errors** — wrap your workflow in a try/finally mindset: if any step fails, still run `tracing-stop` and `close`
+- Never use `playwright-cli close-all` or `kill-all`; they can terminate another agent's session
 - Communities are addressed directly in routes as `/s/<community-address>`; `/s/all` aggregates the default communities
 - High commit counts without long tasks = frequent cheap rerenders — still worth fixing for efficiency
 - React-scan report pinpoints exact components — prioritize these in recommendations
