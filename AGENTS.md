@@ -53,7 +53,7 @@ When CodeGraph MCP tools are available and `.codegraph/` exists, prefer them for
 |---|---|
 | New UI designed or styled, or any visual/component/theme work (`src/components`, `src/views`, CSS modules, `src/themes.css`) | Read `DESIGN.md` first and follow it; self-review the diff against its Do/Don't list before verifying. Seedit is compact and old.reddit-inspired: dense rows, square legacy controls, theme tokens, familiar link hierarchy, and a practical sidebar rather than generic dashboard cards |
 | React UI logic changed (`src/components`, `src/views`, `src/hooks`, UI stores) | Follow React architecture rules below; review the changed diff with `vercel-react-best-practices` and `vercel:react-best-practices` when available, fix valid findings, then run `yarn build`, `yarn lint`, `yarn type-check`, and `yarn doctor` |
-| Visible UI or interaction changed | Verify in browser with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari; test desktop and mobile viewport; if existing browser state matters, confirm whether to use a fresh session or the contributor's current browser session |
+| Visible UI or interaction changed | Verify in browser with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari; use `./scripts/pw-session.sh` so only one browser is active machine-wide, run engines sequentially, reuse each session for desktop/mobile, and close it before opening the next; test desktop and mobile viewport; if existing browser state matters, confirm whether to use a fresh session or the contributor's current browser session |
 | Loading, navigation, feed rendering, or interaction speed matters (or performance may only look good on a fast dev machine) | Run a low-spec pass: throttle a Chromium `playwright-cli` session with `./scripts/pw-throttle.sh <session> mid` (or `low`), then verify. Chromium only. See `docs/agent-playbooks/low-spec-verification.md` |
 | `package.json` changed | Run `corepack yarn install` to keep `yarn.lock` in sync |
 | Dependencies or import graph changed | Run `yarn knip` as an advisory manifest/import audit |
@@ -160,8 +160,12 @@ src/
 - Treat React Doctor output as actionable guidance; prioritize `error` then `warning`.
 - After adding or changing tests, run `yarn test`.
 - Do not commit or force-add local rebuild output. `build/` is the main generated build output in this repo; remove or restore generated output directories after local verification before committing.
-- For UI/visual changes, verify with `playwright-cli` across Chrome/Blink, Firefox/Gecko, and WebKit/Safari.
+- For UI/visual changes, use Chrome/Blink for iterative checks, then perform final verification across Chrome/Blink, Firefox/Gecko, and WebKit/Safari.
 - Cover desktop and a mobile viewport flow in each browser engine when the change affects layout, touch behavior, or responsiveness.
+- Browser automation has a machine-wide resource budget of one active Playwright browser session, shared by every worktree. Use `./scripts/pw-session.sh open <session> ...` to acquire the slot, reuse that session for desktop and mobile, then run `./scripts/pw-session.sh close <session>` in a finally-style cleanup before opening another engine.
+- Run browser engines and profiler batches sequentially. Do not spawn browser-driving agents in parallel. When `open` exits 75 the slot is busy: finish non-browser checks first, or block on `./scripts/pw-session.sh open --wait[=SECONDS] <session> ...`, rather than bypassing the lock.
+- Use short, task-specific session names. Close the exact named session even when verification fails; `close` stops the browser even if the lock was already lost. Do not use `playwright-cli close-all` or `kill-all` while concurrent agents may own other sessions.
+- A lock left behind by an interrupted workflow is reclaimed automatically by the next `open` once its browser is gone. Run `./scripts/pw-session.sh status` before assuming the slot is stuck; it reports whether the holder's browser is still alive.
 - When loading, navigation, feed rendering, or interaction speed matters, run a throttled Chromium pass with `./scripts/pw-throttle.sh <session> mid` (or `low`). Keep Firefox and WebKit checks unthrottled. See `docs/agent-playbooks/low-spec-verification.md`.
 - For browser automation and verification, default to a fresh isolated `playwright-cli` session for reproducibility.
 - If the task depends on existing auth, cookies, extensions, open tabs, or another live browser state, explicitly confirm whether to use a fresh isolated session or the contributor's current browser session.
@@ -206,7 +210,7 @@ src/
 ## Core SHOULD Rules
 
 - Keep context lean: delegate heavy/verbose tasks to subprocesses when available.
-- For complex work, parallelize independent checks.
+- For complex work, parallelize independent checks, except browser-driving checks, which must respect the machine-wide single-session resource budget.
 - Add or update tests for bug fixes and non-trivial logic changes when the code is reasonably testable.
 - When touching already-covered code, prefer extending nearby tests so measured coverage does not regress without a clear reason.
 - Use `yarn knip` when adding/removing dependencies or introducing new direct imports; treat findings as advisory, but resolve real issues before finishing.
@@ -240,6 +244,7 @@ yarn doctor
 yarn doctor:score
 yarn doctor:verbose
 yarn ai-workflow:check
+./scripts/pw-session.sh status
 ./scripts/create-task-worktree.sh chore ai-workflow-improvement
 ./scripts/agent-init.sh
 ```

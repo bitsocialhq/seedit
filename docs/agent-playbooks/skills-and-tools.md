@@ -53,7 +53,19 @@ When using `playwright-cli` for repo UI verification, run the relevant flow in a
 - `firefox` for Gecko
 - `webkit` for Safari/WebKit coverage
 
-Use separate named sessions per engine so results stay isolated. If an engine is intentionally skipped, record why.
+Use separate named sessions per engine so results stay isolated, but run those sessions sequentially. Only one Playwright browser session may be active at a time, machine-wide, because the contended resource is machine RAM and CPU rather than the repository. Open and close sessions through `./scripts/pw-session.sh`; it holds that shared lock so concurrent agents defer and retry browser work instead of saturating the machine. If an engine is intentionally skipped, record why.
+
+During iteration, use Chrome/Blink only. Run the full Chrome, Firefox, and WebKit sequence once the change is ready for final verification. Reuse each engine session for desktop and mobile by resizing it, close it in a finally-style cleanup, and only then open the next engine. Do not run profiler batches in parallel, and do not use `close-all` or `kill-all` while other agents may be active.
+
+```bash
+./scripts/pw-session.sh open verify-chrome https://seedit.localhost --browser=chrome
+playwright-cli -s=verify-chrome snapshot
+playwright-cli -s=verify-chrome resize 375 812
+playwright-cli -s=verify-chrome snapshot
+./scripts/pw-session.sh close verify-chrome
+```
+
+When the slot is busy, `open` exits 75; block on `./scripts/pw-session.sh open --wait[=SECONDS] ...` (default 300s) instead of retrying by hand. A lock left behind by an interrupted workflow is reclaimed automatically, because `open` drops any slot whose recorded browser is no longer running. Inspect the holder with `./scripts/pw-session.sh status`; `release <session>` is a last resort for the rare case where `status` cannot verify the browser state.
 
 ```bash
 npm install -g @playwright/cli@latest

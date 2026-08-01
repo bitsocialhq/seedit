@@ -1,6 +1,6 @@
 ---
 name: profile-browsing
-description: Profile app performance while browsing, collecting Web Vitals and React rerender data via react-scan. Orchestrates parallel profiler subagents via playwright-cli to capture navigation timing, long tasks, layout shifts, LCP, React commit counts, render bursts, and per-component render data. Use when profiling browsing performance, finding bottlenecks, diagnosing excessive rerenders, or auditing page performance.
+description: Profile app performance while browsing, collecting Web Vitals and React rerender data via react-scan. Orchestrates sequential profiler subagents via playwright-cli to capture navigation timing, long tasks, layout shifts, LCP, React commit counts, render bursts, and per-component render data. Use when profiling browsing performance, finding bottlenecks, diagnosing excessive rerenders, or auditing page performance.
 ---
 
 # Profile Browsing Performance
@@ -40,7 +40,7 @@ curl -sf https://seedit.localhost -o /dev/null && echo "OK" || echo "NOT RUNNING
 
 ## Step 1: Define Route Batches
 
-Split routes into batches of 2–4 for parallel profiling.
+Split routes into batches of 2–4 for sequential profiling. Give every batch a short task-specific session name so unrelated profiling runs cannot collide.
 
 **Default batches** (adjust boards as needed):
 
@@ -66,7 +66,7 @@ For each batch, create a subagent request that includes:
 
 Spawn up to 4 subagents simultaneously. Each opens its own browser session, navigates routes, scrolls, collects both Web Vitals and react-scan data per route, and returns a structured issues list.
 
-**Trade-off:** Parallel is faster but may skew timing results under heavy machine load. For precise measurements, spawn sequentially.
+Wait for each profiler to close its browser and return results before spawning the next batch. Never run profiler or browser-check subagents concurrently: competing browser sessions both saturate the machine and invalidate timing measurements.
 
 ## Step 3: Merge Results
 
@@ -145,11 +145,10 @@ ps aux | grep 'vite.*--port' | grep -v grep
 Also close any leftover playwright-cli sessions:
 
 ```bash
-# Close any profiling sessions that weren't properly closed
-playwright-cli -s=prof-1 close 2>/dev/null
-playwright-cli -s=prof-2 close 2>/dev/null
-playwright-cli -s=prof-3 close 2>/dev/null
+./scripts/pw-session.sh status
 ```
+
+If a failed profiler still owns the slot, close that exact recorded session with `./scripts/pw-session.sh close <session>`. A slot whose browser already died is reclaimed by the next `open`, so it needs no manual cleanup. Never use `close-all` or `kill-all` during concurrent agent work.
 
 ## Notes
 

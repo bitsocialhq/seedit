@@ -33,6 +33,7 @@ Batch 3 (parallel): [tasks that depend on batch 2]
 **Rules:**
 
 - Max 4 concurrent subagents, to bound machine load and coordination overhead
+- Never parallelize browser-driving work. Queue browser checks behind the machine-wide `./scripts/pw-session.sh` lock and run them sequentially after implementation work.
 - Tasks touching the same file(s) go in the same subagent or sequential batches — never parallel
 - Small related tasks can be grouped into one subagent to reduce overhead
 - Large independent tasks get their own subagent
@@ -66,7 +67,7 @@ After all batches complete:
 1. Run `yarn build` to confirm everything compiles
 2. Run `yarn lint` and `yarn type-check`
 3. If the plan touched React components/hooks, run the repo-standard verification commands and add `yarn test` when runtime behavior or tests changed
-4. For UI changes, verify in the browser with `playwright-cli` across `chrome`, `firefox`, and `webkit`, plus a mobile viewport flow in each engine when relevant
+4. For UI changes, verify with `./scripts/pw-session.sh` across `chrome`, `firefox`, and `webkit` sequentially, reusing each engine session for the mobile viewport flow when relevant and closing it before opening the next
 
 ### 6. Report
 
@@ -92,5 +93,5 @@ Summarize to the user:
 
 - **You orchestrate, subagents implement.** Don't code changes yourself unless it's a trivial one-liner fix for a subagent failure.
 - **Context is precious.** Every build log and file read you do in the main thread is context you can't get back. Delegate liberally.
-- **Parallelize aggressively.** The faster batches finish, the faster the plan is done. Only serialize when dependencies demand it.
+- **Parallelize non-browser work aggressively.** Browser-driving work is always serialized by the machine-wide resource lock, even when tasks are otherwise independent.
 - **Verify at the end, not in between.** Subagents run their own build checks. You do a final holistic verification.

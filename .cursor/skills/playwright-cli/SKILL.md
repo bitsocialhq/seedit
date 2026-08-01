@@ -1,10 +1,23 @@
 ---
 name: playwright-cli
 description: Automates browser interactions for web testing, form filling, screenshots, and data extraction. Use when the user needs to navigate websites, interact with web pages, fill forms, take screenshots, test web applications, or extract information from web pages.
-allowed-tools: Bash(playwright-cli:*)
+allowed-tools: Bash(playwright-cli:*), Bash(./scripts/pw-session.sh:*)
 ---
 
 # Browser Automation with playwright-cli
+
+## Resource Budget (MUST)
+
+One Playwright browser session may be active at a time, machine-wide. The budget is shared by every worktree and by any other checkout that ships this wrapper, because the contended resource is machine RAM and CPU rather than the repository. Playwright disables normal background throttling, so hidden seedit pages keep P2P and rendering work active after a check.
+
+- During iteration, use Chrome/Blink only. Run the full cross-browser matrix once the change is ready for final verification.
+- Open every fresh session through `./scripts/pw-session.sh open <session> ...`; it acquires the shared browser slot.
+- Reuse the same engine session for desktop and mobile by resizing it.
+- Close it with `./scripts/pw-session.sh close <session>` in a finally-style cleanup before opening another engine. `close` stops the browser even when the lock was already lost, so it is always the right cleanup call.
+- Run browser engines and profiler batches sequentially. Never spawn browser-driving agents in parallel.
+- Exit code 75 means the slot is busy. Finish non-browser work and retry, or block on `./scripts/pw-session.sh open --wait[=SECONDS] <session> ...` (default 300s). Do not bypass the lock.
+- Never use `playwright-cli close-all` or `kill-all` while concurrent agents may own sessions.
+- A lock left behind by an interrupted workflow clears itself: the next `open` reclaims any slot whose browser is no longer running. Inspect the holder with `./scripts/pw-session.sh status`, which reports whether that browser is still alive. `release <session>` is a last resort for the rare case where `status` cannot verify the browser state.
 
 ## Cross-Browser UI Verification
 
@@ -14,12 +27,20 @@ When using `playwright-cli` to verify rendering, styling, layout, or interaction
 - `firefox` for Gecko
 - `webkit` for Safari/WebKit coverage
 
-Use separate named sessions per engine, compare the results, and record any engine-specific differences instead of treating Chromium output as sufficient.
+Use separate short named sessions per engine, compare the results, and record any engine-specific differences instead of treating Chromium output as sufficient. Run them sequentially:
 
 ```bash
-playwright-cli -s=verify-chrome open http://example.com --browser=chrome
-playwright-cli -s=verify-firefox open http://example.com --browser=firefox
-playwright-cli -s=verify-webkit open http://example.com --browser=webkit
+./scripts/pw-session.sh open verify-chrome http://example.com --browser=chrome
+# Run the desktop and mobile flow, then release the slot.
+./scripts/pw-session.sh close verify-chrome
+
+./scripts/pw-session.sh open verify-firefox http://example.com --browser=firefox
+# Run the desktop and mobile flow, then release the slot.
+./scripts/pw-session.sh close verify-firefox
+
+./scripts/pw-session.sh open verify-webkit http://example.com --browser=webkit
+# Run the desktop and mobile flow, then release the slot.
+./scripts/pw-session.sh close verify-webkit
 ```
 
 ## Quick start
@@ -242,6 +263,7 @@ playwright-cli -s=mysession close  # stop a named browser
 playwright-cli -s=mysession delete-data  # delete user data for persistent session
 
 playwright-cli list
+# Never use these during concurrent agent work; they affect unrelated sessions.
 # Close all browsers
 playwright-cli close-all
 # Forcefully kill all browser processes

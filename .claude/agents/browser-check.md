@@ -26,17 +26,25 @@ Do not start, restart, or stop the dev server yourself. If the app is unreachabl
 
 Default to a fresh isolated `playwright-cli` browser session. If the requested verification depends on auth, cookies, extensions, open tabs, or other existing browser state and the parent agent did not specify session mode, stop and ask whether to use a fresh browser or the contributor's current browser session.
 
-### Step 2: Navigate and Snapshot
+### Step 2: Navigate and Snapshot Sequentially
 
-Use playwright-cli to check the relevant page in all three browser engines with separate sessions:
+Choose short task-specific session names. Use the shared wrapper to check the relevant page in all three browser engines one at a time:
 
 ```bash
-playwright-cli -s=verify-chrome open https://seedit.localhost --browser=chrome
-playwright-cli -s=verify-firefox open https://seedit.localhost --browser=firefox
-playwright-cli -s=verify-webkit open https://seedit.localhost --browser=webkit
+./scripts/pw-session.sh open verify-chrome https://seedit.localhost --browser=chrome
+# Complete the Chrome desktop/mobile flow.
+./scripts/pw-session.sh close verify-chrome
+
+./scripts/pw-session.sh open verify-firefox https://seedit.localhost --browser=firefox
+# Complete the Firefox desktop/mobile flow.
+./scripts/pw-session.sh close verify-firefox
+
+./scripts/pw-session.sh open verify-webkit https://seedit.localhost --browser=webkit
+# Complete the WebKit desktop/mobile flow.
+./scripts/pw-session.sh close verify-webkit
 ```
 
-Navigate each engine session to the specific page/route where the change should be visible.
+Navigate the current engine session to the specific page/route where the change should be visible. Always close that session in a finally-style cleanup, even when a check fails, before opening the next engine. If the wrapper exits 75 the slot is busy: retry with `./scripts/pw-session.sh open --wait <session> ...`, or report it to the parent so the check can be rescheduled. Never bypass the lock.
 
 ### Step 3: Verify the Changes
 
@@ -49,13 +57,11 @@ Based on what the parent agent asked you to check:
 - Check mobile viewport in each engine if the change is layout-related:
 
 ```bash
-playwright-cli -s=verify-chrome resize 375 812
-playwright-cli -s=verify-chrome snapshot
-playwright-cli -s=verify-firefox resize 375 812
-playwright-cli -s=verify-firefox snapshot
-playwright-cli -s=verify-webkit resize 375 812
-playwright-cli -s=verify-webkit snapshot
+playwright-cli -s=SESSION resize 375 812
+playwright-cli -s=SESSION snapshot
 ```
+
+Replace `SESSION` with the currently open engine session. Finish its mobile check before closing it and moving to the next engine.
 
 ### Step 4: Report Back
 
@@ -87,4 +93,5 @@ playwright-cli -s=verify-webkit snapshot
 - If the dev server is unreachable, report the error and stop
 - Never attach to a live personal browser session without explicit permission
 - If current-session reuse is requested, use the supported attach path only when available; otherwise report the limitation instead of silently switching to a fresh session
+- Never run multiple browser engines at once, and never use `playwright-cli close-all` or `kill-all`
 - Don't modify any code — you are read-only, verification only

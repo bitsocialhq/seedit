@@ -1,6 +1,12 @@
 # Browser Session Management
 
-Run multiple isolated browser sessions concurrently with state persistence.
+Manage isolated browser sessions with state persistence. In seedit, keep only one session active machine-wide and use the shared wrapper for the open/close lifecycle.
+
+```bash
+./scripts/pw-session.sh open verify-chrome https://seedit.localhost --browser=chrome
+playwright-cli -s=verify-chrome snapshot
+./scripts/pw-session.sh close verify-chrome
+```
 
 ## Named Browser Sessions
 
@@ -60,25 +66,18 @@ playwright-cli open example.com  # Uses "mysession" automatically
 
 ## Common Patterns
 
-### Concurrent Scraping
+### Sequential Cross-Browser Verification
 
 ```bash
 #!/bin/bash
-# Scrape multiple sites concurrently
+# Keep one browser active at a time, machine-wide.
 
-# Start all browsers
-playwright-cli -s=site1 open https://site1.com &
-playwright-cli -s=site2 open https://site2.com &
-playwright-cli -s=site3 open https://site3.com &
-wait
-
-# Take snapshots from each
-playwright-cli -s=site1 snapshot
-playwright-cli -s=site2 snapshot
-playwright-cli -s=site3 snapshot
-
-# Cleanup
-playwright-cli close-all
+for engine in chrome firefox webkit; do
+  session="verify-$engine"
+  ./scripts/pw-session.sh open "$session" https://seedit.localhost --browser="$engine"
+  playwright-cli -s="$session" snapshot
+  ./scripts/pw-session.sh close "$session"
+done
 ```
 
 ### A/B Testing Sessions
@@ -154,7 +153,8 @@ playwright-cli -s=s1 open https://github.com
 playwright-cli -s=auth close
 playwright-cli -s=scrape close
 
-# Or stop all at once
+# Do not use these global commands while concurrent agents may own sessions.
+# Stop all at once
 playwright-cli close-all
 
 # If browsers become unresponsive or zombie processes remain
