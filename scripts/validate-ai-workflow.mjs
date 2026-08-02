@@ -62,9 +62,17 @@ function normalize(content) {
   return out;
 }
 
-// Agents additionally differ by harness-specific model frontmatter.
+// Agents additionally differ by harness-specific model frontmatter. Whether a
+// model is pinned at all is harness-specific too: judgment-tier `.claude`
+// agents omit `model:` so they inherit the session model, while their `.cursor`
+// copies pin a Cursor-only model. Drop the line entirely rather than rewriting
+// it, so a pinned model and an omitted one still compare equal. Only the
+// leading frontmatter block is touched, so a body line beginning with "model:"
+// is left alone.
 function normalizeAgent(content) {
-  return normalize(content).replace(/^model:.*$/m, 'model: <toolchain-specific>');
+  return normalize(content).replace(/^---\n[\s\S]*?\n---\n/, (frontmatter) =>
+    frontmatter.replace(/^model:.*\n/m, ''),
+  );
 }
 
 function listFilesRecursive(dir) {
