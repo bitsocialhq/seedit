@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import HomeFooter from './home-footer';
 
@@ -11,6 +12,12 @@ const act = (React as { act?: (callback: () => void | Promise<void>) => void | P
 
 let root: Root;
 let container: HTMLDivElement;
+
+// the app mounts under a HashRouter, so in-app hrefs render as '#/path'
+const renderFooter = () =>
+  act(() => {
+    root.render(createElement(HashRouter, null, createElement(HomeFooter)));
+  });
 
 describe('HomeFooter', () => {
   beforeEach(() => {
@@ -25,9 +32,7 @@ describe('HomeFooter', () => {
   });
 
   it('renders the Seedit footer destinations without unavailable links', () => {
-    act(() => {
-      root.render(createElement(HomeFooter));
-    });
+    renderFooter();
 
     const links = Array.from(container.querySelectorAll<HTMLAnchorElement>('a'));
     const linkDestinations = Object.fromEntries(links.map((link) => [link.textContent || link.getAttribute('aria-label'), link.href]));
@@ -44,13 +49,19 @@ describe('HomeFooter', () => {
     expect(container.textContent).not.toContain('advertising');
     expect(container.textContent).not.toContain('careers');
     expect(container.textContent).not.toContain('contact us');
-    expect(container.textContent).not.toContain('seedit gold');
+  });
+
+  it('links seedit gold from the <3 column, like reddit premium on old.reddit', () => {
+    renderFooter();
+
+    const goldLink = Array.from(container.querySelectorAll<HTMLAnchorElement>('a')).find((link) => link.textContent === 'seedit gold');
+
+    expect(goldLink?.getAttribute('href')).toBe('#/gold');
+    expect(goldLink?.closest('section')?.querySelector('h2')?.textContent).toBe('<3');
   });
 
   it('uses the 5chan-style FOSS attribution and Bitsocial logo treatment', () => {
-    act(() => {
-      root.render(createElement(HomeFooter));
-    });
+    renderFooter();
 
     expect(container.textContent).toContain('Seedit is FOSS under GPL-3.0-or-later. Powered by Bitsocial');
 
@@ -64,11 +75,14 @@ describe('HomeFooter', () => {
   });
 
   it('opens every external destination safely', () => {
-    act(() => {
-      root.render(createElement(HomeFooter));
-    });
+    renderFooter();
 
     for (const link of container.querySelectorAll('a')) {
+      // the seedit gold link is an in-app route, so it stays in the current tab
+      if (link.getAttribute('href')?.startsWith('#')) {
+        expect(link.getAttribute('target')).toBe(null);
+        continue;
+      }
       expect(link.getAttribute('target')).toBe('_blank');
       expect(link.getAttribute('rel')).toBe('noopener noreferrer');
     }

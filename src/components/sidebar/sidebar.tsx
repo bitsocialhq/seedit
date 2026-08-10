@@ -9,6 +9,7 @@ import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/addre
 import {
   isAllView,
   isDomainView,
+  isGoldView,
   isHomeAboutView,
   isHomeView,
   isModView,
@@ -147,6 +148,8 @@ export const Footer = () => {
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
+  // the home feed renders HomeFooter below it, which already carries these destinations
+  const isDuplicatedByHomeFooter = isHomeView(location.pathname);
 
   return (
     <div
@@ -159,30 +162,34 @@ export const Footer = () => {
           <li>
             <Version />
           </li>
-          <span className={styles.footerSeparator}>|</span>
-          <li>
-            <a href='https://github.com/bitsocialhq/seedit' target='_blank' rel='noopener noreferrer'>
-              github
-            </a>
-            <span className={styles.footerSeparator}>|</span>
-          </li>
-          <li>
-            <a href='https://t.me/bitsocialhq' target='_blank' rel='noopener noreferrer'>
-              telegram
-            </a>
-            <span className={styles.footerSeparator}>|</span>
-          </li>
-          <li>
-            <a href='https://x.com/bitsocialhq' target='_blank' rel='noopener noreferrer'>
-              x
-            </a>
-            <span className={styles.footerSeparator}>|</span>
-          </li>
-          <li>
-            <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
-              docs
-            </a>
-          </li>
+          {!isDuplicatedByHomeFooter && (
+            <>
+              <span className={styles.footerSeparator}>|</span>
+              <li>
+                <a href='https://github.com/bitsocialhq/seedit' target='_blank' rel='noopener noreferrer'>
+                  github
+                </a>
+                <span className={styles.footerSeparator}>|</span>
+              </li>
+              <li>
+                <a href='https://t.me/bitsocialhq' target='_blank' rel='noopener noreferrer'>
+                  telegram
+                </a>
+                <span className={styles.footerSeparator}>|</span>
+              </li>
+              <li>
+                <a href='https://x.com/bitsocialhq' target='_blank' rel='noopener noreferrer'>
+                  x
+                </a>
+                <span className={styles.footerSeparator}>|</span>
+              </li>
+              <li>
+                <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
+                  docs
+                </a>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>
@@ -205,6 +212,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const params = useParams();
   const isInAllView = isAllView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
+  const isInGoldView = isGoldView(location.pathname);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInHomeView = isHomeView(location.pathname);
@@ -304,79 +312,72 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
             </div>
           </Link>
         )}
-        {!isInHomeView &&
-          !isInHomeAboutView &&
-          !isInAllView &&
-          !isInModView &&
-          !isInCommunitiesView &&
-          !isInHomeAboutView &&
-          !isInDomainView &&
-          !isInPostPageAboutView && (
-            <div className={styles.titleBox}>
-              <Link className={styles.title} to={directoryCode ? `/s/${directoryCode}` : address ? getCommunityPath(address) : '/communities'}>
-                {directoryCode || getDisplayAddress(community?.address || '')}
-              </Link>
-              {directoryCode && address && (
-                <div className={styles.directoryRouteDisclosure}>
-                  {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
+        {!isInHomeView && !isInHomeAboutView && !isInAllView && !isInModView && !isInCommunitiesView && !isInGoldView && !isInDomainView && !isInPostPageAboutView && (
+          <div className={styles.titleBox}>
+            <Link className={styles.title} to={directoryCode ? `/s/${directoryCode}` : address ? getCommunityPath(address) : '/communities'}>
+              {directoryCode || getDisplayAddress(community?.address || '')}
+            </Link>
+            {directoryCode && address && (
+              <div className={styles.directoryRouteDisclosure}>
+                {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
+              </div>
+            )}
+            <div className={styles.subscribeContainer}>
+              <span className={styles.subscribeButton}>
+                <SubscribeButton address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
+              </span>
+              <span className={styles.subscribers}>{t('members_count', { count: allActiveUserCount })}</span>
+            </div>
+            {directoryCode && directoryRevision && address && (
+              <DirectoryAutoSwitchControl address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
+            )}
+            <div className={styles.onlineLine}>
+              <span className={`${styles.onlineIndicator} ${!isOffline ? styles.online : styles.offline}`} title={!isOffline ? t('online') : t('offline')} />
+              <span>{isSubCreatedButNotYetPublished ? subCreatedButNotYetPublishedStatus : onlineStatus}</span>
+              {moderatorRole && (
+                <div className={styles.moderatorStatus}>
+                  {moderatorRole === 'moderator' ? t('you_are_moderator') : moderatorRole === 'admin' ? t('you_are_admin') : t('you_are_owner')}
                 </div>
               )}
-              <div className={styles.subscribeContainer}>
-                <span className={styles.subscribeButton}>
-                  <SubscribeButton address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
-                </span>
-                <span className={styles.subscribers}>{t('members_count', { count: allActiveUserCount })}</span>
-              </div>
-              {directoryCode && directoryRevision && address && (
-                <DirectoryAutoSwitchControl address={address} directoryCode={directoryCode} directoryRevision={directoryRevision} />
-              )}
-              <div className={styles.onlineLine}>
-                <span className={`${styles.onlineIndicator} ${!isOffline ? styles.online : styles.offline}`} title={!isOffline ? t('online') : t('offline')} />
-                <span>{isSubCreatedButNotYetPublished ? subCreatedButNotYetPublishedStatus : onlineStatus}</span>
-                {moderatorRole && (
-                  <div className={styles.moderatorStatus}>
-                    {moderatorRole === 'moderator' ? t('you_are_moderator') : moderatorRole === 'admin' ? t('you_are_admin') : t('you_are_owner')}
+            </div>
+            {description && description.length > 0 && (
+              <div>
+                {title && title.length > 0 && (
+                  <div className={styles.descriptionTitle}>
+                    <strong>{title}</strong>
                   </div>
                 )}
+                <div className={styles.description}>
+                  <Markdown content={description} />
+                </div>
               </div>
-              {description && description.length > 0 && (
-                <div>
-                  {title && title.length > 0 && (
-                    <div className={styles.descriptionTitle}>
-                      <strong>{title}</strong>
-                    </div>
-                  )}
-                  <div className={styles.description}>
-                    <Markdown content={description} />
-                  </div>
-                </div>
-              )}
-              {rules && rules.length > 0 && <RulesList rules={rules} />}
-              <div className={styles.bottom}>
-                {t('created_by', { creatorAddress: '' })}
-                <span>{`u/${creatorAddress}`}</span>
-                {createdAt && <span className={styles.age}> {t('community_for', { date: getFormattedTimeDuration(createdAt) })}</span>}
-                <div className={styles.bottomButtons}>
-                  {showBlockConfirm ? (
-                    <span className={styles.blockConfirm}>
-                      {t('are_you_sure')}{' '}
-                      <span className={styles.confirmButton} onClick={handleBlock}>
-                        {t('yes')}
-                      </span>
-                      {' / '}
-                      <span className={styles.cancelButton} onClick={cancelBlock}>
-                        {t('no')}
-                      </span>
+            )}
+            {rules && rules.length > 0 && <RulesList rules={rules} />}
+            <div className={styles.bottom}>
+              {t('created_by', { creatorAddress: '' })}
+              <span>{`u/${creatorAddress}`}</span>
+              {createdAt && <span className={styles.age}> {t('community_for', { date: getFormattedTimeDuration(createdAt) })}</span>}
+              <div className={styles.bottomButtons}>
+                {showBlockConfirm ? (
+                  <span className={styles.blockConfirm}>
+                    {t('are_you_sure')}{' '}
+                    <span className={styles.confirmButton} onClick={handleBlock}>
+                      {t('yes')}
                     </span>
-                  ) : (
-                    <span className={styles.blockSub} onClick={blockConfirm}>
-                      {blocked ? t('unblock_community') : t('block_community')}
+                    {' / '}
+                    <span className={styles.cancelButton} onClick={cancelBlock}>
+                      {t('no')}
                     </span>
-                  )}
-                </div>
+                  </span>
+                ) : (
+                  <span className={styles.blockSub} onClick={blockConfirm}>
+                    {blocked ? t('unblock_community') : t('block_community')}
+                  </span>
+                )}
               </div>
             </div>
-          )}
+          </div>
+        )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
         {isInCommunitiesView && (
           <a href='https://github.com/bitsocialhq/lists' target='_blank' rel='noopener noreferrer'>

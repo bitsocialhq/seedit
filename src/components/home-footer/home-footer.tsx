@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './home-footer.module.css';
 
 const ExternalLink = ({ href, children }: { href: string; children: string }) => (
@@ -42,8 +43,15 @@ const HomeFooter = () => (
           </li>
         </ul>
       </section>
-      <section className={`${styles.column} ${styles.loveColumn}`}>
+      <section className={styles.column}>
         <h2 className={styles.heading}>&lt;3</h2>
+        <ul>
+          <li>
+            <Link className={styles.goldLink} to='/gold'>
+              seedit gold
+            </Link>
+          </li>
+        </ul>
       </section>
     </nav>
     <p className={styles.legal}>

@@ -9,6 +9,7 @@ import AboutView from './views/about';
 import All from './views/all';
 import Author from './views/author';
 import Domain from './views/domain';
+import Gold from './views/gold';
 import Home from './views/home';
 import Inbox from './views/inbox';
 import Mod from './views/mod';
@@ -101,6 +102,7 @@ const App = () => {
         <Route element={globalLayout}>
           <Route element={pagesLayout}>
             <Route path='/about' element={<AboutView />} />
+            <Route path='/gold' element={<Gold />} />
             <Route path='/submit' element={<SubmitPage />} />
 
             <Route path='/s/:communityAddress/comments/:commentCid' element={<PostPage />} />

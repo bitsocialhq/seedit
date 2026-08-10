@@ -1,0 +1,13 @@
+/* the page chrome is shared with the about FAQ, only the gold accents live here */
+
+.notice {
+  margin-bottom: 15px;
+  padding: 5px 10px;
+  border: 1px solid var(--gold-border);
+  line-height: 20px;
+}
+
+.goldName {
+  color: var(--gold-text);
+  font-weight: bold;
+}

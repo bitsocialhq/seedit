@@ -48,6 +48,8 @@
   --footer-heading-text: #bfbfbf;
   --footer-legal-text: var(--gray-footer);
   --footer-panel-border: #3e3e3e;
+  --gold-border: #6b5a26;
+  --gold-text: #c8a12c;
   --gray: #3e3e3e;
   --gray-border: #3e3e3e;
   --gray-button-text: #aaa;
@@ -154,6 +156,8 @@
   --footer-heading-text: #777;
   --footer-legal-text: gray;
   --footer-panel-border: #f0f0f0;
+  --gold-border: #d8c48a;
+  --gold-text: #9a7d2e;
   --gray: #c0c0c0;
   --gray-border: #ddd;
   --gray-button-text: #aaa;

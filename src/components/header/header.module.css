@@ -181,6 +181,10 @@
   text-transform: lowercase;
 }
 
+.goldTitle {
+  color: var(--gold-text);
+}
+
 .mobileDirectoryDisclosure {
   padding: 2px 5px;
   color: var(--text-info);

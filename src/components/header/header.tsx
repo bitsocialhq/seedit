@@ -11,6 +11,7 @@ import {
   isAuthorCommentsView,
   isAuthorSubmittedView,
   isCreateCommunityView,
+  isGoldView,
   isHomeAboutView,
   isHomeView,
   isInboxView,
@@ -328,6 +329,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const isInAllView = isAllView(location.pathname);
   const isInAuthorView = isAuthorView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
+  const isInGoldView = isGoldView(location.pathname);
   const isInInboxView = isInboxView(location.pathname);
   const isInModView = isModView(location.pathname);
   const isInPendingPostView = isPendingPostView(location.pathname, params);
@@ -390,6 +392,8 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
     return <span className={styles.lowercase}>{t('create_community')}</span>;
   } else if (isInCommunitiesView) {
     return t('communities');
+  } else if (isInGoldView) {
+    return <span className={`${styles.lowercase} ${styles.goldTitle}`}>seedit gold</span>;
   } else if (isInNotFoundView) {
     return <span className={styles.lowercase}>{t('page_not_found')}</span>;
   } else if (isInAllView) {

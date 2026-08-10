@@ -53,6 +53,12 @@
   text-decoration: underline;
 }
 
+/* old.reddit styles the "reddit premium" link in the <3 column with .buygold */
+.column a.goldLink {
+  color: var(--gold-text);
+  font-weight: bold;
+}
+
 .legal {
   clear: both;
   display: flex;
@@ -103,17 +109,12 @@
     text-align: center;
   }
 
-  .column:nth-child(2) {
+  .column:nth-child(2n) {
     border-left: 1px solid var(--footer-column-border);
   }
 
-  .column:nth-child(3) {
-    grid-column: 1 / -1;
+  .column:nth-child(n + 3) {
     border-top: 1px solid var(--footer-column-border);
-  }
-
-  .loveColumn {
-    display: none;
   }
 
   .heading {
