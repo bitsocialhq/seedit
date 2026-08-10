@@ -44,6 +44,10 @@
   --flair-blank-background: #1e2021;
   --flair-blank-border: #3a3e41;
   --flair-blank-color: #b2aca2;
+  --footer-column-border: #3e3e3e;
+  --footer-heading-text: #bfbfbf;
+  --footer-legal-text: var(--gray-footer);
+  --footer-panel-border: #3e3e3e;
   --gray: #3e3e3e;
   --gray-border: #3e3e3e;
   --gray-button-text: #aaa;
@@ -146,6 +150,10 @@
   --flair-blank-background: #f5f5f5;
   --flair-blank-border: #ddd;
   --flair-blank-color: #555;
+  --footer-column-border: #e0e0e0;
+  --footer-heading-text: #777;
+  --footer-legal-text: gray;
+  --footer-panel-border: #f0f0f0;
   --gray: #c0c0c0;
   --gray-border: #ddd;
   --gray-button-text: #aaa;
