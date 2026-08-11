@@ -57,54 +57,60 @@ const StatValueCell = ({ row }: { row: TextStatRow }) => {
 
 const ConnectedPeersValue = ({ row }: { row: ConnectedPeersStatRow }) => (
   <details open>
-    <summary className={styles.connectedPeersSummary}>
-      {row.name}: {formatCount(row.peerCount, 'peer')}, {formatCount(row.connectionCount, 'connection')}
+    {/* The summary keeps the shared label/value columns, the map and peer list below sit under the value column. */}
+    <summary className={`${styles.category} ${styles.connectedPeersSummary}`}>
+      <span className={styles.categoryTitle}>{row.name}</span>
+      <span className={styles.categorySettings}>
+        {formatCount(row.peerCount, 'peer')}, {formatCount(row.connectionCount, 'connection')}
+      </span>
     </summary>
-    <PeerWorldMap peers={row.mapEntries ?? row.entries} />
-    <div className={styles.connectedPeerList}>
-      {row.entries.length ? (
-        row.entries.map((entry) => {
-          const countryCode = entry.countryCode ?? getApproximateCountryCode(entry.address);
-          const flagPosition = getCountryFlagPosition(countryCode);
-          return (
-            <div className={styles.connectedPeer} key={entry.id}>
-              <div className={styles.connectedPeerMeta}>
-                <span className={styles.connectionTransport}>{entry.transport}</span>
-                {entry.transferStats && (
-                  <span className={styles.connectionTransferStats}>
-                    Received {formatPeerTransferBytes(entry.transferStats.downloadedBytes)} &middot; Sent {formatPeerTransferBytes(entry.transferStats.uploadedBytes)}
-                  </span>
-                )}
-                {entry.role && (
-                  <span className={styles.connectionRole} data-peer-role={entry.role}>
-                    {entry.role === 'leecher' ? 'Leeching' : 'Seeding'}
-                  </span>
-                )}
+    <div className={styles.connectedPeersPanel}>
+      <PeerWorldMap peers={row.mapEntries ?? row.entries} />
+      <div className={styles.connectedPeerList}>
+        {row.entries.length ? (
+          row.entries.map((entry) => {
+            const countryCode = entry.countryCode ?? getApproximateCountryCode(entry.address);
+            const flagPosition = getCountryFlagPosition(countryCode);
+            return (
+              <div className={styles.connectedPeer} key={entry.id}>
+                <div className={styles.connectedPeerMeta}>
+                  <span className={styles.connectionTransport}>{entry.transport}</span>
+                  {entry.transferStats && (
+                    <span className={styles.connectionTransferStats}>
+                      Received {formatPeerTransferBytes(entry.transferStats.downloadedBytes)} &middot; Sent {formatPeerTransferBytes(entry.transferStats.uploadedBytes)}
+                    </span>
+                  )}
+                  {entry.role && (
+                    <span className={styles.connectionRole} data-peer-role={entry.role}>
+                      {entry.role === 'leecher' ? 'Leeching' : 'Seeding'}
+                    </span>
+                  )}
+                </div>
+                <div className={styles.peerId} title={entry.peerId}>
+                  {entry.peerId}
+                </div>
+                <div className={styles.connectionAddressRow}>
+                  {flagPosition && (
+                    <img
+                      alt={getCountryLabel(countryCode)}
+                      aria-label={getCountryLabel(countryCode)}
+                      className={styles.peerFlag}
+                      src={transparentPixelSrc}
+                      style={{ backgroundPosition: `-${flagPosition.x}px -${flagPosition.y}px` }}
+                      title={getCountryLabel(countryCode)}
+                    />
+                  )}
+                  <code className={styles.connectionAddress} title={entry.address}>
+                    {entry.address}
+                  </code>
+                </div>
               </div>
-              <div className={styles.peerId} title={entry.peerId}>
-                {entry.peerId}
-              </div>
-              <div className={styles.connectionAddressRow}>
-                {flagPosition && (
-                  <img
-                    alt={getCountryLabel(countryCode)}
-                    aria-label={getCountryLabel(countryCode)}
-                    className={styles.peerFlag}
-                    src={transparentPixelSrc}
-                    style={{ backgroundPosition: `-${flagPosition.x}px -${flagPosition.y}px` }}
-                    title={getCountryLabel(countryCode)}
-                  />
-                )}
-                <code className={styles.connectionAddress} title={entry.address}>
-                  {entry.address}
-                </code>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <div className={styles.connectedPeerEmpty}>No active peer addresses</div>
-      )}
+            );
+          })
+        ) : (
+          <div className={styles.connectedPeerEmpty}>No active peer addresses</div>
+        )}
+      </div>
     </div>
   </details>
 );
@@ -120,41 +126,24 @@ const P2pStats = () => {
     <div className={styles.content}>
       {mode ? (
         <>
-          <table className={styles.stats}>
-            <tbody>
-              {rows.map((row) =>
-                row.type === 'connectedPeers' ? (
-                  <Fragment key={row.name}>
-                    {updatedAtLabel && (
-                      <tr>
-                        <td className={styles.statName}>Updated</td>
-                        <td className={styles.statValue}>{updatedAtLabel}</td>
-                      </tr>
-                    )}
-                    <tr>
-                      <td className={styles.connectedPeersCell} colSpan={2}>
-                        <ConnectedPeersValue row={row} />
-                      </td>
-                    </tr>
-                  </Fragment>
-                ) : row.type === 'nodeEndpoint' ? (
-                  <tr key={row.name}>
-                    <td className={styles.statName}>{row.name}</td>
-                    <td className={styles.statValue}>
-                      <NodeEndpointValue row={row} />
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={row.name}>
-                    <td className={styles.statName}>{row.name}</td>
-                    <td className={styles.statValue}>
-                      <StatValueCell row={row} />
-                    </td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+          {rows.map((row) =>
+            row.type === 'connectedPeers' ? (
+              <Fragment key={row.name}>
+                {updatedAtLabel && (
+                  <div className={styles.category}>
+                    <span className={styles.categoryTitle}>Updated</span>
+                    <div className={styles.categorySettings}>{updatedAtLabel}</div>
+                  </div>
+                )}
+                <ConnectedPeersValue row={row} />
+              </Fragment>
+            ) : (
+              <div className={styles.category} key={row.name}>
+                <span className={styles.categoryTitle}>{row.name}</span>
+                <div className={styles.categorySettings}>{row.type === 'nodeEndpoint' ? <NodeEndpointValue row={row} /> : <StatValueCell row={row} />}</div>
+              </div>
+            ),
+          )}
           <div className={styles.statsMeta}>
             {loading ? (
               <div className={styles.statsLoading}>
