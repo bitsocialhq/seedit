@@ -28,6 +28,7 @@ import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
 import NotificationHandler from './components/notification-handler';
+import SiteFooter from './components/site-footer';
 import DirectorySubscriptionReconciler from './components/directory-subscription-reconciler';
 import ExactCommunityActionRoute from './components/exact-community-action-route';
 import StickyHeader from './components/sticky-header';
@@ -52,6 +53,8 @@ const App = () => {
         <SettingsUpgradeModal />
       </Suspense>
       <Outlet />
+      {/* old.reddit shows the same footer on every page, so it lives in the shared layout */}
+      <SiteFooter />
     </>
   );
 

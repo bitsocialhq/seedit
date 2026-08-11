@@ -5,7 +5,7 @@ import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import HomeFooter from './home-footer';
+import SiteFooter from './site-footer';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 const act = (React as { act?: (callback: () => void | Promise<void>) => void | Promise<void> }).act as (callback: () => void | Promise<void>) => void | Promise<void>;
@@ -16,10 +16,10 @@ let container: HTMLDivElement;
 // the app mounts under a HashRouter, so in-app hrefs render as '#/path'
 const renderFooter = () =>
   act(() => {
-    root.render(createElement(HashRouter, null, createElement(HomeFooter)));
+    root.render(createElement(HashRouter, null, createElement(SiteFooter)));
   });
 
-describe('HomeFooter', () => {
+describe('SiteFooter', () => {
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);

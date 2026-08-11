@@ -148,9 +148,9 @@ export const Footer = () => {
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
-  // the home feed renders HomeFooter below it, which already carries these destinations
-  const isDuplicatedByHomeFooter = isHomeView(location.pathname);
 
+  // SiteFooter renders on every page and already carries the github/telegram/x/docs
+  // destinations, so the sidebar keeps only the version
   return (
     <div
       className={`${styles.footer} ${isMobile && (isInHomeAboutView || isInPostPageAboutView) ? styles.mobileFooter : ''} ${
@@ -162,34 +162,6 @@ export const Footer = () => {
           <li>
             <Version />
           </li>
-          {!isDuplicatedByHomeFooter && (
-            <>
-              <span className={styles.footerSeparator}>|</span>
-              <li>
-                <a href='https://github.com/bitsocialhq/seedit' target='_blank' rel='noopener noreferrer'>
-                  github
-                </a>
-                <span className={styles.footerSeparator}>|</span>
-              </li>
-              <li>
-                <a href='https://t.me/bitsocialhq' target='_blank' rel='noopener noreferrer'>
-                  telegram
-                </a>
-                <span className={styles.footerSeparator}>|</span>
-              </li>
-              <li>
-                <a href='https://x.com/bitsocialhq' target='_blank' rel='noopener noreferrer'>
-                  x
-                </a>
-                <span className={styles.footerSeparator}>|</span>
-              </li>
-              <li>
-                <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
-                  docs
-                </a>
-              </li>
-            </>
-          )}
         </ul>
       </div>
     </div>

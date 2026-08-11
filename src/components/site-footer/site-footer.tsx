@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styles from './home-footer.module.css';
+import styles from './site-footer.module.css';
 
 const ExternalLink = ({ href, children }: { href: string; children: string }) => (
   <a href={href} target='_blank' rel='noopener noreferrer'>
@@ -7,7 +7,7 @@ const ExternalLink = ({ href, children }: { href: string; children: string }) =>
   </a>
 );
 
-const HomeFooter = () => (
+const SiteFooter = () => (
   <footer className={styles.footer} aria-label='Seedit footer'>
     <nav className={styles.panel} aria-label='Footer links'>
       <section className={styles.column}>
@@ -63,4 +63,4 @@ const HomeFooter = () => (
   </footer>
 );
 
-export default HomeFooter;
+export default SiteFooter;

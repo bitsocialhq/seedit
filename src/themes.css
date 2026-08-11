@@ -55,7 +55,6 @@
   --gray-button-text: #aaa;
   --gray-contrast: #c7c7c7;
   --gray-footer: rgb(168, 160, 147);
-  --gray-footer-separator: #6a6a6a;
   --gray-light: #3e3e3e9d;
   --gray-overlay: #1f1f1f;
   --gray-overlay-border: #3e3e3e;
@@ -163,7 +162,6 @@
   --gray-button-text: #aaa;
   --gray-contrast: #888;
   --gray-footer: dimgray;
-  --gray-footer-separator: rgb(151, 151, 151);
   --gray-light: #ccc;
   --gray-overlay: #F7F7F7;
   --gray-overlay-border: #E9E9E9;

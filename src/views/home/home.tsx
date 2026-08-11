@@ -12,7 +12,6 @@ import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-fee
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useStarterCommunityList } from '../../hooks/use-default-subscriptions';
 import FeedFooter from '../../components/feed-footer';
-import HomeFooter from '../../components/home-footer';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
@@ -315,7 +314,6 @@ const Home = () => {
           </div>
         )}
       </div>
-      <HomeFooter />
     </div>
   );
 };
