@@ -1,71 +1,78 @@
 .content {
+  /* The peer map and the peer list share one narrow column so neither stretches
+     across the full settings width on desktop. */
+  --peer-panel-max-width: 500px;
+  /* Label column of the shared preferences layout, matched by the peer panel indent. */
+  --settings-label-width: 169px;
+  --settings-label-padding: 10px;
   margin: 7px 5px 40px 0;
-  padding: 10px;
+  /* The shared settings wrapper is `width: 100%` plus side margins, so it runs
+     5px past the viewport. Reserve that back here, otherwise the bordered map
+     and peer list lose their right edge at narrow widths. */
+  padding-right: 10px;
   font-size: 12px;
   color: var(--text);
   width: 100%;
   box-sizing: border-box;
 }
 
-.stats {
-  margin: 6px 0 0;
-  width: calc(100% - 8px);
-  border-collapse: collapse;
+/* Same label/value split as the general and advanced preferences panels. */
+.category {
+  display: flex;
+  align-items: flex-start;
 }
 
-.stats th {
-  text-align: left;
-  font-weight: 700;
-}
-
-.stats th,
-.stats td {
-  padding: 2px 4px 3px 0;
-  vertical-align: top;
-}
-
-.statName {
-  width: 34%;
-  white-space: nowrap;
+.categoryTitle {
+  flex: 0 0 var(--settings-label-width);
+  height: 100%;
+  padding: var(--settings-label-padding);
   font-weight: bold;
+  text-align: right;
+  text-transform: lowercase;
 }
 
-.statValue {
+.categorySettings {
+  flex-grow: 1;
+  min-width: 0;
+  padding: 10px 0;
   word-break: break-word;
 }
 
-.statValue a {
+.categorySettings a {
   color: var(--link-primary);
 }
 
-.statValue a:hover {
+.categorySettings a:hover {
   text-decoration: underline;
 }
 
-/* Connected peers span the full panel width instead of the narrow value column. */
-.stats td.connectedPeersCell {
-  padding: 4px 4px 5px 0;
+.connectedPeersSummary {
+  cursor: pointer;
 }
 
-.connectedPeersSummary {
-  display: inline-block;
-  cursor: pointer;
-  padding: 1px 0;
-  font-weight: bold;
+/* The map and peer list line up under the value column, and take the full
+   width once the narrow layout drops the label column to a stub. */
+.connectedPeersPanel {
+  margin-left: calc(var(--settings-label-width) + var(--settings-label-padding) * 2);
 }
 
 .connectedPeerList {
   display: grid;
-  gap: 5px;
   margin-top: 6px;
+  max-width: var(--peer-panel-max-width);
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .connectedPeer {
   display: grid;
-  gap: 3px;
+  gap: 2px;
   padding: 4px 6px;
-  border: 1px solid rgba(127, 127, 127, 0.28);
-  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.connectedPeer + .connectedPeer {
+  border-top: 1px solid rgba(127, 127, 127, 0.28);
+  border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .connectedPeerMeta {
@@ -142,14 +149,13 @@
 }
 
 .connectedPeerEmpty {
-  padding: 6px 8px;
+  padding: 4px 6px;
   font-style: italic;
   opacity: 0.7;
 }
 
 .peerWorldMap {
-  margin-top: 6px;
-  max-width: 500px;
+  max-width: var(--peer-panel-max-width);
   border: 1px solid rgba(127, 127, 127, 0.28);
   border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
@@ -182,6 +188,7 @@
 
 .statsMeta {
   margin-top: 5px;
+  padding: 0 10px;
   font-size: 0.85em;
 }
 
@@ -194,4 +201,14 @@
 .error {
   color: red;
   word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .content {
+    --settings-label-width: 65px;
+  }
+
+  .connectedPeersPanel {
+    margin-left: 0;
+  }
 }
