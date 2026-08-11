@@ -9,7 +9,7 @@ import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { getHostname } from '../../lib/utils/url-utils';
 import { formatScore, getReplyScore } from '../../lib/utils/post-utils';
-import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/utils';
+import { flattenCommentsPages } from '@bitsocial/bitsocial-react-hooks/dist/lib/utils/index.js';
 import { CommentMediaInfo, getHasThumbnail } from '../../lib/utils/media-utils';
 import { formatLocalizedUTCTimestamp, getFormattedTimeAgo } from '../../lib/utils/time-utils';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
