@@ -220,11 +220,6 @@ const All = () => {
           </div>
         ) : (
           <div className={styles.feed}>
-            {process.env.NODE_ENV !== 'production' && (
-              <button className={styles.debugButton} onClick={reset}>
-                Reset Feed
-              </button>
-            )}
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 600 }}
               totalCount={feed?.length || 0}
