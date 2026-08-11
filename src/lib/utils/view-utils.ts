@@ -57,6 +57,10 @@ export const isDomainView = (pathname: string): boolean => {
   return pathname.startsWith('/domain/');
 };
 
+export const isGoldView = (pathname: string): boolean => {
+  return pathname === '/gold' || pathname.startsWith('/gold#');
+};
+
 export const isHomeView = (pathname: string): boolean => {
   if (pathname === '/') return true;
 

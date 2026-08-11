@@ -1,0 +1,135 @@
+.footer {
+  clear: both;
+  padding-top: 40px;
+  color: var(--footer-legal-text);
+  font-size: larger;
+  text-align: center;
+}
+
+.panel {
+  display: flex;
+  min-height: 118px;
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 5px;
+  border: 1px solid var(--footer-panel-border);
+  border-radius: 7px;
+  color: var(--footer-legal-text);
+}
+
+.column {
+  box-sizing: border-box;
+  display: inline-block;
+  flex: 0 0 25%;
+  margin: 10px 0;
+  padding: 0 15px;
+  border-left: 1px solid var(--footer-column-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.column:first-child {
+  border-left: 0;
+}
+
+.heading {
+  margin: 0 0 5px;
+  color: var(--footer-heading-text);
+  font: normal 18px arial, verdana, helvetica, sans-serif;
+}
+
+.column ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.column a {
+  color: var(--link-primary);
+  text-decoration: none;
+}
+
+.column a:hover {
+  text-decoration: underline;
+}
+
+/* old.reddit styles the "reddit premium" link in the <3 column with .buygold */
+.column a.goldLink {
+  color: var(--gold-text);
+  font-weight: bold;
+}
+
+.legal {
+  clear: both;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--footer-legal-text);
+  font-size: smaller;
+}
+
+.bitsocialLogoLink {
+  display: block;
+  flex: 0 0 auto;
+  margin-left: 1px;
+  line-height: 0;
+}
+
+.bitsocialLogo {
+  display: block;
+  width: 18px;
+  height: 18px;
+  filter: contrast(1.12);
+}
+
+@media (max-width: 639px) {
+  .footer {
+    padding: 24px 10px 16px;
+    font-size: 12px;
+  }
+
+  .panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid var(--footer-column-border);
+    border-radius: 0;
+  }
+
+  .column {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 12px 10px;
+    border: 0;
+    text-align: center;
+  }
+
+  .column:nth-child(2n) {
+    border-left: 1px solid var(--footer-column-border);
+  }
+
+  .column:nth-child(n + 3) {
+    border-top: 1px solid var(--footer-column-border);
+  }
+
+  .heading {
+    font-size: 14px;
+  }
+
+  .column a {
+    display: inline-block;
+    min-height: 24px;
+    line-height: 24px;
+    text-decoration: underline;
+  }
+
+  .legal {
+    margin-top: 15px;
+    line-height: 18px;
+  }
+}

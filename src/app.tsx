@@ -9,6 +9,7 @@ import AboutView from './views/about';
 import All from './views/all';
 import Author from './views/author';
 import Domain from './views/domain';
+import Gold from './views/gold';
 import Home from './views/home';
 import Inbox from './views/inbox';
 import Mod from './views/mod';
@@ -27,6 +28,7 @@ import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
 import NotificationHandler from './components/notification-handler';
+import SiteFooter from './components/site-footer';
 import DirectorySubscriptionReconciler from './components/directory-subscription-reconciler';
 import ExactCommunityActionRoute from './components/exact-community-action-route';
 import StickyHeader from './components/sticky-header';
@@ -51,6 +53,8 @@ const App = () => {
         <SettingsUpgradeModal />
       </Suspense>
       <Outlet />
+      {/* old.reddit shows the same footer on every page, so it lives in the shared layout */}
+      <SiteFooter />
     </>
   );
 
@@ -101,6 +105,7 @@ const App = () => {
         <Route element={globalLayout}>
           <Route element={pagesLayout}>
             <Route path='/about' element={<AboutView />} />
+            <Route path='/gold' element={<Gold />} />
             <Route path='/submit' element={<SubmitPage />} />
 
             <Route path='/s/:communityAddress/comments/:commentCid' element={<PostPage />} />
