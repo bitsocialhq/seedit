@@ -1,4 +1,7 @@
 .content {
+  /* The peer map and the peer list share one narrow column so neither stretches
+     across the full settings width on desktop. */
+  --peer-panel-max-width: 500px;
   margin: 7px 5px 40px 0;
   padding: 10px;
   font-size: 12px;
@@ -56,16 +59,21 @@
 
 .connectedPeerList {
   display: grid;
-  gap: 5px;
   margin-top: 6px;
+  max-width: var(--peer-panel-max-width);
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .connectedPeer {
   display: grid;
-  gap: 3px;
+  gap: 2px;
   padding: 4px 6px;
-  border: 1px solid rgba(127, 127, 127, 0.28);
-  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.connectedPeer + .connectedPeer {
+  border-top: 1px solid rgba(127, 127, 127, 0.28);
+  border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .connectedPeerMeta {
@@ -142,14 +150,14 @@
 }
 
 .connectedPeerEmpty {
-  padding: 6px 8px;
+  padding: 4px 6px;
   font-style: italic;
   opacity: 0.7;
 }
 
 .peerWorldMap {
   margin-top: 6px;
-  max-width: 500px;
+  max-width: var(--peer-panel-max-width);
   border: 1px solid rgba(127, 127, 127, 0.28);
   border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
