@@ -176,8 +176,8 @@ const FeedFooter = ({
                 <Trans
                   i18nKey='no_communities_found'
                   components={[
-                    <a key='community-lists-link' href='https://github.com/bitsocialhq/lists'>
-                      https://github.com/bitsocialhq/lists
+                    <a key='community-lists-link' href='https://github.com/bitsocialnet/lists'>
+                      https://github.com/bitsocialnet/lists
                     </a>,
                   ]}
                 />
