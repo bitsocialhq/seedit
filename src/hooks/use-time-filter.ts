@@ -37,7 +37,12 @@ const timeFilterNamesToSeconds: Record<string, number | undefined> = {
 const secondsSinceLastVisit = lastVisitTimestamp ? (Date.now() - parseInt(lastVisitTimestamp, 10)) / 1000 : Infinity;
 const day = 24 * 60 * 60;
 let lastVisitTimeFilterName: string | undefined;
-if (secondsSinceLastVisit > 30 * day) {
+if (!lastVisitTimestamp) {
+  // a first visit has nothing to catch up on, so it starts on the freshest feed;
+  // when nothing was posted that recently the feed expands itself to a window that has posts
+  lastVisitTimeFilterName = '24h';
+  timeFilterNamesToSeconds[lastVisitTimeFilterName] = timeFilterNamesToSeconds['24h'];
+} else if (secondsSinceLastVisit > 30 * day) {
   lastVisitTimeFilterName = '1m';
   timeFilterNamesToSeconds[lastVisitTimeFilterName] = timeFilterNamesToSeconds['1m'];
 } else if (secondsSinceLastVisit > 7 * day) {
@@ -89,7 +94,7 @@ const getSessionKeyForView = (pathname: string, params: Readonly<Params<string>>
   return null;
 };
 
-const getSessionTimeFilterPreference = (sessionKey: string | null): string | null => {
+export const getSessionTimeFilterPreference = (sessionKey: string | null): string | null => {
   if (!sessionKey) return null;
   try {
     return sessionStorage.getItem(sessionKey);

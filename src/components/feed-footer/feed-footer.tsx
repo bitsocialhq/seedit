@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useCommunities } from '@bitsocial/bitsocial-react-hooks';
-import { isAllView, isModView } from '../../lib/utils/view-utils';
+import { isModView } from '../../lib/utils/view-utils';
+import { getTimeFilterPath } from '../../lib/utils/time-filter-utils';
 import { useCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import EmptyFeedMessage from '../empty-feed-message/empty-feed-message';
+import useAutoExpandTimeFilter from '../../hooks/use-auto-expand-time-filter';
 import { useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedPagination from './feed-pagination';
 import LoadingEllipsis from '../loading-ellipsis';
@@ -51,8 +53,9 @@ const FeedFooter = ({
   const params = useParams();
   const location = useLocation();
   const isInModView = isModView(location.pathname);
-  const isInAllView = isAllView(location.pathname);
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
+  const getWiderFeedPath = (timeFilterName: string) =>
+    getTimeFilterPath({ pathname: location.pathname, sortType: params?.sortType || 'hot', timeFilterName, domain: params?.domain });
 
   const feedCommunityIdentifiers = useCommunityIdentifiers(communityAddresses);
   const { communities } = useCommunities({ communities: feedCommunityIdentifiers });
@@ -78,7 +81,7 @@ const FeedFooter = ({
           i18nKey='more_posts_last_week'
           values={{ currentTimeFilterName, count: feedLength }}
           components={{
-            1: <Link key='weekly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1w'} />,
+            1: <Link key='weekly-posts-link' to={getWiderFeedPath('1w')} />,
           }}
         />
       </div>
@@ -88,7 +91,7 @@ const FeedFooter = ({
           i18nKey='more_posts_last_month'
           values={{ currentTimeFilterName, count: feedLength }}
           components={{
-            1: <Link key='monthly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1m'} />,
+            1: <Link key='monthly-posts-link' to={getWiderFeedPath('1m')} />,
           }}
         />
       </div>
@@ -98,7 +101,7 @@ const FeedFooter = ({
           i18nKey='more_posts_last_year'
           values={{ currentTimeFilterName, count: feedLength }}
           components={{
-            1: <Link key='yearly-posts-link' to={(isInModView ? '/s/mod/' : isInAllView ? '/s/all/' : '/') + (params?.sortType || 'hot') + '/1y'} />,
+            1: <Link key='yearly-posts-link' to={getWiderFeedPath('1y')} />,
           }}
         />
       </div>
@@ -116,6 +119,8 @@ const FeedFooter = ({
   }, []);
 
   const showEmptyFeed = hasFetchedCommunityAddresses && hasEmptyFeedData;
+
+  const isAutoExpandingFeed = useAutoExpandTimeFilter({ isFeedEmpty: showEmptyFeed, weeklyFeedLength, monthlyFeedLength, yearlyFeedLength, searchQuery });
 
   if (!hasFetchedCommunityAddresses) {
     footerContent = <LoadingEllipsis string={t('loading_feed')} />;
@@ -155,7 +160,7 @@ const FeedFooter = ({
         </div>
       </div>
     );
-  } else if (showEmptyFeed) {
+  } else if (showEmptyFeed && !isAutoExpandingFeed) {
     footerContent = (
       <>
         {widerFeedSuggestion}
@@ -166,7 +171,9 @@ const FeedFooter = ({
     // Only show newer posts/weekly/monthly suggestions when not searching
     footerContent = (
       <>
-        {widerFeedSuggestion}
+        {/* a feed with no posts yet is either still loading or about to expand on its own, so a wider time filter
+            can only be suggested once the feed is settled, otherwise the suggestion flashes and disappears */}
+        {feedLength === 0 ? null : widerFeedSuggestion}
         <div className={styles.stateString}>
           {communityAddresses.length === 0 ? (
             isInModView ? (
@@ -176,8 +183,8 @@ const FeedFooter = ({
                 <Trans
                   i18nKey='no_communities_found'
                   components={[
-                    <a key='community-lists-link' href='https://github.com/bitsocialhq/lists'>
-                      https://github.com/bitsocialhq/lists
+                    <a key='community-lists-link' href='https://github.com/bitsocialnet/lists'>
+                      https://github.com/bitsocialnet/lists
                     </a>,
                   ]}
                 />
