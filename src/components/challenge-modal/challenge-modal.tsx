@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react';
 import { FloatingFocusManager, useClick, useDismiss, useFloating, useId, useInteractions, useRole } from '@floating-ui/react';
 import { Challenge as ChallengeType, useComment, useAccount } from '@bitsocial/bitsocial-react-hooks';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +44,16 @@ interface RegularChallengeContentProps {
   abandonModal: () => void;
 }
 
+const TRUSTED_IFRAME_HOSTNAMES = new Set(['mintpass.org', 'spamblocker.bitsocial.net']);
+
+const getIframeSessionId = (challengeUrl: string) => {
+  try {
+    return new URL(challengeUrl).pathname.match(/\/iframe\/([^/?#]+)/)?.[1] ?? '';
+  } catch {
+    return '';
+  }
+};
+
 const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: RegularChallengeContentProps) => {
   const { t } = useTranslation();
   const account = useAccount();
@@ -69,6 +79,11 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
   const [iframeUrlState, setIframeUrl] = useState<string>('');
   const [iframeOrigin, setIframeOrigin] = useState<string>('');
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const handledIframeAutoCompleteRef = useRef(false);
+  const onIframeAutoComplete = useEffectEvent((challengeAnswers: string[]) => {
+    challenge[1].publishChallengeAnswers(challengeAnswers.length ? challengeAnswers : ['']);
+    closeModal();
+  });
 
   const currentChallenge = challenges?.[currentChallengeIndex];
   const isTextChallenge = currentChallenge?.type === 'text/plain';
@@ -116,8 +131,8 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
       if (!iframeUrl) return '';
       const url = new URL(iframeUrl);
 
-      // Whitelist mintpass.org - only show hostname for trusted sites
-      if (url.hostname === 'mintpass.org') {
+      // Show only the hostname for trusted challenge providers.
+      if (TRUSTED_IFRAME_HOSTNAMES.has(url.hostname)) {
         return url.hostname;
       }
 
@@ -196,6 +211,30 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
       sendThemeToIframe();
     }
   }, [iframeOrigin, iframeUrlState, sendThemeToIframe, showIframeConfirmation]);
+
+  useEffect(() => {
+    const expectedSessionId = getIframeSessionId(iframeUrlState);
+    if (!iframeOrigin || !expectedSessionId || showIframeConfirmation) {
+      handledIframeAutoCompleteRef.current = false;
+      return;
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== iframeOrigin || handledIframeAutoCompleteRef.current) return;
+      const data = event.data;
+      if (!data || typeof data !== 'object' || (data as { type?: string }).type !== 'challengeAnswer') return;
+      const challengeAnswers = (data as { challengeAnswers?: unknown }).challengeAnswers;
+      const sessionId = (data as { sessionId?: unknown }).sessionId;
+      if (!Array.isArray(challengeAnswers) || sessionId !== expectedSessionId) return;
+
+      const stringAnswers = challengeAnswers.filter((answer): answer is string => typeof answer === 'string');
+      handledIframeAutoCompleteRef.current = true;
+      onIframeAutoComplete(stringAnswers);
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [iframeOrigin, iframeUrlState, showIframeConfirmation]);
 
   const communityShortAddress = getDisplayAddress(shortCommunityAddress || shortSubplebbitAddress || communityAddress || subplebbitAddress || '');
 
