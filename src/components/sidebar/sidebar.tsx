@@ -74,7 +74,7 @@ const ModeratorsList = ({ roles }: { roles: Record<string, Role> }) => {
             u/{getShortDisplayAddress(address)}
           </li>
         ))}
-        {/* TODO: https://github.com/bitsocialhq/seedit/issues/274
+        {/* TODO: https://github.com/bitsocialnet/seedit/issues/274
          <li className={styles.listMore}>{t('about_moderation')} »</li> */}
       </ul>
     </div>
@@ -251,7 +251,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
       navigate('/communities/create');
     } else if (window.confirm(t('create_community_warning'))) {
       const link = document.createElement('a');
-      link.href = 'https://github.com/bitsocialhq/seedit/releases/latest';
+      link.href = 'https://github.com/bitsocialnet/seedit/releases/latest';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.click();
@@ -354,7 +354,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
         )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
         {isInCommunitiesView && (
-          <a href='https://github.com/bitsocialhq/lists' target='_blank' rel='noopener noreferrer'>
+          <a href='https://github.com/bitsocialnet/lists' target='_blank' rel='noopener noreferrer'>
             <div className={styles.largeButton}>
               <div className={styles.nub} />
               {t('submit_community')}
