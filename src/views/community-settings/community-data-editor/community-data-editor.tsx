@@ -13,6 +13,7 @@ import { getCommunityIdentifier } from '../../../hooks/use-community-identifier'
 import useResolvedCommunityRoute from '../../../hooks/use-resolved-community-route';
 import { getCommunityPath } from '../../../lib/utils/community-route-utils';
 import { removeSuggestedAvatarUrl } from './community-data-editor-utils';
+import { normalizeReactAceModule } from '../../../lib/utils/react-ace-utils';
 
 class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallback: React.ReactNode }> {
   constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
@@ -38,10 +39,12 @@ class EditorErrorBoundary extends Component<{ children: React.ReactNode; fallbac
 
 const LazyAceEditor = lazy(async () => {
   const ReactAceModule = await import('react-ace');
-  await import('ace-builds/src-noconflict/mode-json');
-  await import('ace-builds/src-noconflict/theme-github');
-  await import('ace-builds/src-noconflict/theme-tomorrow_night');
-  return ReactAceModule;
+  await Promise.all([
+    import('ace-builds/src-noconflict/mode-json'),
+    import('ace-builds/src-noconflict/theme-github'),
+    import('ace-builds/src-noconflict/theme-tomorrow_night'),
+  ]);
+  return normalizeReactAceModule(ReactAceModule);
 });
 
 const FallbackEditor = ({ value, onChange, height, disabled }: { value: string; onChange: (value: string) => void; height: string; disabled?: boolean }) => {

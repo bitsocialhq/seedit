@@ -18,11 +18,6 @@
     "types": [
       "node"
     ],
-    "paths": {
-      "@bitsocialnet/bitsocial-react-hooks": [
-        "./src/lib/bitsocial-react-hooks-compat.ts"
-      ]
-    },
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
