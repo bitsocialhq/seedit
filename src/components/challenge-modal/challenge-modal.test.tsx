@@ -12,7 +12,11 @@ const act = (React as { act?: (callback: () => void | Promise<void>) => void | P
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, options?: Record<string, unknown>) => (key === 'challenge_counter' ? `${options?.index}/${options?.total}` : key),
+    t: (key: string, options?: Record<string, unknown>) => {
+      if (key === 'challenge_counter') return `${options?.index}/${options?.total}`;
+      if (key === 'iframe_challenge_open_confirmation') return String(options?.defaultValue ?? key);
+      return key;
+    },
   }),
 }));
 
@@ -30,6 +34,9 @@ let root: Root;
 
 const createChallenge = (prompt: string, publishChallengeAnswers = vi.fn()) =>
   [{ challenges: [{ challenge: prompt, type: 'text/plain' }] }, { communityAddress: 'example.bso', content: prompt, publishChallengeAnswers }] as never;
+
+const createIframeChallenge = (url: string, publishChallengeAnswers = vi.fn()) =>
+  [{ challenges: [{ challenge: url, type: 'url/iframe' }] }, { communityAddress: 'example.bso', content: 'iframe post', publishChallengeAnswers }] as never;
 
 const renderModal = async () => {
   await act(async () => {
@@ -119,5 +126,88 @@ describe('ChallengeModal', () => {
     expect(useChallengesStore.getState().challenges).toHaveLength(1);
     expect(container.textContent).toContain('second prompt');
     expect(container.querySelector<HTMLInputElement>('input')?.value).toBe('');
+  });
+
+  it('shows only the trusted Spamblocker hostname in the confirmation', async () => {
+    useChallengesStore.getState().addChallenge(createIframeChallenge('https://spamblocker.bitsocial.net/api/v1/iframe/session-123?token=large-token'));
+
+    await renderModal();
+
+    expect(container.textContent).toContain('wants to open spamblocker.bitsocial.net');
+    expect(container.textContent).not.toContain('/api/v1/iframe/session-123');
+    expect(container.textContent).not.toContain('large-token');
+  });
+
+  it('keeps the full confirmation URL for untrusted challenge providers', async () => {
+    useChallengesStore.getState().addChallenge(createIframeChallenge('https://example.com/api/v1/iframe/session-123?token=visible-token'));
+
+    await renderModal();
+
+    expect(container.textContent).toContain('https://example.com/api/v1/iframe/session-123?token=visible-token');
+  });
+
+  it('closes automatically when Spamblocker posts a matching challenge answer', async () => {
+    const publishChallengeAnswers = vi.fn();
+    useChallengesStore.getState().addChallenge(createIframeChallenge('https://spamblocker.bitsocial.net/api/v1/iframe/session-123', publishChallengeAnswers));
+    await renderModal();
+    await clickButton('open');
+
+    await act(async () => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          origin: 'https://spamblocker.bitsocial.net',
+          data: { type: 'challengeAnswer', challengeAnswers: ['turnstile-token'], sessionId: 'session-123' },
+        }),
+      );
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          origin: 'https://spamblocker.bitsocial.net',
+          data: { type: 'challengeAnswer', challengeAnswers: ['duplicate-token'], sessionId: 'session-123' },
+        }),
+      );
+      await Promise.resolve();
+    });
+
+    expect(publishChallengeAnswers).toHaveBeenCalledOnce();
+    expect(publishChallengeAnswers).toHaveBeenCalledWith(['turnstile-token']);
+    expect(useChallengesStore.getState().challenges).toHaveLength(0);
+  });
+
+  it('ignores iframe completion messages with a mismatched origin or session', async () => {
+    const publishChallengeAnswers = vi.fn();
+    useChallengesStore.getState().addChallenge(createIframeChallenge('https://spamblocker.bitsocial.net/api/v1/iframe/session-123', publishChallengeAnswers));
+    await renderModal();
+    await clickButton('open');
+
+    await act(async () => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          origin: 'https://example.com',
+          data: { type: 'challengeAnswer', challengeAnswers: ['wrong-origin'], sessionId: 'session-123' },
+        }),
+      );
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          origin: 'https://spamblocker.bitsocial.net',
+          data: { type: 'challengeAnswer', challengeAnswers: ['wrong-session'], sessionId: 'session-456' },
+        }),
+      );
+      await Promise.resolve();
+    });
+
+    expect(publishChallengeAnswers).not.toHaveBeenCalled();
+    expect(useChallengesStore.getState().challenges).toHaveLength(1);
+  });
+
+  it('keeps the manual Done fallback closing the iframe challenge', async () => {
+    const publishChallengeAnswers = vi.fn();
+    useChallengesStore.getState().addChallenge(createIframeChallenge('https://spamblocker.bitsocial.net/api/v1/iframe/session-123', publishChallengeAnswers));
+    await renderModal();
+    await clickButton('open');
+
+    await clickButton('done');
+
+    expect(publishChallengeAnswers).toHaveBeenCalledWith(['']);
+    expect(useChallengesStore.getState().challenges).toHaveLength(0);
   });
 });

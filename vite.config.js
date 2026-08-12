@@ -144,10 +144,6 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: /^@bitsocialnet\/bitsocial-react-hooks$/,
-        replacement: resolve(__dirname, 'src/lib/bitsocial-react-hooks-compat.ts'),
-      },
-      {
         find: /^@\//,
         replacement: `${resolve(__dirname, 'src')}/`,
       },
