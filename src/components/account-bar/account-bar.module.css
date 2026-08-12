@@ -16,14 +16,6 @@
   cursor: pointer;
 }
 
-.userDropdownButton {
-  background: none no-repeat scroll center right;
-  background-image: var(--account-dropdown-arrow);
-  padding-right: 21px;
-  margin-right: -5px;
-  cursor: pointer;
-}
-
 .separator {
  color: var(--gray-contrast);
  margin: 0px .7ex 0px .7ex;
@@ -65,40 +57,6 @@
 
 .selectedTextButton {
   color: var(--green);
-}
-
-.dropdown {
-  float: left;
-  cursor: pointer;
-  position: relative;
-}
-
-.dropChoices {
-  top: 16px;
-  position: absolute;
-  left: 0px;
-  border: 1px solid var(--border-text);
-  background-color: var(--background);
-  color: var(--text-primary) ;
-  white-space: nowrap;
-  line-height: normal;
-}
-
-.dropdownItem {
-  cursor: pointer;
-  padding: 2px 3px 1px 3px;
-  display: block;
-}
-
-@media (max-width: 640px) {
-  .dropdownItem {
-    padding-bottom: 5px;
-    padding-top: 5px;
-  }
-}
-
-.dropdownItem:hover {
-  background-color: var(--background-primary);
 }
 
 .mailIcon {

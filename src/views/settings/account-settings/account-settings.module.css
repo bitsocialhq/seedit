@@ -58,11 +58,6 @@
   padding-right: 10px;
 }
 
-.createAccount button {
-  margin-left: 0px;
-  margin-bottom: 10px;
-}
-
 @media (min-width: 640px) {
   .accountData textarea {
     width: 600px;

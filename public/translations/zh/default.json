@@ -245,10 +245,8 @@
   "show_all_instead": "显示自 {{timeFilterName}} 以来的帖子，<1>显示所有帖子</1>",
   "posts_last_synced_info": "帖子最后同步于{{time}}，社区可能离线，发布可能失败。",
   "import_account_backup": "<1>导入</1>账户备份",
-  "export_account_backup": "<1>导出</1>账户备份",
   "save_reset_changes": "<1>保存</1>或<2>重置</2>更改",
   "delete_this_account": "<1>删除</1>此账户",
-  "create_new_account": "<1>创建</1>新账户",
   "wallet_number": "钱包 #{{index}}",
   "view_more": "查看更多",
   "submit_community": "提交您的社区",
@@ -404,5 +402,6 @@
   "dismiss": "关闭",
   "load_more": "加载更多",
   "enable_infinite_feed": "启用无限信息流",
-  "feeds": "信息流"
+  "feeds": "信息流",
+  "download_account_backup": "<1>下载</1>账户备份"
 }

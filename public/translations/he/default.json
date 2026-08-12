@@ -245,10 +245,8 @@
   "show_all_instead": "מראה פוסטים מאז {{timeFilterName}}, <1>הצג הכל במקום זאת</1>",
   "posts_last_synced_info": "הפוסטים סנכרנו לאחרונה {{time}}, הקהילה עשויה להיות במצב offline וההפרסום עלול להיכשל.",
   "import_account_backup": "<1>יבוא</1> גיבוי חשבון",
-  "export_account_backup": "<1>ייצוא</1> גיבוי חשבון",
   "save_reset_changes": "<1>שמור</1> או <2>אפס</2> שינויים",
   "delete_this_account": "<1>מחק</1> את החשבון הזה",
-  "create_new_account": "<1>צור</1> חשבון חדש",
   "wallet_number": "ארנק #{{index}}",
   "view_more": "ראה עוד",
   "submit_community": "שלח את הקהילה שלך",
@@ -404,5 +402,6 @@
   "dismiss": "סגירה",
   "load_more": "טען עוד",
   "enable_infinite_feed": "הפעלת פיד אינסופי",
-  "feeds": "פידים"
+  "feeds": "פידים",
+  "download_account_backup": "<1>הורד</1> גיבוי חשבון"
 }

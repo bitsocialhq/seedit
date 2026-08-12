@@ -245,10 +245,8 @@
   "show_all_instead": "{{timeFilterName}} سے پوسٹ دکھا رہا ہے، <1>اس کے بجائے سب کچھ دکھائیں</1>",
   "posts_last_synced_info": "پوسٹس آخری بار {{time}} پر سنک کیے گئے تھے، کمیونٹی آف لائن ہو سکتی ہے اور شائع کرنا ناکام ہو سکتا ہے۔",
   "import_account_backup": "<1>درآمد</1> اکاؤنٹ کا بیک اپ",
-  "export_account_backup": "<1>برآمد</1> اکاؤنٹ کا بیک اپ",
   "save_reset_changes": "<1>محفوظ کریں</1> یا <2>ری سیٹ کریں</2> تبدیلیاں",
   "delete_this_account": "<1>حذف کریں</1> یہ اکاؤنٹ",
-  "create_new_account": "<1>نیا بنائیں</1> اکاؤنٹ",
   "wallet_number": "والٹ #{{index}}",
   "view_more": "مزید دیکھیں",
   "submit_community": "اپنی کمیونٹی جمع کروائیں",
@@ -404,5 +402,6 @@
   "dismiss": "بند کریں",
   "load_more": "مزید لوڈ کریں",
   "enable_infinite_feed": "لامحدود فیڈ فعال کریں",
-  "feeds": "فیڈز"
+  "feeds": "فیڈز",
+  "download_account_backup": "اکاؤنٹ کا بیک اپ <1>ڈاؤن لوڈ کریں</1>"
 }

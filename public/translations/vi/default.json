@@ -245,10 +245,8 @@
   "show_all_instead": "Đang hiển thị bài viết từ {{timeFilterName}}, <1>hiển thị tất cả thay vào đó</1>",
   "posts_last_synced_info": "Các bài viết được đồng bộ hóa lần cuối lúc {{time}}, cộng đồng có thể ngoại tuyến và đăng tải có thể không thành công.",
   "import_account_backup": "<1>nhập</1> sao lưu tài khoản",
-  "export_account_backup": "<1>xuất</1> sao lưu tài khoản",
   "save_reset_changes": "<1>lưu</1> hoặc <2>đặt lại</2> thay đổi",
   "delete_this_account": "<1>xóa</1> tài khoản này",
-  "create_new_account": "<1>tạo</1> tài khoản mới",
   "wallet_number": "ví #{{index}}",
   "view_more": "xem thêm",
   "submit_community": "Gửi cộng đồng của bạn",
@@ -404,5 +402,6 @@
   "dismiss": "Đóng",
   "load_more": "Tải thêm",
   "enable_infinite_feed": "Bật bảng tin vô hạn",
-  "feeds": "bảng tin"
+  "feeds": "bảng tin",
+  "download_account_backup": "<1>tải xuống</1> bản sao lưu tài khoản"
 }

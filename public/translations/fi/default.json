@@ -245,10 +245,8 @@
   "show_all_instead": "Näytetään viestejä ajasta {{timeFilterName}}, <1>näytä kaikki sen sijaan</1>",
   "posts_last_synced_info": "Viestit synkronoitu viimeksi {{time}}, yhteisö saattaa olla offline-tilassa ja julkaisu voi epäonnistua.",
   "import_account_backup": "<1>tuoda</1> tilin varmuuskopio",
-  "export_account_backup": "<1>viedä</1> tilin varmuuskopio",
   "save_reset_changes": "<1>tallenna</1> tai <2>nollaa</2> muutokset",
   "delete_this_account": "<1>poista</1> tämä tili",
-  "create_new_account": "<1>luo</1> uusi tili",
   "wallet_number": "lompakko #{{index}}",
   "view_more": "näytä lisää",
   "submit_community": "Lähetä yhteisösi",
@@ -404,5 +402,6 @@
   "dismiss": "Sulje",
   "load_more": "Lataa lisää",
   "enable_infinite_feed": "Ota loputon syöte käyttöön",
-  "feeds": "syötteet"
+  "feeds": "syötteet",
+  "download_account_backup": "<1>lataa</1> tilin varmuuskopio"
 }

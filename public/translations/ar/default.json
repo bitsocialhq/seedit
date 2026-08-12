@@ -245,10 +245,8 @@
   "show_all_instead": "عرض المشاركات منذ {{timeFilterName}} ، <1>عرض الكل بدلاً من ذلك</1>",
   "posts_last_synced_info": "تم مزامنة المنشورات آخر مرة {{time}}، قد تكون المجتمع غير متصل والنشر قد يفشل.",
   "import_account_backup": "<1>استيراد</1> نسخة احتياطية للحساب",
-  "export_account_backup": "<1>تصدير</1> نسخة احتياطية للحساب",
   "save_reset_changes": "<1>حفظ</1> أو <2>إعادة تعيين</2> التغييرات",
   "delete_this_account": "<1>حذف</1> هذا الحساب",
-  "create_new_account": "<1>إنشاء</1> حساب جديد",
   "wallet_number": "المحفظة #{{index}}",
   "view_more": "عرض المزيد",
   "submit_community": "قدم مجتمعك",
@@ -404,5 +402,6 @@
   "dismiss": "تجاهل",
   "load_more": "تحميل المزيد",
   "enable_infinite_feed": "تمكين الخلاصة اللانهائية",
-  "feeds": "الخلاصات"
+  "feeds": "الخلاصات",
+  "download_account_backup": "<1>تنزيل</1> نسخة احتياطية للحساب"
 }

@@ -245,10 +245,8 @@
   "show_all_instead": "Affichage des publications depuis {{timeFilterName}}, <1>afficher tout à la place</1>",
   "posts_last_synced_info": "Derniers messages synchronisés {{time}}, la communauté pourrait être hors ligne et la publication pourrait échouer.",
   "import_account_backup": "<1>importer</1> la sauvegarde du compte",
-  "export_account_backup": "<1>exporter</1> la sauvegarde du compte",
   "save_reset_changes": "<1>enregistrer</1> ou <2>réinitialiser</2> les modifications",
   "delete_this_account": "<1>supprimer</1> ce compte",
-  "create_new_account": "<1>créer</1> un nouveau compte",
   "wallet_number": "portefeuille #{{index}}",
   "view_more": "voir plus",
   "submit_community": "Soumettez votre communauté",
@@ -404,5 +402,6 @@
   "dismiss": "ignorer",
   "load_more": "Charger plus",
   "enable_infinite_feed": "Activer le fil infini",
-  "feeds": "fils"
+  "feeds": "fils",
+  "download_account_backup": "<1>télécharger</1> la sauvegarde du compte"
 }

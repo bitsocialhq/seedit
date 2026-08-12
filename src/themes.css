@@ -4,7 +4,6 @@
 }
 
 :root .dark {
-  --account-dropdown-arrow: url("/assets/buttons/droparrowgray.gif");
   --background: #0f0f0f;
   --background-contrast: #141414;
   --background-markdown: #1f1f1f;
@@ -111,7 +110,6 @@
 }
 
 :root .light {
-  --account-dropdown-arrow: url("/assets/buttons/droparrowblue.gif");
   --background: white;
   --background-contrast: #E4F2FB;
   --background-markdown: #fafafa;

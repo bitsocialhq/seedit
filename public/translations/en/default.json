@@ -284,10 +284,8 @@
   "show_all_instead": "Showing posts since {{timeFilterName}}, <1>show all instead</1>",
   "posts_last_synced_info": "Posts last synced {{time}}, the community might be offline and publishing might fail.",
   "import_account_backup": "<1>import</1> account backup",
-  "export_account_backup": "<1>export</1> account backup",
   "save_reset_changes": "<1>save</1> or <2>reset</2> changes",
   "delete_this_account": "<1>delete</1> this account",
-  "create_new_account": "<1>create</1> a new account",
   "wallet_number": "wallet #{{index}}",
   "view_more": "view more",
   "submit_community": "Submit your community",
@@ -414,5 +412,6 @@
   "dismiss": "dismiss",
   "load_more": "Load more",
   "enable_infinite_feed": "Enable infinite feed",
-  "feeds": "feeds"
+  "feeds": "feeds",
+  "download_account_backup": "<1>download</1> account backup"
 }

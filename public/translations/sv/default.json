@@ -245,10 +245,8 @@
   "show_all_instead": "Visar inlägg sedan {{timeFilterName}}, <1>visa allt istället</1>",
   "posts_last_synced_info": "Inlägg synkroniserades senast {{time}}, gemenskapen kan vara offline och publiceringen kan misslyckas.",
   "import_account_backup": "<1>importera</1> kontots säkerhetskopiering",
-  "export_account_backup": "<1>exportera</1> kontots säkerhetskopiering",
   "save_reset_changes": "<1>spara</1> eller <2>återställ</2> ändringar",
   "delete_this_account": "<1>ta bort</1> det här kontot",
-  "create_new_account": "<1>skapa</1> ett nytt konto",
   "wallet_number": "plånbok #{{index}}",
   "view_more": "visa mer",
   "submit_community": "Skicka in ditt samhälle",
@@ -404,5 +402,6 @@
   "dismiss": "Stäng",
   "load_more": "Ladda fler",
   "enable_infinite_feed": "Aktivera oändligt flöde",
-  "feeds": "flöden"
+  "feeds": "flöden",
+  "download_account_backup": "<1>ladda ner</1> säkerhetskopian av kontot"
 }

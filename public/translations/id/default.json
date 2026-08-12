@@ -245,10 +245,8 @@
   "show_all_instead": "Menampilkan pos sejak {{timeFilterName}}, <1>tampilkan semua sebagai gantinya</1>",
   "posts_last_synced_info": "Posting terakhir disinkronkan {{time}}, komunitas mungkin offline dan penerbitan mungkin gagal.",
   "import_account_backup": "<1>impor</1> cadangan akun",
-  "export_account_backup": "<1>ekspor</1> cadangan akun",
   "save_reset_changes": "<1>simpan</1> atau <2>reset</2> perubahan",
   "delete_this_account": "<1>hapus</1> akun ini",
-  "create_new_account": "<1>buat</1> akun baru",
   "wallet_number": "dompet #{{index}}",
   "view_more": "lihat lebih banyak",
   "submit_community": "Kirim komunitas Anda",
@@ -404,5 +402,6 @@
   "dismiss": "Tutup",
   "load_more": "Muat lebih banyak",
   "enable_infinite_feed": "Aktifkan feed tanpa batas",
-  "feeds": "feed"
+  "feeds": "feed",
+  "download_account_backup": "<1>unduh</1> cadangan akun"
 }

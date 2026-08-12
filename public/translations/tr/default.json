@@ -245,10 +245,8 @@
   "show_all_instead": "{{timeFilterName}} tarihinden itibaren gönderiler gösteriliyor, <1>bunun yerine hepsini göster</1>",
   "posts_last_synced_info": "Gönderiler son {{time}} tarihinde senkronize edildi, topluluk çevrimdışı olabilir ve yayımlama başarısız olabilir.",
   "import_account_backup": "<1>içeri aktarma</1> hesap yedeği",
-  "export_account_backup": "<1>dışa aktarma</1> hesap yedeği",
   "save_reset_changes": "<1>kaydet</1> veya <2>sıfırla</2> değişiklikleri",
   "delete_this_account": "<1>sil</1> bu hesabı",
-  "create_new_account": "<1>oluştur</1> yeni bir hesap",
   "wallet_number": "cüzdan #{{index}}",
   "view_more": "daha fazla görüntüle",
   "submit_community": "Topluluğunuzu gönderin",
@@ -404,5 +402,6 @@
   "dismiss": "Kapat",
   "load_more": "Daha fazla yükle",
   "enable_infinite_feed": "Sonsuz akışı etkinleştir",
-  "feeds": "akışlar"
+  "feeds": "akışlar",
+  "download_account_backup": "hesap yedeğini <1>indirin</1>"
 }

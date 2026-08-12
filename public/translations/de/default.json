@@ -245,10 +245,8 @@
   "show_all_instead": "Zeigt Beiträge seit {{timeFilterName}}, <1>stattdessen alles anzeigen</1>",
   "posts_last_synced_info": "Beiträge zuletzt synchronisiert {{time}}, die Gemeinschaft könnte offline sein und das Veröffentlichen könnte fehlschlagen.",
   "import_account_backup": "<1>importieren</1> Sie die Kontosicherung",
-  "export_account_backup": "<1>exportieren</1> Sie die Kontosicherung",
   "save_reset_changes": "<1>speichern</1> oder <2>zurücksetzen</2> Änderungen",
   "delete_this_account": "<1>löschen</1> Sie dieses Konto",
-  "create_new_account": "<1>erstelle</1> ein neues Konto",
   "wallet_number": "Wallet #{{index}}",
   "view_more": "mehr anzeigen",
   "submit_community": "Reichen Sie Ihre Gemeinschaft ein",
@@ -404,5 +402,6 @@
   "dismiss": "Ausblenden",
   "load_more": "Mehr laden",
   "enable_infinite_feed": "Endlosen Feed aktivieren",
-  "feeds": "Feeds"
+  "feeds": "Feeds",
+  "download_account_backup": "Kontosicherung <1>herunterladen</1>"
 }

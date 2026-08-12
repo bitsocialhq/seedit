@@ -245,10 +245,8 @@
   "show_all_instead": "Zobrazujeme příspěvky od {{timeFilterName}}, <1>zobrazit vše místo toho</1>",
   "posts_last_synced_info": "Příspěvky byly naposledy synchronizovány {{time}}, komunita může být offline a zveřejnění může selhat.",
   "import_account_backup": "<1>importovat</1> zálohu účtu",
-  "export_account_backup": "<1>exportovat</1> zálohu účtu",
   "save_reset_changes": "<1>uložit</1> nebo <2>resetovat</2> změny",
   "delete_this_account": "<1>smazat</1> tento účet",
-  "create_new_account": "<1>vytvořit</1> nový účet",
   "wallet_number": "peněženka #{{index}}",
   "view_more": "zobrazit více",
   "submit_community": "Odešlete svou komunitu",
@@ -404,5 +402,6 @@
   "dismiss": "Zavřít",
   "load_more": "Načíst další",
   "enable_infinite_feed": "Povolit nekonečný kanál",
-  "feeds": "kanály"
+  "feeds": "kanály",
+  "download_account_backup": "<1>stáhnout</1> zálohu účtu"
 }

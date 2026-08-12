@@ -1,48 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { createAccount, deleteAccount, exportAccount, importAccount, setActiveAccount, useAccount, useAccounts } from '@bitsocial/bitsocial-react-hooks';
+import { deleteAccount, exportAccount, importAccount, setActiveAccount, useAccount, useAccounts } from '@bitsocial/bitsocial-react-hooks';
 import { processImportedAccount } from '../../../lib/utils/account-import-utils';
 import { exportFile } from '../../../lib/utils/file-export-utils';
 import styles from './account-settings.module.css';
 import { getDisplayAddress } from '../../../lib/utils/address-utils';
 import { getEditableAccountData } from '../../../lib/utils/account-data-utils';
-
-const CreateAccountButton = () => {
-  const { accounts } = useAccounts();
-  const switchToNewAccountRef = useRef(false);
-
-  useEffect(() => {
-    if (switchToNewAccountRef.current && accounts.length > 0) {
-      const lastAccount = accounts[accounts.length - 1];
-      setActiveAccount(lastAccount.name);
-      switchToNewAccountRef.current = false;
-    }
-  }, [accounts]);
-
-  const handleCreateAccount = async () => {
-    try {
-      switchToNewAccountRef.current = true;
-      await createAccount();
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-        console.log(error);
-      } else {
-        console.error('An unknown error occurred:', error);
-      }
-    }
-  };
-
-  return (
-    <Trans
-      i18nKey='create_new_account'
-      components={{
-        1: <button key='createNewAccountButton' onClick={handleCreateAccount} />,
-      }}
-    />
-  );
-};
 
 const ImportAccountButton = () => {
   const isElectron = window.electronApi?.isElectron === true;
@@ -114,7 +78,7 @@ const ImportAccountButton = () => {
     <Trans
       i18nKey='import_account_backup'
       components={{
-        1: <button key='importAccountButton' onClick={handleImportAccount} />,
+        1: <button key='importAccountButton' type='button' onClick={handleImportAccount} />,
       }}
     />
   );
@@ -173,9 +137,9 @@ const ExportAccountButton = () => {
   return (
     <>
       <Trans
-        i18nKey='export_account_backup'
+        i18nKey='download_account_backup'
         components={{
-          1: <button key='exportAccountButton' onClick={handleExportAccount} />,
+          1: <button key='downloadAccountButton' type='button' onClick={handleExportAccount} />,
         }}
       />
       <span className={styles.exportAccountOptions}>
@@ -244,9 +208,6 @@ const AccountSettings = () => {
           {accountsOptions}
         </select>
         <Link to='/settings/account-data'>{t('edit')}</Link>
-      </div>
-      <div className={styles.createAccount}>
-        <CreateAccountButton />
       </div>
       <div className={styles.accountData}>
         <div className={styles.accountButtons}>

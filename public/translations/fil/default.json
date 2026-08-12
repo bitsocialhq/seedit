@@ -245,10 +245,8 @@
   "show_all_instead": "Ipinapakita ang mga post mula {{timeFilterName}}, <1>ipakita ang lahat sa halip</1>",
   "posts_last_synced_info": "Ang mga post ay na-sync na huling {{time}}, ang komunidad ay maaaring offline at ang paglalathala ay maaaring magbigo.",
   "import_account_backup": "<1>i-import</1> ang backup ng account",
-  "export_account_backup": "<1>ilabas</1> ang backup ng account",
   "save_reset_changes": "<1>i-save</1> o <2>i-reset</2> ang mga pagbabago",
   "delete_this_account": "<1>tanggalin</1> ang account na ito",
-  "create_new_account": "<1>lumikha</1> ng bagong account",
   "wallet_number": "wallet #{{index}}",
   "view_more": "tingnan pa",
   "submit_community": "I-submit ang iyong komunidad",
@@ -404,5 +402,6 @@
   "dismiss": "Isara",
   "load_more": "Mag-load pa",
   "enable_infinite_feed": "I-enable ang walang katapusang feed",
-  "feeds": "mga feed"
+  "feeds": "mga feed",
+  "download_account_backup": "<1>i-download</1> ang backup ng account"
 }

@@ -245,10 +245,8 @@
   "show_all_instead": "A {{timeFilterName}} óta látható bejegyzések, <1>helyette mindent mutass</1>",
   "posts_last_synced_info": "Bejegyzések utoljára szinkronizálva {{time}}, a közösség lehet offline, és a közzététel meghiúsulhat.",
   "import_account_backup": "<1>importálás</1> fiók biztonsági másolat",
-  "export_account_backup": "<1>exportálás</1> fiók biztonsági másolat",
   "save_reset_changes": "<1>mentés</1> vagy <2>visszaállítás</2> a változtatásokat",
   "delete_this_account": "<1>törölni</1> ezt a fiókot",
-  "create_new_account": "<1>hozzon létre</1> egy új fiókot",
   "wallet_number": "tárca #{{index}}",
   "view_more": "több megtekintése",
   "submit_community": "Küldje el közösségét",
@@ -404,5 +402,6 @@
   "dismiss": "Bezárás",
   "load_more": "Továbbiak betöltése",
   "enable_infinite_feed": "Végtelen hírfolyam engedélyezése",
-  "feeds": "hírfolyamok"
+  "feeds": "hírfolyamok",
+  "download_account_backup": "fiók biztonsági másolatának <1>letöltése</1>"
 }

@@ -245,10 +245,8 @@
   "show_all_instead": "Viser innlegg siden {{timeFilterName}}, <1>vis alt i stedet</1>",
   "posts_last_synced_info": "Innlegg synkronisert sist {{time}}, fellesskapet kan være offline og publisering kan mislykkes.",
   "import_account_backup": "<1>importere</1> konto sikkerhetskopi",
-  "export_account_backup": "<1>eksportere</1> konto sikkerhetskopi",
   "save_reset_changes": "<1>lagre</1> eller <2>nullstille</2> endringer",
   "delete_this_account": "<1>slett</1> denne kontoen",
-  "create_new_account": "<1>opprett</1> en ny konto",
   "wallet_number": "lommebok #{{index}}",
   "view_more": "vis mer",
   "submit_community": "Send inn ditt fellesskap",
@@ -404,5 +402,6 @@
   "dismiss": "Lukk",
   "load_more": "Last inn mer",
   "enable_infinite_feed": "Aktiver uendelig feed",
-  "feeds": "feeder"
+  "feeds": "feeder",
+  "download_account_backup": "<1>last ned</1> sikkerhetskopi av kontoen"
 }

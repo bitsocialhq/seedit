@@ -245,10 +245,8 @@
   "show_all_instead": "Pokazuje posty od {{timeFilterName}}, <1>pokaż wszystko zamiast tego</1>",
   "posts_last_synced_info": "Posty ostatnio zsynchronizowane {{time}}, społeczność może być w trybie offline i publikowanie może się nie powieść.",
   "import_account_backup": "<1>importuj</1> kopię zapasową konta",
-  "export_account_backup": "<1>eksportuj</1> kopię zapasową konta",
   "save_reset_changes": "<1>zapisz</1> lub <2>zresetuj</2> zmiany",
   "delete_this_account": "<1>usuń</1> to konto",
-  "create_new_account": "<1>stwórz</1> nowe konto",
   "wallet_number": "portfel #{{index}}",
   "view_more": "zobacz więcej",
   "submit_community": "Prześlij swoją społeczność",
@@ -404,5 +402,6 @@
   "dismiss": "Zamknij",
   "load_more": "Załaduj więcej",
   "enable_infinite_feed": "Włącz nieskończony kanał",
-  "feeds": "kanały"
+  "feeds": "kanały",
+  "download_account_backup": "<1>pobierz</1> kopię zapasową konta"
 }

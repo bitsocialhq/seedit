@@ -245,10 +245,8 @@
   "show_all_instead": "Afișând postări din {{timeFilterName}}, <1>afișați totul în schimb</1>",
   "posts_last_synced_info": "Postări sincronizate ultima dată {{time}}, comunitatea ar putea fi offline și publicarea ar putea eșua.",
   "import_account_backup": "<1>importați</1> backup-ul contului",
-  "export_account_backup": "<1>exportați</1> backup-ul contului",
   "save_reset_changes": "<1>salvează</1> sau <2>resetează</2> modificările",
   "delete_this_account": "<1>șterge</1> acest cont",
-  "create_new_account": "<1>creați</1> un cont nou",
   "wallet_number": "portofel #{{index}}",
   "view_more": "vezi mai mult",
   "submit_community": "Trimite comunitatea ta",
@@ -404,5 +402,6 @@
   "dismiss": "Închide",
   "load_more": "Încarcă mai multe",
   "enable_infinite_feed": "Activează fluxul infinit",
-  "feeds": "fluxuri"
+  "feeds": "fluxuri",
+  "download_account_backup": "<1>descărcați</1> backupul contului"
 }

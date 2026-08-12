@@ -245,10 +245,8 @@
   "show_all_instead": "نمایش پست‌ها از {{timeFilterName}}، <1>به‌جای آن همه را نشان بده</1>",
   "posts_last_synced_info": "پست ها آخرین بار در {{time}} همگام سازی شدند، جامعه ممکن است آفلاین باشد و انتشار ممکن است ناموفق باشد.",
   "import_account_backup": "<1>وارد کردن</1> پشتیبان حساب",
-  "export_account_backup": "<1>خروجی</1> پشتیبان حساب",
   "save_reset_changes": "<1>ذخیره</1> یا <2>بازنشانی</2> تغییرات",
   "delete_this_account": "<1>حذف</1> این حساب",
-  "create_new_account": "<1>ایجاد</1> یک حساب جدید",
   "wallet_number": "کیف پول #{{index}}",
   "view_more": "مشاهده بیشتر",
   "submit_community": "جامعه خود را ارسال کنید",
@@ -404,5 +402,6 @@
   "dismiss": "بستن",
   "load_more": "بارگذاری بیشتر",
   "enable_infinite_feed": "فعال‌سازی خوراک بی‌نهایت",
-  "feeds": "فیدها"
+  "feeds": "فیدها",
+  "download_account_backup": "نسخه پشتیبان حساب را <1>دانلود کنید</1>"
 }
