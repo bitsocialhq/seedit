@@ -1,0 +1,49 @@
+.eligibility {
+  margin-top: 3px;
+}
+
+.directoryIndex {
+  padding-left: 5px;
+}
+
+.directoryRow {
+  padding: 5px 5px 5px 0px;
+  overflow: hidden;
+}
+
+.directoryTitle {
+  font-size: medium;
+  unicode-bidi: isolate;
+}
+
+.directoryTitle a {
+  color: var(--link);
+}
+
+.directoryTagline {
+  margin-top: 2px;
+  color: var(--text-info);
+  text-transform: lowercase;
+}
+
+.directoryHeading {
+  padding: 0px 5px 5px 5px;
+  border-bottom: 1px solid var(--border-text);
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.directoryHeadingTitle {
+  font-size: medium;
+  unicode-bidi: isolate;
+}
+
+.directoryHeadingTitle a {
+  color: var(--link);
+}
+
+.directoryRevision {
+  margin-left: 5px;
+  color: var(--text-info);
+  text-transform: lowercase;
+}

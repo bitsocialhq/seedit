@@ -10,6 +10,7 @@ import {
   getCommunityReferencePostPath,
   getCommunityRouteSegment,
   getDirectoryPath,
+  getDirectoryVotePath,
   getExactCommunityActionRedirectPath,
   resolveCommunityRouteAddress,
 } from './community-route-utils';
@@ -83,6 +84,11 @@ describe('community route builders', () => {
     expect(getCommunityReferencePath('unreserved-name')).toBe('/s/unreserved-name.bso');
     expect(getCommunityReferencePostPath('funny', 'bafy-post-cid')).toBe('/s/funny/comments/bafy-post-cid');
     expect(getCommunityReferencePostPath('funny.bso', 'bafy-post-cid')).toBe('/s/funny.bso/comments/bafy-post-cid');
+  });
+
+  it('builds the directory candidate list path without touching the discovery route', () => {
+    expect(getDirectoryVotePath('memes')).toBe('/communities/vote/memes');
+    expect(getDirectoryVotePath('memes')).not.toBe(getDirectoryPath('memes'));
   });
 
   it('round-trips every canonical address', () => {

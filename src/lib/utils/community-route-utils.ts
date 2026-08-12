@@ -29,6 +29,9 @@ export const getCommunityPath = (communityAddress: string): string => `/s/${enco
 
 export const getDirectoryPath = (directoryCode: SeeditDirectoryCode): string => `/s/${encodeURIComponent(directoryCode)}`;
 
+/** The directory's candidate list, where the communities competing for the route are ranked. */
+export const getDirectoryVotePath = (directoryCode: SeeditDirectoryCode): string => `/communities/vote/${encodeURIComponent(directoryCode)}`;
+
 /** Use for typed or linked references that may intentionally name a directory route. */
 export const getCommunityReferencePath = (communityReference: string): string =>
   isDirectoryCode(communityReference) ? getDirectoryPath(communityReference) : getCommunityPath(communityReference);

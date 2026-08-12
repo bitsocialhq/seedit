@@ -26,7 +26,7 @@ import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
-import { getCommunityPath, getCommunityPostUrl } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, getCommunityPostUrl, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
 import type { SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { FAQ } from '../../views/about/about';
@@ -292,6 +292,8 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
             {directoryCode && address && (
               <div className={styles.directoryRouteDisclosure}>
                 {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
+                {' — '}
+                <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
               </div>
             )}
             <div className={styles.subscribeContainer}>

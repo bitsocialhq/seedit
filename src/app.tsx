@@ -161,6 +161,7 @@ const App = () => {
             <Route path='/communities/vote' element={<Communities />} />
             <Route path='/communities/vote/passing' element={<Communities />} />
             <Route path='/communities/vote/rejecting' element={<Communities />} />
+            <Route path='/communities/vote/:directoryCode' element={<Communities />} />
             <Route path='/communities/create' element={<CommunitySettings />} />
           </Route>
           <Route element={feedLayout}>

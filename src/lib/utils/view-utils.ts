@@ -221,6 +221,10 @@ export const isCommunitiesVoteView = (pathname: string): boolean => {
   return pathname.startsWith('/communities/vote');
 };
 
+export const isCommunitiesVoteAllView = (pathname: string): boolean => {
+  return pathname === '/communities/vote';
+};
+
 export const isCommunitiesVotePassingView = (pathname: string): boolean => {
   return pathname === '/communities/vote/passing';
 };

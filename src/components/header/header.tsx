@@ -44,7 +44,7 @@ import {
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
-import { getCommunityPath, getCommunityPostPath } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, getCommunityPostPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -503,6 +503,8 @@ const Header = () => {
       {isMobile && directoryCode && communityAddress && isInCommunityView && !isInPostPageView && !isInCommunitySubmitView && !isInCommunitySettingsView && (
         <div className={styles.mobileDirectoryDisclosure}>
           {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(communityAddress)}>{getDisplayAddress(communityAddress)}</Link>
+          {' — '}
+          <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
         </div>
       )}
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
