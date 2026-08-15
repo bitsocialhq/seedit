@@ -155,6 +155,7 @@ export const isSettingsView = (pathname: string): boolean => {
     pathname === '/settings/advanced' ||
     pathname === '/settings/p2p-stats' ||
     pathname === '/settings/content-options' ||
+    (import.meta.env.DEV && pathname === '/settings/debug') ||
     pathname === '/settings/account-data'
   );
 };
@@ -169,6 +170,10 @@ export const isSettingsP2pStatsView = (pathname: string): boolean => {
 
 export const isSettingsContentOptionsView = (pathname: string): boolean => {
   return pathname === '/settings/content-options';
+};
+
+export const isSettingsDebugView = (pathname: string): boolean => {
+  return import.meta.env.DEV && pathname === '/settings/debug';
 };
 
 export const isSettingsAccountDataView = (pathname: string): boolean => {

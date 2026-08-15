@@ -403,5 +403,11 @@
   "load_more": "আরও লোড করুন",
   "enable_infinite_feed": "অসীম ফিড চালু করুন",
   "feeds": "ফিডসমূহ",
-  "download_account_backup": "অ্যাকাউন্ট ব্যাকআপ <1>ডাউনলোড করুন</1>"
+  "download_account_backup": "অ্যাকাউন্ট ব্যাকআপ <1>ডাউনলোড করুন</1>",
+  "debug": "ডিবাগ",
+  "mock_content": "মক কনটেন্ট",
+  "reset_feed": "ফিড রিসেট করুন",
+  "enable_mock_content_all_communities_reload": "সব কমিউনিটির জন্য মক কনটেন্ট চালু করুন (Seedit পুনরায় লোড হয়)",
+  "show_reset_feed_button": "ফিড রিসেট বোতামটি দেখান",
+  "mock_content_uncached_communities_description": "মক কনটেন্ট শুধু ক্যাশে না থাকা কমিউনিটিগুলোর জন্য দেখানো হয়; একটি বানানো .bso ঠিকানা চেষ্টা করুন"
 }

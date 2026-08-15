@@ -17,6 +17,7 @@ import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
 import DirectorySubscriptionUpdatesNotice from '../../components/directory-subscription-updates-notice';
+import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
 import { sortTypes } from '../../constants/sort-types';
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
@@ -291,6 +292,7 @@ const Home = () => {
           </div>
         ) : (
           <div className={styles.feed}>
+            <DevelopmentFeedResetButton onReset={reset} />
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 1200 }}
               totalCount={feed?.length || 0}

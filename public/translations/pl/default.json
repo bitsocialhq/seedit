@@ -403,5 +403,11 @@
   "load_more": "Załaduj więcej",
   "enable_infinite_feed": "Włącz nieskończony kanał",
   "feeds": "kanały",
-  "download_account_backup": "<1>pobierz</1> kopię zapasową konta"
+  "download_account_backup": "<1>pobierz</1> kopię zapasową konta",
+  "debug": "debugowanie",
+  "mock_content": "treść testowa",
+  "reset_feed": "zresetuj kanał",
+  "enable_mock_content_all_communities_reload": "włącz treści testowe dla wszystkich społeczności (ponownie ładuje Seedit)",
+  "show_reset_feed_button": "pokaż przycisk resetowania kanału",
+  "mock_content_uncached_communities_description": "treść testowa jest wyświetlana tylko dla społeczności, których nie ma w pamięci podręcznej; wypróbuj zmyślony adres .bso"
 }

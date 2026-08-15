@@ -141,6 +141,7 @@ const App = () => {
             <Route path='/settings/advanced' element={<Settings />} />
             <Route path='/settings/p2p-stats' element={<Settings />} />
             <Route path='/settings/content-options' element={<Settings />} />
+            {import.meta.env.DEV && <Route path='/settings/debug' element={<Settings />} />}
             <Route path='/settings/account-data' element={<AccountDataEditor />} />
 
             <Route path='/profile/about' element={<AboutView />} />

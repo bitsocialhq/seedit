@@ -403,5 +403,11 @@
   "load_more": "Charger plus",
   "enable_infinite_feed": "Activer le fil infini",
   "feeds": "fils",
-  "download_account_backup": "<1>télécharger</1> la sauvegarde du compte"
+  "download_account_backup": "<1>télécharger</1> la sauvegarde du compte",
+  "debug": "débogage",
+  "mock_content": "contenu simulé",
+  "reset_feed": "réinitialiser le fil",
+  "enable_mock_content_all_communities_reload": "activer le contenu fictif pour toutes les communautés (recharge Seedit)",
+  "show_reset_feed_button": "afficher le bouton de réinitialisation du fil",
+  "mock_content_uncached_communities_description": "le contenu simulé s’affiche uniquement pour les communautés qui ne sont pas en cache ; essayez une adresse .bso fictive"
 }

@@ -403,5 +403,11 @@
   "load_more": "Carica altro",
   "enable_infinite_feed": "Abilita il feed infinito",
   "feeds": "feed",
-  "download_account_backup": "<1>scarica</1> il backup dell'account"
+  "download_account_backup": "<1>scarica</1> il backup dell'account",
+  "debug": "debug",
+  "mock_content": "contenuto simulato",
+  "reset_feed": "ripristina feed",
+  "enable_mock_content_all_communities_reload": "abilita i contenuti di prova per tutte le comunità (ricarica Seedit)",
+  "show_reset_feed_button": "mostra il pulsante per ripristinare il feed",
+  "mock_content_uncached_communities_description": "il contenuto simulato viene mostrato solo per le comunità non memorizzate nella cache; prova un indirizzo .bso inventato"
 }

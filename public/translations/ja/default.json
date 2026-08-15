@@ -403,5 +403,11 @@
   "load_more": "さらに読み込む",
   "enable_infinite_feed": "無限フィードを有効にする",
   "feeds": "フィード",
-  "download_account_backup": "アカウントのバックアップを<1>ダウンロード</1>"
+  "download_account_backup": "アカウントのバックアップを<1>ダウンロード</1>",
+  "debug": "デバッグ",
+  "mock_content": "モックコンテンツ",
+  "reset_feed": "フィードをリセット",
+  "enable_mock_content_all_communities_reload": "すべてのコミュニティでモックコンテンツを有効にする（Seeditを再読み込みします）",
+  "show_reset_feed_button": "フィードのリセットボタンを表示",
+  "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください"
 }

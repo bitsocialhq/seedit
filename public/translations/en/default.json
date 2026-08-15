@@ -413,5 +413,11 @@
   "load_more": "Load more",
   "enable_infinite_feed": "Enable infinite feed",
   "feeds": "feeds",
-  "download_account_backup": "<1>download</1> account backup"
+  "download_account_backup": "<1>download</1> account backup",
+  "debug": "debug",
+  "mock_content": "mock content",
+  "reset_feed": "reset feed",
+  "enable_mock_content_all_communities_reload": "enable mock content for all communities (reloads Seedit)",
+  "show_reset_feed_button": "show the reset feed button",
+  "mock_content_uncached_communities_description": "mock content is shown only for uncached communities; try a made-up .bso address"
 }

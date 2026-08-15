@@ -403,5 +403,11 @@
   "load_more": "טען עוד",
   "enable_infinite_feed": "הפעלת פיד אינסופי",
   "feeds": "פידים",
-  "download_account_backup": "<1>הורד</1> גיבוי חשבון"
+  "download_account_backup": "<1>הורד</1> גיבוי חשבון",
+  "debug": "ניפוי שגיאות",
+  "mock_content": "תוכן מדומה",
+  "reset_feed": "אפס את הפיד",
+  "enable_mock_content_all_communities_reload": "הפעל תוכן מדומה עבור כל הקהילות (טוען מחדש את Seedit)",
+  "show_reset_feed_button": "הצג את כפתור איפוס הפיד",
+  "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת"
 }

@@ -403,5 +403,11 @@
   "load_more": "और लोड करें",
   "enable_infinite_feed": "अनंत फ़ीड सक्षम करें",
   "feeds": "फ़ीड",
-  "download_account_backup": "खाता बैकअप <1>डाउनलोड करें</1>"
+  "download_account_backup": "खाता बैकअप <1>डाउनलोड करें</1>",
+  "debug": "डीबग",
+  "mock_content": "मॉक सामग्री",
+  "reset_feed": "फ़ीड रीसेट करें",
+  "enable_mock_content_all_communities_reload": "सभी समुदायों के लिए मॉक सामग्री सक्षम करें (Seedit को फिर से लोड करता है)",
+  "show_reset_feed_button": "फ़ीड रीसेट करने का बटन दिखाएँ",
+  "mock_content_uncached_communities_description": "मॉक सामग्री केवल उन कम्युनिटी के लिए दिखाई जाती है जो कैश में नहीं हैं; कोई काल्पनिक .bso पता आज़माएँ"
 }

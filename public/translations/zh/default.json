@@ -403,5 +403,11 @@
   "load_more": "加载更多",
   "enable_infinite_feed": "启用无限信息流",
   "feeds": "信息流",
-  "download_account_backup": "<1>下载</1>账户备份"
+  "download_account_backup": "<1>下载</1>账户备份",
+  "debug": "调试",
+  "mock_content": "模拟内容",
+  "reset_feed": "重置信息流",
+  "enable_mock_content_all_communities_reload": "为所有社区启用模拟内容（重新加载 Seedit）",
+  "show_reset_feed_button": "显示重置信息流按钮",
+  "mock_content_uncached_communities_description": "模拟内容仅对未缓存的社区显示；请尝试一个虚构的 .bso 地址"
 }

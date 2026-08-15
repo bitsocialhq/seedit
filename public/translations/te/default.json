@@ -403,5 +403,11 @@
   "load_more": "మరిన్ని లోడ్ చేయండి",
   "enable_infinite_feed": "అనంత ఫీడ్‌ను ప్రారంభించండి",
   "feeds": "ఫీడ్‌లు",
-  "download_account_backup": "ఖాతా బ్యాకప్‌ను <1>డౌన్‌లోడ్ చేయండి</1>"
+  "download_account_backup": "ఖాతా బ్యాకప్‌ను <1>డౌన్‌లోడ్ చేయండి</1>",
+  "debug": "డీబగ్",
+  "mock_content": "మాక్ కంటెంట్",
+  "reset_feed": "ఫీడ్‌ను రీసెట్ చేయండి",
+  "enable_mock_content_all_communities_reload": "అన్ని కమ్యూనిటీల కోసం మాక్ కంటెంట్‌ను ప్రారంభించండి (Seedit మళ్లీ లోడ్ అవుతుంది)",
+  "show_reset_feed_button": "ఫీడ్‌ను రీసెట్ చేసే బటన్‌ను చూపించండి",
+  "mock_content_uncached_communities_description": "మాక్ కంటెంట్ కాష్‌లో లేని కమ్యూనిటీలకు మాత్రమే చూపబడుతుంది; కల్పిత .bso చిరునామాను ప్రయత్నించండి"
 }

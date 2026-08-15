@@ -403,5 +403,11 @@
   "load_more": "بارگذاری بیشتر",
   "enable_infinite_feed": "فعال‌سازی خوراک بی‌نهایت",
   "feeds": "فیدها",
-  "download_account_backup": "نسخه پشتیبان حساب را <1>دانلود کنید</1>"
+  "download_account_backup": "نسخه پشتیبان حساب را <1>دانلود کنید</1>",
+  "debug": "اشکال‌زدایی",
+  "mock_content": "محتوای آزمایشی",
+  "reset_feed": "بازنشانی خوراک",
+  "enable_mock_content_all_communities_reload": "فعال‌سازی محتوای آزمایشی برای تمام جوامع (Seedit را دوباره بارگیری می‌کند)",
+  "show_reset_feed_button": "نمایش دکمه بازنشانی خوراک",
+  "mock_content_uncached_communities_description": "محتوای آزمایشی فقط برای انجمن‌هایی که در حافظهٔ پنهان نیستند نمایش داده می‌شود؛ یک نشانی ساختگی .bso را امتحان کنید"
 }

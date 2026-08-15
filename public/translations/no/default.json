@@ -403,5 +403,11 @@
   "load_more": "Last inn mer",
   "enable_infinite_feed": "Aktiver uendelig feed",
   "feeds": "feeder",
-  "download_account_backup": "<1>last ned</1> sikkerhetskopi av kontoen"
+  "download_account_backup": "<1>last ned</1> sikkerhetskopi av kontoen",
+  "debug": "feilsøking",
+  "mock_content": "simulert innhold",
+  "reset_feed": "nullstill feeden",
+  "enable_mock_content_all_communities_reload": "aktiver testinnhold for alle fellesskapene (laster Seedit inn på nytt)",
+  "show_reset_feed_button": "vis knappen for å nullstille feeden",
+  "mock_content_uncached_communities_description": "simulert innhold vises bare for fellesskap som ikke er bufret; prøv en oppdiktet .bso-adresse"
 }

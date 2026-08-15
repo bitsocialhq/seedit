@@ -403,5 +403,11 @@
   "load_more": "Ladda fler",
   "enable_infinite_feed": "Aktivera oändligt flöde",
   "feeds": "flöden",
-  "download_account_backup": "<1>ladda ner</1> säkerhetskopian av kontot"
+  "download_account_backup": "<1>ladda ner</1> säkerhetskopian av kontot",
+  "debug": "felsökning",
+  "mock_content": "simulerat innehåll",
+  "reset_feed": "återställ flödet",
+  "enable_mock_content_all_communities_reload": "aktivera testinnehåll för alla samhällen (läser in Seedit igen)",
+  "show_reset_feed_button": "visa knappen för att återställa flödet",
+  "mock_content_uncached_communities_description": "simulerat innehåll visas bara för communities som inte har cachelagrats; prova en påhittad .bso-adress"
 }

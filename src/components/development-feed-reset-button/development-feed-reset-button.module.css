@@ -1,0 +1,13 @@
+.resetButton {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1000;
+  padding: 4px 8px;
+  border-radius: 0;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}

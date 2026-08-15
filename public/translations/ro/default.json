@@ -403,5 +403,11 @@
   "load_more": "Încarcă mai multe",
   "enable_infinite_feed": "Activează fluxul infinit",
   "feeds": "fluxuri",
-  "download_account_backup": "<1>descărcați</1> backupul contului"
+  "download_account_backup": "<1>descărcați</1> backupul contului",
+  "debug": "depanare",
+  "mock_content": "conținut simulat",
+  "reset_feed": "resetează fluxul",
+  "enable_mock_content_all_communities_reload": "activează conținutul simulat pentru toate comunitățile (reîncarcă Seedit)",
+  "show_reset_feed_button": "afișează butonul de resetare a fluxului",
+  "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată"
 }
