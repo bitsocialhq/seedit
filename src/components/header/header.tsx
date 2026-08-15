@@ -36,6 +36,7 @@ import {
   isCommunitiesOwnerView,
   isProfileUpvotedView,
   isSettingsContentOptionsView,
+  isSettingsDebugView,
   isSettingsAdvancedView,
   isSettingsP2pStatsView,
   isCommunityAboutView,
@@ -250,13 +251,16 @@ const SettingsHeaderTabs = () => {
   const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
   const isInSettingsP2pStatsView = isSettingsP2pStatsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
+  const isInSettingsDebugView = isSettingsDebugView(location.pathname);
   const isInSettingsAccountDataView = isSettingsAccountDataView(location.pathname);
 
   return (
     <>
       <li
         className={
-          isInSettingsAdvancedView || isInSettingsP2pStatsView || isInSettingsContentOptionsView || isInSettingsAccountDataView ? styles.choice : styles.selected
+          isInSettingsAdvancedView || isInSettingsP2pStatsView || isInSettingsContentOptionsView || isInSettingsDebugView || isInSettingsAccountDataView
+            ? styles.choice
+            : styles.selected
         }
       >
         <Link to={'/settings'}>{t('general')}</Link>
@@ -270,6 +274,11 @@ const SettingsHeaderTabs = () => {
       <li className={isInSettingsP2pStatsView ? styles.selected : styles.choice}>
         <Link to={'/settings/p2p-stats'}>{t('p2p_stats')}</Link>
       </li>
+      {import.meta.env.DEV && (
+        <li className={isInSettingsDebugView ? styles.selected : styles.choice}>
+          <Link to={'/settings/debug'}>{t('debug')}</Link>
+        </li>
+      )}
     </>
   );
 };
@@ -508,7 +517,7 @@ const Header = () => {
         </div>
       )}
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
-        <ul className={`${styles.tabMenu} ${isInProfileView ? styles.horizontalScroll : ''}`}>
+        <ul className={`${styles.tabMenu} ${isInProfileView || isInSettingsView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />
           {(isInHomeView || isInHomeAboutView || isInCommunityView || isInHomeAboutView || isInPostPageView) && <AboutButton />}
           {!isInSubmitView && !isInSettingsView && (

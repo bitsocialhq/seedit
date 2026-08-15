@@ -403,5 +403,11 @@
   "load_more": "Daha fazla yükle",
   "enable_infinite_feed": "Sonsuz akışı etkinleştir",
   "feeds": "akışlar",
-  "download_account_backup": "hesap yedeğini <1>indirin</1>"
+  "download_account_backup": "hesap yedeğini <1>indirin</1>",
+  "debug": "hata ayıklama",
+  "mock_content": "simüle edilmiş içerik",
+  "reset_feed": "akışı sıfırla",
+  "enable_mock_content_all_communities_reload": "tüm topluluklar için örnek içeriği etkinleştir (Seedit yeniden yüklenir)",
+  "show_reset_feed_button": "akışı sıfırlama düğmesini göster",
+  "mock_content_uncached_communities_description": "simüle edilmiş içerik yalnızca önbelleğe alınmamış topluluklar için gösterilir; uydurma bir .bso adresi deneyin"
 }

@@ -1,9 +1,9 @@
 import './polyfills.js';
 import './lib/react-scan';
+import { configureDevelopmentMockContent } from './lib/development-debug';
 import { configureP2PBrowserPkcOptions } from './lib/p2p-browser-config';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './app';
 import { HashRouter as Router } from 'react-router-dom';
 import './lib/init-translations';
 import './index.css';
@@ -20,33 +20,39 @@ const isVercelDeployment =
 
 // Must run before the bitsocial-react-hooks accounts store generates the default
 // account, which reads window.defaultPkcOptions.
-configureP2PBrowserPkcOptions();
+const renderApp = async () => {
+  configureP2PBrowserPkcOptions();
+  await configureDevelopmentMockContent();
+  const { default: App } = await import('./app');
 
-registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    // Reload the page to load the new version
-    // Use window.location.reload() as it's more reliable than reloadSW(true)
-    if (!sessionStorage.getItem('sw-update-reload')) {
-      sessionStorage.setItem('sw-update-reload', 'true');
-      window.location.reload();
-    }
-  },
-  onOfflineReady() {
-    // Clear the reload flag when offline-ready (prevents loops)
-    sessionStorage.removeItem('sw-update-reload');
-  },
-});
+  registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      // Reload the page to load the new version
+      // Use window.location.reload() as it's more reliable than reloadSW(true)
+      if (!sessionStorage.getItem('sw-update-reload')) {
+        sessionStorage.setItem('sw-update-reload', 'true');
+        window.location.reload();
+      }
+    },
+    onOfflineReady() {
+      // Clear the reload flag when offline-ready (prevents loops)
+      sessionStorage.removeItem('sw-update-reload');
+    },
+  });
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-      {isVercelDeployment && <Analytics />}
-    </Router>
-  </React.StrictMode>,
-);
+  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+  root.render(
+    <React.StrictMode>
+      <Router>
+        <App />
+        {isVercelDeployment && <Analytics />}
+      </Router>
+    </React.StrictMode>,
+  );
+};
+
+void renderApp();
 
 // add back button in android app
 CapacitorApp.addListener('backButton', ({ canGoBack }) => {

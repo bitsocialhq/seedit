@@ -403,5 +403,11 @@
   "load_more": "더 불러오기",
   "enable_infinite_feed": "무한 피드 활성화",
   "feeds": "피드",
-  "download_account_backup": "계정 백업을 <1>다운로드</1>"
+  "download_account_backup": "계정 백업을 <1>다운로드</1>",
+  "debug": "디버그",
+  "mock_content": "모의 콘텐츠",
+  "reset_feed": "피드 재설정",
+  "enable_mock_content_all_communities_reload": "모든 커뮤니티에 모의 콘텐츠 활성화(Seedit 다시 로드)",
+  "show_reset_feed_button": "피드 재설정 버튼 표시",
+  "mock_content_uncached_communities_description": "모의 콘텐츠는 캐시되지 않은 커뮤니티에만 표시됩니다. 임의로 만든 .bso 주소를 사용해 보세요"
 }

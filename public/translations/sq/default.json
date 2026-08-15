@@ -403,5 +403,11 @@
   "load_more": "Ngarko më shumë",
   "enable_infinite_feed": "Aktivizo feed-in e pafund",
   "feeds": "prurjet",
-  "download_account_backup": "<1>shkarkoni</1> kopjen rezervë të llogarisë"
+  "download_account_backup": "<1>shkarkoni</1> kopjen rezervë të llogarisë",
+  "debug": "debugim",
+  "mock_content": "përmbajtje e simuluar",
+  "reset_feed": "rivendos prurjen",
+  "enable_mock_content_all_communities_reload": "aktivizo përmbajtjen e simuluar për të gjitha komunitetet (ringarkon Seedit)",
+  "show_reset_feed_button": "shfaq butonin për rivendosjen e prurjes",
+  "mock_content_uncached_communities_description": "përmbajtja e simuluar shfaqet vetëm për komunitetet që nuk janë në memorien e fshehtë; provo një adresë .bso të sajuar"
 }

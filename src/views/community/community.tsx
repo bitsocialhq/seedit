@@ -21,6 +21,7 @@ import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use
 import ErrorDisplay from '../../components/error-display';
 import EmptyFeedMessage from '../../components/empty-feed-message/empty-feed-message';
 import FeedPagination from '../../components/feed-footer/feed-pagination';
+import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
@@ -400,6 +401,7 @@ const CommunityView = () => {
         </div>
       )}
       <div className={styles.feed}>
+        <DevelopmentFeedResetButton onReset={reset} />
         <Virtuoso
           increaseViewportBy={{ bottom: 1200, top: 600 }}
           totalCount={combinedFeed?.length || 0}

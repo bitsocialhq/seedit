@@ -403,5 +403,11 @@
   "load_more": "Továbbiak betöltése",
   "enable_infinite_feed": "Végtelen hírfolyam engedélyezése",
   "feeds": "hírfolyamok",
-  "download_account_backup": "fiók biztonsági másolatának <1>letöltése</1>"
+  "download_account_backup": "fiók biztonsági másolatának <1>letöltése</1>",
+  "debug": "hibakeresés",
+  "mock_content": "szimulált tartalom",
+  "reset_feed": "hírfolyam visszaállítása",
+  "enable_mock_content_all_communities_reload": "teszttartalom engedélyezése minden közösségnél (újratölti a Seeditet)",
+  "show_reset_feed_button": "a hírfolyam visszaállítására szolgáló gomb megjelenítése",
+  "mock_content_uncached_communities_description": "a szimulált tartalom csak a gyorsítótárban nem szereplő közösségeknél jelenik meg; próbálj ki egy kitalált .bso-címet"
 }

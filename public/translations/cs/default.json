@@ -403,5 +403,11 @@
   "load_more": "Načíst další",
   "enable_infinite_feed": "Povolit nekonečný kanál",
   "feeds": "kanály",
-  "download_account_backup": "<1>stáhnout</1> zálohu účtu"
+  "download_account_backup": "<1>stáhnout</1> zálohu účtu",
+  "debug": "ladění",
+  "mock_content": "testovací obsah",
+  "reset_feed": "resetovat kanál",
+  "enable_mock_content_all_communities_reload": "povolit testovací obsah pro všechny komunity (znovu načte Seedit)",
+  "show_reset_feed_button": "zobrazit tlačítko pro resetování kanálu",
+  "mock_content_uncached_communities_description": "testovací obsah se zobrazuje jen u komunit, které nejsou v mezipaměti; zkuste vymyšlenou adresu .bso"
 }

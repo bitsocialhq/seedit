@@ -403,5 +403,11 @@
   "load_more": "Загрузить ещё",
   "enable_infinite_feed": "Включить бесконечную ленту",
   "feeds": "ленты",
-  "download_account_backup": "<1>скачать</1> резервную копию аккаунта"
+  "download_account_backup": "<1>скачать</1> резервную копию аккаунта",
+  "debug": "отладка",
+  "mock_content": "тестовый контент",
+  "reset_feed": "сбросить ленту",
+  "enable_mock_content_all_communities_reload": "включить тестовый контент для всех сообществ (перезагружает Seedit)",
+  "show_reset_feed_button": "показать кнопку сброса ленты",
+  "mock_content_uncached_communities_description": "тестовый контент показывается только для сообществ, которых нет в кэше; попробуйте вымышленный адрес .bso"
 }

@@ -1,0 +1,44 @@
+.content {
+  margin: 7px 5px 40px 0;
+  width: 100%;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.category {
+  display: flex;
+  align-items: flex-start;
+}
+
+.categoryTitle {
+  flex: 0 0 169px;
+  height: 100%;
+  padding: 10px;
+  font-weight: bold;
+  text-align: right;
+  text-transform: lowercase;
+}
+
+.categorySettings {
+  flex-grow: 1;
+  padding: 10px 0;
+}
+
+.categorySettings input {
+  margin: 2px 0.5em 0 0;
+}
+
+.settingDescription {
+  margin-top: 2px;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .categoryTitle {
+    flex: 0 0 65px;
+  }
+
+  .categorySettings {
+    width: 35vw;
+  }
+}

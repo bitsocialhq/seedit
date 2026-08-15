@@ -403,5 +403,11 @@
   "load_more": "Muat lebih banyak",
   "enable_infinite_feed": "Aktifkan feed tanpa batas",
   "feeds": "feed",
-  "download_account_backup": "<1>unduh</1> cadangan akun"
+  "download_account_backup": "<1>unduh</1> cadangan akun",
+  "debug": "debug",
+  "mock_content": "konten simulasi",
+  "reset_feed": "reset feed",
+  "enable_mock_content_all_communities_reload": "aktifkan konten tiruan untuk semua komunitas (memuat ulang Seedit)",
+  "show_reset_feed_button": "tampilkan tombol reset feed",
+  "mock_content_uncached_communities_description": "konten simulasi hanya ditampilkan untuk komunitas yang belum di-cache; coba alamat .bso rekaan"
 }

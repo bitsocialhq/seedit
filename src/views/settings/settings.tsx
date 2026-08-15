@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Capacitor } from '@capacitor/core';
 import { setAccount, useAccount, usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
-import { isSettingsAdvancedView, isSettingsP2pStatsView, isSettingsContentOptionsView } from '../../lib/utils/view-utils';
+import { isSettingsAdvancedView, isSettingsP2pStatsView, isSettingsContentOptionsView, isSettingsDebugView } from '../../lib/utils/view-utils';
 import { getReviewableSettingsUpgrades, getSettingsUpgradeKey, type SettingsUpgradeAccount } from '../../lib/settings-upgrades';
 import useTheme from '../../hooks/use-theme';
 import useSettingsUpgradeReviewStore from '../../stores/use-settings-upgrade-review-store';
@@ -21,6 +21,7 @@ import _ from 'lodash';
 
 const commitRef = import.meta.env.VITE_COMMIT_REF;
 const isAndroid = Capacitor.getPlatform() === 'android';
+const DebugSettings = import.meta.env.DEV ? lazy(() => import('./debug-settings')) : null;
 
 const CheckForUpdates = () => {
   const { t } = useTranslation();
@@ -233,6 +234,7 @@ const Settings = () => {
   const isInSettingsAdvancedView = isSettingsAdvancedView(location.pathname);
   const isInSettingsP2pStatsView = isSettingsP2pStatsView(location.pathname);
   const isInSettingsContentOptionsView = isSettingsContentOptionsView(location.pathname);
+  const isInSettingsDebugView = isSettingsDebugView(location.pathname);
   const account = useAccount();
   const pkcRpc = usePkcRpcSettings();
   const hiddenReviewUpgradeKeys = useSettingsUpgradeReviewStore((state) => state.hiddenReviewUpgradeKeys);
@@ -261,6 +263,10 @@ const Settings = () => {
         <P2pStats />
       ) : isInSettingsContentOptionsView ? (
         <ContentOptions />
+      ) : isInSettingsDebugView && DebugSettings ? (
+        <Suspense fallback={null}>
+          <DebugSettings />
+        </Suspense>
       ) : (
         <GeneralSettings key={account?.id} />
       )}

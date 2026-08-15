@@ -403,5 +403,11 @@
   "load_more": "Lataa lisää",
   "enable_infinite_feed": "Ota loputon syöte käyttöön",
   "feeds": "syötteet",
-  "download_account_backup": "<1>lataa</1> tilin varmuuskopio"
+  "download_account_backup": "<1>lataa</1> tilin varmuuskopio",
+  "debug": "virheenkorjaus",
+  "mock_content": "testisisältö",
+  "reset_feed": "nollaa syöte",
+  "enable_mock_content_all_communities_reload": "ota testisisältö käyttöön kaikissa yhteisöissä (lataa Seeditin uudelleen)",
+  "show_reset_feed_button": "näytä syötteen nollauspainike",
+  "mock_content_uncached_communities_description": "testisisältö näytetään vain välimuistiin tallentamattomille yhteisöille; kokeile keksittyä .bso-osoitetta"
 }

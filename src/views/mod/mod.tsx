@@ -8,6 +8,7 @@ import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
+import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
@@ -220,6 +221,7 @@ const Mod = () => {
           </div>
         ) : (
           <div className={styles.feed}>
+            <DevelopmentFeedResetButton onReset={reset} />
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 600 }}
               totalCount={feed?.length || 0}

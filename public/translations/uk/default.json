@@ -403,5 +403,11 @@
   "load_more": "Завантажити ще",
   "enable_infinite_feed": "Увімкнути нескінченну стрічку",
   "feeds": "стрічки",
-  "download_account_backup": "<1>завантажити</1> резервну копію облікового запису"
+  "download_account_backup": "<1>завантажити</1> резервну копію облікового запису",
+  "debug": "налагодження",
+  "mock_content": "тестовий вміст",
+  "reset_feed": "скинути стрічку",
+  "enable_mock_content_all_communities_reload": "увімкнути тестовий вміст для всіх спільнот (перезавантажує Seedit)",
+  "show_reset_feed_button": "показати кнопку скидання стрічки",
+  "mock_content_uncached_communities_description": "тестовий вміст показується лише для спільнот, яких немає в кеші; спробуйте вигадану адресу .bso"
 }
