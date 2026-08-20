@@ -24,6 +24,7 @@ import Expando from './expando';
 import Flair from './flair';
 import CommentTools from './comment-tools';
 import Thumbnail from './thumbnail';
+import CrosspostPreview from './crosspost-preview';
 import styles from './post.module.css';
 import _ from 'lodash';
 import useContentOptionsStore from '../../stores/use-content-options-store';
@@ -86,7 +87,9 @@ interface PostProps {
   post: Comment | undefined;
 }
 
-const Post = ({ index, post = {} }: PostProps) => {
+const EMPTY_POST: Comment = {};
+
+const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   // handle single comment thread
   const op = useComment({ commentCid: post?.parentCid ? post?.postCid : '', onlyIfCached: true });
 
@@ -102,6 +105,7 @@ const Post = ({ index, post = {} }: PostProps) => {
     author,
     cid,
     content,
+    crosspost,
     deleted,
     downvoteCount,
     edit,
@@ -328,6 +332,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                 <CommentTools
                   author={author}
                   cid={cid}
+                  comment={post}
                   deleted={deleted}
                   failed={state === 'failed'}
                   editState={editState}
@@ -339,6 +344,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                   spoiler={spoiler}
                   communityAddress={communityAddress || ''}
                 />
+                {crosspost && !deleted && !removed && <CrosspostPreview crosspost={crosspost} />}
               </div>
               {!(windowWidth < 770) && !(!content && !link) && (
                 <>

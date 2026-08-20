@@ -65,6 +65,28 @@
   position: relative;
 }
 
+.crosspostCancelButton {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--border-primary);
+  border-radius: 0;
+  background: var(--background-primary);
+  color: var(--text-info);
+  cursor: pointer;
+  font: bold 14px/18px verdana, arial, helvetica, sans-serif;
+}
+
+.crosspostCancelButton:hover,
+.crosspostCancelButton:focus-visible {
+  color: var(--text);
+  border-color: var(--border-text);
+}
+
 .boxSubtitle {
   font-size: smaller;
 }

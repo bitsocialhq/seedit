@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Author, useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Author, Comment, createCrosspost, useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import useScheduledReset from '../../../hooks/use-scheduled-reset';
 import styles from './comment-tools.module.css';
 import EditMenu from './edit-menu';
@@ -12,10 +12,12 @@ import { isInboxView } from '../../../lib/utils/view-utils';
 import { getCommunityIdentifier } from '../../../hooks/use-community-identifier';
 import { copyShareLinkToClipboard } from '../../../lib/utils/url-utils';
 import { getCommunityPostPath } from '../../../lib/utils/community-route-utils';
+import usePublishPostStore from '../../../stores/use-publish-post-store';
 
 interface CommentToolsProps {
   author?: Author;
   cid: string;
+  comment?: Comment;
   deleted?: boolean;
   failed?: boolean;
   editState?: string;
@@ -88,6 +90,7 @@ const ShareButton = ({ cid, communityAddress }: { cid: string; communityAddress:
 const PostTools = ({
   author,
   cid,
+  comment,
   failed,
   hasLabel,
   index,
@@ -99,6 +102,7 @@ const PostTools = ({
   showCommentEditForm,
 }: CommentToolsProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const validReplyCount = isNaN(replyCount) ? 0 : replyCount;
   const commentCount = validReplyCount === 0 ? t('post_no_comments') : `${validReplyCount} ${validReplyCount === 1 ? t('post_comment') : t('post_comments')}`;
 
@@ -121,6 +125,19 @@ const PostTools = ({
     </Link>
   );
 
+  const handleCrosspost = () => {
+    if (!comment?.raw?.comment) return;
+
+    const sourceTitle = comment.title?.trim() || comment.content?.trim().slice(0, 300) || t('crosspost');
+    const { resetPublishPostStore, setPublishPostStore } = usePublishPostStore.getState();
+    resetPublishPostStore();
+    setPublishPostStore({
+      title: sourceTitle,
+      crosspost: createCrosspost(comment),
+    });
+    navigate('/submit');
+  };
+
   return (
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{commentCountButton}</li>
@@ -132,11 +149,13 @@ const PostTools = ({
       */}
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
       <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
-      {/* TODO: Implement crosspost functionality
+      {cid && comment?.raw?.comment && !failed && (
         <li className={`${styles.button} ${styles.crosspostButton}`}>
-          <span>{t('crosspost')}</span>
-        </li> 
-      */}
+          <button type='button' className={styles.actionButton} onClick={handleCrosspost}>
+            {t('crosspost')}
+          </button>
+        </li>
+      )}
       <ModOrReportButton cid={cid} isAuthor={isAuthor} isAccountMod={isAccountMod} isCommentAuthorMod={isCommentAuthorMod} />
     </>
   );
@@ -280,6 +299,7 @@ const CommentToolsLabel = ({ cid, deleted, failed, editState, isReply, nsfw, rem
 const CommentTools = ({
   author,
   cid,
+  comment,
   deleted,
   failed,
   editState,
@@ -360,6 +380,7 @@ const CommentTools = ({
             <PostTools
               author={author}
               cid={cid}
+              comment={comment}
               failed={failed}
               hasLabel={hasLabel}
               hasThumbnail={hasThumbnail}

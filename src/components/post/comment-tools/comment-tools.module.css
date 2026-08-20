@@ -34,6 +34,21 @@
   cursor: pointer;
 }
 
+.actionButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: inherit;
+}
+
+.actionButton:hover,
+.actionButton:focus-visible {
+  text-decoration: underline;
+}
+
 .text {
   cursor: default !important;
   color: var(--text-default) !important;
@@ -67,7 +82,7 @@
 }
 
 @media (max-width: 640px) {
-  .reportButton, .crosspostButton, .embedButton {
+  .reportButton, .embedButton {
     display: none !important;
   }
 }

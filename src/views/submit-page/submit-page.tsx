@@ -21,6 +21,7 @@ import Embed from '../../components/post/embed';
 import { FormattingHelpTable } from '../../components/reply-form/reply-form';
 import styles from './submit-page.module.css';
 import InfoTooltip from '../../components/info-tooltip';
+import CrosspostPreview from '../../components/post/crosspost-preview';
 
 const isAndroid = Capacitor.getPlatform() === 'android';
 const isElectron = window.electronApi?.isElectron === true;
@@ -466,11 +467,37 @@ const SubmitOptions = () => {
   );
 };
 
+const CrosspostField = () => {
+  const { t } = useTranslation();
+  const crosspost = usePublishPostStore((state) => state.crosspost);
+  const setPublishPostStore = usePublishPostStore((state) => state.setPublishPostStore);
+
+  if (!crosspost) return null;
+
+  return (
+    <div className={styles.box}>
+      <span className={styles.boxTitle}>{t('crosspost')}</span>
+      <div className={styles.boxContent}>
+        <button
+          type='button'
+          className={styles.crosspostCancelButton}
+          aria-label={t('cancel')}
+          title={t('cancel')}
+          onClick={() => setPublishPostStore({ crosspost: undefined })}
+        >
+          ×
+        </button>
+        <CrosspostPreview crosspost={crosspost} />
+      </div>
+    </div>
+  );
+};
+
 const SubmitPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
+  const { crosspost, link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
   const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
 
   useEffect(() => {
@@ -539,8 +566,14 @@ const SubmitPage = () => {
       <div className={styles.form}>
         <div className={styles.formContent}>
           {isOffline && communityAddress && <div className={styles.infobar}>{offlineTitle}</div>}
-          <UrlField />
-          {!link && <UploadMediaForm />}
+          {crosspost ? (
+            <CrosspostField />
+          ) : (
+            <>
+              <UrlField />
+              {!link && <UploadMediaForm />}
+            </>
+          )}
           <TitleField />
           <ContentField />
           <CommunityAddressField />

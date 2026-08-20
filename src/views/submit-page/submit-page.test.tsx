@@ -19,6 +19,11 @@ const testState = vi.hoisted(() => ({
 vi.mock('@bitsocial/bitsocial-react-hooks', () => ({
   useAccount: () => ({ subscriptions: [] }),
   useCommunity: () => ({ rules: [], title: 'Example' }),
+  useCrosspost: ({ crosspost }: { crosspost: { cid: string; comment: Record<string, any> } }) => ({
+    ...crosspost.comment,
+    cid: crosspost.cid,
+    isCommunityVerified: false,
+  }),
   usePublishComment: (options: Record<string, any>) => {
     testState.lastOptions = options;
     return { abandonPublish: testState.abandonPublish, index: undefined, publishComment: vi.fn() };
@@ -105,5 +110,19 @@ describe('SubmitPage challenge cancellation', () => {
     });
 
     expect(testState.abandonPublish).toHaveBeenCalledOnce();
+  });
+
+  it('passes an embedded crosspost to the publish hook', async () => {
+    const crosspost = {
+      cid: 'source-cid',
+      comment: { content: 'Source content', title: 'Source post' },
+    };
+
+    await act(async () => {
+      usePublishPostStore.getState().setPublishPostStore({ crosspost, title: 'Source post' });
+    });
+
+    expect(testState.lastOptions?.crosspost).toEqual(crosspost);
+    expect(container.textContent).toContain('Source post');
   });
 });

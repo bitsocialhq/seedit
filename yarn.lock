@@ -1378,12 +1378,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bitsocial-react-hooks@npm:0.1.36":
-  version: 0.1.36
-  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.36"
+"@bitsocial/bitsocial-react-hooks@npm:0.1.38":
+  version: 0.1.38
+  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.38"
   dependencies:
     "@bitsocial/bso-resolver": "npm:0.0.10"
-    "@pkcprotocol/pkc-js": "npm:0.0.78"
+    "@pkcprotocol/pkc-js": "npm:0.0.83"
     "@pkcprotocol/pkc-logger": "npm:0.1.0"
     assert: "npm:2.1.0"
     ethers: "npm:5.8.0"
@@ -1399,7 +1399,7 @@ __metadata:
     zustand: "npm:4.5.7"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/282be80dcc09aa3b3c0ff7b6308a9fbb30ba2ccba8e67970a5d117cc79b14b11c8c7ecbc44b8a5b22b0d7f29f35a1ab109258a5229b05da5ccdf9ec8f261d95c
+  checksum: 10c0/3ea27e12726fc16866b1088f6559caa08cb4ff61cd25578b0115714ed1f92d6c4f20fe8caca2fdb28b62c436d72bd640e8713f44d03ce7e727290c855b484a7e
   languageName: node
   linkType: hard
 
@@ -6328,76 +6328,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pkcprotocol/pkc-js@npm:0.0.71":
-  version: 0.0.71
-  resolution: "@pkcprotocol/pkc-js@npm:0.0.71"
-  dependencies:
-    "@enhances/with-resolvers": "npm:0.0.5"
-    "@helia/block-brokers": "npm:5.2.4"
-    "@helia/delegated-routing-v1-http-api-client": "npm:8.0.1"
-    "@helia/ipns": "npm:9.2.1"
-    "@helia/unixfs": "npm:7.2.1"
-    "@libp2p/crypto": "npm:5.1.19"
-    "@libp2p/fetch": "npm:4.1.6"
-    "@libp2p/gossipsub": "npm:16.0.2"
-    "@libp2p/identify": "npm:4.1.7"
-    "@libp2p/interface": "npm:3.2.3"
-    "@libp2p/peer-id": "npm:6.0.10"
-    "@multiformats/multiaddr": "npm:13.0.3"
-    "@noble/curves": "npm:2.2.0"
-    "@pkcprotocol/pkc-logger": "npm:0.1.0"
-    "@pkcprotocol/proper-lock-file": "npm:4.2.1"
-    assert: "npm:2.1.0"
-    better-sqlite3: "npm:12.9.0"
-    blockstore-core: "npm:7.0.1"
-    buffer: "npm:6.0.3"
-    cbor: "npm:10.0.11"
-    cborg: "npm:4.5.8"
-    debounce: "npm:1.2.1"
-    ext-name: "npm:5.0.0"
-    helia: "npm:6.1.4"
-    hpagent: "npm:1.2.0"
-    ipfs-unixfs-importer: "npm:17.0.1"
-    ipns: "npm:11.0.0"
-    it-all: "npm:3.0.6"
-    it-last: "npm:3.0.11"
-    js-sha256: "npm:0.11.1"
-    js-sha512: "npm:0.9.0"
-    kubo-rpc-client: "npm:7.1.0"
-    libp2p: "npm:3.3.3"
-    limiter-es6-compat: "npm:2.1.2"
-    localforage: "npm:1.10.0"
-    lodash.merge: "npm:4.6.2"
-    lru-cache: "npm:10.1.0"
-    multiformats: "npm:14.0.0"
-    node-forge: "npm:1.4.0"
-    open-graph-scraper: "npm:6.11.0"
-    p-limit: "npm:7.3.0"
-    p-retry: "npm:8.0.0"
-    p-timeout: "npm:7.0.1"
-    probe-image-size: "npm:7.2.3"
-    quick-lru: "npm:5.1.1"
-    remeda: "npm:2.39.0"
-    retry: "npm:0.13.1"
-    rpc-websockets: "npm:9.3.8"
-    safe-stable-stringify: "npm:2.4.3"
-    tcp-port-used: "npm:1.0.2"
-    tiny-typed-emitter: "npm:2.1.0"
-    tinycache: "npm:1.1.2"
-    ts-custom-error: "npm:3.3.1"
-    typestub-ipfs-only-hash: "npm:4.0.0"
-    uint8arrays: "npm:6.1.1"
-    undici: "npm:7.24.7"
-    uuid: "npm:13.0.0"
-    ws: "npm:8.20.0"
-    zod: "npm:4.3.6"
-  checksum: 10c0/3f9823b9977ca45d91819f645f7b255217944a4a648ebfc53ab45da7e30f76ed8530092d4e34616960f8ec36da2a2e2fda4a19edec9d24b5a12f79b5e42d36f2
-  languageName: node
-  linkType: hard
-
-"@pkcprotocol/pkc-js@npm:0.0.78":
-  version: 0.0.78
-  resolution: "@pkcprotocol/pkc-js@npm:0.0.78"
+"@pkcprotocol/pkc-js@npm:0.0.83":
+  version: 0.0.83
+  resolution: "@pkcprotocol/pkc-js@npm:0.0.83"
   dependencies:
     "@enhances/with-resolvers": "npm:0.0.5"
     "@helia/block-brokers": "npm:5.2.4"
@@ -6450,7 +6383,6 @@ __metadata:
     retry: "npm:0.13.1"
     rpc-websockets: "npm:9.3.8"
     safe-stable-stringify: "npm:2.4.3"
-    tcp-port-used: "npm:1.0.2"
     tiny-typed-emitter: "npm:2.1.0"
     tinycache: "npm:1.1.2"
     ts-custom-error: "npm:3.3.1"
@@ -6460,7 +6392,7 @@ __metadata:
     uuid: "npm:13.0.0"
     ws: "npm:8.20.0"
     zod: "npm:4.3.6"
-  checksum: 10c0/67f4bdd33b1afcdafd1c38854b08cadd43b7f71fd3c6c59fcc58ce7722f52440aa21020854b643d2bba2fc25d40977326fe967f44bc6d9fb54390e3ec5d2cb8f
+  checksum: 10c0/efeb19d0abcf15e5f45b5ad764714231fb661e7b71cb28f21cdd4fbbade42f027c2414ad90b7422d154a8833c243374cf192a4364d6f09ff494586cb06b42108
   languageName: node
   linkType: hard
 
@@ -10806,7 +10738,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es5-ext@npm:^0.10.35, es5-ext@npm:^0.10.46, es5-ext@npm:^0.10.53, es5-ext@npm:^0.10.62, es5-ext@npm:^0.10.64, es5-ext@npm:~0.10.14, es5-ext@npm:~0.10.2":
+"es5-ext@npm:^0.10.35, es5-ext@npm:^0.10.46, es5-ext@npm:^0.10.62, es5-ext@npm:^0.10.64, es5-ext@npm:~0.10.14, es5-ext@npm:~0.10.2":
   version: 0.10.64
   resolution: "es5-ext@npm:0.10.64"
   dependencies:
@@ -15751,22 +15683,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoizee@npm:0.4.15":
-  version: 0.4.15
-  resolution: "memoizee@npm:0.4.15"
-  dependencies:
-    d: "npm:^1.0.1"
-    es5-ext: "npm:^0.10.53"
-    es6-weak-map: "npm:^2.0.3"
-    event-emitter: "npm:^0.3.5"
-    is-promise: "npm:^2.2.2"
-    lru-queue: "npm:^0.1.0"
-    next-tick: "npm:^1.1.0"
-    timers-ext: "npm:^0.1.7"
-  checksum: 10c0/297e65cd8256bdf24c48f5e158da80d4c9688db0d6e65c5dcc13fa768e782ddeb71aec36925359931b5efef0efc6666b5bb2af6deb3de63d4258a3821ed16fce
-  languageName: node
-  linkType: hard
-
 "memoizee@npm:0.4.17":
   version: 0.4.17
   resolution: "memoizee@npm:0.4.17"
@@ -19759,7 +19675,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "seedit@workspace:."
   dependencies:
-    "@bitsocial/bitsocial-react-hooks": "npm:0.1.36"
+    "@bitsocial/bitsocial-react-hooks": "npm:0.1.38"
     "@bitsocial/bso-resolver": "npm:0.0.10"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"
@@ -19777,7 +19693,7 @@ __metadata:
     "@electron-forge/plugin-auto-unpack-natives": "npm:7.8.0"
     "@electron/rebuild": "npm:3.7.2"
     "@floating-ui/react": "npm:0.26.1"
-    "@pkcprotocol/pkc-js": "npm:0.0.71"
+    "@pkcprotocol/pkc-js": "npm:0.0.83"
     "@reforged/maker-appimage": "npm:5.1.1"
     "@types/memoizee": "npm:0.4.9"
     "@types/node": "npm:20.19.37"
@@ -19818,7 +19734,7 @@ __metadata:
     kubo: "npm:0.39.0"
     lint-staged: "npm:12.3.8"
     lodash: "npm:4.18.0"
-    memoizee: "npm:0.4.15"
+    memoizee: "npm:0.4.17"
     node-fetch: "npm:3.3.2"
     oxfmt: "npm:0.24.0"
     oxlint: "npm:1.39.0"
@@ -19849,7 +19765,7 @@ __metadata:
     vite-plugin-pwa: "npm:1.2.0"
     vitest: "npm:4.1.0"
     wait-on: "npm:9.0.4"
-    zustand: "npm:4.4.3"
+    zustand: "npm:4.5.7"
   dependenciesMeta:
     portless:
       optional: true
@@ -22112,15 +22028,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:1.2.0":
-  version: 1.2.0
-  resolution: "use-sync-external-store@npm:1.2.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/ac4814e5592524f242921157e791b022efe36e451fe0d4fd4d204322d5433a4fc300d63b0ade5185f8e0735ded044c70bcf6d2352db0f74d097a238cebd2da02
-  languageName: node
-  linkType: hard
-
 "use-sync-external-store@npm:^1.2.2, use-sync-external-store@npm:^1.6.0":
   version: 1.6.0
   resolution: "use-sync-external-store@npm:1.6.0"
@@ -23284,26 +23191,6 @@ __metadata:
   version: 4.4.3
   resolution: "zod@npm:4.4.3"
   checksum: 10c0/7ea31b558e88f9faf44f31dd185e2e1cbf51fed3081787fb96cc2534749b50c0acfc6da7f0922a7353ed092dd358c7d50c28ea96c94d04af64191bd33152eca3
-  languageName: node
-  linkType: hard
-
-"zustand@npm:4.4.3":
-  version: 4.4.3
-  resolution: "zustand@npm:4.4.3"
-  dependencies:
-    use-sync-external-store: "npm:1.2.0"
-  peerDependencies:
-    "@types/react": ">=16.8"
-    immer: ">=9.0"
-    react: ">=16.8"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    immer:
-      optional: true
-    react:
-      optional: true
-  checksum: 10c0/39a3d7928dbffd644ade553e2bd0a41c007d49e3f933156e21c02a8eaea2a39ef6c633bc1f4aa33dccecba12077e551f27a1138ba06f6d61b393225f214ded25
   languageName: node
   linkType: hard
 
