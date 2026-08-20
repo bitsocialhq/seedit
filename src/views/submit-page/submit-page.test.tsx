@@ -45,7 +45,7 @@ vi.mock('react-dropzone', () => ({
 
 vi.mock('react-i18next', () => ({
   Trans: ({ values }: { values?: { link?: string } }) => createElement('span', null, values?.link),
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({ i18n: { language: 'en' }, t: (key: string) => key }),
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -65,7 +65,7 @@ vi.mock('../../hooks/use-resolved-community-route', () => ({
   default: () => ({ communityAddress: 'example.bso' }),
 }));
 
-vi.mock('../../lib/utils/media-utils', () => ({ getLinkMediaInfo: () => undefined }));
+vi.mock('../../lib/utils/media-utils', () => ({ getCommentMediaInfo: () => undefined, getLinkMediaInfo: () => undefined }));
 vi.mock('../../components/info-tooltip', () => ({ default: () => null }));
 vi.mock('../../components/loading-ellipsis', () => ({ default: () => null }));
 vi.mock('../../components/markdown', () => ({ default: () => null }));
