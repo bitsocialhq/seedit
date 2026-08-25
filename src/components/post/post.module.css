@@ -277,7 +277,7 @@
   margin-left: 5px;
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAsElEQVR4AX2QAeYCURjE/386UCgEIIiAYEFBQEAo0BnSCQLfzPdadIUVIQQQHaATVErQa2iRenYZM3y/Gev9VX2BNAL7GON/EnD3Ls3W0hVmUb77gUhOdLwDmCufBD3l029oROAh75TLWe4+fB8BB7DVylH5EoBe+n/MMpFjqa+FBlQKITTLxXYO1JNFAgutn1WcyQ9QJtlKwgAG0obATWCULyvfkWaUVkVR1CrBT+AFO2B3/vHNAQgAAAAASUVORK5CYII=') top center;
   background-size: contain;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 
 @media only screen and (min-resolution: 2dppx), only screen and (-webkit-min-device-pixel-ratio: 2) {
