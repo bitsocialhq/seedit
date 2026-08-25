@@ -173,7 +173,8 @@ const P2pDataPathSettings = ({ p2pDataPathRef }: SettingsProps) => {
   const pkcRpc = usePkcRpcSettings();
   const { pkcRpcSettings } = pkcRpc || {};
   const isConnectedToRpc = pkcRpc?.state === 'connected';
-  const path = pkcRpcSettings?.pkcOptions?.dataPath || '';
+  const dataPath = pkcRpcSettings?.pkcOptions?.dataPath;
+  const path = typeof dataPath === 'string' ? dataPath : '';
 
   return (
     <div className={styles.p2pDataPathSettings}>

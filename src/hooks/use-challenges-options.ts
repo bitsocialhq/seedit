@@ -3,10 +3,9 @@ import { usePkcRpcSettings } from '@bitsocial/bitsocial-react-hooks';
 const useChallengesOptions = () => {
   const { challenges } = usePkcRpcSettings().pkcRpcSettings || {};
 
-  const options = Object.keys(challenges || {}).reduce(
-    (acc, challengeName) => {
-      const challengeSettings = challenges[challengeName];
-      acc[challengeName] = challengeSettings.optionInputs.reduce((optionsAcc: any, input: any) => {
+  const options = Object.entries(challenges ?? {}).reduce(
+    (acc, [challengeName, challengeSettings]) => {
+      acc[challengeName] = (challengeSettings.optionInputs ?? []).reduce((optionsAcc: any, input: any) => {
         optionsAcc[input.option] = input.default || '';
         return optionsAcc;
       }, {});

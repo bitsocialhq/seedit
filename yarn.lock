@@ -1378,12 +1378,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bitsocial-react-hooks@npm:0.1.36":
-  version: 0.1.36
-  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.36"
+"@bitsocial/bitsocial-react-hooks@npm:0.1.40":
+  version: 0.1.40
+  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.40"
   dependencies:
     "@bitsocial/bso-resolver": "npm:0.0.10"
-    "@pkcprotocol/pkc-js": "npm:0.0.78"
+    "@pkcprotocol/pkc-js": "npm:0.1.0"
     "@pkcprotocol/pkc-logger": "npm:0.1.0"
     assert: "npm:2.1.0"
     ethers: "npm:5.8.0"
@@ -1399,7 +1399,7 @@ __metadata:
     zustand: "npm:4.5.7"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/282be80dcc09aa3b3c0ff7b6308a9fbb30ba2ccba8e67970a5d117cc79b14b11c8c7ecbc44b8a5b22b0d7f29f35a1ab109258a5229b05da5ccdf9ec8f261d95c
+  checksum: 10c0/eab39d1ef8d61adcec0d5b781022f951706ff5aca71f05a1ad37b1eb132e61887730e00666806fe7e2ec7969cdce8d55bb0c86aee438d6a6f5d192ef192da386
   languageName: node
   linkType: hard
 
@@ -3816,18 +3816,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@libp2p/crypto@npm:5.1.19":
-  version: 5.1.19
-  resolution: "@libp2p/crypto@npm:5.1.19"
+"@libp2p/crypto@npm:5.1.22":
+  version: 5.1.22
+  resolution: "@libp2p/crypto@npm:5.1.22"
   dependencies:
-    "@libp2p/interface": "npm:^3.2.3"
+    "@libp2p/interface": "npm:^3.2.5"
     "@noble/curves": "npm:^2.0.1"
     "@noble/hashes": "npm:^2.0.1"
     multiformats: "npm:^14.0.0"
-    protons-runtime: "npm:^6.0.1"
-    uint8arraylist: "npm:^2.4.8"
+    protons-runtime: "npm:^7.0.0"
+    uint8arraylist: "npm:^3.0.2"
     uint8arrays: "npm:^6.1.1"
-  checksum: 10c0/bac81169a941cce3eb047cdc15d2510ebcce1524788b2caa580e3b002bd5ef61478144c90c728a14fc7126626995caa7655e65d1ee0d89d0168379ab1d103da0
+  checksum: 10c0/50c7865c7ec0867130430a8244e50a50609f7bfe4c44126929798d61430201920c9b1c2547dfb4ebe0869e716442af5217b983879de6869714869283b6fde982
   languageName: node
   linkType: hard
 
@@ -3903,6 +3903,21 @@ __metadata:
     uint8arraylist: "npm:^3.0.2"
     uint8arrays: "npm:^6.1.1"
   checksum: 10c0/bbb9c21b47fa8b62200fc0761b3a2e6faac0fd9eb87a59558eef50ed14848acc96e3e776494edd39c0e5968356da4649e2d06a3e06f4817df0a03c1a4ca11353
+  languageName: node
+  linkType: hard
+
+"@libp2p/crypto@npm:^5.1.22":
+  version: 5.1.23
+  resolution: "@libp2p/crypto@npm:5.1.23"
+  dependencies:
+    "@libp2p/interface": "npm:^3.3.0"
+    "@noble/curves": "npm:^2.0.1"
+    "@noble/hashes": "npm:^2.0.1"
+    multiformats: "npm:^14.0.0"
+    protons-runtime: "npm:^7.0.0"
+    uint8arraylist: "npm:^3.0.2"
+    uint8arrays: "npm:^6.1.1"
+  checksum: 10c0/4775920b749e4f38d2dc2ed8611dfa854bc22e174f5abcb8b95c537a32b119ad9ae7fe96dd957c83f2d3f4ea5787b7c3bf4b68b04d8cbed5b1df455058feeb9e
   languageName: node
   linkType: hard
 
@@ -4164,17 +4179,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@libp2p/interface@npm:3.2.3":
-  version: 3.2.3
-  resolution: "@libp2p/interface@npm:3.2.3"
+"@libp2p/interface@npm:3.2.5, @libp2p/interface@npm:^3.2.5":
+  version: 3.2.5
+  resolution: "@libp2p/interface@npm:3.2.5"
   dependencies:
     "@multiformats/dns": "npm:^1.0.6"
     "@multiformats/multiaddr": "npm:^13.0.3"
     main-event: "npm:^1.0.1"
     multiformats: "npm:^14.0.0"
     progress-events: "npm:^1.1.0"
-    uint8arraylist: "npm:^2.4.8"
-  checksum: 10c0/a38dc3acc79156a2bf0695acb4772b640a5361b6abb3266e340e1e35b0067a7168ac0d8d884506caf2f576277e081987990b1119c01990496b613aef137b0c06
+    uint8arraylist: "npm:^3.0.2"
+  checksum: 10c0/d3d2ee1620276c6df73c5c6e3b27a1a4f2aaf8302619342b5e041020021f4744e12cd53fc47da2444f1710c99ddf4c825a114107747c58ef8ccbc9429e60e8cc
   languageName: node
   linkType: hard
 
@@ -4234,9 +4249,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@libp2p/interface@npm:^3.2.5":
-  version: 3.2.5
-  resolution: "@libp2p/interface@npm:3.2.5"
+"@libp2p/interface@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@libp2p/interface@npm:3.3.0"
   dependencies:
     "@multiformats/dns": "npm:^1.0.6"
     "@multiformats/multiaddr": "npm:^13.0.3"
@@ -4244,7 +4259,7 @@ __metadata:
     multiformats: "npm:^14.0.0"
     progress-events: "npm:^1.1.0"
     uint8arraylist: "npm:^3.0.2"
-  checksum: 10c0/d3d2ee1620276c6df73c5c6e3b27a1a4f2aaf8302619342b5e041020021f4744e12cd53fc47da2444f1710c99ddf4c825a114107747c58ef8ccbc9429e60e8cc
+  checksum: 10c0/37f622c68fb359d05559188014846a180bfcd1ae70e31477e2f89d881c36cdb33ce692f0c858cd1366e5d3ba7450e05588113c44a91600509179ab3d4450a262
   languageName: node
   linkType: hard
 
@@ -4463,15 +4478,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@libp2p/peer-id@npm:6.0.10":
-  version: 6.0.10
-  resolution: "@libp2p/peer-id@npm:6.0.10"
+"@libp2p/peer-id@npm:6.0.14":
+  version: 6.0.14
+  resolution: "@libp2p/peer-id@npm:6.0.14"
   dependencies:
-    "@libp2p/crypto": "npm:^5.1.19"
-    "@libp2p/interface": "npm:^3.2.3"
+    "@libp2p/crypto": "npm:^5.1.22"
+    "@libp2p/interface": "npm:^3.2.5"
     multiformats: "npm:^14.0.0"
     uint8arrays: "npm:^6.1.1"
-  checksum: 10c0/c29c93e9318a8f28c8f9a831bb91bc626e4d74c0f585506425ea6e200b42498d186c9eb1382854238fd183be01aeda05642589599fec1b7c9e21a8ecf7af5064
+  checksum: 10c0/c4155cbfd91f2ae2b4e64d17f77c8bf90f95a1b59c27017cc908d90dabb576e62d200553c906531cde5fee9aa745555fff1808eaf60d3770cdac92bb3706eb51
   languageName: node
   linkType: hard
 
@@ -6328,21 +6343,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pkcprotocol/pkc-js@npm:0.0.71":
-  version: 0.0.71
-  resolution: "@pkcprotocol/pkc-js@npm:0.0.71"
+"@pkcprotocol/pkc-js@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@pkcprotocol/pkc-js@npm:0.1.0"
   dependencies:
     "@enhances/with-resolvers": "npm:0.0.5"
     "@helia/block-brokers": "npm:5.2.4"
     "@helia/delegated-routing-v1-http-api-client": "npm:8.0.1"
     "@helia/ipns": "npm:9.2.1"
     "@helia/unixfs": "npm:7.2.1"
-    "@libp2p/crypto": "npm:5.1.19"
+    "@libp2p/crypto": "npm:5.1.22"
     "@libp2p/fetch": "npm:4.1.6"
-    "@libp2p/gossipsub": "npm:16.0.2"
+    "@libp2p/gossipsub": "npm:17.0.0"
     "@libp2p/identify": "npm:4.1.7"
-    "@libp2p/interface": "npm:3.2.3"
-    "@libp2p/peer-id": "npm:6.0.10"
+    "@libp2p/interface": "npm:3.2.5"
+    "@libp2p/peer-id": "npm:6.0.14"
     "@multiformats/multiaddr": "npm:13.0.3"
     "@noble/curves": "npm:2.2.0"
     "@pkcprotocol/pkc-logger": "npm:0.1.0"
@@ -6350,6 +6365,8 @@ __metadata:
     assert: "npm:2.1.0"
     better-sqlite3: "npm:12.9.0"
     blockstore-core: "npm:7.0.1"
+    blockstore-fs: "npm:4.0.1"
+    blockstore-idb: "npm:4.0.1"
     buffer: "npm:6.0.3"
     cbor: "npm:10.0.11"
     cborg: "npm:4.5.8"
@@ -6381,7 +6398,6 @@ __metadata:
     retry: "npm:0.13.1"
     rpc-websockets: "npm:9.3.8"
     safe-stable-stringify: "npm:2.4.3"
-    tcp-port-used: "npm:1.0.2"
     tiny-typed-emitter: "npm:2.1.0"
     tinycache: "npm:1.1.2"
     ts-custom-error: "npm:3.3.1"
@@ -6391,76 +6407,7 @@ __metadata:
     uuid: "npm:13.0.0"
     ws: "npm:8.20.0"
     zod: "npm:4.3.6"
-  checksum: 10c0/3f9823b9977ca45d91819f645f7b255217944a4a648ebfc53ab45da7e30f76ed8530092d4e34616960f8ec36da2a2e2fda4a19edec9d24b5a12f79b5e42d36f2
-  languageName: node
-  linkType: hard
-
-"@pkcprotocol/pkc-js@npm:0.0.78":
-  version: 0.0.78
-  resolution: "@pkcprotocol/pkc-js@npm:0.0.78"
-  dependencies:
-    "@enhances/with-resolvers": "npm:0.0.5"
-    "@helia/block-brokers": "npm:5.2.4"
-    "@helia/delegated-routing-v1-http-api-client": "npm:8.0.1"
-    "@helia/ipns": "npm:9.2.1"
-    "@helia/unixfs": "npm:7.2.1"
-    "@libp2p/crypto": "npm:5.1.19"
-    "@libp2p/fetch": "npm:4.1.6"
-    "@libp2p/gossipsub": "npm:16.0.2"
-    "@libp2p/identify": "npm:4.1.7"
-    "@libp2p/interface": "npm:3.2.3"
-    "@libp2p/peer-id": "npm:6.0.10"
-    "@multiformats/multiaddr": "npm:13.0.3"
-    "@noble/curves": "npm:2.2.0"
-    "@pkcprotocol/pkc-logger": "npm:0.1.0"
-    "@pkcprotocol/proper-lock-file": "npm:4.2.1"
-    assert: "npm:2.1.0"
-    better-sqlite3: "npm:12.9.0"
-    blockstore-core: "npm:7.0.1"
-    blockstore-fs: "npm:^4.0.1"
-    blockstore-idb: "npm:^4.0.1"
-    buffer: "npm:6.0.3"
-    cbor: "npm:10.0.11"
-    cborg: "npm:4.5.8"
-    debounce: "npm:1.2.1"
-    ext-name: "npm:5.0.0"
-    helia: "npm:6.1.4"
-    hpagent: "npm:1.2.0"
-    ipfs-unixfs-importer: "npm:17.0.1"
-    ipns: "npm:11.0.0"
-    it-all: "npm:3.0.6"
-    it-last: "npm:3.0.11"
-    js-sha256: "npm:0.11.1"
-    js-sha512: "npm:0.9.0"
-    kubo-rpc-client: "npm:7.1.0"
-    libp2p: "npm:3.3.3"
-    limiter-es6-compat: "npm:2.1.2"
-    localforage: "npm:1.10.0"
-    lodash.merge: "npm:4.6.2"
-    lru-cache: "npm:10.1.0"
-    multiformats: "npm:14.0.0"
-    node-forge: "npm:1.4.0"
-    open-graph-scraper: "npm:6.11.0"
-    p-limit: "npm:7.3.0"
-    p-retry: "npm:8.0.0"
-    p-timeout: "npm:7.0.1"
-    probe-image-size: "npm:7.2.3"
-    quick-lru: "npm:5.1.1"
-    remeda: "npm:2.39.0"
-    retry: "npm:0.13.1"
-    rpc-websockets: "npm:9.3.8"
-    safe-stable-stringify: "npm:2.4.3"
-    tcp-port-used: "npm:1.0.2"
-    tiny-typed-emitter: "npm:2.1.0"
-    tinycache: "npm:1.1.2"
-    ts-custom-error: "npm:3.3.1"
-    typestub-ipfs-only-hash: "npm:4.0.0"
-    uint8arrays: "npm:6.1.1"
-    undici: "npm:7.24.7"
-    uuid: "npm:13.0.0"
-    ws: "npm:8.20.0"
-    zod: "npm:4.3.6"
-  checksum: 10c0/67f4bdd33b1afcdafd1c38854b08cadd43b7f71fd3c6c59fcc58ce7722f52440aa21020854b643d2bba2fc25d40977326fe967f44bc6d9fb54390e3ec5d2cb8f
+  checksum: 10c0/4544b3bab9488b8bf8b9818ec0755b7e1854ce68cd13798bf36980e00cb3c8e7b3e7c9b3fca96b3ceaa5f0c45d12353480d912e6b199ea7873e425939d9a8874
   languageName: node
   linkType: hard
 
@@ -8372,7 +8319,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blockstore-fs@npm:^4.0.1":
+"blockstore-fs@npm:4.0.1":
   version: 4.0.1
   resolution: "blockstore-fs@npm:4.0.1"
   dependencies:
@@ -8389,7 +8336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blockstore-idb@npm:^4.0.1":
+"blockstore-idb@npm:4.0.1":
   version: 4.0.1
   resolution: "blockstore-idb@npm:4.0.1"
   dependencies:
@@ -19759,7 +19706,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "seedit@workspace:."
   dependencies:
-    "@bitsocial/bitsocial-react-hooks": "npm:0.1.36"
+    "@bitsocial/bitsocial-react-hooks": "npm:0.1.40"
     "@bitsocial/bso-resolver": "npm:0.0.10"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"
@@ -19777,7 +19724,7 @@ __metadata:
     "@electron-forge/plugin-auto-unpack-natives": "npm:7.8.0"
     "@electron/rebuild": "npm:3.7.2"
     "@floating-ui/react": "npm:0.26.1"
-    "@pkcprotocol/pkc-js": "npm:0.0.71"
+    "@pkcprotocol/pkc-js": "npm:0.1.0"
     "@reforged/maker-appimage": "npm:5.1.1"
     "@types/memoizee": "npm:0.4.9"
     "@types/node": "npm:20.19.37"
