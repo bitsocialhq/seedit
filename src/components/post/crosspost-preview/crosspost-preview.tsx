@@ -32,8 +32,6 @@ const CrosspostPreview = ({ crosspost }: CrosspostPreviewProps) => {
   const [failedMediaUrl, setFailedMediaUrl] = useState<string>();
   const mediaFailed = failedMediaUrl === mediaInfo?.url;
   const sensitive = Boolean(nsfw || spoiler);
-  const thumbnailUrl = sensitive ? undefined : mediaInfo?.thumbnail || mediaInfo?.patternThumbnailUrl;
-  const thumbnailKind = nsfw ? 'nsfw' : spoiler ? 'spoiler' : !link ? 'self' : ['image', 'gif', 'video'].includes(mediaInfo?.type || '') ? 'image' : 'default';
   const validReplyCount = Number.isFinite(replyCount) ? replyCount : 0;
   const postScore = getPostScore(upvoteCount, downvoteCount, state);
   const pointLabel = postScore === 1 ? t('point') : t('points');
@@ -62,11 +60,6 @@ const CrosspostPreview = ({ crosspost }: CrosspostPreviewProps) => {
     <section className={styles.preview} aria-label={t('crosspost')}>
       <div className={styles.header}>
         {sourcePath && <Link className={styles.contentLink} to={sourcePath} aria-label={displayTitle} />}
-        {thumbnailUrl ? (
-          <img className={styles.thumbnailImage} src={thumbnailUrl} alt='' />
-        ) : (
-          <span className={`${styles.thumbnail} ${styles[thumbnailKind]}`} aria-hidden='true' />
-        )}
         <div className={styles.textContent}>
           <p className={styles.title}>
             {sourcePath ? (

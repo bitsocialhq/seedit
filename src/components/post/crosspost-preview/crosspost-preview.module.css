@@ -75,46 +75,6 @@
   font-weight: bold;
 }
 
-.thumbnail,
-.thumbnailImage {
-  position: relative;
-  z-index: 1;
-  float: left;
-  width: 30px;
-  height: 30px;
-  margin-right: 8px;
-}
-
-.thumbnail {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.thumbnailImage {
-  object-fit: cover;
-}
-
-.self {
-  background-image: var(--thumbnail-icon-text);
-}
-
-.image {
-  background-image: var(--thumbnail-icon-image);
-}
-
-.default {
-  background-image: var(--thumbnail-icon-link);
-}
-
-.spoiler {
-  background-image: var(--thumbnail-icon-spoiler);
-}
-
-.nsfw {
-  background-image: var(--thumbnail-icon-nsfw);
-}
-
 .previewContent {
   overflow: hidden;
 }

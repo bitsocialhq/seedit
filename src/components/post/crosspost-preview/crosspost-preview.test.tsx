@@ -76,7 +76,7 @@ describe('CrosspostPreview', () => {
     });
   };
 
-  it('renders old Reddit metadata without claiming an unverified community origin', async () => {
+  it('renders old Reddit metadata without an inner thumbnail or unverified community origin', async () => {
     await renderPreview();
 
     expect(container.textContent).toContain('Source post');
@@ -85,6 +85,8 @@ describe('CrosspostPreview', () => {
     expect(container.textContent).toContain('Source author');
     expect(container.textContent).not.toContain('source-community.eth');
     expect(container.textContent).toContain('•');
+    expect(container.querySelector('img')).toBeNull();
+    expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
   });
 
   it('links to the source after its community update is loaded', async () => {

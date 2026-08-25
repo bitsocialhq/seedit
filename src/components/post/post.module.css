@@ -269,3 +269,20 @@
 .subscribeButtonWrapper {
   padding-right: 14px;
 }
+
+.crosspostBadge {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAsElEQVR4AX2QAeYCURjE/386UCgEIIiAYEFBQEAo0BnSCQLfzPdadIUVIQQQHaATVErQa2iRenYZM3y/Gev9VX2BNAL7GON/EnD3Ls3W0hVmUb77gUhOdLwDmCufBD3l029oROAh75TLWe4+fB8BB7DVylH5EoBe+n/MMpFjqa+FBlQKITTLxXYO1JNFAgutn1WcyQ9QJtlKwgAG0obATWCULyvfkWaUVkVR1CrBT+AFO2B3/vHNAQgAAAAASUVORK5CYII=') top center;
+  background-size: contain;
+  vertical-align: bottom;
+}
+
+@media only screen and (min-resolution: 2dppx), only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .crosspostBadge {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABY0lEQVR4AbWUAURDQRjH36KoiAJIgAUJRQFCEYACAFIiEEhEAiIACAwx97tbA2UMREIa3gQQoQkqgRpkpdd33OPMyu1NHx/Pefe7//f/vrsoaxhjZrRSTwZuisXicNRrCGwPpRJswnMmaKVSGRJlSwLblaxZmA8tl8uD4Yq0XgQaPqQ9DZyF+QU7Gr7TjRqakq9tCluicDoEtuFtapRKpeUkSfqk5AMfBsyHdHJVw1cKEwXjngUrbv09DAZrGj6cihcg38HXKTlkIPJDSpgzcAgc2ZRSjgVQ9/x5k39mw7sHj792DmKBTXY38bCv4cGCHfxe8sLAdhzH/eLjuqg+tzPYaS6lQbnww5TaTNUK9NKHnsKCrLeAq2q1OhIEtOMBnHjQGpBPK/PXs0PhE7iV7zvJJCs0J+VvaWj+dfU0FLp9siYcuOCa5wPrwGiUNZyHvcP818f6Kd5dO1jvIdduLPrv+AEaB6fwfGHytQAAAABJRU5ErkJggg==') top center;
+    background-size: contain;
+  }
+}

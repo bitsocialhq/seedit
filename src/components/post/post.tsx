@@ -158,7 +158,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   const { mediaPreviewOption, thumbnailDisplayOption } = useContentOptionsStore();
 
   const [isExpanded, setIsExpanded] = useState((isInPostPageView || isInPendingPostView) && mediaPreviewOption === 'autoExpandAll');
-  const toggleExpanded = () => setIsExpanded(!isExpanded);
+  const toggleExpanded = () => setIsExpanded((expanded) => !expanded);
 
   const [isEditing, setIsEditing] = useState(false);
   const showCommentEditForm = () => setIsEditing(true);
@@ -180,6 +180,12 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   const hasThumbnail = getHasThumbnail(commentMediaInfo, link);
   const hostname = getHostname(link);
   const linkClass = `${isInPostPageView ? (link ? styles.externalLink : styles.internalLink) : styles.link} ${pinned ? styles.pinnedLink : ''}`;
+  const canExpandPost =
+    Boolean(crosspost) ||
+    Boolean(
+      (commentMediaInfo?.type !== 'webpage' || (commentMediaInfo?.type === 'webpage' && content?.trim().length > 0)) &&
+      !(isInPostPageView && !link && content?.trim().length > 0),
+    );
 
   const { blocked, unblock } = useBlock({ cid });
 
@@ -261,6 +267,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                       {displayedTitle}
                     </Link>
                   )}
+                  {crosspost && <span className={`crosspost-badge ${styles.crosspostBadge}`} title={t('crosspost')} aria-label={t('crosspost')} />}
                   {flair && (
                     <>
                       {' '}
@@ -277,17 +284,17 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                     )
                   </span>
                 </p>
-                {(!(commentMediaInfo?.type === 'webpage') || (commentMediaInfo?.type === 'webpage' && content?.trim().length > 0)) &&
-                  !(isInPostPageView && !link && content?.trim().length > 0) && (
-                    <ExpandButton
-                      commentMediaInfo={commentMediaInfo}
-                      content={content}
-                      expanded={isExpanded}
-                      hasThumbnail={hasThumbnail}
-                      link={link}
-                      toggleExpanded={toggleExpanded}
-                    />
-                  )}
+                {canExpandPost && (
+                  <ExpandButton
+                    commentMediaInfo={commentMediaInfo}
+                    content={content}
+                    crosspost={Boolean(crosspost)}
+                    expanded={isExpanded}
+                    hasThumbnail={hasThumbnail}
+                    link={link}
+                    toggleExpanded={toggleExpanded}
+                  />
+                )}
                 <div className={styles.tagline}>
                   {t('submitted')} <span title={postDate}>{getFormattedTimeAgo(timestamp)}</span>{' '}
                   {edit && isInPostPageView && <span className={styles.timeEdit}>{t('last_edited', { timestamp: getFormattedTimeAgo(edit.timestamp) })}</span>}{' '}
@@ -344,7 +351,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                   spoiler={spoiler}
                   communityAddress={communityAddress || ''}
                 />
-                {crosspost && !deleted && !removed && <CrosspostPreview crosspost={crosspost} />}
+                {crosspost && !deleted && !removed && isExpanded && <CrosspostPreview crosspost={crosspost} />}
               </div>
               {!(windowWidth < 770) && !(!content && !link) && (
                 <>
