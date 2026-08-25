@@ -24,6 +24,7 @@ import Expando from './expando';
 import Flair from './flair';
 import CommentTools from './comment-tools';
 import Thumbnail from './thumbnail';
+import CrosspostPreview from './crosspost-preview';
 import styles from './post.module.css';
 import _ from 'lodash';
 import useContentOptionsStore from '../../stores/use-content-options-store';
@@ -86,7 +87,9 @@ interface PostProps {
   post: Comment | undefined;
 }
 
-const Post = ({ index, post = {} }: PostProps) => {
+const EMPTY_POST: Comment = {};
+
+const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   // handle single comment thread
   const op = useComment({ commentCid: post?.parentCid ? post?.postCid : '', onlyIfCached: true });
 
@@ -102,6 +105,7 @@ const Post = ({ index, post = {} }: PostProps) => {
     author,
     cid,
     content,
+    crosspost,
     deleted,
     downvoteCount,
     edit,
@@ -154,7 +158,7 @@ const Post = ({ index, post = {} }: PostProps) => {
   const { mediaPreviewOption, thumbnailDisplayOption } = useContentOptionsStore();
 
   const [isExpanded, setIsExpanded] = useState((isInPostPageView || isInPendingPostView) && mediaPreviewOption === 'autoExpandAll');
-  const toggleExpanded = () => setIsExpanded(!isExpanded);
+  const toggleExpanded = () => setIsExpanded((expanded) => !expanded);
 
   const [isEditing, setIsEditing] = useState(false);
   const showCommentEditForm = () => setIsEditing(true);
@@ -176,6 +180,12 @@ const Post = ({ index, post = {} }: PostProps) => {
   const hasThumbnail = getHasThumbnail(commentMediaInfo, link);
   const hostname = getHostname(link);
   const linkClass = `${isInPostPageView ? (link ? styles.externalLink : styles.internalLink) : styles.link} ${pinned ? styles.pinnedLink : ''}`;
+  const canExpandPost =
+    Boolean(crosspost) ||
+    Boolean(
+      (commentMediaInfo?.type !== 'webpage' || (commentMediaInfo?.type === 'webpage' && content?.trim().length > 0)) &&
+      !(isInPostPageView && !link && content?.trim().length > 0),
+    );
 
   const { blocked, unblock } = useBlock({ cid });
 
@@ -272,18 +282,19 @@ const Post = ({ index, post = {} }: PostProps) => {
                     )}
                     )
                   </span>
+                  {crosspost && <span className={`crosspost-badge ${styles.crosspostBadge}`} title={t('crosspost')} aria-label={t('crosspost')} />}
                 </p>
-                {(!(commentMediaInfo?.type === 'webpage') || (commentMediaInfo?.type === 'webpage' && content?.trim().length > 0)) &&
-                  !(isInPostPageView && !link && content?.trim().length > 0) && (
-                    <ExpandButton
-                      commentMediaInfo={commentMediaInfo}
-                      content={content}
-                      expanded={isExpanded}
-                      hasThumbnail={hasThumbnail}
-                      link={link}
-                      toggleExpanded={toggleExpanded}
-                    />
-                  )}
+                {canExpandPost && (
+                  <ExpandButton
+                    commentMediaInfo={commentMediaInfo}
+                    content={content}
+                    crosspost={Boolean(crosspost)}
+                    expanded={isExpanded}
+                    hasThumbnail={hasThumbnail}
+                    link={link}
+                    toggleExpanded={toggleExpanded}
+                  />
+                )}
                 <div className={styles.tagline}>
                   {t('submitted')} <span title={postDate}>{getFormattedTimeAgo(timestamp)}</span>{' '}
                   {edit && isInPostPageView && <span className={styles.timeEdit}>{t('last_edited', { timestamp: getFormattedTimeAgo(edit.timestamp) })}</span>}{' '}
@@ -328,6 +339,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                 <CommentTools
                   author={author}
                   cid={cid}
+                  comment={post}
                   deleted={deleted}
                   failed={state === 'failed'}
                   editState={editState}
@@ -339,6 +351,7 @@ const Post = ({ index, post = {} }: PostProps) => {
                   spoiler={spoiler}
                   communityAddress={communityAddress || ''}
                 />
+                {crosspost && !deleted && !removed && isExpanded && <CrosspostPreview crosspost={crosspost} />}
               </div>
               {!(windowWidth < 770) && !(!content && !link) && (
                 <>

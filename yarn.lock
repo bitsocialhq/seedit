@@ -10753,7 +10753,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es5-ext@npm:^0.10.35, es5-ext@npm:^0.10.46, es5-ext@npm:^0.10.53, es5-ext@npm:^0.10.62, es5-ext@npm:^0.10.64, es5-ext@npm:~0.10.14, es5-ext@npm:~0.10.2":
+"es5-ext@npm:^0.10.35, es5-ext@npm:^0.10.46, es5-ext@npm:^0.10.62, es5-ext@npm:^0.10.64, es5-ext@npm:~0.10.14, es5-ext@npm:~0.10.2":
   version: 0.10.64
   resolution: "es5-ext@npm:0.10.64"
   dependencies:
@@ -15698,22 +15698,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoizee@npm:0.4.15":
-  version: 0.4.15
-  resolution: "memoizee@npm:0.4.15"
-  dependencies:
-    d: "npm:^1.0.1"
-    es5-ext: "npm:^0.10.53"
-    es6-weak-map: "npm:^2.0.3"
-    event-emitter: "npm:^0.3.5"
-    is-promise: "npm:^2.2.2"
-    lru-queue: "npm:^0.1.0"
-    next-tick: "npm:^1.1.0"
-    timers-ext: "npm:^0.1.7"
-  checksum: 10c0/297e65cd8256bdf24c48f5e158da80d4c9688db0d6e65c5dcc13fa768e782ddeb71aec36925359931b5efef0efc6666b5bb2af6deb3de63d4258a3821ed16fce
-  languageName: node
-  linkType: hard
-
 "memoizee@npm:0.4.17":
   version: 0.4.17
   resolution: "memoizee@npm:0.4.17"
@@ -19765,7 +19749,7 @@ __metadata:
     kubo: "npm:0.39.0"
     lint-staged: "npm:12.3.8"
     lodash: "npm:4.18.0"
-    memoizee: "npm:0.4.15"
+    memoizee: "npm:0.4.17"
     node-fetch: "npm:3.3.2"
     oxfmt: "npm:0.24.0"
     oxlint: "npm:1.39.0"
@@ -19796,7 +19780,7 @@ __metadata:
     vite-plugin-pwa: "npm:1.2.0"
     vitest: "npm:4.1.0"
     wait-on: "npm:9.0.4"
-    zustand: "npm:4.4.3"
+    zustand: "npm:4.5.7"
   dependenciesMeta:
     portless:
       optional: true
@@ -22059,15 +22043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:1.2.0":
-  version: 1.2.0
-  resolution: "use-sync-external-store@npm:1.2.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/ac4814e5592524f242921157e791b022efe36e451fe0d4fd4d204322d5433a4fc300d63b0ade5185f8e0735ded044c70bcf6d2352db0f74d097a238cebd2da02
-  languageName: node
-  linkType: hard
-
 "use-sync-external-store@npm:^1.2.2, use-sync-external-store@npm:^1.6.0":
   version: 1.6.0
   resolution: "use-sync-external-store@npm:1.6.0"
@@ -23231,26 +23206,6 @@ __metadata:
   version: 4.4.3
   resolution: "zod@npm:4.4.3"
   checksum: 10c0/7ea31b558e88f9faf44f31dd185e2e1cbf51fed3081787fb96cc2534749b50c0acfc6da7f0922a7353ed092dd358c7d50c28ea96c94d04af64191bd33152eca3
-  languageName: node
-  linkType: hard
-
-"zustand@npm:4.4.3":
-  version: 4.4.3
-  resolution: "zustand@npm:4.4.3"
-  dependencies:
-    use-sync-external-store: "npm:1.2.0"
-  peerDependencies:
-    "@types/react": ">=16.8"
-    immer: ">=9.0"
-    react: ">=16.8"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    immer:
-      optional: true
-    react:
-      optional: true
-  checksum: 10c0/39a3d7928dbffd644ade553e2bd0a41c007d49e3f933156e21c02a8eaea2a39ef6c633bc1f4aa33dccecba12077e551f27a1138ba06f6d61b393225f214ded25
   languageName: node
   linkType: hard
 

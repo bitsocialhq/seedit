@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Comment, PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, Crosspost, PublishCommentOptions } from '@bitsocial/bitsocial-react-hooks';
 import { alertChallengeVerificationFailed } from '../lib/utils/challenge-utils';
 import { getCommentCommunityAddress } from '../lib/utils/comment-utils';
 
@@ -10,6 +10,7 @@ type SubmitState = {
   link: string | undefined;
   spoiler: boolean | undefined;
   nsfw: boolean | undefined;
+  crosspost: Crosspost | undefined;
   publishCommentOptions: PublishCommentOptions;
   setPublishPostStore: (comment: Comment) => void;
   resetPublishPostStore: () => void;
@@ -22,12 +23,13 @@ const usePublishPostStore = create<SubmitState>((set) => ({
   link: undefined,
   spoiler: undefined,
   nsfw: undefined,
+  crosspost: undefined,
   publishCommentOptions: {},
   setPublishPostStore: (comment) =>
     set((state) => {
       const nextState = { ...state };
       const commentCommunityAddress = getCommentCommunityAddress(comment);
-      const { title, content, link, spoiler, nsfw } = comment;
+      const { title, content, link, spoiler, nsfw, crosspost } = comment;
 
       if (commentCommunityAddress !== undefined) nextState.communityAddress = commentCommunityAddress;
       if (title !== undefined) nextState.title = title;
@@ -35,6 +37,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
       if (link !== undefined) nextState.link = link || undefined;
       if (spoiler !== undefined) nextState.spoiler = spoiler || undefined;
       if (nsfw !== undefined) nextState.nsfw = nsfw || undefined;
+      if ('crosspost' in comment) nextState.crosspost = crosspost;
 
       nextState.publishCommentOptions = {
         communityAddress: nextState.communityAddress,
@@ -43,6 +46,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
         link: nextState.link,
         spoiler: nextState.spoiler,
         nsfw: nextState.nsfw,
+        crosspost: nextState.crosspost,
         onChallengeVerification: alertChallengeVerificationFailed,
         onError: (error: Error) => {
           console.error(error);
@@ -60,6 +64,7 @@ const usePublishPostStore = create<SubmitState>((set) => ({
       link: undefined,
       spoiler: undefined,
       nsfw: undefined,
+      crosspost: undefined,
       publishCommentOptions: {},
     }),
 }));
