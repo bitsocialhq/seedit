@@ -267,7 +267,6 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                       {displayedTitle}
                     </Link>
                   )}
-                  {crosspost && <span className={`crosspost-badge ${styles.crosspostBadge}`} title={t('crosspost')} aria-label={t('crosspost')} />}
                   {flair && (
                     <>
                       {' '}
@@ -283,6 +282,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                     )}
                     )
                   </span>
+                  {crosspost && <span className={`crosspost-badge ${styles.crosspostBadge}`} title={t('crosspost')} aria-label={t('crosspost')} />}
                 </p>
                 {canExpandPost && (
                   <ExpandButton
