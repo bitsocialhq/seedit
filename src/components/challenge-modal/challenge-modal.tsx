@@ -64,13 +64,8 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
   const publicationContent = publicationType === 'vote' ? getPublicationPreview(publicationTarget) : getPublicationPreview(challenge?.[1]);
   const votePreview = getVotePreview(challenge?.[1]);
 
-  const publication = challenge?.[1] as
-    | (NonNullable<ChallengeType[1]> & {
-        shortSubplebbitAddress?: string;
-        subplebbitAddress?: string;
-      })
-    | undefined;
-  const { parentCid, shortCommunityAddress, communityAddress, shortSubplebbitAddress, subplebbitAddress } = publication || {};
+  const publication = challenge?.[1] as NonNullable<ChallengeType[1]> | undefined;
+  const { parentCid, shortCommunityAddress, communityAddress } = publication || {};
   const parentAddress = getDisplayAddress(useParentAddress(parentCid) || '');
 
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
@@ -191,9 +186,9 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
     try {
       iframeRef.current.contentWindow?.postMessage(
         {
-          type: 'plebbit-theme',
+          type: 'bitsocial-theme',
           theme,
-          source: 'plebbit-seedit',
+          source: 'bitsocial-seedit',
         },
         iframeOrigin,
       );
@@ -236,7 +231,7 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
     return () => window.removeEventListener('message', handleMessage);
   }, [iframeOrigin, iframeUrlState, showIframeConfirmation]);
 
-  const communityShortAddress = getDisplayAddress(shortCommunityAddress || shortSubplebbitAddress || communityAddress || subplebbitAddress || '');
+  const communityShortAddress = getDisplayAddress(shortCommunityAddress || communityAddress || '');
 
   // Render iframe challenge
   if (isIframeChallenge) {

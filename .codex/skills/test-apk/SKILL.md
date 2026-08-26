@@ -148,7 +148,7 @@ adb logcat -d -s chromium:* | tail -100
 | `android/app/src/main/java/seedit/android/FileUploaderPlugin.java` | Capacitor plugin: uploads picked media directly to the catbox.moe API with progress updates |
 | `android/app/src/main/java/seedit/android/FileUtils.java` | File path/URI helpers used by the plugin |
 | `android/app/src/main/java/seedit/android/MainActivity.java` | Capacitor entry activity (registers the plugin) |
-| `capacitor.config.ts` | Capacitor appId/plugin configuration |
+| `capacitor.config.json` | Capacitor appId/plugin configuration |
 
 ## Interpreting Upload Logs
 

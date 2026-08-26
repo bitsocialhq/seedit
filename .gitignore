@@ -1,6 +1,5 @@
-# local pkc temp files (and legacy plebbit dir)
+# local pkc temp files
 .pkc
-.plebbit
 bin
 .env
 .deploy-env
