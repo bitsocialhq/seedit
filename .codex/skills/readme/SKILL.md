@@ -23,7 +23,7 @@ Every claim in the README must be verifiable in the repo. Check:
 
 - **Manifest and scripts**: `package.json` (name, scripts, engines, packageManager), lockfile, `.nvmrc`
 - **Entry points and build**: `index.html`, `vite.config.js`, `src/` layout, `tsconfig.json`
-- **Platform targets**: `capacitor.config.ts` + `android/` (mobile), `electron/` + `forge.config.js` (desktop), `vercel.json` (web hosting), `fastlane/` (store releases)
+- **Platform targets**: `capacitor.config.json` + `android/` (mobile), `electron/` + `forge.config.js` (desktop), `vercel.json` (web hosting), `fastlane/` (store releases)
 - **CI/CD**: `.github/workflows/`
 - **Repo docs that already answer questions**: `AGENTS.md`, `CHANGELOG.md`, `docs/`
 - **Helper scripts**: `scripts/` — document the ones a contributor actually needs
