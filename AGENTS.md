@@ -155,10 +155,16 @@ src/
 ### Verification Rules
 
 - Never mark work complete without verification.
+- Treat the contributor machine as a shared, resource-constrained environment. Before a CPU- or memory-intensive command, inspect existing repo workloads and stop only stale processes that the current agent owns.
+- Run heavyweight work sequentially across the whole task, including delegated agents: dependency installs, full test or coverage runs, production builds, React Doctor, Electron builds, and browser/profiler verification must not overlap.
+- `./scripts/create-task-worktree.sh` runs `corepack yarn install`; treat worktree creation itself as heavyweight and do not run it alongside another intensive command.
+- On contributor machines, cap agent-invoked Vitest runs at two workers. Use `corepack yarn exec vitest run --passWithNoTests --maxWorkers=2` for the full suite, or add test paths for a targeted run. CI may keep its configured worker count.
+- Prefer the narrowest reliable check first. When a full verification pass is required, finish each heavyweight command before starting the next; parallelize only lightweight read-only checks.
+- Reuse an already-running compatible dev server for the same worktree when safe. Otherwise keep at most one dev server per active worktree, record the process/session you start, and stop it on every exit path as soon as it is no longer needed. Never stop a process whose owner or purpose is unclear.
 - After code changes, run: `yarn build`, `yarn lint`, `yarn type-check`.
 - After React UI logic changes, run: `yarn doctor`.
 - Treat React Doctor output as actionable guidance; prioritize `error` then `warning`.
-- After adding or changing tests, run `yarn test`.
+- After adding or changing tests, run the affected tests with the two-worker Vitest command above; run the full suite when the risk or repository workflow requires it.
 - Do not commit or force-add local rebuild output. `build/` is the main generated build output in this repo; remove or restore generated output directories after local verification before committing.
 - For UI/visual changes, use Chrome/Blink for iterative checks, then perform final verification across Chrome/Blink, Firefox/Gecko, and WebKit/Safari.
 - Cover desktop and a mobile viewport flow in each browser engine when the change affects layout, touch behavior, or responsiveness.
@@ -210,7 +216,7 @@ src/
 ## Core SHOULD Rules
 
 - Keep context lean: delegate heavy/verbose tasks to subprocesses when available.
-- For complex work, parallelize independent checks, except browser-driving checks, which must respect the machine-wide single-session resource budget.
+- For complex work, parallelize independent lightweight checks. Keep CPU- or memory-intensive commands sequential, and keep browser-driving checks within the machine-wide single-session resource budget.
 - Add or update tests for bug fixes and non-trivial logic changes when the code is reasonably testable.
 - When touching already-covered code, prefer extending nearby tests so measured coverage does not regress without a clear reason.
 - Use `yarn knip` when adding/removing dependencies or introducing new direct imports; treat findings as advisory, but resolve real issues before finishing.
@@ -234,7 +240,7 @@ yarn start                # https://seedit.localhost
 yarn build
 yarn lint
 yarn type-check
-yarn test
+corepack yarn exec vitest run --passWithNoTests --maxWorkers=2
 yarn prettier
 yarn electron
 yarn changelog
