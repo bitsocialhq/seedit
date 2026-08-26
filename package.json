@@ -84,7 +84,7 @@
     "electron:build:mac:x64": "yarn build && yarn build:preload && electron-forge make --platform=darwin --arch=x64",
     "electron:build:mac:arm64": "yarn build && yarn build:preload && electron-forge make --platform=darwin --arch=arm64",
     "electron:before": "yarn electron:before:delete-data",
-    "electron:before:delete-data": "rimraf .pkc .plebbit",
+    "electron:before:delete-data": "node --eval \"require('fs').rmSync('.pkc', { recursive: true, force: true })\"",
     "release:manifest": "node scripts/generate-release-manifest.mjs",
     "release:manifest:keygen": "node scripts/generate-release-manifest-keypair.mjs",
     "android:build:icons": "cordova-res android --skip-config --copy --resources /tmp/seedit-android-icons --icon-source ./android/icons/icon.png --splash-source ./android/icons/splash.png --icon-foreground-source ./android/icons/icon-foreground.png --icon-background-source '#ffffee'",

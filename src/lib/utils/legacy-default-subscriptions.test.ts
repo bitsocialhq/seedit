@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import starterCommunities from '../../data/seedit-starter-communities.json';
 import {
-  LEGACY_DEFAULT_SUBSCRIPTIONS,
   LEGACY_DIRECTORY_ADDRESS_BY_CODE,
   STARTER_COMMUNITIES_REVISION,
   STARTER_COMMUNITIES_SCHEMA_VERSION,
@@ -31,7 +30,6 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
       { code: 'memes', address: 'memes-posting.bso', sourceIndex: 1 },
       { code: 'aww', address: 'aww-posting.bso', sourceIndex: 3 },
     ]);
-    expect(result.addedStarterAddresses).toEqual([]);
     expect(result.changed).toBe(true);
   });
 
@@ -69,29 +67,13 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
     expect(result.provenance).toEqual([{ address: 'memes-posting.bso', source: 'directory-code', sourceValue: 'memes' }]);
   });
 
-  it('migrates a full legacy default cohort to every starter address', () => {
-    const result = computeAddressCanonicalSubscriptionMigration([...LEGACY_DEFAULT_SUBSCRIPTIONS]);
+  it('keeps every supported .eth address now that the retired cohort is no longer special-cased', () => {
+    const subscriptions = ['manual-before.bso', 'retired-default.eth', 'manual-after.bso'];
+    const result = computeAddressCanonicalSubscriptionMigration(subscriptions);
 
-    expect(result.next).toEqual(STARTER_COMMUNITY_ADDRESSES);
-    expect(result.removedLegacyDefaults).toEqual([...LEGACY_DEFAULT_SUBSCRIPTIONS]);
-    expect(result.addedStarterAddresses).toEqual(STARTER_COMMUNITY_ADDRESSES);
-    expect(result.provenance.filter(({ source }) => source === 'legacy-default-cohort')).toHaveLength(10);
-  });
-
-  it('preserves unrelated addresses while replacing a legacy cohort with the starter set', () => {
-    const result = computeAddressCanonicalSubscriptionMigration(['manual-before.bso', 'plebtoken.eth', 'manual-after.bso', '💩posting.eth']);
-
-    expect(result.next).toEqual(['manual-before.bso', 'manual-after.bso', ...STARTER_COMMUNITY_ADDRESSES]);
-    expect(result.removed).toEqual(['plebtoken.eth', '💩posting.eth']);
-  });
-
-  it('does not duplicate a starter address already kept from the account', () => {
-    const result = computeAddressCanonicalSubscriptionMigration(['aww-posting.bso', 'plebtoken.eth']);
-
-    expect(result.next[0]).toBe('aww-posting.bso');
-    expect(result.next.filter((address) => address === 'aww-posting.bso')).toHaveLength(1);
-    expect(result.addedStarterAddresses).not.toContain('aww-posting.bso');
-    expect(result.next).toHaveLength(STARTER_COMMUNITY_ADDRESSES.length);
+    expect(result.next).toEqual(subscriptions);
+    expect(result.removed).toEqual([]);
+    expect(result.changed).toBe(false);
   });
 
   it('leaves an address-only account unchanged', () => {
@@ -115,12 +97,11 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
 
     expect(result.next).toEqual(['manual.bso', publicKey]);
     expect(result.removed).toEqual(['retired.example']);
-    expect(result.addedStarterAddresses).toEqual([]);
     expect(result.changed).toBe(true);
   });
 
-  it('does not touch addresses that only resemble retired defaults or codes', () => {
-    const subscriptions = ['plebtoken-copy.eth', 'notplebtoken.eth', 'memes.bso', 'MEMES'];
+  it('does not touch addresses that only resemble directory codes', () => {
+    const subscriptions = ['token-copy.eth', 'nottoken.eth', 'memes.bso', 'MEMES'];
     const result = computeAddressCanonicalSubscriptionMigration(subscriptions);
 
     expect(result.next).toEqual(subscriptions);
@@ -128,7 +109,7 @@ describe('computeAddressCanonicalSubscriptionMigration', () => {
   });
 
   it('is idempotent and keeps the compatibility export equivalent', () => {
-    const first = computeAddressCanonicalSubscriptionMigration(['plebtoken.eth', 'my-community.bso', 'memes']);
+    const first = computeAddressCanonicalSubscriptionMigration(['token.eth', 'my-community.bso', 'memes']);
     const second = computeAddressCanonicalSubscriptionMigration(first.next);
 
     expect(second).toMatchObject({ next: first.next, changed: false, added: [], removed: [], provenance: [] });

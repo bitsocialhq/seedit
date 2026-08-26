@@ -41,7 +41,7 @@ describe('account-history-utils', () => {
   it('filters optimistic local posts after narrowing account comments by community and recency', () => {
     const nowSeconds = 10_000;
     const accountComments: Comment[] = [
-      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
+      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, communityAddress: 'cats' },
       { cid: 'keep-newer', postCid: 'keep-newer', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
       { cid: 'skip-existing', postCid: 'skip-existing', state: 'succeeded', timestamp: 9_800, communityAddress: 'cats' },
       { cid: 'skip-reply', postCid: 'parent', state: 'succeeded', timestamp: 9_900, communityAddress: 'cats' },
@@ -54,7 +54,7 @@ describe('account-history-utils', () => {
     const feed: Comment[] = [{ cid: 'skip-existing' }];
 
     expect(filterOptimisticLocalPosts(accountComments, feed, 'cats', nowSeconds)).toEqual([
-      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, subplebbitAddress: 'cats' },
+      { cid: 'keep-legacy', postCid: 'keep-legacy', state: 'succeeded', timestamp: 9_500, communityAddress: 'cats' },
       { cid: 'keep-newer', postCid: 'keep-newer', state: 'succeeded', timestamp: 9_700, communityAddress: 'cats' },
     ]);
   });
