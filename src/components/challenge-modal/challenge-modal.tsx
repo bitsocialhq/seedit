@@ -186,9 +186,9 @@ const RegularChallengeContent = ({ challenge, closeModal, abandonModal }: Regula
     try {
       iframeRef.current.contentWindow?.postMessage(
         {
-          type: 'plebbit-theme',
+          type: 'bitsocial-theme',
           theme,
-          source: 'plebbit-seedit',
+          source: 'bitsocial-seedit',
         },
         iframeOrigin,
       );

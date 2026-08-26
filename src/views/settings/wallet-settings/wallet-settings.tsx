@@ -13,7 +13,7 @@ interface Wallet {
 
 const getWalletMessageToSign = (authorAddress: string, timestamp: number): string => {
   const messageToSign = {
-    domainSeparator: 'plebbit-author-wallet',
+    domainSeparator: 'pkc-author-wallet',
     authorAddress,
     timestamp,
   };
