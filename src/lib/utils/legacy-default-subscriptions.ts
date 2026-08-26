@@ -19,48 +19,6 @@ export const STARTER_COMMUNITIES_SCHEMA_VERSION = 2;
 export const STARTER_COMMUNITIES_REVISION = 2;
 export const STARTER_COMMUNITY_ADDRESSES = Object.values(LEGACY_DIRECTORY_ADDRESS_BY_CODE);
 
-// Dead defaults from the multisub that preceded directory subscriptions. Their presence
-// identifies an account that should be moved as a cohort to the current starter addresses.
-export const LEGACY_DEFAULT_SUBSCRIPTIONS = [
-  'plebtoken.eth',
-  'vote.plebbit.eth',
-  'blog.plebbit.eth',
-  'politically-incorrect.eth',
-  'business-and-finance.eth',
-  'plebpiracy.eth',
-  'technopleb.eth',
-  'health-nutrition-science.eth',
-  'movies-tv-anime.eth',
-  'plebmusic.eth',
-  'videos-livestreams-podcasts.eth',
-  'weaponized-autism.eth',
-  'plebwhales.eth',
-  'pleblore.eth',
-  'fatpeoplehate.eth',
-  'reddit-screenshots.eth',
-  'censorship-watch.eth',
-  'askplebbit.eth',
-  'wereadbooks.eth',
-  'psychicgarden.eth',
-  'cave2cave.eth',
-  'cryptoserious.eth',
-  'plebcouncil.eth',
-  'diyeconomy.eth',
-  'chantdownbabylon.eth',
-  'plebbit-ukraine.eth',
-  'monarkia.eth',
-  'mktwallet.eth',
-  'brasilandia.eth',
-  'cringeposting.eth',
-  'bitcoinbrothers.eth',
-  '💩posting.eth',
-  'plebbrothers.eth',
-  'plebshelpingplebs.eth',
-  'decentralizedscam.eth',
-  'plebbitai.eth',
-] as const;
-
-const LEGACY_DEFAULT_SUBSCRIPTIONS_SET: ReadonlySet<string> = new Set(LEGACY_DEFAULT_SUBSCRIPTIONS);
 const SUPPORTED_NAME_SUFFIXES = ['.eth', '.bso'] as const;
 
 const isSupportedSubscriptionAddress = (address: string): boolean => !address.includes('.') || SUPPORTED_NAME_SUFFIXES.some((suffix) => address.endsWith(suffix));
@@ -73,7 +31,7 @@ export interface DirectoryCodeReplacement {
 
 export interface SubscriptionMigrationProvenance {
   address: string;
-  source: 'directory-code' | 'legacy-default-cohort';
+  source: 'directory-code';
   sourceValue?: string;
 }
 
@@ -82,7 +40,6 @@ export interface AddressCanonicalMigrationResult {
   changed: boolean;
   replacedDirectoryCodes: DirectoryCodeReplacement[];
   removedLegacyDefaults: string[];
-  addedStarterAddresses: string[];
   deduplicatedAddresses: string[];
   provenance: SubscriptionMigrationProvenance[];
   /** Compatibility alias for the untouched auto-subscribe hook. */
@@ -99,22 +56,18 @@ const getLegacyDirectoryAddress = (entry: string): string | undefined => {
 /**
  * Convert persisted directory-code subscriptions to fixed community addresses and discard
  * unsupported name aliases. Supported direct-address-only accounts are left untouched.
- * Finding any retired multisub default migrates that legacy cohort to the complete starter
- * set while preserving unrelated supported addresses.
  */
 export const computeAddressCanonicalSubscriptionMigration = (subscriptions: string[] | undefined): AddressCanonicalMigrationResult => {
   const current = (subscriptions ?? []).filter((entry): entry is string => typeof entry === 'string');
   const hasDirectoryCodes = current.some((entry) => getLegacyDirectoryAddress(entry) !== undefined);
-  const hasLegacyDefaults = current.some((entry) => LEGACY_DEFAULT_SUBSCRIPTIONS_SET.has(entry));
   const hasUnsupportedNamedAddresses = current.some((entry) => !isSupportedSubscriptionAddress(entry));
 
-  if (!hasDirectoryCodes && !hasLegacyDefaults && !hasUnsupportedNamedAddresses) {
+  if (!hasDirectoryCodes && !hasUnsupportedNamedAddresses) {
     return {
       next: current,
       changed: false,
       replacedDirectoryCodes: [],
       removedLegacyDefaults: [],
-      addedStarterAddresses: [],
       deduplicatedAddresses: [],
       provenance: [],
       removed: [],
@@ -126,7 +79,6 @@ export const computeAddressCanonicalSubscriptionMigration = (subscriptions: stri
   const seen = new Set<string>();
   const replacedDirectoryCodes: DirectoryCodeReplacement[] = [];
   const removedLegacyDefaults: string[] = [];
-  const addedStarterAddresses: string[] = [];
   const deduplicatedAddresses: string[] = [];
   const provenance: SubscriptionMigrationProvenance[] = [];
   const originalDirectAddresses = new Set(current.filter((entry) => getLegacyDirectoryAddress(entry) === undefined));
@@ -142,7 +94,7 @@ export const computeAddressCanonicalSubscriptionMigration = (subscriptions: stri
   };
 
   current.forEach((entry, sourceIndex) => {
-    if (LEGACY_DEFAULT_SUBSCRIPTIONS_SET.has(entry) || !isSupportedSubscriptionAddress(entry)) {
+    if (!isSupportedSubscriptionAddress(entry)) {
       removedLegacyDefaults.push(entry);
       return;
     }
@@ -160,15 +112,6 @@ export const computeAddressCanonicalSubscriptionMigration = (subscriptions: stri
     }
   });
 
-  if (hasLegacyDefaults) {
-    for (const address of STARTER_COMMUNITY_ADDRESSES) {
-      if (seen.has(address)) continue;
-      appendUnique(address);
-      addedStarterAddresses.push(address);
-      provenance.push({ address, source: 'legacy-default-cohort' });
-    }
-  }
-
   const currentSet = new Set(current);
   const added = next.filter((address) => !currentSet.has(address));
 
@@ -177,7 +120,6 @@ export const computeAddressCanonicalSubscriptionMigration = (subscriptions: stri
     changed: next.length !== current.length || next.some((entry, index) => entry !== current[index]),
     replacedDirectoryCodes,
     removedLegacyDefaults,
-    addedStarterAddresses,
     deduplicatedAddresses,
     provenance,
     removed: removedLegacyDefaults,

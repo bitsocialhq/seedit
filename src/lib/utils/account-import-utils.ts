@@ -147,12 +147,6 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean)
     importedAccount.account.chainProviders = getSupportedChainProviders(importedAccount.account.chainProviders);
   }
 
-  // Support accounts exported by older versions that used the legacy field name
-  if (!importedAccount.account.pkcOptions && importedAccount.account.plebbitOptions) {
-    importedAccount.account.pkcOptions = importedAccount.account.plebbitOptions;
-    delete importedAccount.account.plebbitOptions;
-  }
-
   if (importedAccount.account.pkcOptions && !Array.isArray(importedAccount.account.pkcOptions.httpRoutersOptions)) {
     importedAccount.account.pkcOptions.httpRoutersOptions = (isElectron ? getDefaultElectronConfig() : getDefaultWebConfig()).httpRoutersOptions;
   }
