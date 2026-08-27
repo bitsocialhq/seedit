@@ -12,7 +12,7 @@ Seedit directory codes are mutable discovery routes, not subscription identities
 - `/s/funny.bso` and `/s/funny-posting.bso` identify exact communities.
 - `account.subscriptions` contains only exact community addresses or public keys. A directory code is never stored there.
 - The home feed reads the exact subscription array directly and never resolves directory codes.
-- The topbar links current directory-backed defaults by code (`funny` to `/s/funny`), while `My Communities` continues to expose exact subscriptions.
+- The topbar and `My Communities` dropdown link current directory-backed defaults by code (`funny` to `/s/funny`); other subscriptions continue to use their exact short addresses.
 - Joining from `/s/funny` atomically subscribes to the exact current winner and records Seedit-only directory provenance.
 - Generated post permalinks always use the post owner's exact community address and `/comments/<cid>`.
 - A winner change does not alter a subscription by default. Seedit presents an inline choice to switch, keep both, or keep the current community.
@@ -48,7 +48,7 @@ This metadata lets Seedit offer winner-change actions without inventing a second
 
 Seedit's default-subscription list remains a list of exact addresses. A default entry may also include `directoryCode` and `directoryRevision` to record which finalized directory snapshot selected it. New accounts receive exact subscriptions plus the matching Seedit provenance; existing accounts retain their exact choices until they act on an update or previously enabled automatic switching.
 
-The topbar uses that metadata for stable discovery navigation: a current default such as `pics-posting.bso` is presented as `pics` and links to `/s/pics`. This presentation does not change the exact address stored in the account. If a retained exact subscription no longer matches the current default winner, it remains visible by its address instead of being disguised as the directory.
+The topbar and `My Communities` dropdown use that metadata for stable discovery navigation: a current default such as `pics-posting.bso` is presented as `pics` and links to `/s/pics`. This presentation does not change the exact address stored in the account. If a retained exact subscription no longer matches the current default winner, it remains visible by its address instead of being disguised as the directory.
 
 ## Rejected alternatives
 

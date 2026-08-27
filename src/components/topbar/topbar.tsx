@@ -5,7 +5,7 @@ import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-ho
 import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import { useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
+import { useDefaultSubscriptions, useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
 import { getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
@@ -20,11 +20,13 @@ const getTopbarCommunityLink = ({ address, directoryCode }: Pick<DefaultSubscrip
   path: directoryCode ? getDirectoryPath(directoryCode) : getCommunityPath(address),
 });
 
-const CommunitiesDropdown = () => {
+export const CommunitiesDropdown = () => {
   const { t } = useTranslation();
   const account = useAccount();
   const subscriptions = useMemo(() => account?.subscriptions, [account?.subscriptions]);
   const reversedSubscriptions = useMemo(() => (subscriptions ? [...subscriptions].reverse() : []), [subscriptions]);
+  const defaultCommunities = useDefaultSubscriptions();
+  const defaultCommunityByAddress = new Map(defaultCommunities.map((community) => [community.address, community]));
 
   const [isSubsDropdownOpen, setIsSubsDropdownOpen] = useState(false);
   const toggleSubsDropdown = () => setIsSubsDropdownOpen(!isSubsDropdownOpen);
@@ -54,11 +56,15 @@ const CommunitiesDropdown = () => {
     <div className={`${styles.dropdown} ${styles.subsDropdown}`} ref={subsDropdownRef} onClick={toggleSubsDropdown}>
       <span className={styles.selectedTitle}>{t('my_communities')}</span>
       <div className={`${styles.dropChoices} ${styles.subsDropChoices} ${subsDropdownClass}`} ref={subsdropdownItemsRef}>
-        {reversedSubscriptions?.map((subscription: string) => (
-          <Link key={subscription} to={getCommunityPath(subscription)} className={styles.dropdownItem}>
-            {getSubscriptionDisplayName(subscription)}
-          </Link>
-        ))}
+        {reversedSubscriptions?.map((subscription: string) => {
+          const directoryCode = defaultCommunityByAddress.get(subscription)?.directoryCode;
+          const { displayName, path } = getTopbarCommunityLink({ address: subscription, directoryCode });
+          return (
+            <Link key={subscription} to={path} className={styles.dropdownItem}>
+              {displayName}
+            </Link>
+          );
+        })}
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
           {t('edit_subscriptions')}
         </Link>
