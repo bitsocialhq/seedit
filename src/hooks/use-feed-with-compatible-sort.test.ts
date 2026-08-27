@@ -55,6 +55,18 @@ describe('hasUnresolvedPostSortMetadata', () => {
     expect(hasUnresolvedPostSortMetadata([community({ pages: ['hot'] })], 'hot')).toBe(false);
   });
 
+  it.each(['waiting-retry', 'failed', 'stopped', 'succeeded'])('does not let %s communities block available feed data', (updatingState) => {
+    expect(hasUnresolvedPostSortMetadata([{ updatingState } as Community], 'hot')).toBe(false);
+  });
+
+  it.each(['resolving-name', 'fetching-ipns', 'fetching-ipfs'])('keeps metadata pending while a community is %s', (updatingState) => {
+    expect(hasUnresolvedPostSortMetadata([{ updatingState } as Community], 'hot')).toBe(true);
+  });
+
+  it('does not let an unresolved community block peers with published sort metadata', () => {
+    expect(hasUnresolvedPostSortMetadata([{ updatingState: 'fetching-ipns' } as Community, community({ pages: ['hot'] })], 'hot')).toBe(false);
+  });
+
   it('does not keep an explicitly unavailable sort pending after page metadata is published', () => {
     expect(hasUnresolvedPostSortMetadata([community({ pages: ['hot'] })], 'custom')).toBe(false);
   });

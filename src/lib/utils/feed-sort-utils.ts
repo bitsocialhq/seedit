@@ -12,8 +12,14 @@ const getAvailablePostSortTypes = (community: Community): string[] => [
   ...new Set([...Object.keys(community.posts?.pages || {}), ...Object.keys(community.posts?.pageCids || {})]),
 ];
 
-export const hasUnresolvedPostSortMetadata = (communities: Array<Community | undefined>, requestedSortType?: string): boolean =>
-  Boolean(requestedSortType && communities.some((community) => community && getAvailablePostSortTypes(community).length === 0));
+const nonBlockingPostSortMetadataStates = new Set(['failed', 'stopped', 'succeeded', 'waiting-retry']);
+
+export const hasUnresolvedPostSortMetadata = (communities: Array<Community | undefined>, requestedSortType?: string): boolean => {
+  if (!requestedSortType) return false;
+  const resolvedCommunities = communities.filter((community): community is Community => Boolean(community));
+  if (resolvedCommunities.some((community) => getAvailablePostSortTypes(community).length > 0)) return false;
+  return resolvedCommunities.some((community) => !nonBlockingPostSortMetadataStates.has(community.updatingState || ''));
+};
 
 const hasCompletePreloadedPostPage = (community: Community): boolean => {
   const preloadedSorts = Object.keys(community.posts?.pages || {});
