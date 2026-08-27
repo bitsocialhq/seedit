@@ -45,6 +45,16 @@ describe('GoldFaq', () => {
     expect(container.textContent).toContain('crypto-only checkout');
   });
 
+  it('states how net proceeds will support Seedit', () => {
+    renderGoldFaq();
+
+    expect(container.textContent).toContain('support the continued development and operation of Seedit');
+    expect(container.textContent).toContain('compensating core contributors');
+    expect(container.textContent).toContain('Any future allocation to buying or burning BSO will be disclosed separately');
+    expect(container.textContent).toContain('public on-chain transactions');
+    expect(container.textContent).not.toContain('automatically in the smart contract');
+  });
+
   it('links directory vote eligibility to the default community list route', () => {
     renderGoldFaq();
 
