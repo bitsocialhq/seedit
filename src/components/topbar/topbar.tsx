@@ -9,8 +9,6 @@ import { useDefaultSubscriptions, useFilteredDefaultSubscriptions, type DefaultS
 import { getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
-import { sortTypes } from '../../constants/sort-types';
-import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
 const getSubscriptionDisplayName = (subscription: string) => getCompactCommunityDisplayName(subscription);
@@ -68,61 +66,6 @@ export const CommunitiesDropdown = () => {
         <Link to='/communities/subscriber' className={`${styles.dropdownItem} ${styles.myCommunitiesItemButtonDotted}`}>
           {t('edit_subscriptions')}
         </Link>
-      </div>
-    </div>
-  );
-};
-
-const SortTypesDropdown = () => {
-  const { t } = useTranslation();
-  const params = useParams();
-  const location = useLocation();
-  const isInCommunityView = isCommunityView(location.pathname, params);
-  const isinAllView = isAllView(location.pathname);
-  const { timeFilterName } = useTimeFilter();
-
-  const selectedSortType = params.sortType || 'hot';
-  const { communityAddress } = useResolvedCommunityRoute();
-
-  const getSelectedSortLabel = () => {
-    const index = sortTypes.indexOf(selectedSortType);
-    return index >= 0 ? sortLabels[index] : sortLabels[0];
-  };
-
-  const [isSortsDropdownOpen, setIsSortsDropdownOpen] = useState(false);
-  const toggleSortsDropdown = () => setIsSortsDropdownOpen(!isSortsDropdownOpen);
-  const sortsDropdownRef = useRef<HTMLDivElement>(null);
-  const sortsdropdownItemsRef = useRef<HTMLDivElement>(null);
-  const sortsDropdownClass = isSortsDropdownOpen ? styles.visible : styles.hidden;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (sortsDropdownRef.current && !sortsDropdownRef.current.contains(event.target as Node)) {
-        setIsSortsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  return (
-    <div className={styles.dropdown} ref={sortsDropdownRef} onClick={toggleSortsDropdown}>
-      <span className={styles.selectedTitle}>{t(getSelectedSortLabel())}</span>
-      <div className={`${styles.dropChoices} ${styles.sortsDropChoices} ${sortsDropdownClass}`} ref={sortsdropdownItemsRef}>
-        {sortTypes.map((sortType, index) => {
-          let dropdownLink = isInCommunityView && communityAddress ? `${getCommunityPath(communityAddress)}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
-          if (timeFilterName) {
-            dropdownLink += `/${timeFilterName}`;
-          }
-          return (
-            <Link to={dropdownLink} key={sortType} className={styles.dropdownItem}>
-              {t(sortLabels[index])}
-            </Link>
-          );
-        })}
       </div>
     </div>
   );
@@ -218,7 +161,6 @@ const TopBar = memo(() => {
     <div className={styles.headerArea}>
       <div className={styles.widthClip}>
         <CommunitiesDropdown />
-        <SortTypesDropdown />
         <TimeFilterDropdown />
         <div className={styles.srList}>
           <ul className={styles.srBar}>
