@@ -29,113 +29,114 @@ export const FAQ = () => {
   return (
     <>
       <div className={styles.about}>
-        <ul className={isMobile ? styles.tocMobile : styles.toc}>
-          <li>
-            <HashLink to='/about#newUsers'>New Users:</HashLink>
-          </li>
-          <li>
-            <HashLink to='/about#whatIsSeedit'>What is Seedit and how does it work?</HashLink>
-          </li>
-          <li>
-            <HashLink to='/about#createCommunity'>How do I create my own community?</HashLink>
-          </li>
-          <li>
-            <HashLink to='/about#defaultList'>How can others find my community?</HashLink>
-          </li>
-          <li>
-            <HashLink to='/about#search'>How do I search for a post?</HashLink>
-          </li>
-          <li>
-            <HashLink to='/about#registerUsername'>Can I register a username?</HashLink>
-          </li>
-          {isInHomeAboutView && isMobile && (
+        <nav className={isMobile ? styles.tocMobile : styles.toc} aria-label='About page contents'>
+          <strong>On this page</strong>
+          <ul>
             <li>
-              <HashLink to='/about#usefulLinks'>Useful links</HashLink>
+              <HashLink to='/about#newUsers'>Getting started</HashLink>
             </li>
-          )}
-        </ul>
+            <li>
+              <HashLink to='/about#whatIsSeedit'>What is Seedit?</HashLink>
+            </li>
+            <li>
+              <HashLink to='/about#createCommunity'>How do I create a community?</HashLink>
+            </li>
+            <li>
+              <HashLink to='/about#defaultList'>How can people find my community?</HashLink>
+            </li>
+            <li>
+              <HashLink to='/about#search'>How do I search for posts?</HashLink>
+            </li>
+            <li>
+              <HashLink to='/about#registerUsername'>Can I choose a readable account name?</HashLink>
+            </li>
+            {isInHomeAboutView && isMobile && (
+              <li>
+                <HashLink to='/about#usefulLinks'>Useful links</HashLink>
+              </li>
+            )}
+          </ul>
+        </nav>
         <h3 id='newUsers' style={{ marginTop: '0' }}>
-          New Users:
+          Getting started
         </h3>
         <p>
-          Welcome! Your account was created automatically and it's stored locally on your device (
-          {window.electronApi?.isElectron ? 'on this desktop app' : isAndroid ? 'on this mobile app' : `on this web app, ${window.location.hostname}`}, not on a server).
-          You can back up your account in the <Link to='/settings#exportAccount'>preferences</Link>. There are no global rules or admins on Seedit, each community has its
-          own rules and moderators, so please be sure to read the rules of the community you are joining. You can connect peer-to-peer to any community by using the
-          search bar, or you can check out the <Link to='/communities/vote'>default community list</Link>.
+          Seedit created your account automatically and stores it locally on this device—
+          {window.electronApi?.isElectron ? 'in the desktop app' : isAndroid ? 'in the mobile app' : `in this web app at ${window.location.hostname}`}—rather than on a
+          central account server. <Link to='/settings#exportAccount'>Back up your account</Link> so you can restore it if you change devices or lose this app's local
+          data.
         </p>
+        <ul className={styles.gettingStartedList}>
+          <li>Browse the communities in the top bar, or enter an exact community address in the search box.</li>
+          <li>Join the communities you want to see in your home feed.</li>
+          <li>Read each community's rules before posting. Communities are independently operated and can set their own rules and moderators.</li>
+        </ul>
         <hr />
-        <h3 id='whatIsSeedit'>What is Seedit and how does it work?</h3>
+        <h3 id='whatIsSeedit'>What is Seedit?</h3>
         <p>
-          Seedit is a serverless, adminless, decentralized reddit alternative. Seedit is a client for the Bitsocial protocol, a decentralized social network for creating
-          and fully owning unstoppable communities. To learn more about Bitsocial and its clients, please visit{' '}
+          Seedit is an old.reddit-style app for{' '}
           <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
-            bitsocial.net
+            Bitsocial
           </a>
-          .<br />
-          <br />
-          The main difference between Seedit and other reddit-like websites is that Seedit is fully decentralized. Each community is fully independent and decides how/if
-          to moderate its own content, as there are no global rules or admins on Seedit. Each community acts as its own server, with its own data, and users connect to it
-          peer-to-peer. This means that it's not possible to know how many users or communities Seedit has as a whole, since anyone can create their own community at any
-          time, and not share its address with anyone.
-          <br />
-          <br />
-          Unlike other "decentralized" websites, Seedit does not rely on blockchain technology or federated servers. Instead, it uses a distributed database (
+          , a peer-to-peer protocol for independently owned communities. Seedit does not use one central server to host every community or account. Each community
+          publishes its own data, sets its own rules, and is reached through its address.
+        </p>
+        <p>
+          Bitsocial distributes community data through peer-to-peer networking and{' '}
           <a href='https://ipfs.tech' target='_blank' rel='noopener noreferrer'>
             IPFS
           </a>
-          , similar to BitTorrent) to store the content of each community. This means that Seedit does not have to rely on the slow and expensive blockchain to store the
-          content of each community, and it can be much faster and cheaper, scaling to millions of communities and users.
-          <br />
-          <br />
-          Seedit is free and open source software under the GPL-3.0-or-later license, you can check the source code{' '}
+          . Posts and comments are not stored on a blockchain. Optional readable <code>.bso</code> addresses use ENS, as explained below.
+        </p>
+        <p>
+          There is no central index of every Bitsocial community or user. Anyone can create a community and share its address privately or publicly. Seedit is free and
+          open source software under the GPL-3.0-or-later license; you can{' '}
           <a href='https://github.com/bitsocialnet/seedit' target='_blank' rel='noopener noreferrer'>
-            here
+            view its source code on GitHub
           </a>
           .
         </p>
         <hr />
-        <h3 id='createCommunity'>How do I create my own community?</h3>
+        <h3 id='createCommunity'>How do I create a community?</h3>
         <p>
-          If you're comfortable with the command line, you can use{' '}
-          <a href='https://github.com/bitsocialnet/bitsocial-cli' target='_blank' rel='noopener noreferrer'>
-            bitsocial-cli
-          </a>{' '}
-          to create your own community. Otherwise, you can download{' '}
+          The simplest option is{' '}
           <a href='https://github.com/bitsocialnet/seedit/releases/latest' target='_blank' rel='noopener noreferrer'>
             Seedit desktop
           </a>
-          , which automatically runs a full node and lets you create communities with the ease of a reddit-like graphical user interface. You can also open a remote
-          connection to an <HashLink to='/settings/advanced#fullNodeRpc'>RPC node</HashLink> to create communities even on web and on mobile devices. In the near future,
-          we plan to include a public RPC connection turned on by default, so you can create communities on any device without running your own node.
+          , which runs a full node and provides a graphical community editor. You can also run{' '}
+          <a href='https://github.com/bitsocialnet/bitsocial-cli' target='_blank' rel='noopener noreferrer'>
+            bitsocial-cli
+          </a>
+          . On the web or mobile app, creating and managing a community requires a <HashLink to='/settings/advanced#fullNodeRpc'>connection to a full node</HashLink>.
         </p>
         <hr />
-        <h3 id='defaultList'>How can others find my community?</h3>
+        <h3 id='defaultList'>How can people find my community?</h3>
         <p>
-          Share your community address directly with others or submit it to a public directory. Communities included in Seedit's{' '}
-          <Link to='/communities/vote'>default community list</Link> are visible to all Seedit users.
-          <br />
-          <br />
-          Additionally, if a user of your community posts in it, your community address will be visible to others in the user's profile page. This means that even if your
-          community is not listed in the default community list, if your community is popular enough, other users will be able to find it through the post history in the
-          profile pages of the users of your community.
+          Share its exact address. People can paste that address into Seedit's search box, and links to posts keep using the same address. Community addresses also appear
+          with posts and in user profiles, so people can follow them back to the community.
+        </p>
+        <p>
+          Seedit also has default communities and short <code>s/</code> directory routes for public discovery. You can{' '}
+          <Link to='/communities/vote'>inspect the current directories and their candidates</Link>; voting is not open yet. During this bootstrap period, proposals for
+          the default community list are made through{' '}
+          <a href='https://github.com/bitsocialnet/lists' target='_blank' rel='noopener noreferrer'>
+            bitsocialnet/lists
+          </a>
+          .
         </p>
         <hr />
-        <h3 id='search'>How do I search for a post?</h3>
+        <h3 id='search'>How do I search for posts?</h3>
         <p>
-          In the near future, it will be possible to progressively search for posts in a feed, by constantly looking for new posts in the p2p network (this search might
-          be slow). As there are no servers, it's impossible to recreate a centralized search engine that will search for posts across the entire p2p network. However, we
-          expect to see third party archiver websites that will allow you to search for posts that have already been discovered by other users across the Bitsocial
-          network.
+          On any feed, select the search box and choose <strong>Search a post in this feed</strong>. Seedit searches the posts available through that feed. It cannot
+          search every community on the Bitsocial network at once because there is no central, network-wide post index.
         </p>
         <hr />
-        <h3 id='registerUsername'>Can I register a username?</h3>
+        <h3 id='registerUsername'>Can I choose a readable account name?</h3>
         <p>
-          You can set a display name for your account in the <Link to='/settings#displayName'>preferences</Link>. Your account address (u/
-          {getDisplayAddress(account?.author?.shortAddress || '')}) is generated randomly from a cryptographic hash of your public key, similarly to how a bitcoin address
-          is generated. You can <HashLink to='/settings#cryptoAddress'>change your account address</HashLink> to a unique readable <code>.bso</code> name you own. A{' '}
-          <code>.bso</code> address is an ENS name shown by Seedit with a <code>.bso</code> ending instead of <code>.eth</code>. Register and configure the underlying{' '}
-          <code>.eth</code> name through{' '}
+          You can set a <Link to='/settings#displayName'>display name</Link>, but your account still has an underlying address such as u/
+          {getDisplayAddress(account?.author?.shortAddress || '')}. For a unique readable address, you can{' '}
+          <HashLink to='/settings#cryptoAddress'>connect an ENS name you own</HashLink>. Seedit displays the configured <code>.eth</code> name with a <code>.bso</code>{' '}
+          ending. Register and manage the underlying name through{' '}
           <a href='https://ens.domains/' target='_blank' rel='noopener noreferrer'>
             ENS
           </a>

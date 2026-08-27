@@ -22,7 +22,6 @@
   padding: 11px 22px;
   margin: 0 0 11px 22px;
   border: 1px solid var(--box-border-color);
-  list-style: none;
   max-width: 300px;
 }
 
@@ -30,12 +29,25 @@
   padding: 11px 22px;
   margin-bottom: 20px;
   border: 1px solid var(--box-border-color);
+}
+
+.toc ul,
+.tocMobile ul {
+  padding: 0;
+  margin: 2px 0 0;
   list-style: none;
 }
 
-.toc li, .tocMobile li {
+.toc li,
+.tocMobile li {
   line-height: 20px;
   font-size: 14px;
+}
+
+.gettingStartedList {
+  padding-left: 25px;
+  margin: 5px 0 13px;
+  line-height: 20px;
 }
 
 .about a {
