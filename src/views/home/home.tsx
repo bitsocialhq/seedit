@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback, startTransition } from 'react';
 import { Link, useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useAccount, useFeed, Comment } from '@bitsocial/bitsocial-react-hooks';
+import { useAccount, Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
@@ -22,6 +22,7 @@ import { sortTypes } from '../../constants/sort-types';
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -97,7 +98,7 @@ const Home = () => {
     return options;
   }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, commentFilter]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
   useEffect(() => {
     startTransition(() => {
@@ -134,7 +135,7 @@ const Home = () => {
     feed: weeklyFeed,
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
@@ -143,7 +144,7 @@ const Home = () => {
     feed: monthlyFeed,
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
@@ -152,7 +153,7 @@ const Home = () => {
     feed: yearlyFeed,
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
     sortType,
     newerThan: 60 * 60 * 24 * 365,

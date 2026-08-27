@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAccountComments, useBlock, useFeed, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { useAccountComments, useBlock, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Trans, useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';
@@ -28,6 +28,7 @@ import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { sortTypes } from '../../constants/sort-types';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -288,7 +289,7 @@ const CommunityView = () => {
     return options;
   }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useFeedWithCompatibleSort(feedOptions);
 
   // show account comments instantly in the feed once published (cid defined), instead of waiting for the feed to update
   const { accountComments } = useAccountComments({ communityAddress, newerThan: 60 * 60 });

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useAccountCommunities, useFeed, type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { useAccountCommunities, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
@@ -14,6 +14,7 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { sortTypes } from '../../constants/sort-types';
+import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 import styles from '../home/home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
@@ -66,14 +67,14 @@ const Mod = () => {
     return options;
   }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
   // suggest the user to change time filter if there aren't enough posts
   const {
     feed: weeklyFeed,
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
@@ -82,7 +83,7 @@ const Mod = () => {
     feed: monthlyFeed,
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
@@ -91,7 +92,7 @@ const Mod = () => {
     feed: yearlyFeed,
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,

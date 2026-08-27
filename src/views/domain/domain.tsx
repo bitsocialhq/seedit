@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useFeed, Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
@@ -14,6 +14,7 @@ import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import styles from '../home/home.module.css';
 import { sortTypes } from '../../constants/sort-types';
+import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -84,7 +85,7 @@ const Domain = () => {
     return options;
   }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
   useEffect(() => {
     if (isSearching) {
@@ -112,21 +113,21 @@ const Domain = () => {
   }, [searchQuery, domain, feed?.length, searchAttemptCompleted, showNoResults]);
 
   // suggest the user to change time filter if there aren't enough posts
-  const { feed: weeklyFeed } = useFeed({
+  const { feed: weeklyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
     filter: { filter: matchesDomain, key: `domain-filter-weekly-${domain}` },
   });
 
-  const { feed: monthlyFeed } = useFeed({
+  const { feed: monthlyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
     filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
   });
 
-  const { feed: yearlyFeed } = useFeed({
+  const { feed: yearlyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,

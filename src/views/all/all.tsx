@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useFeed } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
@@ -15,6 +14,7 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { sortTypes } from '../../constants/sort-types';
+import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 import styles from '../home/home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
@@ -75,7 +75,7 @@ const All = () => {
     return options;
   }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
   // Reset no results state when search query changes
   useEffect(() => {
@@ -109,7 +109,7 @@ const All = () => {
     feed: weeklyFeed,
     hasMore: hasMoreWeekly,
     loadMore: loadMoreWeekly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 7,
@@ -118,7 +118,7 @@ const All = () => {
     feed: monthlyFeed,
     hasMore: hasMoreMonthly,
     loadMore: loadMoreMonthly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 30,
@@ -127,7 +127,7 @@ const All = () => {
     feed: yearlyFeed,
     hasMore: hasMoreYearly,
     loadMore: loadMoreYearly,
-  } = useFeed({
+  } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
     sortType,
     newerThan: 60 * 60 * 24 * 365,
