@@ -15,7 +15,8 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
-import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 import styles from '../home/home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
@@ -78,7 +79,7 @@ const All = () => {
     return options;
   }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   // Reset no results state when search query changes
   useEffect(() => {
@@ -108,45 +109,6 @@ const All = () => {
 
   const { t } = useTranslation();
 
-  const {
-    feed: weeklyFeed,
-    hasMore: hasMoreWeekly,
-    loadMore: loadMoreWeekly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 7,
-  });
-  const {
-    feed: monthlyFeed,
-    hasMore: hasMoreMonthly,
-    loadMore: loadMoreMonthly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 30,
-  });
-  const {
-    feed: yearlyFeed,
-    hasMore: hasMoreYearly,
-    loadMore: loadMoreYearly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 365,
-  });
-
-  // Combined loadMore function for better performance when sort type isn't 'top'
-  const combinedLoadMore = async () => {
-    const loadMorePromises = [loadMore()];
-    if (sortType !== 'top') {
-      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
-      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
-      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
-    }
-    await Promise.all(loadMorePromises);
-  };
-
   const documentTitle = 'seedit: ' + t('all_communities');
   useEffect(() => {
     document.title = documentTitle;
@@ -173,16 +135,10 @@ const All = () => {
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
-    communityAddressesWithNewerPosts,
-    weeklyFeedLength: weeklyFeed.length,
-    monthlyFeedLength: monthlyFeed.length,
-    yearlyFeedLength: yearlyFeed.length,
-    currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
-    reset,
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
-    onLoadMore: combinedLoadMore,
+    onLoadMore: loadMore,
   };
 
   const handleClearSearch = () => {
@@ -195,6 +151,10 @@ const All = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
   }
 
   return (
@@ -238,7 +198,7 @@ const All = () => {
               itemContent={(index, post) => <Post key={post?.cid} index={index} post={post} />}
               useWindowScroll={true}
               components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
+              endReached={infiniteFeedEnabled ? loadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

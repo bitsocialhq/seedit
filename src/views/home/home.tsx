@@ -23,7 +23,8 @@ import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRout
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
-import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -101,7 +102,7 @@ const Home = () => {
     return options;
   }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, commentFilter]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   useEffect(() => {
     startTransition(() => {
@@ -131,46 +132,6 @@ const Home = () => {
       if (timer) clearTimeout(timer);
     };
   }, [searchQuery, feed?.length, searchAttemptCompleted]);
-
-  const shouldLoadAdditionalFeeds = sortType !== 'top' && !searchQuery;
-
-  const {
-    feed: weeklyFeed,
-    hasMore: hasMoreWeekly,
-    loadMore: loadMoreWeekly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 7,
-  });
-  const {
-    feed: monthlyFeed,
-    hasMore: hasMoreMonthly,
-    loadMore: loadMoreMonthly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 30,
-  });
-  const {
-    feed: yearlyFeed,
-    hasMore: hasMoreYearly,
-    loadMore: loadMoreYearly,
-  } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 365,
-  });
-
-  const combinedLoadMore = useCallback(async () => {
-    const loadMorePromises = [loadMore()];
-    if (shouldLoadAdditionalFeeds) {
-      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
-      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
-      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
-    }
-    await Promise.all(loadMorePromises);
-  }, [loadMore, shouldLoadAdditionalFeeds, hasMoreWeekly, loadMoreWeekly, hasMoreMonthly, loadMoreMonthly, hasMoreYearly, loadMoreYearly]);
 
   const virtuosoRef = useRef<VirtuosoHandle | null>(null);
 
@@ -211,34 +172,13 @@ const Home = () => {
       hasFeedLoaded: !!feed,
       hasMore,
       communityAddresses,
-      communityAddressesWithNewerPosts,
-      weeklyFeedLength: weeklyFeed.length,
-      monthlyFeedLength: monthlyFeed.length,
-      yearlyFeedLength: yearlyFeed.length,
-      currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
-      reset,
       searchQuery: searchQuery,
       isSearching,
       showNoResults,
       onClearSearch,
-      onLoadMore: combinedLoadMore,
+      onLoadMore: loadMore,
     }),
-    [
-      feed,
-      hasMore,
-      communityAddresses,
-      communityAddressesWithNewerPosts,
-      weeklyFeed.length,
-      monthlyFeed.length,
-      yearlyFeed.length,
-      searchQuery,
-      currentTimeFilterName,
-      reset,
-      isSearching,
-      showNoResults,
-      onClearSearch,
-      combinedLoadMore,
-    ],
+    [feed, hasMore, communityAddresses, searchQuery, isSearching, showNoResults, onClearSearch, loadMore],
   );
 
   const [safeToShowNoSubscriptions, setSafeToShowNoSubscriptions] = useState(false);
@@ -263,6 +203,10 @@ const Home = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
   }
 
   return (
@@ -312,7 +256,7 @@ const Home = () => {
               components={{
                 Footer: () => <FeedFooter {...footerProps} />,
               }}
-              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
+              endReached={infiniteFeedEnabled ? loadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

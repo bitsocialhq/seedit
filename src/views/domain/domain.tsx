@@ -15,7 +15,8 @@ import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import styles from '../home/home.module.css';
 import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
-import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -73,13 +74,13 @@ const Domain = () => {
     const filterKey = searchQuery ? `search-filter-${domain}-${searchQuery}` : `domain-filter-${domain}`;
 
     const options: {
-      newerThan: number;
+      newerThan: number | undefined;
       postsPerPage: number;
       sortType: string;
       communities: ReturnType<typeof getCommunityIdentifiers>;
       filter: CommentsFilter;
     } = {
-      newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
+      newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
       sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
@@ -89,7 +90,7 @@ const Domain = () => {
     return options;
   }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   useEffect(() => {
     if (isSearching) {
@@ -115,28 +116,6 @@ const Domain = () => {
       if (timer) clearTimeout(timer);
     };
   }, [searchQuery, domain, feed?.length, searchAttemptCompleted, showNoResults]);
-
-  // suggest the user to change time filter if there aren't enough posts
-  const { feed: weeklyFeed } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 7,
-    filter: { filter: matchesDomain, key: `domain-filter-weekly-${domain}` },
-  });
-
-  const { feed: monthlyFeed } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 30,
-    filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
-  });
-
-  const { feed: yearlyFeed } = useFeedWithCompatibleSort({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType: feedSortType,
-    newerThan: 60 * 60 * 24 * 365,
-    filter: { filter: matchesDomain, key: `domain-filter-yearly-${domain}` },
-  });
 
   const documentTitle = domain + ' - Seedit';
   useEffect(() => {
@@ -164,12 +143,6 @@ const Domain = () => {
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
-    communityAddressesWithNewerPosts,
-    weeklyFeedLength: weeklyFeed.length,
-    monthlyFeedLength: monthlyFeed.length,
-    yearlyFeedLength: yearlyFeed.length,
-    currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
-    reset,
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
@@ -187,6 +160,10 @@ const Domain = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
   }
 
   return (

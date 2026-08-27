@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, Navigate, useLocation, useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccountComments, useBlock, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import { filterOptimisticLocalPosts } from '../../lib/utils/account-history-utils';
@@ -14,7 +14,7 @@ import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
-import { getCommunityPath, isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
+import { isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -29,7 +29,8 @@ import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
-import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -43,7 +44,6 @@ interface FooterProps {
   started: boolean;
   isSubCreatedButNotYetPublished: boolean;
   hasMore: boolean;
-  timeFilterName: string;
   reset: () => void;
   searchQuery: string;
   isSearching: boolean;
@@ -61,7 +61,6 @@ const Footer = ({
   started: _started,
   isSubCreatedButNotYetPublished: _isSubCreatedButNotYetPublished,
   hasMore,
-  timeFilterName,
   reset,
   searchQuery,
   isSearching,
@@ -195,26 +194,12 @@ const Footer = ({
         </div>
       );
     }
-  } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString) {
+  } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString && !hasMore) {
     footerFirstLine = <EmptyFeedMessage />;
   } else if (paginationFeedLength === 0 || !isOnline) {
     footerFirstLine = loadingString;
   } else if (hasMore && infiniteFeedEnabled) {
     footerFirstLine = loadingString;
-  }
-
-  if (timeFilterName !== 'all' && !blocked && !searchQuery) {
-    footerSecondLine = (
-      <div className={styles.morePostsSuggestion}>
-        <Trans
-          i18nKey='show_all_instead'
-          values={{ timeFilterName }}
-          components={{
-            1: <Link key='show_all_instead_link' to={getCommunityPath(communityAddress)} />,
-          }}
-        />
-      </div>
-    );
   }
 
   return (
@@ -292,7 +277,7 @@ const CommunityView = () => {
     return options;
   }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset } = useFeedWithCompatibleSort(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   // show account comments instantly in the feed once published (cid defined), instead of waiting for the feed to update
   const { accountComments } = useAccountComments({ communityAddress, newerThan: 60 * 60 });
@@ -341,7 +326,6 @@ const CommunityView = () => {
     started,
     isSubCreatedButNotYetPublished,
     hasMore,
-    timeFilterName: searchQuery ? 'all' : timeFilterName || '',
     reset,
     searchQuery,
     isSearching,
@@ -386,6 +370,10 @@ const CommunityView = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
   }
 
   return isHiddenNsfwCommunity ? (
