@@ -39,7 +39,11 @@
 }
 
 .categorySettings a {
+  text-transform: lowercase;
+  cursor: pointer;
+  font-size: 10px;
   color: var(--link-primary);
+  margin-left: 5px;
 }
 
 .categorySettings a:hover {

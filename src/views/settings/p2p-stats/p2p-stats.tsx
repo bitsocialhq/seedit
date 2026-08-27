@@ -44,11 +44,10 @@ const StatValueCell = ({ row }: { row: TextStatRow }) => {
   if (row.name === 'Mode' && row.value === 'Leeching') {
     return (
       <>
-        Leeching (
+        Leeching
         <a href={SEEDER_REPO_URL} rel='noopener noreferrer' target='_blank'>
           want to seed?
         </a>
-        )
       </>
     );
   }
