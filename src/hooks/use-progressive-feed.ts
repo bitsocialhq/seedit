@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CommunityIdentifier, UseFeedOptions, UseFeedResult } from '@bitsocial/bitsocial-react-hooks';
 import { FEED_POSTS_PER_PAGE } from './use-feed-pagination';
 import useFeedWithCompatibleSort from './use-feed-with-compatible-sort';
 import useSuggestionFeedLoader from './use-suggestion-feed-loader';
-import useProgressiveFeedStore from '../stores/use-progressive-feed-store';
 import {
   getAutomaticProgressiveTimeWindow,
   getManualProgressiveTimeWindow,
@@ -33,9 +32,8 @@ const getProgressiveFeedKey = (options: UseFeedOptions): string =>
 const useProgressiveFeed = ({ enabled, feedOptions }: UseProgressiveFeedOptions): UseFeedResult => {
   const lastAutomaticExpansionRef = useRef<{ feedKey: string; feedLength: number; hasMore: boolean; state: string } | undefined>(undefined);
   const feedKey = useMemo(() => getProgressiveFeedKey(feedOptions), [feedOptions]);
-  const storedWindow = useProgressiveFeedStore((state) => state.windows[feedKey]);
-  const setWindow = useProgressiveFeedStore((state) => state.setWindow);
-  const currentNewerThan = storedWindow ? storedWindow.newerThan : feedOptions.newerThan;
+  const [activeWindow, setActiveWindow] = useState<{ feedKey: string; newerThan?: number }>({ feedKey, newerThan: feedOptions.newerThan });
+  const currentNewerThan = activeWindow.feedKey === feedKey ? activeWindow.newerThan : feedOptions.newerThan;
   const baseFeed = useFeedWithCompatibleSort(feedOptions);
   const shouldProbe = enabled && currentNewerThan !== undefined && baseFeed.state !== 'fetching-ipns' && !baseFeed.hasMore;
   const widerWindows = useMemo(() => getWiderProgressiveTimeWindows(currentNewerThan), [currentNewerThan]);
@@ -111,10 +109,10 @@ const useProgressiveFeed = ({ enabled, feedOptions }: UseProgressiveFeedOptions)
 
   const expandToWindow = useCallback(
     async (window: ProgressiveTimeWindow) => {
-      setWindow(feedKey, window.newerThan);
+      setActiveWindow({ feedKey, newerThan: window.newerThan });
       await baseFeed.expandTimeWindow(window.newerThan);
     },
-    [baseFeed.expandTimeWindow, feedKey, setWindow],
+    [baseFeed.expandTimeWindow, feedKey],
   );
 
   const automaticWindow = shouldProbe ? getAutomaticProgressiveTimeWindow(currentNewerThan, baseFeed.feed.length, FEED_POSTS_PER_PAGE, probes) : undefined;

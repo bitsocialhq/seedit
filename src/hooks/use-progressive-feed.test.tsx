@@ -6,7 +6,6 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Comment, UseFeedOptions, UseFeedResult } from '@bitsocial/bitsocial-react-hooks';
 import useProgressiveFeed from './use-progressive-feed';
-import useProgressiveFeedStore from '../stores/use-progressive-feed-store';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 const act = (React as { act?: (callback: () => void | Promise<void>) => void | Promise<void> }).act as (callback: () => void | Promise<void>) => void | Promise<void>;
@@ -65,7 +64,6 @@ describe('useProgressiveFeed', () => {
     testState.probeLengths = new Map();
     testState.expandTimeWindow.mockClear();
     testState.loadMore.mockClear();
-    useProgressiveFeedStore.setState({ windows: {} });
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
@@ -106,5 +104,19 @@ describe('useProgressiveFeed', () => {
 
     expect(testState.expandTimeWindow).toHaveBeenCalledTimes(1);
     expect(testState.expandTimeWindow).toHaveBeenCalledWith(30 * day);
+  });
+
+  it('starts from the configured window again after the feed remounts', async () => {
+    testState.probeLengths = new Map([[undefined, 1]]);
+
+    await act(() => root.render(createElement(HookHarness)));
+    expect(testState.expandTimeWindow).toHaveBeenCalledWith(undefined);
+
+    await act(() => root.unmount());
+    root = createRoot(container);
+    await act(() => root.render(createElement(HookHarness)));
+
+    expect(testState.expandTimeWindow).toHaveBeenCalledTimes(2);
+    expect(testState.expandTimeWindow).toHaveBeenLastCalledWith(undefined);
   });
 });

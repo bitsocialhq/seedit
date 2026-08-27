@@ -12,6 +12,9 @@ const getAvailablePostSortTypes = (community: Community): string[] => [
   ...new Set([...Object.keys(community.posts?.pages || {}), ...Object.keys(community.posts?.pageCids || {})]),
 ];
 
+export const hasUnresolvedPostSortMetadata = (communities: Array<Community | undefined>, requestedSortType?: string): boolean =>
+  Boolean(requestedSortType && communities.some((community) => community && getAvailablePostSortTypes(community).length === 0));
+
 const hasCompletePreloadedPostPage = (community: Community): boolean => {
   const preloadedSorts = Object.keys(community.posts?.pages || {});
   const paginatedSorts = Object.keys(community.posts?.pageCids || {});

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useCommunities, useFeed, type UseFeedOptions, type UseFeedResult } from '@bitsocial/bitsocial-react-hooks';
-import { getFeedCommunityGroups, mergeAndSortFeeds } from '../lib/utils/feed-sort-utils';
+import { getFeedCommunityGroups, hasUnresolvedPostSortMetadata, mergeAndSortFeeds } from '../lib/utils/feed-sort-utils';
 
 /**
  * PKC only publishes its preloaded `hot` page when every post fits in that page. The page is a complete data set,
@@ -74,7 +74,8 @@ const useFeedWithCompatibleSort = (options: UseFeedOptions = {}): UseFeedResult 
   }, [preloadedSortCommunities.length, requestedSortCommunities.length, resetPreloadedSort, resetRequestedSort]);
 
   const hasUnresolvedCommunities = communitiesState === 'fetching-ipns';
-  const hasMore = hasUnresolvedCommunities || requestedSortHasMore || preloadedSortHasMore;
+  const hasUnresolvedSortMetadata = hasUnresolvedPostSortMetadata(communities, options.sortType);
+  const hasMore = hasUnresolvedCommunities || hasUnresolvedSortMetadata || requestedSortHasMore || preloadedSortHasMore;
 
   return {
     feed,

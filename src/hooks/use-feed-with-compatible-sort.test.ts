@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { Comment, Community, CommunityIdentifier } from '@bitsocial/bitsocial-react-hooks';
-import { getFeedCommunityGroups, mergeAndSortFeeds } from '../lib/utils/feed-sort-utils';
+import { getFeedCommunityGroups, hasUnresolvedPostSortMetadata, mergeAndSortFeeds } from '../lib/utils/feed-sort-utils';
 
 const identifier = (name: string): CommunityIdentifier => ({ name });
 const community = ({ pages, pageCids = {} }: { pages: string[]; pageCids?: Record<string, string> }) =>
@@ -46,6 +46,17 @@ describe('getFeedCommunityGroups', () => {
       requestedSortCommunities: [],
       preloadedSortCommunities: [],
     });
+  });
+});
+
+describe('hasUnresolvedPostSortMetadata', () => {
+  it('keeps a requested sort pending until the community publishes its post page map', () => {
+    expect(hasUnresolvedPostSortMetadata([{} as Community], 'hot')).toBe(true);
+    expect(hasUnresolvedPostSortMetadata([community({ pages: ['hot'] })], 'hot')).toBe(false);
+  });
+
+  it('does not keep an explicitly unavailable sort pending after page metadata is published', () => {
+    expect(hasUnresolvedPostSortMetadata([community({ pages: ['hot'] })], 'custom')).toBe(false);
   });
 });
 
