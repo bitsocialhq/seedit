@@ -15,6 +15,7 @@ const testState = vi.hoisted(() => ({
   baseFeedLength: 0,
   baseHasMore: false,
   probeLengths: new Map<number | undefined, number>(),
+  enabledWindows: [] as (number | undefined)[],
   expandTimeWindow: vi.fn(async (_newerThan?: number) => {}),
   loadMore: vi.fn(async () => {}),
 }));
@@ -24,6 +25,7 @@ const posts = (count: number): Comment[] => Array.from({ length: count }, (_, in
 vi.mock('./use-feed-with-compatible-sort', () => ({
   default: (options: UseFeedOptions): UseFeedResult => {
     const isDisabled = options.communities?.length === 0;
+    if (!isDisabled) testState.enabledWindows.push(options.newerThan);
     const isBaseFeed = options.newerThan === day;
     const feedLength = isDisabled ? 0 : isBaseFeed ? testState.baseFeedLength : (testState.probeLengths.get(options.newerThan) ?? 0);
     return {
@@ -62,6 +64,7 @@ describe('useProgressiveFeed', () => {
     testState.baseFeedLength = 0;
     testState.baseHasMore = false;
     testState.probeLengths = new Map();
+    testState.enabledWindows = [];
     testState.expandTimeWindow.mockClear();
     testState.loadMore.mockClear();
     container = document.createElement('div');
@@ -74,7 +77,7 @@ describe('useProgressiveFeed', () => {
     container.remove();
   });
 
-  it('waits for probes and expands a sparse initial feed in place to the narrowest full window', async () => {
+  it('waits for probes and promotes the narrowest full window without mutating the initial feed key', async () => {
     testState.baseFeedLength = 4;
     testState.probeLengths = new Map([
       [7 * day, 25],
@@ -85,9 +88,8 @@ describe('useProgressiveFeed', () => {
 
     await act(() => root.render(createElement(HookHarness)));
 
-    expect(testState.expandTimeWindow).toHaveBeenCalledTimes(1);
-    expect(testState.expandTimeWindow).toHaveBeenCalledWith(7 * day);
-    expect(hookResult.feed).toHaveLength(4);
+    expect(testState.expandTimeWindow).not.toHaveBeenCalled();
+    expect(hookResult.feed).toHaveLength(25);
   });
 
   it('uses a broader ready probe when manual loading exhausts the current window', async () => {
@@ -102,21 +104,22 @@ describe('useProgressiveFeed', () => {
     await act(() => root.render(createElement(HookHarness)));
     await act(() => hookResult.loadMore());
 
-    expect(testState.expandTimeWindow).toHaveBeenCalledTimes(1);
-    expect(testState.expandTimeWindow).toHaveBeenCalledWith(30 * day);
+    expect(testState.expandTimeWindow).not.toHaveBeenCalled();
+    expect(hookResult.feed).toHaveLength(31);
   });
 
   it('starts from the configured window again after the feed remounts', async () => {
     testState.probeLengths = new Map([[undefined, 1]]);
 
     await act(() => root.render(createElement(HookHarness)));
-    expect(testState.expandTimeWindow).toHaveBeenCalledWith(undefined);
+    expect(hookResult.feed).toHaveLength(1);
 
     await act(() => root.unmount());
     root = createRoot(container);
     await act(() => root.render(createElement(HookHarness)));
 
-    expect(testState.expandTimeWindow).toHaveBeenCalledTimes(2);
-    expect(testState.expandTimeWindow).toHaveBeenLastCalledWith(undefined);
+    expect(testState.enabledWindows.filter((newerThan) => newerThan === day)).toHaveLength(2);
+    expect(testState.expandTimeWindow).not.toHaveBeenCalled();
+    expect(hookResult.feed).toHaveLength(1);
   });
 });

@@ -34,7 +34,11 @@ const useProgressiveFeed = ({ enabled, feedOptions }: UseProgressiveFeedOptions)
   const feedKey = useMemo(() => getProgressiveFeedKey(feedOptions), [feedOptions]);
   const [activeWindow, setActiveWindow] = useState<{ feedKey: string; newerThan?: number }>({ feedKey, newerThan: feedOptions.newerThan });
   const currentNewerThan = activeWindow.feedKey === feedKey ? activeWindow.newerThan : feedOptions.newerThan;
-  const baseFeed = useFeedWithCompatibleSort(feedOptions);
+  const currentFeedOptions = useMemo(
+    () => (currentNewerThan === feedOptions.newerThan ? feedOptions : { ...feedOptions, newerThan: currentNewerThan }),
+    [currentNewerThan, feedOptions],
+  );
+  const baseFeed = useFeedWithCompatibleSort(currentFeedOptions);
   const shouldProbe = enabled && currentNewerThan !== undefined && baseFeed.state !== 'fetching-ipns' && !baseFeed.hasMore;
   const widerWindows = useMemo(() => getWiderProgressiveTimeWindows(currentNewerThan), [currentNewerThan]);
   const shouldProbeWindow = (name: ProgressiveTimeWindow['name']) => shouldProbe && widerWindows.some((window) => window.name === name);
@@ -107,13 +111,7 @@ const useProgressiveFeed = ({ enabled, feedOptions }: UseProgressiveFeedOptions)
     ],
   );
 
-  const expandToWindow = useCallback(
-    async (window: ProgressiveTimeWindow) => {
-      setActiveWindow({ feedKey, newerThan: window.newerThan });
-      await baseFeed.expandTimeWindow(window.newerThan);
-    },
-    [baseFeed.expandTimeWindow, feedKey],
-  );
+  const expandToWindow = useCallback((window: ProgressiveTimeWindow) => setActiveWindow({ feedKey, newerThan: window.newerThan }), [feedKey]);
 
   const automaticWindow = shouldProbe ? getAutomaticProgressiveTimeWindow(currentNewerThan, baseFeed.feed.length, FEED_POSTS_PER_PAGE, probes) : undefined;
   const automaticWindowName = automaticWindow?.name;
