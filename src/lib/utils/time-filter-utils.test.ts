@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getTimeFilterPath, getWiderTimeFilterWithPosts } from './time-filter-utils';
+import { getTimeFilterPath, getTopTimeFilterPath, getWiderTimeFilterWithPosts } from './time-filter-utils';
 
 const day = 60 * 60 * 24;
 
@@ -39,5 +39,12 @@ describe('getTimeFilterPath', () => {
 
   it('keeps the search params', () => {
     expect(getTimeFilterPath({ pathname: '/hot/24h', sortType: 'hot', timeFilterName: '1w', search: '?q=test' })).toBe('/hot/1w?q=test');
+  });
+});
+
+describe('getTopTimeFilterPath', () => {
+  it('adds or replaces a top time filter while preserving the query', () => {
+    expect(getTopTimeFilterPath('/s/example.bso/top', undefined, 'all')).toBe('/s/example.bso/top/all');
+    expect(getTopTimeFilterPath('/s/example.bso/top/1w', '1w', '1y', '?q=test')).toBe('/s/example.bso/top/1y?q=test');
   });
 });

@@ -409,5 +409,12 @@
   "reset_feed": "フィードをリセット",
   "enable_mock_content_all_communities_reload": "すべてのコミュニティでモックコンテンツを有効にする（Seeditを再読み込みします）",
   "show_reset_feed_button": "フィードのリセットボタンを表示",
-  "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください"
+  "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください",
+  "past_24_hours": "過去24時間",
+  "past_hour": "過去1時間",
+  "past_week": "過去1週間",
+  "links_from": "投稿時期",
+  "past_year": "過去1年間",
+  "past_month": "過去1か月",
+  "all_time": "全期間"
 }

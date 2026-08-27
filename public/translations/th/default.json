@@ -409,5 +409,12 @@
   "reset_feed": "รีเซ็ตฟีด",
   "enable_mock_content_all_communities_reload": "เปิดใช้เนื้อหาจำลองสำหรับชุมชนทั้งหมด (โหลด Seedit ใหม่)",
   "show_reset_feed_button": "แสดงปุ่มรีเซ็ตฟีด",
-  "mock_content_uncached_communities_description": "เนื้อหาจำลองจะแสดงเฉพาะสำหรับชุมชนที่ยังไม่ถูกแคชเท่านั้น ลองใช้ที่อยู่ .bso ที่สมมติขึ้น"
+  "mock_content_uncached_communities_description": "เนื้อหาจำลองจะแสดงเฉพาะสำหรับชุมชนที่ยังไม่ถูกแคชเท่านั้น ลองใช้ที่อยู่ .bso ที่สมมติขึ้น",
+  "past_24_hours": "24 ชั่วโมงที่ผ่านมา",
+  "past_hour": "ชั่วโมงที่ผ่านมา",
+  "past_week": "สัปดาห์ที่ผ่านมา",
+  "links_from": "ลิงก์มาจาก",
+  "past_year": "ปีที่ผ่านมา",
+  "past_month": "เดือนที่ผ่านมา",
+  "all_time": "ตลอดเวลา"
 }

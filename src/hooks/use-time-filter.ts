@@ -33,6 +33,8 @@ const timeFilterNamesToSeconds: Record<string, number | undefined> = {
   all: undefined,
 };
 
+export const topTimeFilterNames = ['1h', '24h', '1w', '1m', '1y', 'all'];
+
 // calculate the last visit timeFilterNamesToSeconds
 const secondsSinceLastVisit = lastVisitTimestamp ? (Date.now() - parseInt(lastVisitTimestamp, 10)) / 1000 : Infinity;
 const day = 24 * 60 * 60;
@@ -132,11 +134,14 @@ export const isValidTimeFilterName = (name: string | undefined | null): boolean 
   return false;
 };
 
+export const isValidTopTimeFilterName = (name: string | undefined | null): boolean => !name || topTimeFilterNames.includes(name);
+
 const useTimeFilter = () => {
   const params = useParams();
   const location = useLocation();
   const isInCommunityView = isCommunityView(location.pathname, params);
   const isInDomainView = Boolean(params.domain);
+  const isTopSort = params.sortType === 'top' || params.sortType === 'topAll';
   const sessionKey = getSessionKeyForView(location.pathname, params);
 
   useEffect(() => {
@@ -152,7 +157,9 @@ const useTimeFilter = () => {
   let timeFilterName = params.timeFilterName;
   if (!timeFilterName) {
     const sessionPreference = getSessionTimeFilterPreference(sessionKey);
-    if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
+    if (isTopSort) {
+      timeFilterName = sessionPreference && topTimeFilterNames.includes(sessionPreference) ? sessionPreference : 'all';
+    } else if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
       // We don't set timeFilterName here directly,
       // let the redirect logic in the component handle it.
       // Just use it for calculating initial timeFilterSeconds if needed below.
@@ -167,7 +174,9 @@ const useTimeFilter = () => {
     }
   }
 
-  const effectiveTimeFilterName = params.timeFilterName || getSessionTimeFilterPreference(sessionKey) || timeFilterName;
+  const storedTimeFilterName = getSessionTimeFilterPreference(sessionKey);
+  const effectiveTimeFilterName =
+    params.timeFilterName || (isTopSort && storedTimeFilterName && topTimeFilterNames.includes(storedTimeFilterName) ? storedTimeFilterName : timeFilterName);
 
   let timeFilterSeconds: number | undefined;
 

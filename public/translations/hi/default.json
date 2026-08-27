@@ -409,5 +409,12 @@
   "reset_feed": "फ़ीड रीसेट करें",
   "enable_mock_content_all_communities_reload": "सभी समुदायों के लिए मॉक सामग्री सक्षम करें (Seedit को फिर से लोड करता है)",
   "show_reset_feed_button": "फ़ीड रीसेट करने का बटन दिखाएँ",
-  "mock_content_uncached_communities_description": "मॉक सामग्री केवल उन कम्युनिटी के लिए दिखाई जाती है जो कैश में नहीं हैं; कोई काल्पनिक .bso पता आज़माएँ"
+  "mock_content_uncached_communities_description": "मॉक सामग्री केवल उन कम्युनिटी के लिए दिखाई जाती है जो कैश में नहीं हैं; कोई काल्पनिक .bso पता आज़माएँ",
+  "past_24_hours": "पिछले 24 घंटे",
+  "past_hour": "पिछला घंटा",
+  "past_week": "पिछला सप्ताह",
+  "links_from": "से लिंक्स",
+  "past_year": "पिछला वर्ष",
+  "past_month": "पिछला महीना",
+  "all_time": "अब तक"
 }

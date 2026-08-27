@@ -5,10 +5,11 @@ import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName, topTimeFilterNames } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
+import TopTimeFilter from '../../components/top-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
@@ -30,25 +31,26 @@ const All = () => {
   const sortType = getRouteSortType(params.sortType);
   const feedSortType = getFeedSortType(sortType);
 
-  const { timeFilterName, timeFilterSeconds, sessionKey, timeFilterNames } = useTimeFilter();
+  const { timeFilterName, timeFilterSeconds, sessionKey } = useTimeFilter();
 
   useEffect(() => {
-    if (!params.timeFilterName && !searchQuery && sessionKey) {
+    if (sortType === 'top' && !params.timeFilterName && !searchQuery && sessionKey) {
       const sessionPreference = sessionStorage.getItem(sessionKey);
-      if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
+      if (sessionPreference && topTimeFilterNames.includes(sessionPreference)) {
         const targetPath = `/s/all/${sortType}/${sessionPreference}${location.search}`;
         navigate(targetPath, { replace: true });
       }
     }
-  }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname, timeFilterNames]);
+  }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname]);
 
   useEffect(() => {
-    if (!isValidRouteSortType(params.sortType) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (!isValidRouteSortType(params.sortType) || hasInvalidTimeFilter) {
       navigate('/not-found', { replace: true });
     }
-  }, [params?.sortType, params.timeFilterName, navigate]);
+  }, [params?.sortType, params.timeFilterName, sortType, navigate]);
 
-  const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
+  const currentTimeFilterName = params.timeFilterName || timeFilterName || (sortType === 'top' ? 'all' : '24h');
 
   const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
@@ -227,6 +229,7 @@ const All = () => {
         ) : (
           <div className={styles.feed}>
             <DevelopmentFeedResetButton onReset={reset} />
+            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 600 }}
               totalCount={feed?.length || 0}

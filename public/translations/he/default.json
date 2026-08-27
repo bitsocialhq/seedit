@@ -409,5 +409,12 @@
   "reset_feed": "אפס את הפיד",
   "enable_mock_content_all_communities_reload": "הפעל תוכן מדומה עבור כל הקהילות (טוען מחדש את Seedit)",
   "show_reset_feed_button": "הצג את כפתור איפוס הפיד",
-  "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת"
+  "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת",
+  "past_24_hours": "24 השעות האחרונות",
+  "past_hour": "השעה האחרונה",
+  "past_week": "השבוע האחרון",
+  "links_from": "לינקים מ",
+  "past_year": "השנה האחרונה",
+  "past_month": "החודש האחרון",
+  "all_time": "כל הזמנים"
 }

@@ -15,13 +15,14 @@ import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { getCommunityPath, isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
 import EmptyFeedMessage from '../../components/empty-feed-message/empty-feed-message';
 import FeedPagination from '../../components/feed-footer/feed-pagination';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
+import TopTimeFilter from '../../components/top-time-filter';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
@@ -259,14 +260,14 @@ const CommunityView = () => {
   }, [params?.sortType, navigate]);
 
   useEffect(() => {
-    if (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName)) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (hasInvalidTimeFilter) {
       console.log(`Invalid timeFilterName '${params.timeFilterName}' in Community, redirecting to /not-found`);
       navigate('/not-found', { replace: true });
     }
-  }, [params.timeFilterName, navigate]);
+  }, [params.timeFilterName, sortType, navigate]);
 
-  const timeFilterName = params.timeFilterName || 'all';
-  const { timeFilterSeconds } = useTimeFilter();
+  const { timeFilterSeconds, timeFilterName, sessionKey } = useTimeFilter();
   const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
@@ -409,6 +410,7 @@ const CommunityView = () => {
       )}
       <div className={styles.feed}>
         <DevelopmentFeedResetButton onReset={reset} />
+        {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={timeFilterName || 'all'} sessionKey={sessionKey} />}
         <Virtuoso
           increaseViewportBy={{ bottom: 1200, top: 600 }}
           totalCount={combinedFeed?.length || 0}

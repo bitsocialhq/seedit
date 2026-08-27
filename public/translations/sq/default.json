@@ -409,5 +409,12 @@
   "reset_feed": "rivendos prurjen",
   "enable_mock_content_all_communities_reload": "aktivizo përmbajtjen e simuluar për të gjitha komunitetet (ringarkon Seedit)",
   "show_reset_feed_button": "shfaq butonin për rivendosjen e prurjes",
-  "mock_content_uncached_communities_description": "përmbajtja e simuluar shfaqet vetëm për komunitetet që nuk janë në memorien e fshehtë; provo një adresë .bso të sajuar"
+  "mock_content_uncached_communities_description": "përmbajtja e simuluar shfaqet vetëm për komunitetet që nuk janë në memorien e fshehtë; provo një adresë .bso të sajuar",
+  "past_24_hours": "24 orët e fundit",
+  "past_hour": "ora e fundit",
+  "past_week": "java e kaluar",
+  "links_from": "lidhjet nga",
+  "past_year": "viti i kaluar",
+  "past_month": "muaji i kaluar",
+  "all_time": "të gjitha kohërat"
 }

@@ -18,6 +18,12 @@ export const getTimeFilterPath = ({ pathname, sortType, timeFilterName, domain, 
   return suffix;
 };
 
+export const getTopTimeFilterPath = (pathname: string, currentTimeFilterName: string | undefined, nextTimeFilterName: string, search = ''): string => {
+  const currentSuffix = currentTimeFilterName ? `/${currentTimeFilterName}` : '';
+  const basePath = currentSuffix && pathname.endsWith(currentSuffix) ? pathname.slice(0, -currentSuffix.length) : pathname;
+  return `${basePath}/${nextTimeFilterName}${search}`;
+};
+
 const day = 60 * 60 * 24;
 
 // the time filters feed views already preload next to the current feed, from narrowest to widest

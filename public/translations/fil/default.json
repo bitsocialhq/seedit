@@ -409,5 +409,12 @@
   "reset_feed": "i-reset ang feed",
   "enable_mock_content_all_communities_reload": "paganahin ang pansubok na content para sa lahat ng komunidad (nire-reload ang Seedit)",
   "show_reset_feed_button": "ipakita ang button para i-reset ang feed",
-  "mock_content_uncached_communities_description": "ipinapakita lang ang mock na content para sa mga community na wala sa cache; subukan ang isang gawa-gawang .bso address"
+  "mock_content_uncached_communities_description": "ipinapakita lang ang mock na content para sa mga community na wala sa cache; subukan ang isang gawa-gawang .bso address",
+  "past_24_hours": "nakaraang 24 na oras",
+  "past_hour": "nakaraang oras",
+  "past_week": "nakaraang linggo",
+  "links_from": "mga link galing sa",
+  "past_year": "nakaraang taon",
+  "past_month": "nakaraang buwan",
+  "all_time": "lahat ng panahon"
 }

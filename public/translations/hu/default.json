@@ -409,5 +409,12 @@
   "reset_feed": "hírfolyam visszaállítása",
   "enable_mock_content_all_communities_reload": "teszttartalom engedélyezése minden közösségnél (újratölti a Seeditet)",
   "show_reset_feed_button": "a hírfolyam visszaállítására szolgáló gomb megjelenítése",
-  "mock_content_uncached_communities_description": "a szimulált tartalom csak a gyorsítótárban nem szereplő közösségeknél jelenik meg; próbálj ki egy kitalált .bso-címet"
+  "mock_content_uncached_communities_description": "a szimulált tartalom csak a gyorsítótárban nem szereplő közösségeknél jelenik meg; próbálj ki egy kitalált .bso-címet",
+  "past_24_hours": "elmúlt 24 óra",
+  "past_hour": "elmúlt óra",
+  "past_week": "elmúlt hét",
+  "links_from": "linkek",
+  "past_year": "elmúlt év",
+  "past_month": "elmúlt hónap",
+  "all_time": "minden idők"
 }

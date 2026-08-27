@@ -409,5 +409,12 @@
   "reset_feed": "restablecer feed",
   "enable_mock_content_all_communities_reload": "activar contenido de prueba para todas las comunidades (recarga Seedit)",
   "show_reset_feed_button": "mostrar el botón para restablecer el feed",
-  "mock_content_uncached_communities_description": "el contenido simulado se muestra solo para comunidades sin almacenar en caché; prueba una dirección .bso inventada"
+  "mock_content_uncached_communities_description": "el contenido simulado se muestra solo para comunidades sin almacenar en caché; prueba una dirección .bso inventada",
+  "past_24_hours": "últimas 24 horas",
+  "past_hour": "última hora",
+  "past_week": "última semana",
+  "links_from": "enlaces desde",
+  "past_year": "último año",
+  "past_month": "último mes",
+  "all_time": "siempre"
 }

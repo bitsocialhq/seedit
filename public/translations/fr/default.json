@@ -409,5 +409,12 @@
   "reset_feed": "réinitialiser le fil",
   "enable_mock_content_all_communities_reload": "activer le contenu fictif pour toutes les communautés (recharge Seedit)",
   "show_reset_feed_button": "afficher le bouton de réinitialisation du fil",
-  "mock_content_uncached_communities_description": "le contenu simulé s’affiche uniquement pour les communautés qui ne sont pas en cache ; essayez une adresse .bso fictive"
+  "mock_content_uncached_communities_description": "le contenu simulé s’affiche uniquement pour les communautés qui ne sont pas en cache ; essayez une adresse .bso fictive",
+  "past_24_hours": "dernières 24 heures",
+  "past_hour": "dernière heure",
+  "past_week": "semaine dernière",
+  "links_from": "liens de",
+  "past_year": "année dernière",
+  "past_month": "mois dernier",
+  "all_time": "toujours"
 }

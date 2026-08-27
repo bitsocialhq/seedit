@@ -409,5 +409,12 @@
   "reset_feed": "ఫీడ్‌ను రీసెట్ చేయండి",
   "enable_mock_content_all_communities_reload": "అన్ని కమ్యూనిటీల కోసం మాక్ కంటెంట్‌ను ప్రారంభించండి (Seedit మళ్లీ లోడ్ అవుతుంది)",
   "show_reset_feed_button": "ఫీడ్‌ను రీసెట్ చేసే బటన్‌ను చూపించండి",
-  "mock_content_uncached_communities_description": "మాక్ కంటెంట్ కాష్‌లో లేని కమ్యూనిటీలకు మాత్రమే చూపబడుతుంది; కల్పిత .bso చిరునామాను ప్రయత్నించండి"
+  "mock_content_uncached_communities_description": "మాక్ కంటెంట్ కాష్‌లో లేని కమ్యూనిటీలకు మాత్రమే చూపబడుతుంది; కల్పిత .bso చిరునామాను ప్రయత్నించండి",
+  "past_24_hours": "గత 24 గంటలు",
+  "past_hour": "గత గంట",
+  "past_week": "గత వారం",
+  "links_from": "ఈ కాలంలోని లింకులు",
+  "past_year": "గత సంవత్సరం",
+  "past_month": "గత నెల",
+  "all_time": "అన్ని కాలాలు"
 }

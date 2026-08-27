@@ -5,9 +5,10 @@ import { Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
+import TopTimeFilter from '../../components/top-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
@@ -28,7 +29,7 @@ const Domain = () => {
   const domain = params?.domain;
   const sortType = getRouteSortType(params.sortType);
   const feedSortType = getFeedSortType(sortType);
-  const { timeFilterName, timeFilterSeconds } = useTimeFilter();
+  const { timeFilterName, timeFilterSeconds, sessionKey } = useTimeFilter();
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
   const { isSearching } = useFeedFiltersStore();
@@ -37,10 +38,11 @@ const Domain = () => {
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   useEffect(() => {
-    if (!isValidRouteSortType(params.sortType) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (!isValidRouteSortType(params.sortType) || hasInvalidTimeFilter) {
       navigate('/not-found', { replace: true });
     }
-  }, [params?.sortType, params.timeFilterName, navigate]);
+  }, [params?.sortType, params.timeFilterName, sortType, navigate]);
 
   const matchesDomain = useCallback(
     (comment: Comment) => {
@@ -225,18 +227,21 @@ const Domain = () => {
             </div>
           </div>
         ) : (
-          <Virtuoso
-            increaseViewportBy={{ bottom: 1200, top: 600 }}
-            totalCount={feed?.length || 0}
-            data={feed}
-            itemContent={(index, post) => <Post index={index} post={post} />}
-            useWindowScroll={true}
-            components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-            endReached={infiniteFeedEnabled ? loadMore : undefined}
-            ref={virtuosoRef}
-            restoreStateFrom={lastVirtuosoState}
-            initialScrollTop={lastVirtuosoState?.scrollTop}
-          />
+          <>
+            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
+            <Virtuoso
+              increaseViewportBy={{ bottom: 1200, top: 600 }}
+              totalCount={feed?.length || 0}
+              data={feed}
+              itemContent={(index, post) => <Post index={index} post={post} />}
+              useWindowScroll={true}
+              components={{ Footer: () => <FeedFooter {...footerProps} /> }}
+              endReached={infiniteFeedEnabled ? loadMore : undefined}
+              ref={virtuosoRef}
+              restoreStateFrom={lastVirtuosoState}
+              initialScrollTop={lastVirtuosoState?.scrollTop}
+            />
+          </>
         )}
       </div>
     </div>

@@ -409,5 +409,12 @@
   "reset_feed": "重置信息流",
   "enable_mock_content_all_communities_reload": "为所有社区启用模拟内容（重新加载 Seedit）",
   "show_reset_feed_button": "显示重置信息流按钮",
-  "mock_content_uncached_communities_description": "模拟内容仅对未缓存的社区显示；请尝试一个虚构的 .bso 地址"
+  "mock_content_uncached_communities_description": "模拟内容仅对未缓存的社区显示；请尝试一个虚构的 .bso 地址",
+  "past_24_hours": "过去24小时",
+  "past_hour": "过去一小时",
+  "past_week": "过去一周",
+  "links_from": "投稿时间",
+  "past_year": "过去一年",
+  "past_month": "过去一个月",
+  "all_time": "全部时间"
 }

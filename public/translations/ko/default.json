@@ -409,5 +409,12 @@
   "reset_feed": "피드 재설정",
   "enable_mock_content_all_communities_reload": "모든 커뮤니티에 모의 콘텐츠 활성화(Seedit 다시 로드)",
   "show_reset_feed_button": "피드 재설정 버튼 표시",
-  "mock_content_uncached_communities_description": "모의 콘텐츠는 캐시되지 않은 커뮤니티에만 표시됩니다. 임의로 만든 .bso 주소를 사용해 보세요"
+  "mock_content_uncached_communities_description": "모의 콘텐츠는 캐시되지 않은 커뮤니티에만 표시됩니다. 임의로 만든 .bso 주소를 사용해 보세요",
+  "past_24_hours": "지난 24시간",
+  "past_hour": "지난 1시간",
+  "past_week": "지난주",
+  "links_from": "다음 기간 중에 올라온 링크만 보기",
+  "past_year": "지난 1년",
+  "past_month": "지난 한 달",
+  "all_time": "전체 기간"
 }
