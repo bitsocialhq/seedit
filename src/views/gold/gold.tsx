@@ -108,11 +108,9 @@ export const GoldFaq = () => {
       <hr />
       <h3 id='proceeds'>Where do the proceeds go?</h3>
       <p>
-        All proceeds from seedit gold are intended to burn BSO, the official cryptocurrency token of{' '}
-        <a href='https://bitsocial.net' target='_blank' rel='noopener noreferrer'>
-          Bitsocial
-        </a>
-        , automatically in the smart contract. The resulting transactions are public, so assume the wallet activity of a purchase can be seen by anyone.
+        Net proceeds from seedit gold are intended to support the continued development and operation of Seedit, including compensating core contributors and covering
+        infrastructure and other project costs. Any future allocation to buying or burning BSO will be disclosed separately before it takes effect. Purchases will create
+        public on-chain transactions, so assume the wallet activity of a purchase can be seen by anyone.
       </p>
       <hr />
       <h3 id='needGold'>Do I need it to browse or post?</h3>
