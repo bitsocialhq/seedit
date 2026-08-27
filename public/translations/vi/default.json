@@ -411,10 +411,10 @@
   "show_reset_feed_button": "hiển thị nút đặt lại bảng tin",
   "mock_content_uncached_communities_description": "nội dung mô phỏng chỉ hiển thị cho các cộng đồng chưa được lưu vào bộ nhớ đệm; hãy thử một địa chỉ .bso tự đặt",
   "past_24_hours": "24 giờ qua",
-  "past_hour": "giờ qua",
+  "past_hour": "1 giờ qua",
   "past_week": "tuần qua",
-  "links_from": "liên kết từ",
+  "links_from": "liên kết trong khoảng thời gian",
   "past_year": "năm qua",
   "past_month": "tháng qua",
-  "all_time": "mọi thời đại"
+  "all_time": "toàn bộ thời gian"
 }

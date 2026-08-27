@@ -413,8 +413,8 @@
   "past_24_hours": "siste 24 timer",
   "past_hour": "siste time",
   "past_week": "siste uke",
-  "links_from": "lenker fra",
+  "links_from": "lenker fra perioden",
   "past_year": "siste år",
   "past_month": "siste måned",
-  "all_time": "gjennom tidene"
+  "all_time": "hele perioden"
 }

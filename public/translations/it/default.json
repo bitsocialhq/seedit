@@ -413,8 +413,8 @@
   "past_24_hours": "ultime 24 ore",
   "past_hour": "ultima ora",
   "past_week": "ultima settimana",
-  "links_from": "link da",
+  "links_from": "link del periodo",
   "past_year": "ultimo anno",
   "past_month": "ultimo mese",
-  "all_time": "sempre"
+  "all_time": "intero periodo"
 }

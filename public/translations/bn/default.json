@@ -411,10 +411,10 @@
   "show_reset_feed_button": "ফিড রিসেট বোতামটি দেখান",
   "mock_content_uncached_communities_description": "মক কনটেন্ট শুধু ক্যাশে না থাকা কমিউনিটিগুলোর জন্য দেখানো হয়; একটি বানানো .bso ঠিকানা চেষ্টা করুন",
   "past_24_hours": "গত ২৪ ঘণ্টা",
-  "past_hour": "গত ঘণ্টা",
+  "past_hour": "গত এক ঘণ্টা",
   "past_week": "গত সপ্তাহ",
-  "links_from": "থেকে লিংকগুলি",
+  "links_from": "সময়কালের লিংকসমূহ",
   "past_year": "গত বছর",
   "past_month": "গত মাস",
-  "all_time": "সব সময়"
+  "all_time": "সম্পূর্ণ সময়কাল"
 }

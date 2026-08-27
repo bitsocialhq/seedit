@@ -413,8 +413,8 @@
   "past_24_hours": "viimeiset 24 tuntia",
   "past_hour": "viime tunti",
   "past_week": "viime viikko",
-  "links_from": "linkkejä",
+  "links_from": "linkit ajanjaksolta",
   "past_year": "viime vuosi",
   "past_month": "viime kuukausi",
-  "all_time": "kaikkien aikojen"
+  "all_time": "koko ajanjakso"
 }

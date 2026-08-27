@@ -411,10 +411,10 @@
   "show_reset_feed_button": "نمایش دکمه بازنشانی خوراک",
   "mock_content_uncached_communities_description": "محتوای آزمایشی فقط برای انجمن‌هایی که در حافظهٔ پنهان نیستند نمایش داده می‌شود؛ یک نشانی ساختگی .bso را امتحان کنید",
   "past_24_hours": "۲۴ ساعت گذشته",
-  "past_hour": "ساعت گذشته",
+  "past_hour": "یک ساعت گذشته",
   "past_week": "هفتهٔ گذشته",
-  "links_from": "لینک ها از",
+  "links_from": "پیوندهای مربوط به بازه",
   "past_year": "سال گذشته",
   "past_month": "ماه گذشته",
-  "all_time": "تمام دوران"
+  "all_time": "کل دوره"
 }
