@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
@@ -13,7 +13,7 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import styles from '../home/home.module.css';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
@@ -23,9 +23,11 @@ const Domain = () => {
   const params = useParams<{ domain?: string; sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const searchQuery = searchParams.get('q') || '';
   const domain = params?.domain;
-  const sortType = params?.sortType && sortTypes.includes(params.sortType) ? params.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
   const { timeFilterName, timeFilterSeconds } = useTimeFilter();
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
@@ -35,7 +37,7 @@ const Domain = () => {
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   useEffect(() => {
-    if ((params?.sortType && !sortTypes.includes(params.sortType)) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    if (!isValidRouteSortType(params.sortType) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
       navigate('/not-found', { replace: true });
     }
   }, [params?.sortType, params.timeFilterName, navigate]);
@@ -77,13 +79,13 @@ const Domain = () => {
     } = {
       newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
       filter: { filter: filterFunc, key: filterKey },
     };
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
 
   const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
@@ -115,21 +117,21 @@ const Domain = () => {
   // suggest the user to change time filter if there aren't enough posts
   const { feed: weeklyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 7,
     filter: { filter: matchesDomain, key: `domain-filter-weekly-${domain}` },
   });
 
   const { feed: monthlyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 30,
     filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
   });
 
   const { feed: yearlyFeed } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 365,
     filter: { filter: matchesDomain, key: `domain-filter-yearly-${domain}` },
   });
@@ -180,6 +182,10 @@ const Domain = () => {
     });
     reset();
   };
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
 
   return (
     <div>

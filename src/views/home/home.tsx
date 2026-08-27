@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback, startTransition } from 'react';
-import { Link, useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { useAccount, Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Trans, useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ import Sidebar from '../../components/sidebar';
 import StarterSubscriptionsNotice from '../../components/starter-subscriptions-notice/starter-subscriptions-notice';
 import DirectorySubscriptionUpdatesNotice from '../../components/directory-subscription-updates-notice';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import { getHomeSubscriptionState } from './subscription-state';
 import styles from './home.module.css';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
@@ -42,12 +42,13 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const sortType = params?.sortType && sortTypes.includes(params.sortType) ? params.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
 
   useRedirectToDefaultSort();
 
   useEffect(() => {
-    if ((params?.sortType && !sortTypes.includes(params.sortType)) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    if (!isValidRouteSortType(params.sortType) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
       navigate('/not-found', { replace: true });
     }
   }, [params?.sortType, params.timeFilterName, navigate]);
@@ -84,7 +85,7 @@ const Home = () => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
 
@@ -96,7 +97,7 @@ const Home = () => {
     }
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, commentFilter]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, commentFilter]);
 
   const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
@@ -137,7 +138,7 @@ const Home = () => {
     loadMore: loadMoreWeekly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 7,
   });
   const {
@@ -146,7 +147,7 @@ const Home = () => {
     loadMore: loadMoreMonthly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 30,
   });
   const {
@@ -155,7 +156,7 @@ const Home = () => {
     loadMore: loadMoreYearly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(shouldLoadAdditionalFeeds ? communityAddresses : []),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 365,
   });
 
@@ -257,6 +258,10 @@ const Home = () => {
     isCheckingSubscriptions,
     safeToShowNoSubscriptions,
   });
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
 
   return (
     <div>

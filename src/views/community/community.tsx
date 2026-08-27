@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccountComments, useBlock, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Trans, useTranslation } from 'react-i18next';
@@ -26,7 +26,7 @@ import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
 import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 
@@ -234,6 +234,7 @@ const Footer = ({
 const CommunityView = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
@@ -248,10 +249,11 @@ const CommunityView = () => {
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
   const communityAddresses = useMemo(() => (canLoadCommunity ? [communityAddress] : []), [canLoadCommunity, communityAddress]) as string[];
-  const sortType = sortTypes.includes(params?.sortType || '') ? params?.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
 
   useEffect(() => {
-    if (params?.sortType && !sortTypes.includes(params.sortType)) {
+    if (!isValidRouteSortType(params.sortType)) {
       navigate('/not-found');
     }
   }, [params?.sortType, navigate]);
@@ -272,7 +274,7 @@ const CommunityView = () => {
     const options: any = {
       communities: getCommunityIdentifiers(communityAddresses),
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       newerThan: searchQuery ? 0 : timeFilterSeconds,
     };
 
@@ -287,7 +289,7 @@ const CommunityView = () => {
     }
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
   const { feed, hasMore, loadMore, reset } = useFeedWithCompatibleSort(feedOptions);
 
@@ -380,6 +382,10 @@ const CommunityView = () => {
 
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
 
   return isHiddenNsfwCommunity ? (
     <Over18Warning />

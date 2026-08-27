@@ -8,7 +8,7 @@ export type ParamsType = {
 
 export type ViewType = 'home' | 'pending' | 'post' | 'submit' | 'community' | 'community/submit';
 
-const sortTypes = ['/hot', '/new', '/active', '/topAll'];
+const sortTypes = ['/hot', '/new', '/active', '/top'];
 
 export const getAboutLink = (pathname: string, params: ParamsType): string => {
   // some communities might use emojis in their address, so we need to decode the pathname

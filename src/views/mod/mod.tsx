@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { useAccountCommunities, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import useFeedWithCompatibleSort from '../../hooks/use-feed-with-compatible-sort';
 import styles from '../home/home.module.css';
 
@@ -30,12 +30,13 @@ const Mod = () => {
 
   const { timeFilterName, timeFilterSeconds, sessionKey, timeFilterNames } = useTimeFilter();
 
-  const sortType = params?.sortType && sortTypes.includes(params.sortType) ? params.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
 
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
 
   useEffect(() => {
-    if ((params?.sortType && !sortTypes.includes(params.sortType)) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    if (!isValidRouteSortType(params.sortType) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
       navigate('/not-found', { replace: true });
     }
   }, [params?.sortType, params.timeFilterName, navigate]);
@@ -50,7 +51,7 @@ const Mod = () => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
 
@@ -65,7 +66,7 @@ const Mod = () => {
     }
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
   const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeedWithCompatibleSort(feedOptions);
 
@@ -76,7 +77,7 @@ const Mod = () => {
     loadMore: loadMoreWeekly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 7,
   });
   const {
@@ -85,7 +86,7 @@ const Mod = () => {
     loadMore: loadMoreMonthly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 30,
   });
   const {
@@ -94,7 +95,7 @@ const Mod = () => {
     loadMore: loadMoreYearly,
   } = useFeedWithCompatibleSort({
     communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
+    sortType: feedSortType,
     newerThan: 60 * 60 * 24 * 365,
   });
 
@@ -190,6 +191,10 @@ const Mod = () => {
       }
     }
   }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname, timeFilterNames]);
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
 
   return (
     <div>
