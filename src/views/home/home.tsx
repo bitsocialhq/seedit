@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
-import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName, topTimeFilterNames } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
@@ -56,18 +56,7 @@ const Home = () => {
     }
   }, [params?.sortType, params.timeFilterName, sortType, navigate]);
 
-  const { timeFilterName, timeFilterSeconds, sessionKey } = useTimeFilter();
-
-  useEffect(() => {
-    if (sortType === 'top' && !params.timeFilterName && !searchQuery && sessionKey) {
-      const sessionPreference = sessionStorage.getItem(sessionKey);
-      if (sessionPreference && topTimeFilterNames.includes(sessionPreference)) {
-        const targetPath = `/${sortType}/${sessionPreference}${location.search}`;
-        console.log(`Redirecting Home from ${location.pathname} to ${targetPath} based on session preference: ${sessionPreference}`);
-        navigate(targetPath, { replace: true });
-      }
-    }
-  }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname]);
+  const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
 
   const currentTimeFilterName = params.timeFilterName || timeFilterName || (sortType === 'top' ? 'all' : '24h');
 
@@ -203,6 +192,10 @@ const Home = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
   }
 
   if (sortType !== 'top' && params.timeFilterName) {

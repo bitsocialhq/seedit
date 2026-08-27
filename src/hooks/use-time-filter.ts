@@ -2,6 +2,7 @@ import assert from 'assert';
 import { useEffect } from 'react';
 import { useLocation, useParams, Params } from 'react-router-dom';
 import { isCommunityView, isAllView, isModView, isHomeView, isDomainView } from '../lib/utils/view-utils';
+import { getTopTimeFilterPath } from '../lib/utils/time-filter-utils';
 
 // the timestamp the last time the user visited
 const lastVisitTimestamp = localStorage.getItem('seeditLastVisitTimestamp');
@@ -151,9 +152,13 @@ const useTimeFilter = () => {
   }, []);
 
   const storedTimeFilterName = getSessionTimeFilterPreference(sessionKey);
-  const effectiveTimeFilterName = isTopSort
-    ? params.timeFilterName || (storedTimeFilterName && topTimeFilterNames.includes(storedTimeFilterName) ? storedTimeFilterName : 'all')
-    : lastVisitTimeFilterName;
+  const storedTopTimeFilterName = storedTimeFilterName && topTimeFilterNames.includes(storedTimeFilterName) ? storedTimeFilterName : undefined;
+  const effectiveTimeFilterName = isTopSort ? params.timeFilterName || storedTopTimeFilterName || 'all' : lastVisitTimeFilterName;
+  const searchQuery = new URLSearchParams(location.search).get('q') || '';
+  const preferredTopTimeFilterPath =
+    isTopSort && !params.timeFilterName && !searchQuery && storedTopTimeFilterName
+      ? getTopTimeFilterPath(location.pathname, params.timeFilterName, storedTopTimeFilterName, location.search)
+      : null;
 
   let timeFilterSeconds: number | undefined;
 
@@ -176,7 +181,7 @@ const useTimeFilter = () => {
 
   assert(effectiveTimeFilterName === 'all' || timeFilterSeconds !== undefined, `useTimeFilter no filter for timeFilterName '${effectiveTimeFilterName}'`);
 
-  return { timeFilterSeconds, timeFilterName: effectiveTimeFilterName, lastVisitTimeFilterName, sessionKey };
+  return { timeFilterSeconds, timeFilterName: effectiveTimeFilterName, lastVisitTimeFilterName, sessionKey, preferredTopTimeFilterPath };
 };
 
 export default useTimeFilter;

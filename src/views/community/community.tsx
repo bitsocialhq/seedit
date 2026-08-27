@@ -252,7 +252,7 @@ const CommunityView = () => {
     }
   }, [params.timeFilterName, sortType, navigate]);
 
-  const { timeFilterSeconds, timeFilterName, sessionKey } = useTimeFilter();
+  const { timeFilterSeconds, timeFilterName, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
   const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
@@ -370,6 +370,10 @@ const CommunityView = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
   }
 
   if (sortType !== 'top' && params.timeFilterName) {

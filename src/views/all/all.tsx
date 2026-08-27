@@ -5,7 +5,7 @@ import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
-import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName, topTimeFilterNames } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
@@ -32,17 +32,7 @@ const All = () => {
   const sortType = getRouteSortType(params.sortType);
   const feedSortType = getFeedSortType(sortType);
 
-  const { timeFilterName, timeFilterSeconds, sessionKey } = useTimeFilter();
-
-  useEffect(() => {
-    if (sortType === 'top' && !params.timeFilterName && !searchQuery && sessionKey) {
-      const sessionPreference = sessionStorage.getItem(sessionKey);
-      if (sessionPreference && topTimeFilterNames.includes(sessionPreference)) {
-        const targetPath = `/s/all/${sortType}/${sessionPreference}${location.search}`;
-        navigate(targetPath, { replace: true });
-      }
-    }
-  }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname]);
+  const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
 
   useEffect(() => {
     const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
@@ -151,6 +141,10 @@ const All = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
   }
 
   if (sortType !== 'top' && params.timeFilterName) {

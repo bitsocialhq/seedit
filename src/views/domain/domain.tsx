@@ -30,7 +30,7 @@ const Domain = () => {
   const domain = params?.domain;
   const sortType = getRouteSortType(params.sortType);
   const feedSortType = getFeedSortType(sortType);
-  const { timeFilterName, timeFilterSeconds, sessionKey } = useTimeFilter();
+  const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
   const { isSearching } = useFeedFiltersStore();
@@ -160,6 +160,10 @@ const Domain = () => {
 
   if (isLegacyTopRoute(params.sortType)) {
     return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
   }
 
   if (sortType !== 'top' && params.timeFilterName) {
