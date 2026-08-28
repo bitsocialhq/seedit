@@ -310,6 +310,33 @@ const HiddenComments = () => {
   );
 };
 
+const SavedCommentsList = ({ initialSavedCommentCids }: { initialSavedCommentCids: string[] }) => {
+  const { t } = useTranslation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [savedCommentCids] = useState(() => [...initialSavedCommentCids]);
+  const visibleSavedCommentCids = savedCommentCids.slice(0, currentPage * pageSize);
+  const hasMore = savedCommentCids.length > currentPage * pageSize;
+
+  return (
+    <div>
+      {visibleSavedCommentCids.length === 0 ? (
+        <div className={styles.nothingFound}>{t('nothing_found')}</div>
+      ) : (
+        visibleSavedCommentCids.map((cid) => <CommentItem key={cid} cid={cid} />)
+      )}
+      <PaginationControls currentPage={currentPage} hasMore={hasMore} onPageChange={setCurrentPage} />
+    </div>
+  );
+};
+
+const SavedComments = () => {
+  const account = useAccount();
+
+  if (!account) return null;
+
+  return <SavedCommentsList initialSavedCommentCids={account.savedComments ?? []} />;
+};
+
 const Profile = () => {
   const { t } = useTranslation();
   const account = useAccount();
@@ -374,5 +401,6 @@ Profile.Comments = Comments;
 Profile.Submitted = Submitted;
 Profile.VotedComments = VotedComments;
 Profile.HiddenComments = HiddenComments;
+Profile.SavedComments = SavedComments;
 
 export default Profile;

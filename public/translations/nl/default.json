@@ -416,5 +416,7 @@
   "links_from": "links uit de periode",
   "past_year": "afgelopen jaar",
   "past_month": "afgelopen maand",
-  "all_time": "gehele periode"
+  "all_time": "gehele periode",
+  "unsave": "Opslaan ongedaan maken",
+  "feature_not_available_yet": "Deze functie is nog niet beschikbaar."
 }

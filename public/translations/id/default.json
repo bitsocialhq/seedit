@@ -416,5 +416,7 @@
   "links_from": "tautan dari periode",
   "past_year": "setahun terakhir",
   "past_month": "sebulan terakhir",
-  "all_time": "seluruh periode"
+  "all_time": "seluruh periode",
+  "unsave": "Batal simpan",
+  "feature_not_available_yet": "Fitur ini belum tersedia."
 }

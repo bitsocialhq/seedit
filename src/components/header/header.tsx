@@ -23,6 +23,7 @@ import {
   isProfileDownvotedView,
   isProfileSubmittedView,
   isProfileHiddenView,
+  isProfileSavedView,
   isSettingsView,
   isSubmitView,
   isCommunityView,
@@ -146,6 +147,7 @@ const AuthorHeaderTabs = () => {
   const isInProfileSubmittedView = isProfileSubmittedView(location.pathname);
   const isInProfileUpvotedView = isProfileUpvotedView(location.pathname);
   const isInProfileHiddenView = isProfileHiddenView(location.pathname);
+  const isInProfileSavedView = isProfileSavedView(location.pathname);
 
   const authorRoute = `/u/${params.authorAddress}/comments/${params.commentCid}`;
   const overviewSelectedClass =
@@ -156,6 +158,7 @@ const AuthorHeaderTabs = () => {
     !isInProfileSubmittedView &&
     !isInAuthorCommentsView &&
     !isInProfileHiddenView &&
+    !isInProfileSavedView &&
     !isInAuthorSubmittedView
       ? styles.selected
       : styles.choice;
@@ -182,12 +185,9 @@ const AuthorHeaderTabs = () => {
           <li className={isInProfileHiddenView ? styles.selected : styles.choice}>
             <Link to={'/profile/hidden'}>{t('hidden')}</Link>
           </li>
-          {/* TODO: implement functionality from API once available
-          <li>
-            <Link to={'/'} className={styles.choice} onClick={(e) => e.preventDefault()}>
-              {t('saved')}
-            </Link>
-          </li> */}
+          <li className={isInProfileSavedView ? styles.selected : styles.choice}>
+            <Link to='/profile/saved'>{t('saved')}</Link>
+          </li>
         </>
       )}
     </>

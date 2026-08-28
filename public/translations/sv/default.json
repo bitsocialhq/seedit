@@ -416,5 +416,7 @@
   "links_from": "länkar från perioden",
   "past_year": "senaste året",
   "past_month": "senaste månaden",
-  "all_time": "hela perioden"
+  "all_time": "hela perioden",
+  "unsave": "Ta bort från sparade",
+  "feature_not_available_yet": "Den här funktionen är inte tillgänglig än."
 }

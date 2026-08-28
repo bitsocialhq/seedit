@@ -416,5 +416,7 @@
   "links_from": "lenker fra perioden",
   "past_year": "siste år",
   "past_month": "siste måned",
-  "all_time": "hele perioden"
+  "all_time": "hele perioden",
+  "unsave": "Fjern fra lagrede",
+  "feature_not_available_yet": "Denne funksjonen er ikke tilgjengelig ennå."
 }

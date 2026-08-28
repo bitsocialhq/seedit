@@ -416,5 +416,7 @@
   "links_from": "linki z okresu",
   "past_year": "ostatni rok",
   "past_month": "ostatni miesiąc",
-  "all_time": "cały okres"
+  "all_time": "cały okres",
+  "unsave": "Cofnij zapisanie",
+  "feature_not_available_yet": "Ta funkcja nie jest jeszcze dostępna."
 }

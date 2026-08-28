@@ -30,6 +30,14 @@
   background-color: var(--background-primary);
 }
 
+button.menuItem {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+}
+
 @media (min-width: 640px) {
   .reportButton {
     display: none;

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Author, Comment, createCrosspost, useAccount, useComment, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { Author, Comment, createCrosspost, useAccount, useComment, useCommunity, useSaveComment } from '@bitsocial/bitsocial-react-hooks';
 import useScheduledReset from '../../../hooks/use-scheduled-reset';
 import styles from './comment-tools.module.css';
 import EditMenu from './edit-menu';
@@ -55,9 +55,26 @@ const ModOrReportButton = ({ cid, isAuthor, isAccountMod, isCommentAuthorMod }: 
   ) : (
     !isAuthor && (
       <li className={`${styles.button} ${styles.reportButton}`}>
-        <span>{t('report')}</span>
+        <button type='button' className={styles.actionButton} onClick={() => window.alert(t('feature_not_available_yet'))}>
+          {t('report')}
+        </button>
       </li>
     )
+  );
+};
+
+const SaveButton = ({ cid }: { cid?: string }) => {
+  const { t } = useTranslation();
+  const { saved, saveComment, unsaveComment } = useSaveComment({ commentCid: cid });
+
+  if (!cid || saved === undefined) return null;
+
+  return (
+    <li className={styles.button}>
+      <button type='button' className={styles.actionButton} onClick={saved ? unsaveComment : saveComment}>
+        {saved ? t('unsave') : t('save')}
+      </button>
+    </li>
   );
 };
 
@@ -142,13 +159,10 @@ const PostTools = ({
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{commentCountButton}</li>
       <ShareButton cid={cid} communityAddress={communityAddress} />
-      {/* TODO: Implement save functionality
-        <li className={styles.button}>
-          <span>{t('save')}</span>
-        </li> 
-      */}
+      <SaveButton cid={cid} />
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
       <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
+      <ModOrReportButton cid={cid} isAuthor={isAuthor} isAccountMod={isAccountMod} isCommentAuthorMod={isCommentAuthorMod} />
       {cid && comment?.raw?.comment && !failed && (
         <li className={`${styles.button} ${styles.crosspostButton}`}>
           <button type='button' className={styles.actionButton} onClick={handleCrosspost}>
@@ -156,7 +170,6 @@ const PostTools = ({
           </button>
         </li>
       )}
-      <ModOrReportButton cid={cid} isAuthor={isAuthor} isAccountMod={isAccountMod} isCommentAuthorMod={isCommentAuthorMod} />
     </>
   );
 };
@@ -188,11 +201,7 @@ const ReplyTools = ({
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{permalink}</li>
       <ShareButton cid={cid} communityAddress={communityAddress} />
-      {/* TODO: Implement save functionality
-        <li className={styles.button}>
-          <span>{t('save')}</span>
-        </li> 
-      */}
+      <SaveButton cid={cid} />
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
       <HideMenu author={author} cid={cid} isAccountMod={isAccountMod} communityAddress={communityAddress} />
       <li className={!cid ? styles.hideReply : styles.button}>
@@ -251,11 +260,7 @@ const SingleReplyTools = ({
   return (
     <>
       <li className={`${styles.button} ${!hasLabel ? styles.firstButton : ''}`}>{permalinkButton}</li>
-      {/* TODO: Implement save functionality
-        <li className={styles.button}>
-          <span>{t('save')}</span>
-        </li> 
-      */}
+      <SaveButton cid={cid} />
       {isAuthor && <EditMenu commentCid={cid} showCommentEditForm={showCommentEditForm} />}
       <li className={styles.button}>{contextButton}</li>
       <li className={styles.button}>{fullCommentsButton}</li>

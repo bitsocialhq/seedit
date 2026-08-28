@@ -416,5 +416,7 @@
   "links_from": "対象期間のリンク",
   "past_year": "過去1年間",
   "past_month": "過去1か月",
-  "all_time": "全期間"
+  "all_time": "全期間",
+  "unsave": "保存を解除",
+  "feature_not_available_yet": "この機能はまだ利用できません。"
 }

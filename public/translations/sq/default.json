@@ -416,5 +416,7 @@
   "links_from": "lidhjet nga periudha",
   "past_year": "viti i kaluar",
   "past_month": "muaji i kaluar",
-  "all_time": "e gjithë periudha"
+  "all_time": "e gjithë periudha",
+  "unsave": "Hiq nga të ruajturat",
+  "feature_not_available_yet": "Kjo veçori nuk është ende e disponueshme."
 }

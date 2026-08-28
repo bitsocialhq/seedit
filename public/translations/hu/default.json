@@ -416,5 +416,7 @@
   "links_from": "az időszak linkjei",
   "past_year": "elmúlt év",
   "past_month": "elmúlt hónap",
-  "all_time": "teljes időszak"
+  "all_time": "teljes időszak",
+  "unsave": "Mentés visszavonása",
+  "feature_not_available_yet": "Ez a funkció még nem érhető el."
 }

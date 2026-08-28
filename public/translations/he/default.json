@@ -416,5 +416,7 @@
   "links_from": "קישורים מהתקופה",
   "past_year": "השנה האחרונה",
   "past_month": "החודש האחרון",
-  "all_time": "כל התקופה"
+  "all_time": "כל התקופה",
+  "unsave": "בטל שמירה",
+  "feature_not_available_yet": "התכונה הזו עדיין לא זמינה."
 }

@@ -416,5 +416,7 @@
   "links_from": "该时间段的链接",
   "past_year": "过去一年",
   "past_month": "过去一个月",
-  "all_time": "全部时间"
+  "all_time": "全部时间",
+  "unsave": "取消保存",
+  "feature_not_available_yet": "此功能尚不可用。"
 }
