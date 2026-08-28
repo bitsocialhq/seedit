@@ -416,5 +416,7 @@
   "links_from": "Links aus dem Zeitraum",
   "past_year": "letztes Jahr",
   "past_month": "letzter Monat",
-  "all_time": "gesamter Zeitraum"
+  "all_time": "gesamter Zeitraum",
+  "unsave": "Speichern rückgängig machen",
+  "feature_not_available_yet": "Diese Funktion ist noch nicht verfügbar."
 }

@@ -416,5 +416,7 @@
   "links_from": "해당 기간의 링크",
   "past_year": "지난 1년",
   "past_month": "지난 한 달",
-  "all_time": "전체 기간"
+  "all_time": "전체 기간",
+  "unsave": "저장 취소",
+  "feature_not_available_yet": "이 기능은 아직 사용할 수 없습니다."
 }

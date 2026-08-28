@@ -416,5 +416,7 @@
   "links_from": "इस अवधि के लिंक",
   "past_year": "पिछला वर्ष",
   "past_month": "पिछला महीना",
-  "all_time": "पूरी अवधि"
+  "all_time": "पूरी अवधि",
+  "unsave": "सहेजना रद्द करें",
+  "feature_not_available_yet": "यह सुविधा अभी उपलब्ध नहीं है।"
 }

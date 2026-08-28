@@ -416,5 +416,7 @@
   "links_from": "odkazy z období",
   "past_year": "minulý rok",
   "past_month": "minulý měsíc",
-  "all_time": "celé období"
+  "all_time": "celé období",
+  "unsave": "Zrušit uložení",
+  "feature_not_available_yet": "Tato funkce zatím není k dispozici."
 }

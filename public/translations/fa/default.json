@@ -416,5 +416,7 @@
   "links_from": "پیوندهای مربوط به بازه",
   "past_year": "سال گذشته",
   "past_month": "ماه گذشته",
-  "all_time": "کل دوره"
+  "all_time": "کل دوره",
+  "unsave": "لغو ذخیره",
+  "feature_not_available_yet": "این قابلیت هنوز در دسترس نیست."
 }

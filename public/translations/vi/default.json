@@ -416,5 +416,7 @@
   "links_from": "liên kết trong khoảng thời gian",
   "past_year": "năm qua",
   "past_month": "tháng qua",
-  "all_time": "toàn bộ thời gian"
+  "all_time": "toàn bộ thời gian",
+  "unsave": "Bỏ lưu",
+  "feature_not_available_yet": "Tính năng này chưa khả dụng."
 }

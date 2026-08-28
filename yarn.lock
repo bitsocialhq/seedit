@@ -1378,9 +1378,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitsocial/bitsocial-react-hooks@npm:0.1.41":
-  version: 0.1.41
-  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.41"
+"@bitsocial/bitsocial-react-hooks@npm:0.1.42":
+  version: 0.1.42
+  resolution: "@bitsocial/bitsocial-react-hooks@npm:0.1.42"
   dependencies:
     "@bitsocial/bso-resolver": "npm:0.0.10"
     "@pkcprotocol/pkc-js": "npm:0.0.88"
@@ -1399,7 +1399,7 @@ __metadata:
     zustand: "npm:4.5.7"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/af08919ddd253223932b033bc7c0ef18df76fc2120ec83518c31ad41d27051ec1c5470102ce4198db4a6c17d39a78ffe8fed25bb165f90828759e487a7d761d9
+  checksum: 10c0/729c45ba038fc0be48d8e7eaea50a1ce93948f0beaae679924be6f3b1c19215d77a096bb57a03ed2a64d1ce05c298c98aa1fbb2c4f73cf48cad9dbeb3dc73f1a
   languageName: node
   linkType: hard
 
@@ -19690,7 +19690,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "seedit@workspace:."
   dependencies:
-    "@bitsocial/bitsocial-react-hooks": "npm:0.1.41"
+    "@bitsocial/bitsocial-react-hooks": "npm:0.1.42"
     "@bitsocial/bso-resolver": "npm:0.0.10"
     "@capacitor/android": "npm:7.4.5"
     "@capacitor/app": "npm:7.0.1"

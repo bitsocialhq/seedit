@@ -149,6 +149,10 @@ export const isProfileHiddenView = (pathname: string): boolean => {
   return pathname === '/profile/hidden';
 };
 
+export const isProfileSavedView = (pathname: string): boolean => {
+  return pathname === '/profile/saved';
+};
+
 export const isSettingsView = (pathname: string): boolean => {
   return (
     pathname === '/settings' ||

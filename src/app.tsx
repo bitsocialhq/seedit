@@ -183,6 +183,7 @@ const App = () => {
               <Route path='upvoted' element={<Profile.VotedComments voteType={1} />} />
               <Route path='downvoted' element={<Profile.VotedComments voteType={-1} />} />
               <Route path='hidden' element={<Profile.HiddenComments />} />
+              <Route path='saved' element={<Profile.SavedComments />} />
               <Route path='comments' element={<Profile.Comments />} />
               <Route path='submitted' element={<Profile.Submitted />} />
             </Route>

@@ -416,5 +416,7 @@
   "links_from": "mga link mula sa panahon",
   "past_year": "nakaraang taon",
   "past_month": "nakaraang buwan",
-  "all_time": "buong panahon"
+  "all_time": "buong panahon",
+  "unsave": "Alisin sa naka-save",
+  "feature_not_available_yet": "Hindi pa magagamit ang feature na ito."
 }

@@ -416,5 +416,7 @@
   "links_from": "legături din perioada",
   "past_year": "anul trecut",
   "past_month": "luna trecută",
-  "all_time": "întreaga perioadă"
+  "all_time": "întreaga perioadă",
+  "unsave": "Anulează salvarea",
+  "feature_not_available_yet": "Această funcție nu este disponibilă încă."
 }

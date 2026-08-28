@@ -416,5 +416,7 @@
   "links_from": "linkit ajanjaksolta",
   "past_year": "viime vuosi",
   "past_month": "viime kuukausi",
-  "all_time": "koko ajanjakso"
+  "all_time": "koko ajanjakso",
+  "unsave": "Poista tallennus",
+  "feature_not_available_yet": "Tämä ominaisuus ei ole vielä saatavilla."
 }

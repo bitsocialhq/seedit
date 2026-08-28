@@ -90,7 +90,11 @@ const HideMenu = ({ author, cid, isAccountMod, communityAddress }: HideMenuProps
               <BlockCommentButton cid={cid} toggleIsMenuOpen={toggleIsMenuOpen} />
               <BlockCommunityButton communityAddress={communityAddress} />
               <BlockAuthorButton author={author} />
-              {!isAccountMod && <div className={`${styles.menuItem} ${styles.reportButton}`}>{t('report')}</div>}
+              {!isAccountMod && (
+                <button type='button' className={`${styles.menuItem} ${styles.reportButton}`} onClick={() => window.alert(t('feature_not_available_yet'))}>
+                  {t('report')}
+                </button>
+              )}
             </div>
           </div>
         </FloatingFocusManager>

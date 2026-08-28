@@ -416,5 +416,7 @@
   "links_from": "link del periodo",
   "past_year": "ultimo anno",
   "past_month": "ultimo mese",
-  "all_time": "intero periodo"
+  "all_time": "intero periodo",
+  "unsave": "annulla salvataggio",
+  "feature_not_available_yet": "Questa funzionalità non è ancora disponibile."
 }
