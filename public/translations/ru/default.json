@@ -409,5 +409,12 @@
   "reset_feed": "сбросить ленту",
   "enable_mock_content_all_communities_reload": "включить тестовый контент для всех сообществ (перезагружает Seedit)",
   "show_reset_feed_button": "показать кнопку сброса ленты",
-  "mock_content_uncached_communities_description": "тестовый контент показывается только для сообществ, которых нет в кэше; попробуйте вымышленный адрес .bso"
+  "mock_content_uncached_communities_description": "тестовый контент показывается только для сообществ, которых нет в кэше; попробуйте вымышленный адрес .bso",
+  "past_24_hours": "последние 24 часа",
+  "past_hour": "последний час",
+  "past_week": "прошедшая неделя",
+  "links_from": "ссылки за период",
+  "past_year": "прошедший год",
+  "past_month": "прошедший месяц",
+  "all_time": "за всё время"
 }

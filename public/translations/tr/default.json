@@ -409,5 +409,12 @@
   "reset_feed": "akışı sıfırla",
   "enable_mock_content_all_communities_reload": "tüm topluluklar için örnek içeriği etkinleştir (Seedit yeniden yüklenir)",
   "show_reset_feed_button": "akışı sıfırlama düğmesini göster",
-  "mock_content_uncached_communities_description": "simüle edilmiş içerik yalnızca önbelleğe alınmamış topluluklar için gösterilir; uydurma bir .bso adresi deneyin"
+  "mock_content_uncached_communities_description": "simüle edilmiş içerik yalnızca önbelleğe alınmamış topluluklar için gösterilir; uydurma bir .bso adresi deneyin",
+  "past_24_hours": "son 24 saat",
+  "past_hour": "son bir saat",
+  "past_week": "geçen hafta",
+  "links_from": "döneme ait bağlantılar",
+  "past_year": "geçen yıl",
+  "past_month": "geçen ay",
+  "all_time": "tüm zaman aralığı"
 }

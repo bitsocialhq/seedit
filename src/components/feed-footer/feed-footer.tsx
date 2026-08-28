@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useCommunities } from '@bitsocial/bitsocial-react-hooks';
 import { isModView } from '../../lib/utils/view-utils';
-import { getTimeFilterPath } from '../../lib/utils/time-filter-utils';
 import { useCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import EmptyFeedMessage from '../empty-feed-message/empty-feed-message';
-import useAutoExpandTimeFilter from '../../hooks/use-auto-expand-time-filter';
 import { useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedPagination from './feed-pagination';
 import LoadingEllipsis from '../loading-ellipsis';
@@ -20,12 +18,6 @@ interface FeedFooterProps {
   hasFeedLoaded: boolean;
   hasMore: boolean;
   communityAddresses: string[];
-  communityAddressesWithNewerPosts: string[];
-  weeklyFeedLength: number;
-  monthlyFeedLength: number;
-  yearlyFeedLength: number;
-  currentTimeFilterName: string;
-  reset: () => void;
   searchQuery?: string;
   isSearching?: boolean;
   showNoResults?: boolean;
@@ -33,38 +25,16 @@ interface FeedFooterProps {
   onLoadMore: () => void;
 }
 
-const FeedFooter = ({
-  feedLength,
-  hasFeedLoaded,
-  hasMore,
-  communityAddresses,
-  weeklyFeedLength,
-  monthlyFeedLength,
-  yearlyFeedLength,
-  currentTimeFilterName,
-  searchQuery,
-  isSearching,
-  showNoResults,
-  onClearSearch,
-  onLoadMore,
-}: FeedFooterProps) => {
+const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, searchQuery, isSearching, showNoResults, onClearSearch, onLoadMore }: FeedFooterProps) => {
   let footerContent;
   const { t } = useTranslation();
-  const params = useParams();
   const location = useLocation();
   const isInModView = isModView(location.pathname);
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
-  const getWiderFeedPath = (timeFilterName: string) =>
-    getTimeFilterPath({ pathname: location.pathname, sortType: params?.sortType || 'hot', timeFilterName, domain: params?.domain });
-
   const feedCommunityIdentifiers = useCommunityIdentifiers(communityAddresses);
   const { communities } = useCommunities({ communities: feedCommunityIdentifiers });
   const feedStateString = useFeedStateString(communityAddresses);
-  const loadingStateString =
-    feedStateString ||
-    (!hasFeedLoaded || (feedLength === 0 && !(weeklyFeedLength > feedLength || monthlyFeedLength > feedLength || yearlyFeedLength > feedLength))
-      ? t('loading_feed')
-      : t('looking_for_more_posts'));
+  const loadingStateString = feedStateString || (!hasFeedLoaded || feedLength === 0 ? t('loading_feed') : t('looking_for_more_posts'));
   const hasEmptyFeedData = shouldShowEmptyFeed({
     requestedCommunityCount: feedCommunityIdentifiers.length,
     communities,
@@ -73,39 +43,6 @@ const FeedFooter = ({
     isSearching,
     searchQuery,
   });
-
-  const widerFeedSuggestion =
-    weeklyFeedLength > feedLength && !searchQuery ? (
-      <div className={styles.morePostsSuggestion}>
-        <Trans
-          i18nKey='more_posts_last_week'
-          values={{ currentTimeFilterName, count: feedLength }}
-          components={{
-            1: <Link key='weekly-posts-link' to={getWiderFeedPath('1w')} />,
-          }}
-        />
-      </div>
-    ) : monthlyFeedLength > feedLength && !searchQuery ? (
-      <div className={styles.morePostsSuggestion}>
-        <Trans
-          i18nKey='more_posts_last_month'
-          values={{ currentTimeFilterName, count: feedLength }}
-          components={{
-            1: <Link key='monthly-posts-link' to={getWiderFeedPath('1m')} />,
-          }}
-        />
-      </div>
-    ) : yearlyFeedLength > feedLength && !searchQuery ? (
-      <div className={styles.morePostsSuggestion}>
-        <Trans
-          i18nKey='more_posts_last_year'
-          values={{ currentTimeFilterName, count: feedLength }}
-          components={{
-            1: <Link key='yearly-posts-link' to={getWiderFeedPath('1y')} />,
-          }}
-        />
-      </div>
-    ) : null;
 
   // Add state to track initial loading
   const [hasFetchedCommunityAddresses, setHasFetchedCommunityAddresses] = useState(false);
@@ -118,9 +55,7 @@ const FeedFooter = ({
     return () => clearTimeout(timer);
   }, []);
 
-  const showEmptyFeed = hasFetchedCommunityAddresses && hasEmptyFeedData;
-
-  const isAutoExpandingFeed = useAutoExpandTimeFilter({ isFeedEmpty: showEmptyFeed, weeklyFeedLength, monthlyFeedLength, yearlyFeedLength, searchQuery });
+  const showEmptyFeed = hasFetchedCommunityAddresses && hasEmptyFeedData && !hasMore;
 
   if (!hasFetchedCommunityAddresses) {
     footerContent = <LoadingEllipsis string={t('loading_feed')} />;
@@ -160,20 +95,12 @@ const FeedFooter = ({
         </div>
       </div>
     );
-  } else if (showEmptyFeed && !isAutoExpandingFeed) {
-    footerContent = (
-      <>
-        {widerFeedSuggestion}
-        <EmptyFeedMessage />
-      </>
-    );
+  } else if (showEmptyFeed) {
+    footerContent = <EmptyFeedMessage />;
   } else if (hasMore || communityAddresses.length > 0 || (communityAddresses && communityAddresses.length === 0)) {
     // Only show newer posts/weekly/monthly suggestions when not searching
     footerContent = (
       <>
-        {/* a feed with no posts yet is either still loading or about to expand on its own, so a wider time filter
-            can only be suggested once the feed is settled, otherwise the suggestion flashes and disappears */}
-        {feedLength === 0 ? null : widerFeedSuggestion}
         <div className={styles.stateString}>
           {communityAddresses.length === 0 ? (
             isInModView ? (

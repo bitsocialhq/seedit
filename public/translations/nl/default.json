@@ -409,5 +409,12 @@
   "reset_feed": "feed resetten",
   "enable_mock_content_all_communities_reload": "testinhoud inschakelen voor alle gemeenschappen (laadt Seedit opnieuw)",
   "show_reset_feed_button": "knop voor het resetten van de feed tonen",
-  "mock_content_uncached_communities_description": "gesimuleerde inhoud wordt alleen getoond voor community's die niet in de cache staan; probeer een verzonnen .bso-adres"
+  "mock_content_uncached_communities_description": "gesimuleerde inhoud wordt alleen getoond voor community's die niet in de cache staan; probeer een verzonnen .bso-adres",
+  "past_24_hours": "afgelopen 24 uur",
+  "past_hour": "afgelopen uur",
+  "past_week": "afgelopen week",
+  "links_from": "links uit de periode",
+  "past_year": "afgelopen jaar",
+  "past_month": "afgelopen maand",
+  "all_time": "gehele periode"
 }

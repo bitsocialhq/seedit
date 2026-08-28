@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAccountComments, useBlock, useFeed, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { Navigate, useLocation, useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAccountComments, useBlock, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import { filterOptimisticLocalPosts } from '../../lib/utils/account-history-utils';
@@ -14,20 +14,23 @@ import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
-import { getCommunityPath, isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import { isResolvableCommunityAddress } from '../../lib/utils/community-route-utils';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import { getCommunityIdentifier, getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import ErrorDisplay from '../../components/error-display';
 import EmptyFeedMessage from '../../components/empty-feed-message/empty-feed-message';
 import FeedPagination from '../../components/feed-footer/feed-pagination';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
+import TopTimeFilter from '../../components/top-time-filter';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Over18Warning from '../../components/over-18-warning';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -41,7 +44,6 @@ interface FooterProps {
   started: boolean;
   isSubCreatedButNotYetPublished: boolean;
   hasMore: boolean;
-  timeFilterName: string;
   reset: () => void;
   searchQuery: string;
   isSearching: boolean;
@@ -59,7 +61,6 @@ const Footer = ({
   started: _started,
   isSubCreatedButNotYetPublished: _isSubCreatedButNotYetPublished,
   hasMore,
-  timeFilterName,
   reset,
   searchQuery,
   isSearching,
@@ -193,26 +194,12 @@ const Footer = ({
         </div>
       );
     }
-  } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString) {
+  } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString && !hasMore) {
     footerFirstLine = <EmptyFeedMessage />;
   } else if (paginationFeedLength === 0 || !isOnline) {
     footerFirstLine = loadingString;
   } else if (hasMore && infiniteFeedEnabled) {
     footerFirstLine = loadingString;
-  }
-
-  if (timeFilterName !== 'all' && !blocked && !searchQuery) {
-    footerSecondLine = (
-      <div className={styles.morePostsSuggestion}>
-        <Trans
-          i18nKey='show_all_instead'
-          values={{ timeFilterName }}
-          components={{
-            1: <Link key='show_all_instead_link' to={getCommunityPath(communityAddress)} />,
-          }}
-        />
-      </div>
-    );
   }
 
   return (
@@ -233,6 +220,7 @@ const Footer = ({
 const CommunityView = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 
@@ -247,23 +235,24 @@ const CommunityView = () => {
   const isSubCreatedButNotYetPublished = typeof createdAt === 'number' && !updatedAt;
 
   const communityAddresses = useMemo(() => (canLoadCommunity ? [communityAddress] : []), [canLoadCommunity, communityAddress]) as string[];
-  const sortType = sortTypes.includes(params?.sortType || '') ? params?.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
 
   useEffect(() => {
-    if (params?.sortType && !sortTypes.includes(params.sortType)) {
+    if (!isValidRouteSortType(params.sortType)) {
       navigate('/not-found');
     }
   }, [params?.sortType, navigate]);
 
   useEffect(() => {
-    if (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName)) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (hasInvalidTimeFilter) {
       console.log(`Invalid timeFilterName '${params.timeFilterName}' in Community, redirecting to /not-found`);
       navigate('/not-found', { replace: true });
     }
-  }, [params.timeFilterName, navigate]);
+  }, [params.timeFilterName, sortType, navigate]);
 
-  const timeFilterName = params.timeFilterName || 'all';
-  const { timeFilterSeconds } = useTimeFilter();
+  const { timeFilterSeconds, timeFilterName, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
   const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
@@ -271,7 +260,7 @@ const CommunityView = () => {
     const options: any = {
       communities: getCommunityIdentifiers(communityAddresses),
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       newerThan: searchQuery ? 0 : timeFilterSeconds,
     };
 
@@ -286,9 +275,9 @@ const CommunityView = () => {
     }
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   // show account comments instantly in the feed once published (cid defined), instead of waiting for the feed to update
   const { accountComments } = useAccountComments({ communityAddress, newerThan: 60 * 60 });
@@ -337,7 +326,6 @@ const CommunityView = () => {
     started,
     isSubCreatedButNotYetPublished,
     hasMore,
-    timeFilterName: searchQuery ? 'all' : timeFilterName || '',
     reset,
     searchQuery,
     isSearching,
@@ -380,6 +368,18 @@ const CommunityView = () => {
   // Derive whether to show error directly from current feed state
   const shouldShowErrorToUser = Boolean(error?.message && feed.length === 0);
 
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
+  }
+
   return isHiddenNsfwCommunity ? (
     <Over18Warning />
   ) : (
@@ -402,6 +402,7 @@ const CommunityView = () => {
       )}
       <div className={styles.feed}>
         <DevelopmentFeedResetButton onReset={reset} />
+        {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={timeFilterName || 'all'} sessionKey={sessionKey} />}
         <Virtuoso
           increaseViewportBy={{ bottom: 1200, top: 600 }}
           totalCount={combinedFeed?.length || 0}

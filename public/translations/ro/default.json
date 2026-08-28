@@ -409,5 +409,12 @@
   "reset_feed": "resetează fluxul",
   "enable_mock_content_all_communities_reload": "activează conținutul simulat pentru toate comunitățile (reîncarcă Seedit)",
   "show_reset_feed_button": "afișează butonul de resetare a fluxului",
-  "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată"
+  "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată",
+  "past_24_hours": "ultimele 24 de ore",
+  "past_hour": "ultima oră",
+  "past_week": "săptămâna trecută",
+  "links_from": "legături din perioada",
+  "past_year": "anul trecut",
+  "past_month": "luna trecută",
+  "all_time": "întreaga perioadă"
 }
