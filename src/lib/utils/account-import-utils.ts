@@ -66,7 +66,7 @@ export const getImportedAccountActiveName = (importedAccountName: string | undef
     return undefined;
   }
 
-  const accountNames = new Set(accounts.map((account) => account.name));
+  const accountNames = new Set(accounts.map((account) => account?.name));
   if (!accountNames.has(importedAccountName)) {
     return importedAccountName;
   }
@@ -112,10 +112,11 @@ const isLocalhostRpc = (url: string): boolean => {
   return url.includes('localhost') || url.includes('127.0.0.1');
 };
 
-// Check if account has non-localhost RPC configuration
+// Check if account has at least one non-localhost RPC endpoint. A mixed list counts, so importing never
+// discards a reachable remote node just because a localhost entry sits alongside it.
 const hasNonLocalhostRpc = (options: PkcOptions): boolean => {
   const hasRpcOptions = (options.pkcRpcClientsOptions?.length ?? 0) > 0;
-  return hasRpcOptions && !options.pkcRpcClientsOptions?.some(isLocalhostRpc);
+  return hasRpcOptions && (options.pkcRpcClientsOptions?.some((url) => !isLocalhostRpc(url)) ?? false);
 };
 
 // Check if account has pubsub providers configured
@@ -205,6 +206,12 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean,
     const subscriptions = Array.isArray(importedAccount.account.subscriptions) ? importedAccount.account.subscriptions : [];
     importedAccount.account.subscriptions = [...new Set([...subscriptions, ...Object.keys(importedAccount.account.communities)])];
   }
+  const importedPkcOptions: unknown = importedAccount.account.pkcOptions;
+  if (importedPkcOptions && (typeof importedPkcOptions !== 'object' || Array.isArray(importedPkcOptions))) {
+    // A hand-edited backup can carry a non-object pkcOptions; drop it so platform defaults apply instead
+    // of assigning properties onto a primitive, which throws in strict mode.
+    importedAccount.account.pkcOptions = undefined;
+  }
   const explicitImportedHttpRoutersOptions = importedAccount.account.pkcOptions?.httpRoutersOptions;
 
   if (importedAccount.account.chainProviders) {
@@ -216,20 +223,26 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean,
   }
 
   // Transform pkcOptions based on platform and existing config
+  let normalizedPkcOptions: PkcOptions;
   if (importedAccount.account.pkcOptions) {
-    importedAccount.account.pkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);
+    normalizedPkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);
   } else {
     // If no pkcOptions exist, set defaults based on platform
-    importedAccount.account.pkcOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
+    normalizedPkcOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
   }
+  importedAccount.account.pkcOptions = normalizedPkcOptions;
 
   const browserWindow = targetWindow ?? (typeof window === 'undefined' ? undefined : window);
   if (!isElectron && browserWindow && shouldUpgradeBrowserPureP2PAccount(importedAccount.account, browserWindow)) {
-    importedAccount.account.pkcOptions = {
-      ...getBrowserPureP2PAccountOptions(importedAccount.account),
-      ...(Array.isArray(explicitImportedHttpRoutersOptions) ? { httpRoutersOptions: explicitImportedHttpRoutersOptions } : {}),
-    };
+    normalizedPkcOptions = getBrowserPureP2PAccountOptions(importedAccount.account);
   }
+
+  // Platform defaults and the pure-P2P upgrade both replace the whole options object, so restore the backup's
+  // explicit router list last; otherwise importing on Electron silently drops custom routers.
+  if (Array.isArray(explicitImportedHttpRoutersOptions)) {
+    normalizedPkcOptions.httpRoutersOptions = explicitImportedHttpRoutersOptions;
+  }
+  importedAccount.account.pkcOptions = normalizedPkcOptions;
 
   return JSON.stringify(importedAccount);
 };

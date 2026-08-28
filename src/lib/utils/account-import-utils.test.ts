@@ -25,6 +25,12 @@ describe('imported account activation name', () => {
   it('returns undefined when the imported backup has no account name', () => {
     expect(getImportedAccountActiveName(undefined, [])).toBeUndefined();
   });
+
+  it('tolerates account entries the hooks store has not hydrated yet', () => {
+    const accounts = [{ name: 'Account dress' }, undefined] as unknown as Array<{ name?: string }>;
+
+    expect(getImportedAccountActiveName('Account dress', accounts)).toBe('Account dress 2');
+  });
 });
 
 describe('imported account metadata', () => {
@@ -187,5 +193,38 @@ describe('account import PKC options', () => {
 
     expect(result.account.pkcOptions.libp2pJsClientsOptions).toEqual([{ key: 'libp2pjs', options: { bootstrap: ['custom-peer'] } }]);
     expect(result.account.pkcOptions.resolveAuthorAddresses).toBe(true);
+  });
+
+  it('preserves the backup router list when an electron import falls back to platform defaults', () => {
+    const result = JSON.parse(
+      processImportedAccount(
+        JSON.stringify({ account: { pkcOptions: { pubsubKuboRpcClientsOptions: ['https://pubsub.example'], httpRoutersOptions: ['https://custom.example'] } } }),
+        true,
+      ),
+    );
+
+    expect(result.account.pkcOptions.pkcRpcClientsOptions).toEqual(['ws://localhost:9138']);
+    expect(result.account.pkcOptions.httpRoutersOptions).toEqual(['https://custom.example']);
+  });
+
+  it('keeps a remote rpc endpoint that sits alongside a localhost entry', () => {
+    const result = JSON.parse(
+      processImportedAccount(
+        JSON.stringify({
+          account: { pkcOptions: { pkcRpcClientsOptions: ['ws://localhost:9138', 'wss://remote.example'], httpRoutersOptions: ['https://custom.example'] } },
+        }),
+        false,
+        browserWindow,
+      ),
+    );
+
+    expect(result.account.pkcOptions.pkcRpcClientsOptions).toEqual(['ws://localhost:9138', 'wss://remote.example']);
+    expect(result.account.pkcOptions.httpRoutersOptions).toEqual(['https://custom.example']);
+  });
+
+  it('falls back to platform defaults when the backup carries a non-object pkcOptions', () => {
+    const result = JSON.parse(processImportedAccount(JSON.stringify({ account: { pkcOptions: 'ws://localhost:9138' } }), true));
+
+    expect(result.account.pkcOptions).toEqual(getDefaultElectronConfig());
   });
 });
