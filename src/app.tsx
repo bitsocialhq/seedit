@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
@@ -27,6 +28,7 @@ import StarterSubscriptions from './views/starter-subscriptions/starter-subscrip
 import AccountBar from './components/account-bar/';
 import ChallengeModal from './components/challenge-modal';
 import Header from './components/header';
+import LoadingEllipsis from './components/loading-ellipsis';
 import NotificationHandler from './components/notification-handler';
 import SiteFooter from './components/site-footer';
 import DirectorySubscriptionReconciler from './components/directory-subscription-reconciler';
@@ -38,8 +40,11 @@ import styles from './app.module.css';
 initializeNotificationSystem();
 
 const SettingsUpgradeModal = lazy(() => import('./components/settings-upgrade-modal'));
+// the changelog inlines the whole CHANGELOG.md, so it loads as its own chunk instead of weighing down first paint
+const Changelog = lazy(() => import('./views/changelog'));
 
 const App = () => {
+  const { t } = useTranslation();
   useAutoSubscribe();
   useBrowserPureP2PAccountUpgrade();
   useCanonicalCommunityRoute();
@@ -105,6 +110,20 @@ const App = () => {
         <Route element={globalLayout}>
           <Route element={pagesLayout}>
             <Route path='/about' element={<AboutView />} />
+            <Route
+              path='/changelog'
+              element={
+                <Suspense
+                  fallback={
+                    <div className={styles.lazyRouteLoading}>
+                      <LoadingEllipsis string={t('loading')} />
+                    </div>
+                  }
+                >
+                  <Changelog />
+                </Suspense>
+              }
+            />
             <Route path='/gold' element={<Gold />} />
             <Route path='/submit' element={<SubmitPage />} />
 

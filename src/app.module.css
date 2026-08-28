@@ -10,6 +10,12 @@
   color-scheme: var(--color-scheme) !important;
 }
 
+.lazyRouteLoading {
+  padding: 12px 15px;
+  color: var(--text-info);
+  font-size: 12px;
+}
+
 textarea, input {
   background-color: var(--background);
   color: var(--text-input);

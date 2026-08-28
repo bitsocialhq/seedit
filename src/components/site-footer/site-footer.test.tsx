@@ -51,6 +51,15 @@ describe('SiteFooter', () => {
     expect(container.textContent).not.toContain('contact us');
   });
 
+  it('links the in-app changelog from the about column', () => {
+    renderFooter();
+
+    const changelogLink = Array.from(container.querySelectorAll<HTMLAnchorElement>('a')).find((link) => link.textContent === 'changelog');
+
+    expect(changelogLink?.getAttribute('href')).toBe('#/changelog');
+    expect(changelogLink?.closest('section')?.querySelector('h2')?.textContent).toBe('about');
+  });
+
   it('links seedit gold from the <3 column, like reddit premium on old.reddit', () => {
     renderFooter();
 

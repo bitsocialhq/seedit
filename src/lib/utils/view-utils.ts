@@ -49,6 +49,10 @@ export const isAuthorSubmittedView = (pathname: string, params: ParamsType): boo
   return pathname === `/u/${params.authorAddress}/comments/${params.commentCid}/submitted`;
 };
 
+export const isChangelogView = (pathname: string): boolean => {
+  return pathname === '/changelog' || pathname.startsWith('/changelog#');
+};
+
 export const isCreateCommunityView = (pathname: string): boolean => {
   return pathname === '/communities/create';
 };

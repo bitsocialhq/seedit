@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import packageJson from '../../../package.json';
 
 const { version } = packageJson;
@@ -15,12 +16,9 @@ const VersionWithCommit = () => {
   );
 };
 
+// clicking the running version opens the in-app changelog rather than leaving for GitHub
 const Version = () => {
-  return (
-    <a href={`https://github.com/bitsocialnet/seedit/releases/tag/v${version}`} target='_blank' rel='noopener noreferrer'>
-      v{version}
-    </a>
-  );
+  return <Link to='/changelog'>v{version}</Link>;
 };
 
 export { Version, VersionWithCommit };

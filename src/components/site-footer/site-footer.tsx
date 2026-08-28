@@ -19,6 +19,9 @@ const SiteFooter = () => (
           <li>
             <ExternalLink href='https://bitsocial.net/apps/seedit'>about</ExternalLink>
           </li>
+          <li>
+            <Link to='/changelog'>changelog</Link>
+          </li>
         </ul>
       </section>
       <section className={styles.column}>

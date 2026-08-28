@@ -1,0 +1,120 @@
+/* the page chrome is shared with the about FAQ, only the release log styling lives here */
+
+.notice {
+  margin-bottom: 15px;
+  padding: 5px 10px;
+  border: 1px solid var(--box-border-color);
+  line-height: 20px;
+}
+
+.currentVersion {
+  font-weight: bold;
+}
+
+.index {
+  margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.indexLabel {
+  margin-right: 4px;
+  color: var(--text-info);
+}
+
+.index ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.index li {
+  display: inline;
+}
+
+.index li::after {
+  content: ' · ';
+  color: var(--text-info);
+}
+
+.index li:last-child::after {
+  content: '';
+}
+
+.release {
+  margin-bottom: 20px;
+}
+
+.releaseHeading {
+  margin: 0 0 5px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border-primary);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.releaseVersion {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.releaseDate {
+  margin-left: 8px;
+  color: var(--text-info);
+}
+
+.runningTag {
+  margin-left: 8px;
+  padding: 0 4px;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 11px;
+}
+
+.compareLink {
+  margin-left: 8px;
+}
+
+/* .about h3 in the shared chrome is a page heading, these are dense list labels */
+.section .sectionHeading {
+  margin: 10px 0 2px;
+  color: var(--text-info);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.commits {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.commits li {
+  margin-bottom: 2px;
+  line-height: 18px;
+  /* breaking change notes carry paragraph breaks and sub-lists; commit rows have no newlines to keep */
+  white-space: pre-line;
+}
+
+.scope {
+  font-weight: 700;
+}
+
+/* the hash is metadata trailing the description, not a headline link */
+.commits .hash {
+  color: var(--text-info);
+  font-family: monospace;
+  font-size: 12px;
+}
+
+@media (max-width: 639px) {
+  .releaseVersion {
+    font-size: 15px;
+  }
+
+  .commits {
+    padding-left: 18px;
+  }
+}

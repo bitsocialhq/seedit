@@ -8,6 +8,7 @@ import { findCommunityCreator } from '../../lib/utils/user-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
 import {
   isAllView,
+  isChangelogView,
   isDomainView,
   isGoldView,
   isHomeAboutView,
@@ -183,6 +184,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const location = useLocation();
   const params = useParams();
   const isInAllView = isAllView(location.pathname);
+  const isInChangelogView = isChangelogView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
   const isInGoldView = isGoldView(location.pathname);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
@@ -194,6 +196,18 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const isInCommunitiesView = isCommunitiesView(location.pathname);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
+
+  // the community title box only belongs on routes that stand for a community, not on the standalone pages
+  const showsCommunityTitleBox =
+    !isInHomeView &&
+    !isInHomeAboutView &&
+    !isInAllView &&
+    !isInModView &&
+    !isInCommunitiesView &&
+    !isInGoldView &&
+    !isInChangelogView &&
+    !isInDomainView &&
+    !isInPostPageAboutView;
 
   const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);
   const pendingPostCommunityAddress = getCommentCommunityAddress(pendingPost);
@@ -284,7 +298,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
             </div>
           </Link>
         )}
-        {!isInHomeView && !isInHomeAboutView && !isInAllView && !isInModView && !isInCommunitiesView && !isInGoldView && !isInDomainView && !isInPostPageAboutView && (
+        {showsCommunityTitleBox && (
           <div className={styles.titleBox}>
             <Link className={styles.title} to={directoryCode ? `/s/${directoryCode}` : address ? getCommunityPath(address) : '/communities'}>
               {directoryCode || getDisplayAddress(community?.address || '')}
