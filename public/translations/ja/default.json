@@ -418,5 +418,10 @@
   "past_month": "過去1か月",
   "all_time": "全期間",
   "unsave": "保存を解除",
-  "feature_not_available_yet": "この機能はまだ利用できません。"
+  "feature_not_available_yet": "この機能はまだ利用できません。",
+  "results_provided_by": "検索結果提供元:",
+  "search_all_posts": "すべての投稿を検索",
+  "search_results": "検索結果",
+  "search_provider_unavailable": "検索プロバイダーが利用できません。後でもう一度お試しください",
+  "retry": "再試行"
 }

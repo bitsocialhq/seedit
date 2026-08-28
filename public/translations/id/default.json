@@ -418,5 +418,10 @@
   "past_month": "sebulan terakhir",
   "all_time": "seluruh periode",
   "unsave": "Batal simpan",
-  "feature_not_available_yet": "Fitur ini belum tersedia."
+  "feature_not_available_yet": "Fitur ini belum tersedia.",
+  "results_provided_by": "hasil yang disediakan oleh",
+  "search_all_posts": "Cari semua postingan",
+  "search_results": "hasil pencarian",
+  "search_provider_unavailable": "penyedia pencarian tidak tersedia, coba lagi nanti",
+  "retry": "coba"
 }

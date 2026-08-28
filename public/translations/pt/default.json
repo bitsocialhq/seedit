@@ -418,5 +418,10 @@
   "past_month": "último mês",
   "all_time": "todo o período",
   "unsave": "deixar de salvar",
-  "feature_not_available_yet": "Esta funcionalidade ainda não está disponível."
+  "feature_not_available_yet": "Esta funcionalidade ainda não está disponível.",
+  "results_provided_by": "resultados fornecidos por",
+  "search_all_posts": "Pesquisar todos os posts",
+  "search_results": "resultados da pesquisa",
+  "search_provider_unavailable": "o provedor de busca está indisponível, tente novamente mais tarde",
+  "retry": "tentar"
 }

@@ -418,5 +418,10 @@
   "past_month": "afgelopen maand",
   "all_time": "gehele periode",
   "unsave": "Opslaan ongedaan maken",
-  "feature_not_available_yet": "Deze functie is nog niet beschikbaar."
+  "feature_not_available_yet": "Deze functie is nog niet beschikbaar.",
+  "results_provided_by": "resultaten verzorgd door",
+  "search_all_posts": "Alle berichten zoeken",
+  "search_results": "zoekresultaten",
+  "search_provider_unavailable": "zoekprovider is niet beschikbaar, probeer het later opnieuw",
+  "retry": "opnieuw"
 }

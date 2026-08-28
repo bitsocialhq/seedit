@@ -72,11 +72,11 @@
 .slideDown {
   transform: scaleY(1);
   visibility: visible;
-  height: 50px;
+  height: 78px;
 }
 
 .lessHeight {
-  height: 22px;
+  height: 50px;
 }
 
 .slideUp {

@@ -418,5 +418,10 @@
   "past_month": "seneste måned",
   "all_time": "hele perioden",
   "unsave": "Fjern fra gemte",
-  "feature_not_available_yet": "Denne funktion er ikke tilgængelig endnu."
+  "feature_not_available_yet": "Denne funktion er ikke tilgængelig endnu.",
+  "results_provided_by": "resultater leveret af",
+  "search_all_posts": "Søg alle indlæg",
+  "search_results": "søgeresultater",
+  "search_provider_unavailable": "søgeudbyder er ikke tilgængelig, prøv igen senere",
+  "retry": "forsøg"
 }

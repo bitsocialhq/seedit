@@ -418,5 +418,10 @@
   "past_month": "过去一个月",
   "all_time": "全部时间",
   "unsave": "取消保存",
-  "feature_not_available_yet": "此功能尚不可用。"
+  "feature_not_available_yet": "此功能尚不可用。",
+  "results_provided_by": "搜索结果来自",
+  "search_all_posts": "搜索所有帖子",
+  "search_results": "搜索结果",
+  "search_provider_unavailable": "搜索提供商不可用，请稍后重试",
+  "retry": "重试"
 }

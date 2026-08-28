@@ -418,5 +418,10 @@
   "past_month": "मागील महिना",
   "all_time": "संपूर्ण कालावधी",
   "unsave": "जतन रद्द करा",
-  "feature_not_available_yet": "हे वैशिष्ट्य अद्याप उपलब्ध नाही."
+  "feature_not_available_yet": "हे वैशिष्ट्य अद्याप उपलब्ध नाही.",
+  "results_provided_by": "परिणाम प्रदान केले",
+  "search_all_posts": "सर्व पोस्ट शोधा",
+  "search_results": "शोध परिणाम",
+  "search_provider_unavailable": "शोध प्रदाता अनुपलब्ध आहे, नंतर पुन्हा प्रयत्न करा",
+  "retry": "पुन्हा"
 }

@@ -418,5 +418,10 @@
   "past_month": "geçen ay",
   "all_time": "tüm zaman aralığı",
   "unsave": "Kaydetmeyi geri al",
-  "feature_not_available_yet": "Bu özellik henüz kullanılamıyor."
+  "feature_not_available_yet": "Bu özellik henüz kullanılamıyor.",
+  "results_provided_by": "sonuçlar sağlayan",
+  "search_all_posts": "Tüm gönderiyi ara",
+  "search_results": "arama sonuçları",
+  "search_provider_unavailable": "arama sağlayıcısı kullanılamıyor, daha sonra tekrar deneyin",
+  "retry": "tekrar"
 }

@@ -418,5 +418,10 @@
   "past_month": "elmúlt hónap",
   "all_time": "teljes időszak",
   "unsave": "Mentés visszavonása",
-  "feature_not_available_yet": "Ez a funkció még nem érhető el."
+  "feature_not_available_yet": "Ez a funkció még nem érhető el.",
+  "results_provided_by": "eredmények biztosította:",
+  "search_all_posts": "Összes bejegyzés keresése",
+  "search_results": "keresési eredmények",
+  "search_provider_unavailable": "a keresési szolgáltató nem érhető el, próbálja meg később",
+  "retry": "ismét"
 }

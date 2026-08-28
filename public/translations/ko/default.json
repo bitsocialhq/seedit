@@ -418,5 +418,10 @@
   "past_month": "지난 한 달",
   "all_time": "전체 기간",
   "unsave": "저장 취소",
-  "feature_not_available_yet": "이 기능은 아직 사용할 수 없습니다."
+  "feature_not_available_yet": "이 기능은 아직 사용할 수 없습니다.",
+  "results_provided_by": "검색 결과 제공:",
+  "search_all_posts": "모든 게시물 검색",
+  "search_results": "검색 결과",
+  "search_provider_unavailable": "검색 공급자를 사용할 수 없습니다. 나중에 다시 시도하세요",
+  "retry": "재시도"
 }

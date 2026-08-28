@@ -418,5 +418,10 @@
   "past_month": "گزشتہ مہینہ",
   "all_time": "پوری مدت",
   "unsave": "محفوظ کرنا منسوخ کریں",
-  "feature_not_available_yet": "یہ فیچر ابھی دستیاب نہیں ہے۔"
+  "feature_not_available_yet": "یہ فیچر ابھی دستیاب نہیں ہے۔",
+  "results_provided_by": "نتائج فراہم کردہ",
+  "search_all_posts": "تمام پوسٹ تلاش کریں",
+  "search_results": "تلاش کے نتائج",
+  "search_provider_unavailable": "تلاش فراہم کنندہ دستیاب نہیں ہے، بعد میں دوبارہ کوشش کریں",
+  "retry": "دوبارہ"
 }

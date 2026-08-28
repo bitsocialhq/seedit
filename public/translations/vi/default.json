@@ -418,5 +418,10 @@
   "past_month": "tháng qua",
   "all_time": "toàn bộ thời gian",
   "unsave": "Bỏ lưu",
-  "feature_not_available_yet": "Tính năng này chưa khả dụng."
+  "feature_not_available_yet": "Tính năng này chưa khả dụng.",
+  "results_provided_by": "kết quả được cung cấp bởi",
+  "search_all_posts": "Tìm kiếm tất cả bài viết",
+  "search_results": "kết quả tìm kiếm",
+  "search_provider_unavailable": "nhà cung cấp tìm kiếm không có sẵn, thử lại sau",
+  "retry": "thử"
 }

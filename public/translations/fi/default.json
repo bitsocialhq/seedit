@@ -418,5 +418,9 @@
   "past_month": "viime kuukausi",
   "all_time": "koko ajanjakso",
   "unsave": "Poista tallennus",
-  "feature_not_available_yet": "Tämä ominaisuus ei ole vielä saatavilla."
+  "feature_not_available_yet": "Tämä ominaisuus ei ole vielä saatavilla.",
+  "results_provided_by": "tulokset toimittanut",
+  "search_all_posts": "Hae kaikista viesteistä",
+  "search_results": "hakutulokset",
+  "search_provider_unavailable": "hakupalvelu ei ole saatavilla, yritä myöhemmin uudelleen"
 }

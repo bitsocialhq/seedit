@@ -418,5 +418,10 @@
   "past_month": "senaste månaden",
   "all_time": "hela perioden",
   "unsave": "Ta bort från sparade",
-  "feature_not_available_yet": "Den här funktionen är inte tillgänglig än."
+  "feature_not_available_yet": "Den här funktionen är inte tillgänglig än.",
+  "results_provided_by": "resultat tillhandahållet av",
+  "search_all_posts": "Sök alla inlägg",
+  "search_results": "sökresultat",
+  "search_provider_unavailable": "sökprovidern är inte tillgänglig, försök igen senare",
+  "retry": "försök"
 }

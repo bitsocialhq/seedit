@@ -428,5 +428,10 @@
   "past_month": "past month",
   "all_time": "all time",
   "unsave": "unsave",
-  "feature_not_available_yet": "This feature is not available yet."
+  "feature_not_available_yet": "This feature is not available yet.",
+  "search_all_posts": "Search all posts",
+  "search_results": "search results",
+  "results_provided_by": "results provided by",
+  "search_provider_unavailable": "the search provider is unavailable, try again later",
+  "retry": "retry"
 }

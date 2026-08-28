@@ -418,5 +418,10 @@
   "past_month": "muaji i kaluar",
   "all_time": "e gjithë periudha",
   "unsave": "Hiq nga të ruajturat",
-  "feature_not_available_yet": "Kjo veçori nuk është ende e disponueshme."
+  "feature_not_available_yet": "Kjo veçori nuk është ende e disponueshme.",
+  "results_provided_by": "rezultatet e ofruara nga",
+  "search_all_posts": "Kërko të gjitha postimet",
+  "search_results": "rezultatet e kërkimit",
+  "search_provider_unavailable": "ofrimi i kërkimit nuk është i disponueshëm, provoni më vonë",
+  "retry": "provo"
 }

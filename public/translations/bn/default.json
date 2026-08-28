@@ -418,5 +418,10 @@
   "past_month": "গত মাস",
   "all_time": "সম্পূর্ণ সময়কাল",
   "unsave": "সংরক্ষণ বাতিল",
-  "feature_not_available_yet": "এই ফিচারটি এখনও উপলব্ধ নয়।"
+  "feature_not_available_yet": "এই ফিচারটি এখনও উপলব্ধ নয়।",
+  "results_provided_by": "দ্বারা প্রদত্ত ফলাফল",
+  "search_all_posts": "সব পোস্ট সার্চ করুন",
+  "search_results": "অনুসন্ধান ফলাফল",
+  "search_provider_unavailable": "অনুসন্ধান প্রদানকারী অপ্রাপ্য, পরে চেষ্টা করুন",
+  "retry": "পুনরায়"
 }

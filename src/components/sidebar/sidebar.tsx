@@ -21,6 +21,7 @@ import {
   isCommunitySettingsView,
   isCommunitiesView,
   isCommunityView,
+  isSearchView,
 } from '../../lib/utils/view-utils';
 import useCommunitySubtitles from '../../hooks/use-community-subtitles';
 import useIsMobile from '../../hooks/use-is-mobile';
@@ -186,6 +187,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const isInAllView = isAllView(location.pathname);
   const isInChangelogView = isChangelogView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
+  const isInSearchView = isSearchView(location.pathname);
   const isInGoldView = isGoldView(location.pathname);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
@@ -207,6 +209,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
     !isInGoldView &&
     !isInChangelogView &&
     !isInDomainView &&
+    !isInSearchView &&
     !isInPostPageAboutView;
 
   const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);

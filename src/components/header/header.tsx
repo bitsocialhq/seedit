@@ -44,6 +44,7 @@ import {
   isCommunityAboutView,
   isDomainView,
   isPostPageAboutView,
+  isSearchView,
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
@@ -336,6 +337,7 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
   const isInAuthorView = isAuthorView(location.pathname);
   const isInChangelogView = isChangelogView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
+  const isInSearchView = isSearchView(location.pathname);
   const isInGoldView = isGoldView(location.pathname);
   const isInInboxView = isInboxView(location.pathname);
   const isInModView = isModView(location.pathname);
@@ -411,6 +413,8 @@ const HeaderTitle = ({ title, pendingPostCommunityAddress }: { title: string; pe
     return <span className={styles.lowercase}>{t('communities_you_moderate')}</span>;
   } else if (isInDomainView) {
     return domainTitle;
+  } else if (isInSearchView) {
+    return <span className={styles.lowercase}>{t('search_results')}</span>;
   }
   return null;
 };
@@ -432,6 +436,7 @@ const Header = () => {
   const isInAllView = isAllView(location.pathname);
   const isInAuthorView = isAuthorView(location.pathname);
   const isInDomainView = isDomainView(location.pathname);
+  const isInSearchView = isSearchView(location.pathname);
   const isInHomeView = isHomeView(location.pathname);
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInInboxView = isInboxView(location.pathname);
@@ -463,6 +468,7 @@ const Header = () => {
     (isInAllView && !isInAllAboutView) ||
     (isInModView && !isInHomeAboutView) ||
     (isInDomainView && !isInHomeAboutView) ||
+    (isInSearchView && !isInHomeAboutView) ||
     (isInAuthorView && !isInHomeAboutView);
 
   const { hideNsfwCommunities } = useContentOptionsStore();

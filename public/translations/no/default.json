@@ -418,5 +418,10 @@
   "past_month": "siste måned",
   "all_time": "hele perioden",
   "unsave": "Fjern fra lagrede",
-  "feature_not_available_yet": "Denne funksjonen er ikke tilgjengelig ennå."
+  "feature_not_available_yet": "Denne funksjonen er ikke tilgjengelig ennå.",
+  "results_provided_by": "resultater levert av",
+  "search_all_posts": "Søk alle innlegg",
+  "search_results": "søkeresultater",
+  "search_provider_unavailable": "søkeleverandør er ikke tilgjengelig, prøv igjen senere",
+  "retry": "forsøk"
 }

@@ -196,6 +196,8 @@ type ParentLinkProps = {
   address?: string;
   cid?: string;
   commentCid?: string;
+  /** Indexer-served copy of the parent post, shown while (or if never) the live fetch answers. */
+  fallbackParent?: Comment;
   markedAsRead?: boolean;
   parentCid?: string;
   postCid?: string;
@@ -204,8 +206,10 @@ type ParentLinkProps = {
   timestamp?: number;
 };
 
-const ParentLink = ({ postCid }: ParentLinkProps) => {
-  const parentComment = useComment({ commentCid: postCid });
+const ParentLink = ({ postCid, fallbackParent }: ParentLinkProps) => {
+  const fetchedParent = useComment({ commentCid: postCid });
+  // an archived thread can be gone from the live network, so an indexer-served copy fills in until the fetch answers
+  const parentComment = fetchedParent?.timestamp ? fetchedParent : (fallbackParent ?? fetchedParent);
   const { author, cid, content, title } = parentComment || {};
   const communityAddress = getCommentCommunityAddress(parentComment);
   const { t } = useTranslation();
@@ -217,7 +221,7 @@ const ParentLink = ({ postCid }: ParentLinkProps) => {
         {postTitle}{' '}
       </Link>
       {t('post_by')}{' '}
-      <Link to={`/u/${author?.address}/comments/${cid}`} className={styles.parentAuthor}>
+      <Link to={author?.address && cid ? `/u/${author.address}/comments/${cid}` : ''} className={styles.parentAuthor}>
         u/{getDisplayAddress(author?.shortAddress || '')}{' '}
       </Link>
       {t('via')}{' '}
@@ -307,10 +311,12 @@ interface ReplyProps {
   isNotification?: boolean;
   isSingleComment?: boolean;
   isSingleReply?: boolean;
+  /** Indexer-served copy of the reply's post, for the context line when the live post is unreachable. */
+  parentComment?: Comment;
   reply: Comment | undefined;
 }
 
-const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleReply, isNotification = false, reply = {} }: ReplyProps) => {
+const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleReply, isNotification = false, parentComment, reply = {} }: ReplyProps) => {
   // handle pending mod or author edit
   const { state: editState, editedComment } = useEditedComment({ comment: reply });
   if (editedComment) {
@@ -431,7 +437,7 @@ const Reply = ({ cidOfReplyWithContext, depth = 0, isSingleComment, isSingleRepl
 
   return (
     <div className={styles.reply} id={cidOfReplyWithContext === cid ? `reply-${cid}` : undefined}>
-      {isSingleReply && !isInInboxView && <ParentLink postCid={cid ? postCid : parentOfPendingReply?.postCid} />}
+      {isSingleReply && !isInInboxView && <ParentLink postCid={cid ? postCid : parentOfPendingReply?.postCid} fallbackParent={parentComment} />}
       {isInInboxView && <InboxParentLink commentCid={cid} />}
       <div className={`${!isSingleReply ? styles.replyWrapper : styles.singleReplyWrapper} ${depth > 0 && styles.nested}`}>
         {!collapsed && (

@@ -418,5 +418,10 @@
   "past_month": "గత నెల",
   "all_time": "పూర్తి కాలం",
   "unsave": "సేవ్ రద్దు చేయండి",
-  "feature_not_available_yet": "ఈ ఫీచర్ ఇంకా అందుబాటులో లేదు."
+  "feature_not_available_yet": "ఈ ఫీచర్ ఇంకా అందుబాటులో లేదు.",
+  "results_provided_by": "ఫలితాలు అందించిన",
+  "search_all_posts": "అన్ని పోస్టులను వెతకండి",
+  "search_results": "శోధన ఫలితాలు",
+  "search_provider_unavailable": "సెర్చ్ ప్రొవైడర్ అందుబాటులో లేదు, నంతరం మళ్లీ ప్రయత్నించండి",
+  "retry": "మళ్లీ"
 }

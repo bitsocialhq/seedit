@@ -12,7 +12,9 @@ import {
   isAllView,
   isModView,
   isCommunityAboutView,
+  isSearchView,
 } from '../../lib/utils/view-utils';
+import { getSearchPath } from '../../lib/utils/search-utils';
 import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
@@ -42,16 +44,20 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInAllView = isAllView(location.pathname);
   const isInModView = isModView(location.pathname);
+  const isInSearchView = isSearchView(location.pathname);
 
   const isInFeedView = (isInCommunityView || isInHomeView || isInAllView || isInModView) && !isInPostPageView;
 
   const currentQuery = searchParams.get('q') || '';
+  // archive search queries the seeditarchive indexer for posts across all communities
+  const [isArchiveSearch, setIsArchiveSearch] = useState(isInSearchView);
   const [isInCommunitySearch, setIsInCommunitySearch] = useState(() => {
+    if (isInSearchView) return false;
     if (currentQuery) return true;
     if (isInFeedView) return false;
     return false; // always default to 'go to a community' in non-feed views
   });
-  const placeholder = isInCommunitySearch && isInFeedView ? t('search_posts') : t('enter_community_address');
+  const placeholder = isArchiveSearch ? t('search_all_posts') : isInCommunitySearch && isInFeedView ? t('search_posts') : t('enter_community_address');
   const [showExpando, setShowExpando] = useState(false);
 
   const searchBarRef = useRef<HTMLFormElement>(null);
@@ -68,10 +74,10 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number>(-1);
 
   const filteredCommunitySuggestions = useMemo(() => {
-    if (!inputValue || isInCommunitySearch) return [];
+    if (!inputValue || isInCommunitySearch || isArchiveSearch) return [];
     const combinedAddresses = Array.from(new Set([...communityAddresses, ...defaultCommunityAddresses]));
     return combinedAddresses.filter((address: string) => address?.toLowerCase()?.includes(inputValue.toLowerCase())).slice(0, 10);
-  }, [inputValue, communityAddresses, defaultCommunityAddresses, isInCommunitySearch]);
+  }, [inputValue, communityAddresses, defaultCommunityAddresses, isInCommunitySearch, isArchiveSearch]);
 
   const { x, y, strategy, refs, context } = useFloating({
     open: isInputFocused && filteredCommunitySuggestions.length > 0,
@@ -113,12 +119,16 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   );
 
   useEffect(() => {
-    if (searchParams.get('q')) {
+    if (isInSearchView) {
+      setIsArchiveSearch(true);
+      setIsInCommunitySearch(false);
+    } else if (searchParams.get('q')) {
       setIsInCommunitySearch(true);
+      setIsArchiveSearch(false);
     } else if (!isInFeedView) {
       setIsInCommunitySearch(false);
     }
-  }, [searchParams, isInFeedView]);
+  }, [searchParams, isInFeedView, isInSearchView]);
 
   useEffect(() => {
     if (isFocused) {
@@ -144,6 +154,14 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isArchiveSearch) {
+      const searchInput = searchInputRef.current?.value.trim();
+      if (searchInput) {
+        setShowExpando(false);
+        navigate(getSearchPath(searchInput));
+      }
+      return;
+    }
     if (isInCommunitySearch) {
       debouncedSetSearchQuery.flush();
       return;
@@ -178,7 +196,15 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
     }
   };
 
+  const handleArchiveSearchToggle = () => {
+    setIsArchiveSearch(true);
+    setIsInCommunitySearch(false);
+    searchInputRef.current?.focus();
+    setShowExpando(true);
+  };
+
   const handleCommunitySearchToggle = (shouldSearchCommunity: boolean) => {
+    setIsArchiveSearch(false);
     setIsInCommunitySearch(shouldSearchCommunity);
     if (!shouldSearchCommunity) {
       setInputValue('');
@@ -289,15 +315,19 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
       )}
       <div className={`${styles.infobar} ${showExpando ? styles.slideDown : styles.slideUp} ${!isInFeedView ? styles.lessHeight : ''}`}>
         <label>
-          <input type='checkbox' checked={!isInCommunitySearch || !isInFeedView} disabled={!isInFeedView} onChange={() => handleCommunitySearchToggle(false)} />
+          <input type='checkbox' checked={!isArchiveSearch && (!isInCommunitySearch || !isInFeedView)} onChange={() => handleCommunitySearchToggle(false)} />
           {t('go_to_a_community')}
         </label>
         {isInFeedView && (
           <label>
-            <input type='checkbox' checked={isInCommunitySearch} onChange={() => handleCommunitySearchToggle(true)} />
+            <input type='checkbox' checked={isInCommunitySearch && !isArchiveSearch} onChange={() => handleCommunitySearchToggle(true)} />
             {t('search_feed_post')}
           </label>
         )}
+        <label>
+          <input type='checkbox' checked={isArchiveSearch} onChange={handleArchiveSearchToggle} />
+          {t('search_all_posts')}
+        </label>
       </div>
     </div>
   );

@@ -418,5 +418,10 @@
   "past_month": "nakaraang buwan",
   "all_time": "buong panahon",
   "unsave": "Alisin sa naka-save",
-  "feature_not_available_yet": "Hindi pa magagamit ang feature na ito."
+  "feature_not_available_yet": "Hindi pa magagamit ang feature na ito.",
+  "results_provided_by": "mga resulta na ibinigay ng",
+  "search_all_posts": "Maghanap sa lahat ng posts",
+  "search_results": "mga resulta ng paghahanap",
+  "search_provider_unavailable": "ang provider ng paghahanap ay hindi available, subukan ulit mamaya",
+  "retry": "subukan"
 }

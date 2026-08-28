@@ -418,5 +418,10 @@
   "past_month": "прошедший месяц",
   "all_time": "за всё время",
   "unsave": "Отменить сохранение",
-  "feature_not_available_yet": "Эта функция пока недоступна."
+  "feature_not_available_yet": "Эта функция пока недоступна.",
+  "results_provided_by": "результаты предоставлены",
+  "search_all_posts": "Поиск всех постов",
+  "search_results": "результаты поиска",
+  "search_provider_unavailable": "поисковый провайдер недоступен, попробуйте позже",
+  "retry": "повторить"
 }

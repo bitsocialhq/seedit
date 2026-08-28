@@ -418,5 +418,10 @@
   "past_month": "минулий місяць",
   "all_time": "за весь час",
   "unsave": "Скасувати збереження",
-  "feature_not_available_yet": "Ця функція ще недоступна."
+  "feature_not_available_yet": "Ця функція ще недоступна.",
+  "results_provided_by": "результати надані",
+  "search_all_posts": "Пошук усіх постів",
+  "search_results": "результати пошуку",
+  "search_provider_unavailable": "пошуковий провайдер недоступний, спробуйте пізніше",
+  "retry": "повторити"
 }

@@ -418,5 +418,10 @@
   "past_month": "เดือนที่ผ่านมา",
   "all_time": "ทุกช่วงเวลา",
   "unsave": "ยกเลิกการบันทึก",
-  "feature_not_available_yet": "ฟีเจอร์นี้ยังไม่พร้อมใช้งาน"
+  "feature_not_available_yet": "ฟีเจอร์นี้ยังไม่พร้อมใช้งาน",
+  "results_provided_by": "ผลลัพธ์มาจาก",
+  "search_all_posts": "ค้นหาโพสต์ทั้งหมด",
+  "search_results": "ผลการค้นหา",
+  "search_provider_unavailable": "ผู้ให้บริการค้นหาไม่พร้อมใช้งาน ลองใหม่ในภายหลัง",
+  "retry": "ลอง"
 }

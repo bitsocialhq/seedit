@@ -418,5 +418,10 @@
   "past_month": "minulý měsíc",
   "all_time": "celé období",
   "unsave": "Zrušit uložení",
-  "feature_not_available_yet": "Tato funkce zatím není k dispozici."
+  "feature_not_available_yet": "Tato funkce zatím není k dispozici.",
+  "results_provided_by": "výsledky poskytnuté",
+  "search_all_posts": "Hledat všechny příspěvky",
+  "search_results": "výsledky hledání",
+  "search_provider_unavailable": "poskytovatel vyhledávání není dostupný, zkuste to později",
+  "retry": "opakovat"
 }

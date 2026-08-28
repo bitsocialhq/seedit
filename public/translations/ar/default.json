@@ -418,5 +418,10 @@
   "past_month": "الشهر الماضي",
   "all_time": "الفترة كاملة",
   "unsave": "إلغاء الحفظ",
-  "feature_not_available_yet": "هذه الميزة غير متاحة بعد."
+  "feature_not_available_yet": "هذه الميزة غير متاحة بعد.",
+  "results_provided_by": "نتائج مقدمة من",
+  "search_all_posts": "البحث عن جميع المنشورات",
+  "search_results": "نتائج البحث",
+  "search_provider_unavailable": "مزود البحث غير متاح، حاول لاحقًا",
+  "retry": "إعادة"
 }

@@ -418,5 +418,10 @@
   "past_month": "החודש האחרון",
   "all_time": "כל התקופה",
   "unsave": "בטל שמירה",
-  "feature_not_available_yet": "התכונה הזו עדיין לא זמינה."
+  "feature_not_available_yet": "התכונה הזו עדיין לא זמינה.",
+  "results_provided_by": "תוצאות שסופקו על ידי",
+  "search_all_posts": "חיפוש בכל הפוסטים",
+  "search_results": "תוצאות חיפוש",
+  "search_provider_unavailable": "ספק החיפוש אינו זמין, נסה שוב מאוחר יותר",
+  "retry": "נסה"
 }
