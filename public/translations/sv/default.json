@@ -409,5 +409,12 @@
   "reset_feed": "återställ flödet",
   "enable_mock_content_all_communities_reload": "aktivera testinnehåll för alla samhällen (läser in Seedit igen)",
   "show_reset_feed_button": "visa knappen för att återställa flödet",
-  "mock_content_uncached_communities_description": "simulerat innehåll visas bara för communities som inte har cachelagrats; prova en påhittad .bso-adress"
+  "mock_content_uncached_communities_description": "simulerat innehåll visas bara för communities som inte har cachelagrats; prova en påhittad .bso-adress",
+  "past_24_hours": "senaste 24 timmarna",
+  "past_hour": "senaste timmen",
+  "past_week": "senaste veckan",
+  "links_from": "länkar från perioden",
+  "past_year": "senaste året",
+  "past_month": "senaste månaden",
+  "all_time": "hela perioden"
 }

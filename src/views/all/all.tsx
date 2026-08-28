@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useFeed } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import DevelopmentFeedResetButton from '../../components/development-feed-reset-button/development-feed-reset-button-lazy';
+import TopTimeFilter from '../../components/top-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 import styles from '../home/home.module.css';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
@@ -27,27 +29,19 @@ const All = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const sortType = params?.sortType && sortTypes.includes(params.sortType) ? params.sortType : sortTypes[0];
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
 
-  const { timeFilterName, timeFilterSeconds, sessionKey, timeFilterNames } = useTimeFilter();
-
-  useEffect(() => {
-    if (!params.timeFilterName && !searchQuery && sessionKey) {
-      const sessionPreference = sessionStorage.getItem(sessionKey);
-      if (sessionPreference && timeFilterNames.includes(sessionPreference)) {
-        const targetPath = `/s/all/${sortType}/${sessionPreference}${location.search}`;
-        navigate(targetPath, { replace: true });
-      }
-    }
-  }, [params.timeFilterName, searchQuery, sessionKey, sortType, navigate, location.search, location.pathname, timeFilterNames]);
+  const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
 
   useEffect(() => {
-    if ((params?.sortType && !sortTypes.includes(params.sortType)) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (!isValidRouteSortType(params.sortType) || hasInvalidTimeFilter) {
       navigate('/not-found', { replace: true });
     }
-  }, [params?.sortType, params.timeFilterName, navigate]);
+  }, [params?.sortType, params.timeFilterName, sortType, navigate]);
 
-  const currentTimeFilterName = params.timeFilterName || timeFilterName || 'hot';
+  const currentTimeFilterName = params.timeFilterName || timeFilterName || (sortType === 'top' ? 'all' : '24h');
 
   const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
@@ -58,7 +52,7 @@ const All = () => {
     const options: any = {
       newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
     };
 
@@ -73,9 +67,9 @@ const All = () => {
     }
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   // Reset no results state when search query changes
   useEffect(() => {
@@ -105,45 +99,6 @@ const All = () => {
 
   const { t } = useTranslation();
 
-  const {
-    feed: weeklyFeed,
-    hasMore: hasMoreWeekly,
-    loadMore: loadMoreWeekly,
-  } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 7,
-  });
-  const {
-    feed: monthlyFeed,
-    hasMore: hasMoreMonthly,
-    loadMore: loadMoreMonthly,
-  } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 30,
-  });
-  const {
-    feed: yearlyFeed,
-    hasMore: hasMoreYearly,
-    loadMore: loadMoreYearly,
-  } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 365,
-  });
-
-  // Combined loadMore function for better performance when sort type isn't 'top'
-  const combinedLoadMore = async () => {
-    const loadMorePromises = [loadMore()];
-    if (sortType !== 'top') {
-      if (hasMoreWeekly) loadMorePromises.push(loadMoreWeekly());
-      if (hasMoreMonthly) loadMorePromises.push(loadMoreMonthly());
-      if (hasMoreYearly) loadMorePromises.push(loadMoreYearly());
-    }
-    await Promise.all(loadMorePromises);
-  };
-
   const documentTitle = 'seedit: ' + t('all_communities');
   useEffect(() => {
     document.title = documentTitle;
@@ -170,16 +125,10 @@ const All = () => {
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
-    communityAddressesWithNewerPosts,
-    weeklyFeedLength: weeklyFeed.length,
-    monthlyFeedLength: monthlyFeed.length,
-    yearlyFeedLength: yearlyFeed.length,
-    currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
-    reset,
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
-    onLoadMore: combinedLoadMore,
+    onLoadMore: loadMore,
   };
 
   const handleClearSearch = () => {
@@ -189,6 +138,18 @@ const All = () => {
     });
     reset();
   };
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
+  }
 
   return (
     <div>
@@ -222,6 +183,7 @@ const All = () => {
         ) : (
           <div className={styles.feed}>
             <DevelopmentFeedResetButton onReset={reset} />
+            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 600 }}
               totalCount={feed?.length || 0}
@@ -230,7 +192,7 @@ const All = () => {
               itemContent={(index, post) => <Post key={post?.cid} index={index} post={post} />}
               useWindowScroll={true}
               components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-              endReached={infiniteFeedEnabled ? combinedLoadMore : undefined}
+              endReached={infiniteFeedEnabled ? loadMore : undefined}
               ref={virtuosoRef}
               restoreStateFrom={lastVirtuosoState}
               initialScrollTop={lastVirtuosoState?.scrollTop}

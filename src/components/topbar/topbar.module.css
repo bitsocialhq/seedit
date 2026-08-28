@@ -24,25 +24,6 @@
   cursor: pointer;
 }
 
-.filterDropdown .dropChoices {
-  padding: 0 4px 4px 4px;
-  text-transform: none;
-  font-size: 11px;
-}
-
-.filterDropdownItem label {
-  cursor: pointer;
-  padding-top: 2px;
-}
-
-.filterDropdownItem {
-  padding-top: 4px;
-}
-
-.filterDropdownItem input {
-  margin-right: 5px;
-}
-
 .dropChoices {
   top: 18px;
   margin-top: 0;

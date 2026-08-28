@@ -114,7 +114,6 @@ const SortItems = () => {
   const { communityAddress } = useResolvedCommunityRoute();
   // Derive selection directly from route instead of syncing via an effect
   const selectedSortType = isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? '' : params.sortType || 'hot';
-  const timeFilterName = params.timeFilterName;
 
   return sortTypes.map((sortType, index) => {
     let sortLink = isInCommunityView
@@ -126,9 +125,6 @@ const SortItems = () => {
           : isInDomainView
             ? `/domain/${params.domain}/${sortType}`
             : sortType;
-    if (timeFilterName) {
-      sortLink = sortLink + `/${timeFilterName}`;
-    }
     return (
       <li key={sortType} className={selectedSortType === sortType ? styles.selected : styles.choice}>
         <Link to={sortLink}>{t(sortLabels[index])}</Link>

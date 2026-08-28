@@ -24,11 +24,6 @@ vi.mock('../../hooks/use-default-subscriptions', () => ({
   useFilteredDefaultSubscriptions: () => [],
 }));
 
-vi.mock('../../hooks/use-time-filter', () => ({
-  default: () => ({ timeFilterName: undefined, timeFilterNames: [], sessionKey: 'test' }),
-  setSessionTimeFilterPreference: vi.fn(),
-}));
-
 vi.mock('../../hooks/use-resolved-community-route', () => ({
   default: () => ({ communityAddress: undefined, directoryCode: undefined }),
 }));

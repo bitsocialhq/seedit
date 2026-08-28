@@ -409,5 +409,12 @@
   "reset_feed": "скинути стрічку",
   "enable_mock_content_all_communities_reload": "увімкнути тестовий вміст для всіх спільнот (перезавантажує Seedit)",
   "show_reset_feed_button": "показати кнопку скидання стрічки",
-  "mock_content_uncached_communities_description": "тестовий вміст показується лише для спільнот, яких немає в кеші; спробуйте вигадану адресу .bso"
+  "mock_content_uncached_communities_description": "тестовий вміст показується лише для спільнот, яких немає в кеші; спробуйте вигадану адресу .bso",
+  "past_24_hours": "останні 24 години",
+  "past_hour": "остання година",
+  "past_week": "минулий тиждень",
+  "links_from": "посилання за період",
+  "past_year": "минулий рік",
+  "past_month": "минулий місяць",
+  "all_time": "за весь час"
 }

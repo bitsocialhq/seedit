@@ -1,0 +1,61 @@
+.menuArea {
+  border-bottom: 1px dotted var(--gray-contrast);
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: larger;
+}
+
+.menuArea > span {
+  display: inline;
+  margin-right: 15px;
+}
+
+.dropdown {
+  display: inline;
+  position: relative;
+}
+
+.dropdown summary {
+  display: inline-block;
+  list-style: none;
+  padding-right: 18px;
+  color: var(--gray-contrast);
+  background: transparent url('/assets/buttons/droparrowgray.gif') no-repeat right center;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropChoices {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 9;
+  min-width: max-content;
+  border: 1px solid var(--gray-contrast);
+  background: var(--background);
+  font-size: smaller;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.dropChoices a {
+  display: block;
+  padding: 2px 3px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.dropChoices a:hover,
+.dropChoices a:focus-visible {
+  background: var(--background-primary);
+}
+
+@media (max-width: 640px) {
+  .dropChoices a {
+    padding-block: 5px;
+  }
+}

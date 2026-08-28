@@ -419,5 +419,12 @@
   "reset_feed": "reset feed",
   "enable_mock_content_all_communities_reload": "enable mock content for all communities (reloads Seedit)",
   "show_reset_feed_button": "show the reset feed button",
-  "mock_content_uncached_communities_description": "mock content is shown only for uncached communities; try a made-up .bso address"
+  "mock_content_uncached_communities_description": "mock content is shown only for uncached communities; try a made-up .bso address",
+  "past_24_hours": "past 24 hours",
+  "past_hour": "past hour",
+  "past_week": "past week",
+  "links_from": "links from",
+  "past_year": "past year",
+  "past_month": "past month",
+  "all_time": "all time"
 }

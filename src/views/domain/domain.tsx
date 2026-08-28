@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
-import { useFeed, Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
+import { Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
 import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
-import useTimeFilter, { isValidTimeFilterName } from '../../hooks/use-time-filter';
+import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
+import TopTimeFilter from '../../components/top-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import styles from '../home/home.module.css';
-import { sortTypes } from '../../constants/sort-types';
+import { getCanonicalTopPath, getFeedSortType, getRouteSortType, isLegacyTopRoute, isValidRouteSortType } from '../../constants/sort-types';
+import useProgressiveFeed from '../../hooks/use-progressive-feed';
+import { getPathWithoutTimeFilter } from '../../lib/utils/time-filter-utils';
 
 const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 
@@ -22,10 +25,12 @@ const Domain = () => {
   const params = useParams<{ domain?: string; sortType?: string; timeFilterName?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const searchQuery = searchParams.get('q') || '';
   const domain = params?.domain;
-  const sortType = params?.sortType && sortTypes.includes(params.sortType) ? params.sortType : sortTypes[0];
-  const { timeFilterName, timeFilterSeconds } = useTimeFilter();
+  const sortType = getRouteSortType(params.sortType);
+  const feedSortType = getFeedSortType(sortType);
+  const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
   const { isSearching } = useFeedFiltersStore();
@@ -34,10 +39,11 @@ const Domain = () => {
   const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   useEffect(() => {
-    if ((params?.sortType && !sortTypes.includes(params.sortType)) || (params.timeFilterName && !isValidTimeFilterName(params.timeFilterName))) {
+    const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
+    if (!isValidRouteSortType(params.sortType) || hasInvalidTimeFilter) {
       navigate('/not-found', { replace: true });
     }
-  }, [params?.sortType, params.timeFilterName, navigate]);
+  }, [params?.sortType, params.timeFilterName, sortType, navigate]);
 
   const matchesDomain = useCallback(
     (comment: Comment) => {
@@ -68,23 +74,23 @@ const Domain = () => {
     const filterKey = searchQuery ? `search-filter-${domain}-${searchQuery}` : `domain-filter-${domain}`;
 
     const options: {
-      newerThan: number;
+      newerThan: number | undefined;
       postsPerPage: number;
       sortType: string;
       communities: ReturnType<typeof getCommunityIdentifiers>;
       filter: CommentsFilter;
     } = {
-      newerThan: searchQuery ? 0 : (timeFilterSeconds ?? 0),
+      newerThan: searchQuery ? 0 : timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
-      sortType,
+      sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
       filter: { filter: filterFunc, key: filterKey },
     };
 
     return options;
-  }, [communityAddresses, sortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
 
-  const { feed, hasMore, loadMore, reset, communityKeysWithNewerPosts: communityAddressesWithNewerPosts } = useFeed(feedOptions);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
 
   useEffect(() => {
     if (isSearching) {
@@ -110,28 +116,6 @@ const Domain = () => {
       if (timer) clearTimeout(timer);
     };
   }, [searchQuery, domain, feed?.length, searchAttemptCompleted, showNoResults]);
-
-  // suggest the user to change time filter if there aren't enough posts
-  const { feed: weeklyFeed } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 7,
-    filter: { filter: matchesDomain, key: `domain-filter-weekly-${domain}` },
-  });
-
-  const { feed: monthlyFeed } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 30,
-    filter: { filter: matchesDomain, key: `domain-filter-monthly-${domain}` },
-  });
-
-  const { feed: yearlyFeed } = useFeed({
-    communities: getCommunityIdentifiers(communityAddresses),
-    sortType,
-    newerThan: 60 * 60 * 24 * 365,
-    filter: { filter: matchesDomain, key: `domain-filter-yearly-${domain}` },
-  });
 
   const documentTitle = domain + ' - Seedit';
   useEffect(() => {
@@ -159,12 +143,6 @@ const Domain = () => {
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
-    communityAddressesWithNewerPosts,
-    weeklyFeedLength: weeklyFeed.length,
-    monthlyFeedLength: monthlyFeed.length,
-    yearlyFeedLength: yearlyFeed.length,
-    currentTimeFilterName: searchQuery ? 'all' : currentTimeFilterName,
-    reset,
     searchQuery: searchQuery,
     isSearching,
     showNoResults,
@@ -179,6 +157,18 @@ const Domain = () => {
     });
     reset();
   };
+
+  if (isLegacyTopRoute(params.sortType)) {
+    return <Navigate to={getCanonicalTopPath(location.pathname, location.search)} replace />;
+  }
+
+  if (preferredTopTimeFilterPath) {
+    return <Navigate to={preferredTopTimeFilterPath} replace />;
+  }
+
+  if (sortType !== 'top' && params.timeFilterName) {
+    return <Navigate to={getPathWithoutTimeFilter(location.pathname, params.timeFilterName, location.search)} replace />;
+  }
 
   return (
     <div>
@@ -218,18 +208,21 @@ const Domain = () => {
             </div>
           </div>
         ) : (
-          <Virtuoso
-            increaseViewportBy={{ bottom: 1200, top: 600 }}
-            totalCount={feed?.length || 0}
-            data={feed}
-            itemContent={(index, post) => <Post index={index} post={post} />}
-            useWindowScroll={true}
-            components={{ Footer: () => <FeedFooter {...footerProps} /> }}
-            endReached={infiniteFeedEnabled ? loadMore : undefined}
-            ref={virtuosoRef}
-            restoreStateFrom={lastVirtuosoState}
-            initialScrollTop={lastVirtuosoState?.scrollTop}
-          />
+          <>
+            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
+            <Virtuoso
+              increaseViewportBy={{ bottom: 1200, top: 600 }}
+              totalCount={feed?.length || 0}
+              data={feed}
+              itemContent={(index, post) => <Post index={index} post={post} />}
+              useWindowScroll={true}
+              components={{ Footer: () => <FeedFooter {...footerProps} /> }}
+              endReached={infiniteFeedEnabled ? loadMore : undefined}
+              ref={virtuosoRef}
+              restoreStateFrom={lastVirtuosoState}
+              initialScrollTop={lastVirtuosoState?.scrollTop}
+            />
+          </>
         )}
       </div>
     </div>
