@@ -1,8 +1,12 @@
 import { getSupportedChainProviders } from './chain-provider-utils';
+import { getBrowserPureP2PAccountOptions, shouldUpgradeBrowserPureP2PAccount } from '../p2p-runtime';
 
 interface PkcOptions {
   ipfsGatewayUrls?: string[];
+  kuboRpcClientsOptions?: unknown[];
+  libp2pJsClientsOptions?: unknown[];
   pubsubKuboRpcClientsOptions?: string[];
+  pubsubHttpClientsOptions?: unknown[];
   pkcRpcClientsOptions?: string[];
   httpRoutersOptions?: string[];
   chainProviders?: {
@@ -13,16 +17,66 @@ interface PkcOptions {
   };
   resolveAuthorAddresses?: boolean;
   validatePages?: boolean;
+  [key: string]: unknown;
 }
 
 interface ImportedAccount {
   account?: {
+    author?: { address?: string };
     chainProviders?: PkcOptions['chainProviders'];
+    communities?: Record<string, unknown>;
+    name?: string;
     pkcOptions?: PkcOptions;
-    [key: string]: any;
+    subscriptions?: string[];
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
+
+const IMPORTED_ACCOUNT_ADDRESSES_STORAGE_KEY = 'importedAccountAddresses';
+const IMPORTED_ACCOUNT_ADDRESS_LEGACY_STORAGE_KEY = 'importedAccountAddress';
+
+export const readImportedAccountAddresses = (storage: Pick<Storage, 'getItem'> = localStorage): string[] => {
+  try {
+    const storedAddresses = storage.getItem(IMPORTED_ACCOUNT_ADDRESSES_STORAGE_KEY);
+    const parsedAddresses: unknown = storedAddresses ? JSON.parse(storedAddresses) : null;
+    const normalizedAddresses = Array.isArray(parsedAddresses)
+      ? parsedAddresses.filter((address): address is string => typeof address === 'string' && address.length > 0)
+      : [];
+    const legacyAddress = storage.getItem(IMPORTED_ACCOUNT_ADDRESS_LEGACY_STORAGE_KEY);
+    return [...new Set(legacyAddress ? [...normalizedAddresses, legacyAddress] : normalizedAddresses)];
+  } catch (error) {
+    console.warn('Failed to read imported account addresses from localStorage:', error);
+    return [];
+  }
+};
+
+export const rememberImportedAccountAddress = (address: string, storage: Pick<Storage, 'getItem' | 'setItem'> = localStorage) => {
+  try {
+    const importedAddresses = readImportedAccountAddresses(storage);
+    storage.setItem(IMPORTED_ACCOUNT_ADDRESSES_STORAGE_KEY, JSON.stringify([...new Set([...importedAddresses, address])]));
+    storage.setItem(IMPORTED_ACCOUNT_ADDRESS_LEGACY_STORAGE_KEY, address);
+  } catch (error) {
+    console.warn('Failed to save imported account address to localStorage:', error);
+  }
+};
+
+export const getImportedAccountActiveName = (importedAccountName: string | undefined, accounts: Array<{ name?: string }>): string | undefined => {
+  if (!importedAccountName) {
+    return undefined;
+  }
+
+  const accountNames = new Set(accounts.map((account) => account?.name));
+  if (!accountNames.has(importedAccountName)) {
+    return importedAccountName;
+  }
+
+  let suffix = 2;
+  while (accountNames.has(`${importedAccountName} ${suffix}`)) {
+    suffix += 1;
+  }
+  return `${importedAccountName} ${suffix}`;
+};
 
 // Default configuration for web/mobile platforms
 export const getDefaultWebConfig = (): PkcOptions => ({
@@ -58,16 +112,19 @@ const isLocalhostRpc = (url: string): boolean => {
   return url.includes('localhost') || url.includes('127.0.0.1');
 };
 
-// Check if account has non-localhost RPC configuration
+// Check if account has at least one non-localhost RPC endpoint. A mixed list counts, so importing never
+// discards a reachable remote node just because a localhost entry sits alongside it.
 const hasNonLocalhostRpc = (options: PkcOptions): boolean => {
   const hasRpcOptions = (options.pkcRpcClientsOptions?.length ?? 0) > 0;
-  return hasRpcOptions && !options.pkcRpcClientsOptions?.some(isLocalhostRpc);
+  return hasRpcOptions && (options.pkcRpcClientsOptions?.some((url) => !isLocalhostRpc(url)) ?? false);
 };
 
 // Check if account has pubsub providers configured
 const hasPubsubProviders = (options: PkcOptions): boolean => {
   return (options.pubsubKuboRpcClientsOptions?.length ?? 0) > 0 || (options.ipfsGatewayUrls?.length ?? 0) > 0;
 };
+
+const hasBrowserLibp2pProvider = (options: PkcOptions): boolean => (options.libp2pJsClientsOptions?.length ?? 0) > 0;
 
 // Check if account has localhost RPC configured
 const hasLocalhostRpc = (options: PkcOptions): boolean => {
@@ -120,8 +177,8 @@ export const transformPkcOptionsForImport = (importedAccount: ImportedAccount, i
     if (hasLocalhostRpc(currentOptions)) {
       return getPlatformDefaults();
     }
-    // If no RPC or has pubsub providers, use web defaults
-    return (currentOptions.pubsubKuboRpcClientsOptions?.length ?? 0) > 0 ? currentOptions : getPlatformDefaults();
+    // Preserve both current browser transports; missing transports use web defaults.
+    return hasBrowserLibp2pProvider(currentOptions) || hasPubsubProviders(currentOptions) ? currentOptions : getPlatformDefaults();
   }
 };
 
@@ -129,19 +186,33 @@ export const transformPkcOptionsForImport = (importedAccount: ImportedAccount, i
  * Processes an imported account by transforming its PKC options
  * Returns the modified account as a JSON string ready for import
  */
-export const processImportedAccount = (accountJson: string, isElectron: boolean): string => {
-  let importedAccount;
+export const processImportedAccount = (accountJson: string, isElectron: boolean, targetWindow?: Window): string => {
+  let importedAccount: ImportedAccount;
 
   try {
-    importedAccount = JSON.parse(accountJson);
+    const parsedAccount: unknown = JSON.parse(accountJson);
+    if (!parsedAccount || typeof parsedAccount !== 'object' || Array.isArray(parsedAccount)) {
+      throw new Error('Account backup must be a JSON object.');
+    }
+    importedAccount = parsedAccount as ImportedAccount;
   } catch (error) {
     throw new Error(`Failed to parse account data: ${error instanceof Error ? error.message : 'Unknown parsing error'}`);
   }
 
-  // Ensure account object exists
-  if (!importedAccount.account) {
-    importedAccount.account = {};
+  if (!importedAccount.account || typeof importedAccount.account !== 'object' || Array.isArray(importedAccount.account)) {
+    throw new Error('Account backup is missing account data.');
   }
+  if (importedAccount.account.communities) {
+    const subscriptions = Array.isArray(importedAccount.account.subscriptions) ? importedAccount.account.subscriptions : [];
+    importedAccount.account.subscriptions = [...new Set([...subscriptions, ...Object.keys(importedAccount.account.communities)])];
+  }
+  const importedPkcOptions: unknown = importedAccount.account.pkcOptions;
+  if (importedPkcOptions && (typeof importedPkcOptions !== 'object' || Array.isArray(importedPkcOptions))) {
+    // A hand-edited backup can carry a non-object pkcOptions; drop it so platform defaults apply instead
+    // of assigning properties onto a primitive, which throws in strict mode.
+    importedAccount.account.pkcOptions = undefined;
+  }
+  const explicitImportedHttpRoutersOptions = importedAccount.account.pkcOptions?.httpRoutersOptions;
 
   if (importedAccount.account.chainProviders) {
     importedAccount.account.chainProviders = getSupportedChainProviders(importedAccount.account.chainProviders);
@@ -152,12 +223,26 @@ export const processImportedAccount = (accountJson: string, isElectron: boolean)
   }
 
   // Transform pkcOptions based on platform and existing config
+  let normalizedPkcOptions: PkcOptions;
   if (importedAccount.account.pkcOptions) {
-    importedAccount.account.pkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);
+    normalizedPkcOptions = transformPkcOptionsForImport(importedAccount, isElectron);
   } else {
     // If no pkcOptions exist, set defaults based on platform
-    importedAccount.account.pkcOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
+    normalizedPkcOptions = isElectron ? getDefaultElectronConfig() : getDefaultWebConfig();
   }
+  importedAccount.account.pkcOptions = normalizedPkcOptions;
+
+  const browserWindow = targetWindow ?? (typeof window === 'undefined' ? undefined : window);
+  if (!isElectron && browserWindow && shouldUpgradeBrowserPureP2PAccount(importedAccount.account, browserWindow)) {
+    normalizedPkcOptions = getBrowserPureP2PAccountOptions(importedAccount.account);
+  }
+
+  // Platform defaults and the pure-P2P upgrade both replace the whole options object, so restore the backup's
+  // explicit router list last; otherwise importing on Electron silently drops custom routers.
+  if (Array.isArray(explicitImportedHttpRoutersOptions)) {
+    normalizedPkcOptions.httpRoutersOptions = explicitImportedHttpRoutersOptions;
+  }
+  importedAccount.account.pkcOptions = normalizedPkcOptions;
 
   return JSON.stringify(importedAccount);
 };

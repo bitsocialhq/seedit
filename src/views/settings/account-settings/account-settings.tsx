@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { deleteAccount, exportAccount, importAccount, setActiveAccount, useAccount, useAccounts } from '@bitsocial/bitsocial-react-hooks';
-import { processImportedAccount } from '../../../lib/utils/account-import-utils';
+import { getImportedAccountActiveName, processImportedAccount, rememberImportedAccountAddress } from '../../../lib/utils/account-import-utils';
 import { exportFile } from '../../../lib/utils/file-export-utils';
 import styles from './account-settings.module.css';
 import { getDisplayAddress } from '../../../lib/utils/address-utils';
 import { getEditableAccountData } from '../../../lib/utils/account-data-utils';
+import { isElectronRuntime } from '../../../lib/p2p-browser-config';
 
 const ImportAccountButton = () => {
-  const isElectron = window.electronApi?.isElectron === true;
+  const isElectron = isElectronRuntime(window);
+  const { accounts, state: accountsState } = useAccounts();
 
   const handleImportAccount = async () => {
     const fileInput = document.createElement('input');
@@ -29,27 +31,27 @@ const ImportAccountButton = () => {
         const reader = new FileReader();
         reader.onload = async (e) => {
           try {
-            const fileContent = e.target!.result;
+            const fileContent = e.target?.result ?? reader.result;
             if (typeof fileContent !== 'string') {
               throw new Error('File content is not a string.');
             }
             // Process the imported account with platform-appropriate PKC options.
             const transformedAccountString = processImportedAccount(fileContent, isElectron);
             const newAccount = JSON.parse(transformedAccountString);
+            const importedAccountActiveName = getImportedAccountActiveName(newAccount.account?.name, accounts);
             await importAccount(transformedAccountString);
 
             // Store the imported account's address
             if (newAccount.account?.author?.address) {
-              localStorage.setItem('importedAccountAddress', newAccount.account.author.address);
+              rememberImportedAccountAddress(newAccount.account.author.address);
             }
 
-            // Set the new account as active before reloading
-            if (newAccount.account?.name) {
-              await setActiveAccount(newAccount.account.name);
+            // Hooks suffix duplicate account names during import, so activate the same resolved name.
+            if (importedAccountActiveName) {
+              await setActiveAccount(importedAccountActiveName);
             }
 
-            alert(`Imported ${newAccount.account?.name}`);
-            window.location.reload();
+            alert(`Imported ${importedAccountActiveName}`);
           } catch (error) {
             if (error instanceof Error) {
               alert(error.message);
@@ -78,7 +80,7 @@ const ImportAccountButton = () => {
     <Trans
       i18nKey='import_account_backup'
       components={{
-        1: <button key='importAccountButton' type='button' onClick={handleImportAccount} />,
+        1: <button key='importAccountButton' type='button' disabled={accountsState !== 'succeeded'} onClick={handleImportAccount} />,
       }}
     />
   );
