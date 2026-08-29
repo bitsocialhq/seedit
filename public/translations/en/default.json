@@ -440,5 +440,15 @@
   "search_within_community": "search within {{community}}",
   "search_results_in": "search results in {{community}}",
   "search_excerpt_more": "more",
-  "search_excerpt_less": "less"
+  "search_excerpt_less": "less",
+  "advanced_search_link": "advanced search: by author, community...",
+  "advanced_search_intro": "use the following search parameters to narrow your results:",
+  "advanced_search_community": "find posts in \"community\"",
+  "advanced_search_author": "find posts by \"username\"",
+  "advanced_search_site": "find posts from \"example.com\"",
+  "advanced_search_url": "search for \"text\" in url",
+  "advanced_search_selftext": "search for \"text\" in post contents",
+  "advanced_search_self": "include (or exclude) text posts",
+  "advanced_search_nsfw": "include (or exclude) results marked as NSFW",
+  "advanced_search_example": "e.g."
 }

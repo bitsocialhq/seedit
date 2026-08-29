@@ -5,6 +5,7 @@ import { isHomeAboutView, isPostPageAboutView, isCommunityAboutView, isSearchVie
 import { getSearchNsfw, getSearchPath, getSearchQuery, SEARCH_COMMUNITY_PARAM, SEARCH_NSFW_PARAM } from '../../lib/utils/search-utils';
 import { getShortDisplayAddress } from '../../lib/utils/address-utils';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
+import AdvancedSearchHelp from './advanced-search-help';
 import styles from './search-bar.module.css';
 
 interface SearchBarProps {
@@ -39,6 +40,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const [nsfw, setNsfw] = useState(routeNsfw);
   const [limitToCommunity, setLimitToCommunity] = useState(routeLimitToCommunity);
   const [showExpando, setShowExpando] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // The bar is editable, so the route is only re-applied when it actually changes.
   const routeState = `${routeQuery}|${routeNsfw}|${routeLimitToCommunity}`;
@@ -96,7 +98,9 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
         />
         <input type='submit' value='' />
       </form>
-      <div className={`${styles.infobar} ${showExpando ? styles.slideDown : styles.slideUp} ${!communityToRestrict ? styles.lessHeight : ''}`}>
+      <div
+        className={`${styles.infobar} ${showExpando ? styles.slideDown : styles.slideUp} ${!communityToRestrict ? styles.lessHeight : ''} ${showAdvanced ? styles.advancedOpen : ''}`}
+      >
         {communityToRestrict && (
           <label>
             <input type='checkbox' checked={limitToCommunity} onChange={(event) => setLimitToCommunity(event.target.checked)} />
@@ -107,6 +111,13 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
           <input type='checkbox' checked={nsfw} onChange={(event) => setNsfw(event.target.checked)} />
           {t('include_nsfw_results')}
         </label>
+        {showAdvanced ? (
+          <AdvancedSearchHelp onCollapse={() => setShowAdvanced(false)} />
+        ) : (
+          <button className={styles.advancedSearchLink} onClick={() => setShowAdvanced(true)} type='button'>
+            {t('advanced_search_link')}
+          </button>
+        )}
       </div>
     </div>
   );
