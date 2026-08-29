@@ -420,8 +420,15 @@
   "unsave": "Alisin sa naka-save",
   "feature_not_available_yet": "Hindi pa magagamit ang feature na ito.",
   "results_provided_by": "mga resulta na ibinigay ng",
-  "search_all_posts": "Maghanap sa lahat ng posts",
   "search_results": "mga resulta ng paghahanap",
   "search_provider_unavailable": "ang provider ng paghahanap ay hindi available, subukan ulit mamaya",
-  "retry": "subukan"
+  "retry": "subukan",
+  "include_nsfw_results": "isama ang mga resulta ng NSFW",
+  "limit_my_search_to": "limitahan ang paghahanap ko sa {{community}}",
+  "posts": "mga post",
+  "search": "maghanap",
+  "search_excerpt_less": "mas kaunti",
+  "search_excerpt_more": "higit pa",
+  "search_results_in": "mga resulta ng paghahanap sa {{community}}",
+  "search_within_community": "maghanap sa loob ng {{community}}"
 }

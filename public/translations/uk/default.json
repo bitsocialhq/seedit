@@ -420,8 +420,15 @@
   "unsave": "Скасувати збереження",
   "feature_not_available_yet": "Ця функція ще недоступна.",
   "results_provided_by": "результати надані",
-  "search_all_posts": "Пошук усіх постів",
   "search_results": "результати пошуку",
   "search_provider_unavailable": "пошуковий провайдер недоступний, спробуйте пізніше",
-  "retry": "повторити"
+  "retry": "повторити",
+  "include_nsfw_results": "включити результати NSFW",
+  "limit_my_search_to": "обмежити пошук до {{community}}",
+  "posts": "пости",
+  "search": "пошук",
+  "search_excerpt_less": "менше",
+  "search_excerpt_more": "більше",
+  "search_results_in": "результати пошуку в {{community}}",
+  "search_within_community": "шукати в {{community}}"
 }

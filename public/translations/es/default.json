@@ -420,8 +420,15 @@
   "unsave": "dejar de guardar",
   "feature_not_available_yet": "Esta función aún no está disponible.",
   "results_provided_by": "resultados proporcionados por",
-  "search_all_posts": "Buscar todos los posts",
   "search_results": "resultados de búsqueda",
   "search_provider_unavailable": "el proveedor de búsqueda no está disponible, intenta más tarde",
-  "retry": "reintentar"
+  "retry": "reintentar",
+  "include_nsfw_results": "incluir resultados NSFW",
+  "limit_my_search_to": "limitar mi búsqueda a {{community}}",
+  "posts": "publicaciones",
+  "search": "buscar",
+  "search_excerpt_less": "menos",
+  "search_excerpt_more": "más",
+  "search_results_in": "resultados de búsqueda en {{community}}",
+  "search_within_community": "buscar en {{community}}"
 }

@@ -420,8 +420,15 @@
   "unsave": "إلغاء الحفظ",
   "feature_not_available_yet": "هذه الميزة غير متاحة بعد.",
   "results_provided_by": "نتائج مقدمة من",
-  "search_all_posts": "البحث عن جميع المنشورات",
   "search_results": "نتائج البحث",
   "search_provider_unavailable": "مزود البحث غير متاح، حاول لاحقًا",
-  "retry": "إعادة"
+  "retry": "إعادة",
+  "include_nsfw_results": "تضمين نتائج NSFW",
+  "limit_my_search_to": "حصر بحثي في {{community}}",
+  "posts": "المشاركات",
+  "search": "بحث",
+  "search_excerpt_less": "أقل",
+  "search_excerpt_more": "المزيد",
+  "search_results_in": "نتائج البحث في {{community}}",
+  "search_within_community": "البحث داخل {{community}}"
 }

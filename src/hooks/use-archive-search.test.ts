@@ -41,7 +41,7 @@ describe('archive search store', () => {
     const fetchMock = vi.fn().mockResolvedValue(searchResponse(1, [indexedPost('QmA'), indexedPost('QmB')], 2));
     vi.stubGlobal('fetch', fetchMock);
 
-    const unsubscribe = subscribeToArchiveSearch('first page query', () => undefined);
+    const unsubscribe = subscribeToArchiveSearch('first page query', {}, () => undefined);
     expect(getArchiveSearchSnapshot('first page query').loading).toBe(true);
 
     await flushInFlight();
@@ -63,7 +63,7 @@ describe('archive search store', () => {
       .mockResolvedValueOnce(searchResponse(2, [indexedPost('QmA'), indexedPost('QmC')], 2));
     vi.stubGlobal('fetch', fetchMock);
 
-    const unsubscribe = subscribeToArchiveSearch('paged query', () => undefined);
+    const unsubscribe = subscribeToArchiveSearch('paged query', {}, () => undefined);
     await flushInFlight();
     expect(getArchiveSearchSnapshot('paged query').hasMore).toBe(true);
 
@@ -80,7 +80,7 @@ describe('archive search store', () => {
     const fetchMock = vi.fn().mockResolvedValue(searchResponse(1, [], 50));
     vi.stubGlobal('fetch', fetchMock);
 
-    const unsubscribe = subscribeToArchiveSearch('overshooting total', () => undefined);
+    const unsubscribe = subscribeToArchiveSearch('overshooting total', {}, () => undefined);
     await flushInFlight();
 
     expect(getArchiveSearchSnapshot('overshooting total').hasMore).toBe(false);
@@ -94,7 +94,7 @@ describe('archive search store', () => {
       .mockResolvedValueOnce(searchResponse(1, [indexedPost('QmA')], 1));
     vi.stubGlobal('fetch', fetchMock);
 
-    const unsubscribe = subscribeToArchiveSearch('failing query', () => undefined);
+    const unsubscribe = subscribeToArchiveSearch('failing query', {}, () => undefined);
     await flushInFlight();
     expect(getArchiveSearchSnapshot('failing query').error?.message).toMatch(/503/);
 
@@ -115,18 +115,18 @@ describe('archive search store', () => {
       .mockResolvedValueOnce(searchResponse(1, [indexedPost('QmA')], 1));
     vi.stubGlobal('fetch', fetchMock);
 
-    const unsubscribe = subscribeToArchiveSearch('stale failure query', () => undefined);
+    const unsubscribe = subscribeToArchiveSearch('stale failure query', {}, () => undefined);
     await vi.advanceTimersByTimeAsync(0);
     expect(getArchiveSearchSnapshot('stale failure query').error).not.toBeNull();
     unsubscribe();
 
     // within the reuse window the failure is replayed, not retried
-    const unsubscribeAgain = subscribeToArchiveSearch('stale failure query', () => undefined);
+    const unsubscribeAgain = subscribeToArchiveSearch('stale failure query', {}, () => undefined);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     unsubscribeAgain();
 
     await vi.advanceTimersByTimeAsync(11_000);
-    const unsubscribeLater = subscribeToArchiveSearch('stale failure query', () => undefined);
+    const unsubscribeLater = subscribeToArchiveSearch('stale failure query', {}, () => undefined);
     await vi.advanceTimersByTimeAsync(0);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(getArchiveSearchSnapshot('stale failure query').comments).toHaveLength(1);

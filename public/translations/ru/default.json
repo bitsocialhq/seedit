@@ -420,8 +420,15 @@
   "unsave": "Отменить сохранение",
   "feature_not_available_yet": "Эта функция пока недоступна.",
   "results_provided_by": "результаты предоставлены",
-  "search_all_posts": "Поиск всех постов",
   "search_results": "результаты поиска",
   "search_provider_unavailable": "поисковый провайдер недоступен, попробуйте позже",
-  "retry": "повторить"
+  "retry": "повторить",
+  "include_nsfw_results": "включить результаты NSFW",
+  "limit_my_search_to": "искать только в {{community}}",
+  "posts": "посты",
+  "search": "поиск",
+  "search_excerpt_less": "меньше",
+  "search_excerpt_more": "ещё",
+  "search_results_in": "результаты поиска в {{community}}",
+  "search_within_community": "искать в {{community}}"
 }

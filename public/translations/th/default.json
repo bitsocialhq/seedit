@@ -420,8 +420,15 @@
   "unsave": "ยกเลิกการบันทึก",
   "feature_not_available_yet": "ฟีเจอร์นี้ยังไม่พร้อมใช้งาน",
   "results_provided_by": "ผลลัพธ์มาจาก",
-  "search_all_posts": "ค้นหาโพสต์ทั้งหมด",
   "search_results": "ผลการค้นหา",
   "search_provider_unavailable": "ผู้ให้บริการค้นหาไม่พร้อมใช้งาน ลองใหม่ในภายหลัง",
-  "retry": "ลอง"
+  "retry": "ลอง",
+  "include_nsfw_results": "รวมผลลัพธ์ NSFW",
+  "limit_my_search_to": "จำกัดการค้นหาของฉันไว้ที่ {{community}}",
+  "posts": "โพสต์",
+  "search": "ค้นหา",
+  "search_excerpt_less": "น้อยลง",
+  "search_excerpt_more": "เพิ่มเติม",
+  "search_results_in": "ผลการค้นหาใน {{community}}",
+  "search_within_community": "ค้นหาใน {{community}}"
 }

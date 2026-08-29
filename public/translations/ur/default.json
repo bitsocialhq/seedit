@@ -420,8 +420,15 @@
   "unsave": "محفوظ کرنا منسوخ کریں",
   "feature_not_available_yet": "یہ فیچر ابھی دستیاب نہیں ہے۔",
   "results_provided_by": "نتائج فراہم کردہ",
-  "search_all_posts": "تمام پوسٹ تلاش کریں",
   "search_results": "تلاش کے نتائج",
   "search_provider_unavailable": "تلاش فراہم کنندہ دستیاب نہیں ہے، بعد میں دوبارہ کوشش کریں",
-  "retry": "دوبارہ"
+  "retry": "دوبارہ",
+  "include_nsfw_results": "NSFW نتائج شامل کریں",
+  "limit_my_search_to": "میری تلاش کو {{community}} تک محدود کریں",
+  "posts": "پوسٹس",
+  "search": "تلاش",
+  "search_excerpt_less": "کم",
+  "search_excerpt_more": "مزید",
+  "search_results_in": "{{community}} میں تلاش کے نتائج",
+  "search_within_community": "{{community}} میں تلاش کریں"
 }

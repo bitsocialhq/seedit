@@ -1,137 +1,114 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { StateSnapshot, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import { loadMoreArchiveSearch, retryArchiveSearch, useArchiveSearch } from '../../hooks/use-archive-search';
-import { useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
-import { DEFAULT_SEARCH_QUERY, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
-import FeedPagination from '../../components/feed-footer/feed-pagination';
-import LoadingEllipsis from '../../components/loading-ellipsis';
-import Post from '../../components/post';
-import Reply from '../../components/reply';
+import { useCommunitySearch, useNsfwCommunityAddresses } from '../../hooks/use-community-search';
+import { DEFAULT_SEARCH_QUERY, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
+import { getHighlightTerms } from '../../lib/utils/search-highlight-utils';
+import { getShortDisplayAddress } from '../../lib/utils/address-utils';
+import SearchResultCommunity from '../../components/search-result/search-result-community';
+import SearchResultGroup from '../../components/search-result/search-result-group';
+import SearchResultPost from '../../components/search-result/search-result-post';
 import Sidebar from '../../components/sidebar';
-import styles from '../home/home.module.css';
+import homeStyles from '../home/home.module.css';
+import styles from '../../components/search-result/search-result.module.css';
 
-const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
-
-interface SearchFooterProps {
-  query: string;
-}
-
-const SearchFooter = ({ query }: SearchFooterProps) => {
-  const { t } = useTranslation();
-  const { comments, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(query);
-
-  let footerContent;
-  if (loading || loadingMore) {
-    footerContent = (
-      <div className={styles.stateString}>
-        <LoadingEllipsis string={loadingMore ? t('looking_for_more_posts') : t('searching')} />
-      </div>
-    );
-  } else if (error) {
-    footerContent = (
-      <div className={styles.stateString}>
-        <span className={styles.noMatchesFound}>{t('search_provider_unavailable')}</span>
-        <br />
-        <br />
-        <div className={styles.morePostsSuggestion}>
-          <span className={styles.link} onClick={() => retryArchiveSearch(query)}>
-            {t('retry')}
-          </span>
-        </div>
-      </div>
-    );
-  } else if (total === 0) {
-    footerContent = (
-      <div className={styles.stateString}>
-        <span className={styles.noMatchesFound}>{t('no_matches_found_for', { query })}</span>
-      </div>
-    );
-  } else {
-    footerContent = (
-      <div className={styles.stateString}>
-        <span>{t('found_n_results_for', { count: total, query })}</span>
-        {provider && (
-          <>
-            <br />
-            <span>
-              {t('results_provided_by')}{' '}
-              <a href={provider.siteUrl} target='_blank' rel='noopener noreferrer'>
-                {provider.name}
-              </a>
-            </span>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.footer}>
-      {footerContent}
-      <FeedPagination feedLength={comments.length} hasMore={hasMore} onLoadMore={() => loadMoreArchiveSearch(query)} />
-    </div>
-  );
-};
+/** How many community matches a group shows before "load more" reveals the next batch. */
+const COMMUNITY_PAGE_SIZE = 5;
 
 const Search = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const query = getSearchQuery(searchParams.get('q'));
-  const { comments, hasMore, parents } = useArchiveSearch(query);
-  const infiniteFeedEnabled = useInfiniteFeedEnabled();
+  const options = useMemo(() => getSearchOptions(searchParams), [searchParams]);
+  const { community: restrictedCommunity, nsfw = false } = options;
+
+  const terms = useMemo(() => getHighlightTerms(query), [query]);
+
+  // Community matches are seedit's own; a search already pinned to one community does not repeat it.
+  const { communities } = useCommunitySearch(restrictedCommunity ? '' : query, nsfw);
+  const [visibleCommunities, setVisibleCommunities] = useState(COMMUNITY_PAGE_SIZE);
+  const [communityPageKey, setCommunityPageKey] = useState('');
+  const currentCommunityPageKey = `${query}|${nsfw}|${restrictedCommunity ?? ''}`;
+  // Reset the reveal count when the search changes, without waiting for an effect.
+  if (communityPageKey !== currentCommunityPageKey) {
+    setCommunityPageKey(currentCommunityPageKey);
+    setVisibleCommunities(COMMUNITY_PAGE_SIZE);
+  }
+
+  const { comments, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(query, options);
+  const nsfwCommunityAddresses = useNsfwCommunityAddresses();
+  const posts = useMemo(
+    () => (nsfw ? comments : comments.filter((comment) => !nsfwCommunityAddresses.has((comment.communityAddress ?? '').toLowerCase()))),
+    [comments, nsfw, nsfwCommunityAddresses],
+  );
 
   const documentTitle = `${t('search_results')}: ${query} - Seedit`;
   useEffect(() => {
     document.title = documentTitle;
   }, [documentTitle]);
 
-  const virtuosoRef = useRef<VirtuosoHandle | null>(null);
-
-  useEffect(() => {
-    const setLastVirtuosoState = () => {
-      virtuosoRef.current?.getState((snapshot: StateSnapshot) => {
-        if (snapshot?.ranges?.length) {
-          lastVirtuosoStates[query] = snapshot;
-        }
-      });
-    };
-    window.addEventListener('scroll', setLastVirtuosoState);
-    return () => window.removeEventListener('scroll', setLastVirtuosoState);
-  }, [query]);
-
-  const lastVirtuosoState = lastVirtuosoStates?.[query];
-
   // /search never runs empty: with no query in the URL it searches for seedit itself
   if (!query) {
-    return <Navigate to={getSearchPath(DEFAULT_SEARCH_QUERY)} replace />;
+    return <Navigate to={getSearchPath(DEFAULT_SEARCH_QUERY, options)} replace />;
   }
+
+  const shownCommunities = communities.slice(0, visibleCommunities);
 
   return (
     <div>
-      <div className={styles.content}>
-        <div className={`${styles.sidebar}`}>
+      <div className={homeStyles.content}>
+        <div className={homeStyles.sidebar}>
           <Sidebar />
         </div>
-        <Virtuoso
-          increaseViewportBy={{ bottom: 1200, top: 600 }}
-          totalCount={comments.length}
-          data={comments}
-          itemContent={(index, comment) =>
-            comment?.parentCid ? (
-              <Reply index={index} isSingleReply={true} reply={comment} parentComment={comment.postCid ? parents[comment.postCid] : undefined} />
-            ) : (
-              <Post index={index} post={comment} />
-            )
-          }
-          useWindowScroll={true}
-          components={{ Footer: () => <SearchFooter query={query} /> }}
-          endReached={infiniteFeedEnabled && hasMore ? () => loadMoreArchiveSearch(query) : undefined}
-          ref={virtuosoRef}
-          restoreStateFrom={lastVirtuosoState}
-          initialScrollTop={lastVirtuosoState?.scrollTop}
-        />
+        <div className={styles.listing}>
+          {/* An unlabelled group, the way the results page shows community matches; hidden when nothing matched. */}
+          {!restrictedCommunity && shownCommunities.length > 0 && (
+            <SearchResultGroup
+              hasMore={communities.length > shownCommunities.length}
+              isEmpty={false}
+              onLoadMore={() => setVisibleCommunities((current) => current + COMMUNITY_PAGE_SIZE)}
+            >
+              {shownCommunities.map((community) => (
+                <SearchResultCommunity community={community} key={community.address} nsfw={nsfw} query={query} terms={terms} />
+              ))}
+            </SearchResultGroup>
+          )}
+
+          <SearchResultGroup
+            hasMore={hasMore}
+            heading={
+              restrictedCommunity
+                ? t('search_results_in', { community: `s/${getShortDisplayAddress(restrictedCommunity)}`, interpolation: { escapeValue: false } })
+                : t('posts')
+            }
+            isEmpty={!loading && !error && posts.length === 0}
+            loadingMore={loadingMore}
+            onLoadMore={() => loadMoreArchiveSearch(query, options)}
+          >
+            {loading && <p className={styles.info}>{t('searching')}</p>}
+            {error && (
+              <p className={styles.error}>
+                {t('search_provider_unavailable')}
+                <button className={styles.retry} onClick={() => retryArchiveSearch(query, options)} type='button'>
+                  {t('retry')}
+                </button>
+              </p>
+            )}
+            {posts.map((comment) => (
+              <SearchResultPost comment={comment} key={comment.cid} terms={terms} />
+            ))}
+          </SearchResultGroup>
+
+          {provider && total > 0 && (
+            <p className={styles.info}>
+              {t('results_provided_by')}{' '}
+              <a href={provider.siteUrl} rel='noopener noreferrer' target='_blank'>
+                {provider.name}
+              </a>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

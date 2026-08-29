@@ -420,7 +420,14 @@
   "unsave": "Poista tallennus",
   "feature_not_available_yet": "Tämä ominaisuus ei ole vielä saatavilla.",
   "results_provided_by": "tulokset toimittanut",
-  "search_all_posts": "Hae kaikista viesteistä",
   "search_results": "hakutulokset",
-  "search_provider_unavailable": "hakupalvelu ei ole saatavilla, yritä myöhemmin uudelleen"
+  "search_provider_unavailable": "hakupalvelu ei ole saatavilla, yritä myöhemmin uudelleen",
+  "include_nsfw_results": "sisällytä NSFW-tulokset",
+  "limit_my_search_to": "rajaa hakuni kohteeseen {{community}}",
+  "posts": "viestit",
+  "search": "etsi",
+  "search_excerpt_less": "vähemmän",
+  "search_excerpt_more": "lisää",
+  "search_results_in": "hakutulokset kohteessa {{community}}",
+  "search_within_community": "hae kohteesta {{community}}"
 }

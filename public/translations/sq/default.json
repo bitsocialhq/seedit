@@ -420,8 +420,15 @@
   "unsave": "Hiq nga të ruajturat",
   "feature_not_available_yet": "Kjo veçori nuk është ende e disponueshme.",
   "results_provided_by": "rezultatet e ofruara nga",
-  "search_all_posts": "Kërko të gjitha postimet",
   "search_results": "rezultatet e kërkimit",
   "search_provider_unavailable": "ofrimi i kërkimit nuk është i disponueshëm, provoni më vonë",
-  "retry": "provo"
+  "retry": "provo",
+  "include_nsfw_results": "përfshi rezultatet NSFW",
+  "limit_my_search_to": "kufizo kërkimin tim te {{community}}",
+  "posts": "postime",
+  "search": "kërko",
+  "search_excerpt_less": "më pak",
+  "search_excerpt_more": "më shumë",
+  "search_results_in": "rezultatet e kërkimit në {{community}}",
+  "search_within_community": "kërko brenda {{community}}"
 }

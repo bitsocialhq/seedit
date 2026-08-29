@@ -420,8 +420,15 @@
   "unsave": "Fjern fra lagrede",
   "feature_not_available_yet": "Denne funksjonen er ikke tilgjengelig ennå.",
   "results_provided_by": "resultater levert av",
-  "search_all_posts": "Søk alle innlegg",
   "search_results": "søkeresultater",
   "search_provider_unavailable": "søkeleverandør er ikke tilgjengelig, prøv igjen senere",
-  "retry": "forsøk"
+  "retry": "forsøk",
+  "include_nsfw_results": "inkluder NSFW-resultater",
+  "limit_my_search_to": "begrens søket mitt til {{community}}",
+  "posts": "innlegg",
+  "search": "søk",
+  "search_excerpt_less": "mindre",
+  "search_excerpt_more": "mer",
+  "search_results_in": "søkeresultater i {{community}}",
+  "search_within_community": "søk i {{community}}"
 }

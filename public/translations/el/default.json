@@ -420,8 +420,15 @@
   "unsave": "Αναίρεση αποθήκευσης",
   "feature_not_available_yet": "Αυτή η λειτουργία δεν είναι ακόμη διαθέσιμη.",
   "results_provided_by": "αποτελέσματα που παρέχονται από",
-  "search_all_posts": "Αναζήτηση όλων των δημοσιεύσεων",
   "search_results": "αποτελέσματα αναζήτησης",
   "search_provider_unavailable": "ο πάροχος αναζήτησης είναι μη διαθέσιμος, δοκιμάστε αργότερα",
-  "retry": "ξανακόλωσε"
+  "retry": "ξανακόλωσε",
+  "include_nsfw_results": "συμπερίληψη αποτελεσμάτων NSFW",
+  "limit_my_search_to": "περιορισμός της αναζήτησής μου σε {{community}}",
+  "posts": "αναρτήσεις",
+  "search": "αναζήτηση",
+  "search_excerpt_less": "λιγότερα",
+  "search_excerpt_more": "περισσότερα",
+  "search_results_in": "αποτελέσματα αναζήτησης σε {{community}}",
+  "search_within_community": "αναζήτηση εντός {{community}}"
 }

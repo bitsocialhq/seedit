@@ -420,8 +420,15 @@
   "unsave": "Batal simpan",
   "feature_not_available_yet": "Fitur ini belum tersedia.",
   "results_provided_by": "hasil yang disediakan oleh",
-  "search_all_posts": "Cari semua postingan",
   "search_results": "hasil pencarian",
   "search_provider_unavailable": "penyedia pencarian tidak tersedia, coba lagi nanti",
-  "retry": "coba"
+  "retry": "coba",
+  "include_nsfw_results": "sertakan hasil NSFW",
+  "limit_my_search_to": "batasi pencarian saya ke {{community}}",
+  "posts": "postingan",
+  "search": "cari",
+  "search_excerpt_less": "lebih sedikit",
+  "search_excerpt_more": "lainnya",
+  "search_results_in": "hasil pencarian di {{community}}",
+  "search_within_community": "cari di {{community}}"
 }

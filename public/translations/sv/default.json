@@ -420,8 +420,15 @@
   "unsave": "Ta bort från sparade",
   "feature_not_available_yet": "Den här funktionen är inte tillgänglig än.",
   "results_provided_by": "resultat tillhandahållet av",
-  "search_all_posts": "Sök alla inlägg",
   "search_results": "sökresultat",
   "search_provider_unavailable": "sökprovidern är inte tillgänglig, försök igen senare",
-  "retry": "försök"
+  "retry": "försök",
+  "include_nsfw_results": "inkludera NSFW-resultat",
+  "limit_my_search_to": "begränsa min sökning till {{community}}",
+  "posts": "inlägg",
+  "search": "sök",
+  "search_excerpt_less": "mindre",
+  "search_excerpt_more": "mer",
+  "search_results_in": "sökresultat i {{community}}",
+  "search_within_community": "sök i {{community}}"
 }

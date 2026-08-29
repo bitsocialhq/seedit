@@ -420,8 +420,15 @@
   "unsave": "Fjern fra gemte",
   "feature_not_available_yet": "Denne funktion er ikke tilgængelig endnu.",
   "results_provided_by": "resultater leveret af",
-  "search_all_posts": "Søg alle indlæg",
   "search_results": "søgeresultater",
   "search_provider_unavailable": "søgeudbyder er ikke tilgængelig, prøv igen senere",
-  "retry": "forsøg"
+  "retry": "forsøg",
+  "include_nsfw_results": "inkluder NSFW-resultater",
+  "limit_my_search_to": "begræns min søgning til {{community}}",
+  "posts": "indlæg",
+  "search": "søg",
+  "search_excerpt_less": "mindre",
+  "search_excerpt_more": "mere",
+  "search_results_in": "søgeresultater i {{community}}",
+  "search_within_community": "søg i {{community}}"
 }

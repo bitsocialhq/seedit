@@ -420,8 +420,15 @@
   "unsave": "Mentés visszavonása",
   "feature_not_available_yet": "Ez a funkció még nem érhető el.",
   "results_provided_by": "eredmények biztosította:",
-  "search_all_posts": "Összes bejegyzés keresése",
   "search_results": "keresési eredmények",
   "search_provider_unavailable": "a keresési szolgáltató nem érhető el, próbálja meg később",
-  "retry": "ismét"
+  "retry": "ismét",
+  "include_nsfw_results": "NSFW találatok megjelenítése",
+  "limit_my_search_to": "keresés korlátozása erre: {{community}}",
+  "posts": "hozzászólások",
+  "search": "keresés",
+  "search_excerpt_less": "kevesebb",
+  "search_excerpt_more": "több",
+  "search_results_in": "találatok itt: {{community}}",
+  "search_within_community": "keresés itt: {{community}}"
 }

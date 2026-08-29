@@ -420,8 +420,15 @@
   "unsave": "সংরক্ষণ বাতিল",
   "feature_not_available_yet": "এই ফিচারটি এখনও উপলব্ধ নয়।",
   "results_provided_by": "দ্বারা প্রদত্ত ফলাফল",
-  "search_all_posts": "সব পোস্ট সার্চ করুন",
   "search_results": "অনুসন্ধান ফলাফল",
   "search_provider_unavailable": "অনুসন্ধান প্রদানকারী অপ্রাপ্য, পরে চেষ্টা করুন",
-  "retry": "পুনরায়"
+  "retry": "পুনরায়",
+  "include_nsfw_results": "NSFW ফলাফল অন্তর্ভুক্ত করুন",
+  "limit_my_search_to": "আমার অনুসন্ধান {{community}} এ সীমাবদ্ধ করুন",
+  "posts": "পোস্ট",
+  "search": "অনুসন্ধান",
+  "search_excerpt_less": "কম",
+  "search_excerpt_more": "আরও",
+  "search_results_in": "{{community}} এ অনুসন্ধানের ফলাফল",
+  "search_within_community": "{{community}} এর মধ্যে অনুসন্ধান করুন"
 }

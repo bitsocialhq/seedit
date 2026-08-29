@@ -420,8 +420,15 @@
   "unsave": "لغو ذخیره",
   "feature_not_available_yet": "این قابلیت هنوز در دسترس نیست.",
   "results_provided_by": "نتایج ارائه شده توسط",
-  "search_all_posts": "جستجو در تمام پست‌ها",
   "search_results": "نتایج جستجو",
   "search_provider_unavailable": "ارائه‌دهنده جستجو در دسترس نیست، بعداً دوباره تلاش کنید",
-  "retry": "دوباره"
+  "retry": "دوباره",
+  "include_nsfw_results": "شامل نتایج NSFW",
+  "limit_my_search_to": "جستجوی من به {{community}} محدود شود",
+  "posts": "پست‌ها",
+  "search": "جستجو",
+  "search_excerpt_less": "کمتر",
+  "search_excerpt_more": "بیشتر",
+  "search_results_in": "نتایج جستجو در {{community}}",
+  "search_within_community": "جستجو در {{community}}"
 }

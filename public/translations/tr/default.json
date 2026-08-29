@@ -420,8 +420,15 @@
   "unsave": "Kaydetmeyi geri al",
   "feature_not_available_yet": "Bu özellik henüz kullanılamıyor.",
   "results_provided_by": "sonuçlar sağlayan",
-  "search_all_posts": "Tüm gönderiyi ara",
   "search_results": "arama sonuçları",
   "search_provider_unavailable": "arama sağlayıcısı kullanılamıyor, daha sonra tekrar deneyin",
-  "retry": "tekrar"
+  "retry": "tekrar",
+  "include_nsfw_results": "NSFW sonuçlarını dahil et",
+  "limit_my_search_to": "aramamı {{community}} ile sınırla",
+  "posts": "gönderiler",
+  "search": "ara",
+  "search_excerpt_less": "daha az",
+  "search_excerpt_more": "daha fazla",
+  "search_results_in": "{{community}} içindeki arama sonuçları",
+  "search_within_community": "{{community}} içinde ara"
 }

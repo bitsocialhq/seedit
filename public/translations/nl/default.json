@@ -420,8 +420,15 @@
   "unsave": "Opslaan ongedaan maken",
   "feature_not_available_yet": "Deze functie is nog niet beschikbaar.",
   "results_provided_by": "resultaten verzorgd door",
-  "search_all_posts": "Alle berichten zoeken",
   "search_results": "zoekresultaten",
   "search_provider_unavailable": "zoekprovider is niet beschikbaar, probeer het later opnieuw",
-  "retry": "opnieuw"
+  "retry": "opnieuw",
+  "include_nsfw_results": "NSFW-resultaten opnemen",
+  "limit_my_search_to": "mijn zoekopdracht beperken tot {{community}}",
+  "posts": "berichten",
+  "search": "zoeken",
+  "search_excerpt_less": "minder",
+  "search_excerpt_more": "meer",
+  "search_results_in": "zoekresultaten in {{community}}",
+  "search_within_community": "zoeken in {{community}}"
 }

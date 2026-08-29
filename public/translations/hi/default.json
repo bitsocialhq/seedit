@@ -420,8 +420,15 @@
   "unsave": "सहेजना रद्द करें",
   "feature_not_available_yet": "यह सुविधा अभी उपलब्ध नहीं है।",
   "results_provided_by": "परिणाम प्रदान किए गए",
-  "search_all_posts": "सभी पोस्ट खोजें",
   "search_results": "खोज परिणाम",
   "search_provider_unavailable": "खोज प्रदाता अनुपलब्ध है, बाद में पुनः प्रयास करें",
-  "retry": "फिर से"
+  "retry": "फिर से",
+  "include_nsfw_results": "NSFW परिणाम शामिल करें",
+  "limit_my_search_to": "मेरी खोज को {{community}} तक सीमित करें",
+  "posts": "पोस्ट",
+  "search": "खोजें",
+  "search_excerpt_less": "कम",
+  "search_excerpt_more": "और",
+  "search_results_in": "{{community}} में खोज परिणाम",
+  "search_within_community": "{{community}} में खोजें"
 }

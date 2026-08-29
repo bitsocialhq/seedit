@@ -420,8 +420,15 @@
   "unsave": "Speichern rückgängig machen",
   "feature_not_available_yet": "Diese Funktion ist noch nicht verfügbar.",
   "results_provided_by": "Ergebnisse bereitgestellt von",
-  "search_all_posts": "Alle Beiträge durchsuchen",
   "search_results": "Suchergebnisse",
   "search_provider_unavailable": "der Suchdienstleister ist nicht verfügbar, versuchen Sie es später erneut",
-  "retry": "wiederholen"
+  "retry": "wiederholen",
+  "include_nsfw_results": "NSFW-Ergebnisse einschließen",
+  "limit_my_search_to": "meine Suche auf {{community}} beschränken",
+  "posts": "Beiträge",
+  "search": "Suche",
+  "search_excerpt_less": "weniger",
+  "search_excerpt_more": "mehr",
+  "search_results_in": "Suchergebnisse in {{community}}",
+  "search_within_community": "in {{community}} suchen"
 }

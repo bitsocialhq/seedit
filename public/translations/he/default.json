@@ -420,8 +420,15 @@
   "unsave": "בטל שמירה",
   "feature_not_available_yet": "התכונה הזו עדיין לא זמינה.",
   "results_provided_by": "תוצאות שסופקו על ידי",
-  "search_all_posts": "חיפוש בכל הפוסטים",
   "search_results": "תוצאות חיפוש",
   "search_provider_unavailable": "ספק החיפוש אינו זמין, נסה שוב מאוחר יותר",
-  "retry": "נסה"
+  "retry": "נסה",
+  "include_nsfw_results": "כלול תוצאות NSFW",
+  "limit_my_search_to": "הגבל את החיפוש שלי ל-{{community}}",
+  "posts": "פוסטים",
+  "search": "חיפוש",
+  "search_excerpt_less": "פחות",
+  "search_excerpt_more": "עוד",
+  "search_results_in": "תוצאות חיפוש ב-{{community}}",
+  "search_within_community": "חפש בתוך {{community}}"
 }

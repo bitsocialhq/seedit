@@ -420,8 +420,15 @@
   "unsave": "保存を解除",
   "feature_not_available_yet": "この機能はまだ利用できません。",
   "results_provided_by": "検索結果提供元:",
-  "search_all_posts": "すべての投稿を検索",
   "search_results": "検索結果",
   "search_provider_unavailable": "検索プロバイダーが利用できません。後でもう一度お試しください",
-  "retry": "再試行"
+  "retry": "再試行",
+  "include_nsfw_results": "NSFWの結果を含める",
+  "limit_my_search_to": "{{community}} 内だけを検索",
+  "posts": "投稿",
+  "search": "検索",
+  "search_excerpt_less": "折りたたむ",
+  "search_excerpt_more": "もっと見る",
+  "search_results_in": "{{community}} の検索結果",
+  "search_within_community": "{{community}} 内を検索"
 }

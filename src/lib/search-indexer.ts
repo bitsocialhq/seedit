@@ -95,11 +95,12 @@ const getApiUrl = (provider: SearchProvider, path: string): URL => {
   return new URL(path, apiBase);
 };
 
-const getSearchUrl = (provider: SearchProvider, query: string, page: number): string => {
+const getSearchUrl = (provider: SearchProvider, query: string, page: number, community?: string): string => {
   const url = getApiUrl(provider, 'api/search');
   url.searchParams.set('q', query);
   url.searchParams.set('page', String(page));
   url.searchParams.set('limit', String(SEARCH_PAGE_SIZE));
+  if (community) url.searchParams.set('community', community);
   return url.toString();
 };
 
@@ -141,25 +142,75 @@ const fetchThreadPosts = async (provider: SearchProvider, posts: IndexedPost[]):
   return Object.fromEntries(threadPosts.filter((post) => post !== null).map((post) => [post.cid, post]));
 };
 
-const fetchSearchPage = async (provider: SearchProvider, query: string, page: number): Promise<IndexerSearchPage> => {
-  const result: unknown = await fetchProviderJson(getSearchUrl(provider, query, page));
+const fetchSearchPage = async (provider: SearchProvider, query: string, page: number, community?: string): Promise<IndexerSearchPage> => {
+  const result: unknown = await fetchProviderJson(getSearchUrl(provider, query, page, community));
   if (!isSearchResponse(result)) throw new Error('Search provider returned an invalid response');
   return { ...result, provider, threadPosts: await fetchThreadPosts(provider, result.posts) };
 };
 
 /** Ask each indexer in rank order, so one that is down or broken hands over to the next. */
-export const fetchSearchPageFromChain = async (providers: SearchProvider[], query: string, page: number): Promise<IndexerSearchPage> => {
+export const fetchSearchPageFromChain = async (providers: SearchProvider[], query: string, page: number, community?: string): Promise<IndexerSearchPage> => {
   let lastError: unknown = new Error('No search provider is available');
 
   for (const provider of providers) {
     try {
-      return await fetchSearchPage(provider, query, page);
+      return await fetchSearchPage(provider, query, page, community);
     } catch (error) {
       lastError = error;
     }
   }
 
   throw lastError;
+};
+
+/**
+ * A community as the indexer knows it. `post_count` is what the indexer has
+ * archived, not the community's real size, so it only ever ranks results.
+ */
+export interface IndexedCommunity {
+  address: string;
+  description: string | null;
+  last_indexed_at: number | null;
+  post_count: number;
+  title: string | null;
+}
+
+const isIndexedCommunity = (value: unknown): value is IndexedCommunity => {
+  if (!value || typeof value !== 'object') return false;
+  const community = value as Partial<IndexedCommunity>;
+  return (
+    typeof community.address === 'string' &&
+    community.address.length > 0 &&
+    isNullableString(community.title) &&
+    isNullableString(community.description) &&
+    isNonNegativeInteger(community.post_count) &&
+    (community.last_indexed_at === null || typeof community.last_indexed_at === 'number')
+  );
+};
+
+const fetchCommunities = async (provider: SearchProvider): Promise<IndexedCommunity[]> => {
+  const result: unknown = await fetchProviderJson(getApiUrl(provider, 'api/communities').toString());
+  const communities = (result as { communities?: unknown } | null)?.communities;
+  if (!Array.isArray(communities)) throw new Error('Search provider returned an invalid community list');
+  // The list is served whole; drop rows this client cannot read rather than the page.
+  return communities.filter(isIndexedCommunity);
+};
+
+/**
+ * The indexer's own community list, used alongside seedit's lists so a
+ * community the client has never heard of can still be found. Unlike a search,
+ * an unavailable provider is not an error: seedit's own lists still answer.
+ */
+export const fetchCommunitiesFromChain = async (providers: SearchProvider[]): Promise<IndexedCommunity[]> => {
+  for (const provider of providers) {
+    try {
+      return await fetchCommunities(provider);
+    } catch {
+      // Try the next provider; an empty list is a valid, degraded answer.
+    }
+  }
+
+  return [];
 };
 
 type RawCommentPayload = {

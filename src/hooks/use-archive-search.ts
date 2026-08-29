@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import type { Comment } from '@bitsocial/bitsocial-react-hooks';
 import { fetchSearchPageFromChain, getIndexedPostComment } from '../lib/search-indexer';
 import { getSearchProviderChain, type SearchProvider } from '../lib/search-providers';
+import { getSearchKey, type SearchOptions } from '../lib/utils/search-utils';
 
 export interface ArchiveSearchState {
   comments: Comment[];
@@ -28,6 +29,7 @@ const MAX_CACHED_QUERIES = 30;
 const FAILED_SEARCH_REUSE_MS = 10_000;
 
 interface ArchiveSearchStore {
+  options: SearchOptions;
   query: string;
   snapshot: ArchiveSearchState;
   listeners: Set<() => void>;
@@ -54,7 +56,7 @@ const fetchPage = (store: ArchiveSearchStore, page: number): void => {
   const isFirstPage = store.loadedPages === 0;
   setSnapshot(store, { ...store.snapshot, loading: isFirstPage, loadingMore: !isFirstPage, error: null });
 
-  const request = fetchSearchPageFromChain(getSearchProviderChain(), store.query, page)
+  const request = fetchSearchPageFromChain(getSearchProviderChain(), store.query, page, store.options.community)
     .then((result) => {
       // Offset pagination can repeat a result when the index moves between pages.
       const seenCids = new Set(store.snapshot.comments.map((comment) => comment.cid));
@@ -109,8 +111,9 @@ const evictIdleStores = (): void => {
   }
 };
 
-const createStore = (query: string): ArchiveSearchStore => {
+const createStore = (query: string, options: SearchOptions): ArchiveSearchStore => {
   const store = {
+    options,
     query,
     snapshot: { ...EMPTY_SNAPSHOT, loading: true },
     listeners: new Set<() => void>(),
@@ -131,35 +134,37 @@ const createStore = (query: string): ArchiveSearchStore => {
   return store;
 };
 
-const getStore = (query: string): ArchiveSearchStore => {
-  const existing = stores.get(query);
+const getStore = (query: string, options: SearchOptions): ArchiveSearchStore => {
+  const key = getSearchKey(query, options);
+  const existing = stores.get(key);
   if (existing) return existing;
 
   evictIdleStores();
-  const store = createStore(query);
-  stores.set(query, store);
+  const store = createStore(query, options);
+  stores.set(key, store);
   return store;
 };
 
-export const getArchiveSearchSnapshot = (query: string): ArchiveSearchState => (query ? getStore(query).getSnapshot() : EMPTY_SNAPSHOT);
+export const getArchiveSearchSnapshot = (query: string, options: SearchOptions = {}): ArchiveSearchState =>
+  query ? getStore(query, options).getSnapshot() : EMPTY_SNAPSHOT;
 
-export const subscribeToArchiveSearch = (query: string, listener: () => void): (() => void) => getStore(query).subscribe(listener);
+export const subscribeToArchiveSearch = (query: string, options: SearchOptions, listener: () => void): (() => void) => getStore(query, options).subscribe(listener);
 
-export const loadMoreArchiveSearch = (query: string): void => {
-  const store = stores.get(query);
+export const loadMoreArchiveSearch = (query: string, options: SearchOptions = {}): void => {
+  const store = stores.get(getSearchKey(query, options));
   if (!store || store.inFlight || !store.snapshot.hasMore) return;
   fetchPage(store, store.loadedPages + 1);
 };
 
-export const retryArchiveSearch = (query: string): void => {
-  const store = stores.get(query);
+export const retryArchiveSearch = (query: string, options: SearchOptions = {}): void => {
+  const store = stores.get(getSearchKey(query, options));
   if (!store || store.inFlight) return;
   store.failedAt = 0;
   fetchPage(store, store.loadedPages + 1);
 };
 
 /** Read an archive search feed for a query. This hook never reads or writes account state. */
-export const useArchiveSearch = (query: string): ArchiveSearchState => {
-  const store = query ? getStore(query) : null;
+export const useArchiveSearch = (query: string, options: SearchOptions = {}): ArchiveSearchState => {
+  const store = query ? getStore(query, options) : null;
   return useSyncExternalStore(store?.subscribe ?? emptySubscribe, store?.getSnapshot ?? getEmptySnapshot, store?.getSnapshot ?? getEmptySnapshot);
 };

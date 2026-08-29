@@ -420,8 +420,15 @@
   "unsave": "Anulează salvarea",
   "feature_not_available_yet": "Această funcție nu este disponibilă încă.",
   "results_provided_by": "rezultate furnizate de",
-  "search_all_posts": "Căutați toți posturile",
   "search_results": "rezultate de căutare",
   "search_provider_unavailable": "furnizorul de căutare nu este disponibil, încercați din nou mai târziu",
-  "retry": "reîncerca"
+  "retry": "reîncerca",
+  "include_nsfw_results": "include rezultate NSFW",
+  "limit_my_search_to": "limitează căutarea la {{community}}",
+  "posts": "postări",
+  "search": "căutare",
+  "search_excerpt_less": "mai puțin",
+  "search_excerpt_more": "mai mult",
+  "search_results_in": "rezultatele căutării în {{community}}",
+  "search_within_community": "caută în {{community}}"
 }
