@@ -154,9 +154,8 @@ const useTimeFilter = () => {
   const storedTimeFilterName = getSessionTimeFilterPreference(sessionKey);
   const storedTopTimeFilterName = storedTimeFilterName && topTimeFilterNames.includes(storedTimeFilterName) ? storedTimeFilterName : undefined;
   const effectiveTimeFilterName = isTopSort ? params.timeFilterName || storedTopTimeFilterName || 'all' : lastVisitTimeFilterName;
-  const searchQuery = new URLSearchParams(location.search).get('q') || '';
   const preferredTopTimeFilterPath =
-    isTopSort && !params.timeFilterName && !searchQuery && storedTopTimeFilterName
+    isTopSort && !params.timeFilterName && storedTopTimeFilterName
       ? getTopTimeFilterPath(location.pathname, params.timeFilterName, storedTopTimeFilterName, location.search)
       : null;
 

@@ -63,15 +63,12 @@ describe('useTimeFilter', () => {
     expect(result?.timeFilterName).toBe('1w');
   });
 
-  it('does not replace explicit top routes or search routes', async () => {
+  it('does not replace an explicit top route', async () => {
     sessionStorage.setItem('sessionTimeFilter-home', '1w');
 
     await renderRoute('/:sortType/:timeFilterName?', '/top/24h');
     expect(result?.preferredTopTimeFilterPath).toBeNull();
     expect(result?.timeFilterName).toBe('24h');
-
-    await renderRoute('/:sortType/:timeFilterName?', '/top?q=test');
-    expect(result?.preferredTopTimeFilterPath).toBeNull();
   });
 
   it('falls back to all time when session storage cannot be read', async () => {
