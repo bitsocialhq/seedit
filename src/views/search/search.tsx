@@ -3,9 +3,9 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { loadMoreArchiveSearch, retryArchiveSearch, useArchiveSearch } from '../../hooks/use-archive-search';
 import { useCommunitySearch, useNsfwCommunityAddresses } from '../../hooks/use-community-search';
-import { DEFAULT_SEARCH_QUERY, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
+import { DEFAULT_SEARCH_QUERY, getAppliedSearchQuery, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
 import { getHighlightTerms } from '../../lib/utils/search-highlight-utils';
-import { getShortDisplayAddress } from '../../lib/utils/address-utils';
+import useCommunityDisplayName from '../../hooks/use-community-display-name';
 import SearchResultCommunity from '../../components/search-result/search-result-community';
 import SearchResultGroup from '../../components/search-result/search-result-group';
 import SearchResultPost from '../../components/search-result/search-result-post';
@@ -19,38 +19,47 @@ const COMMUNITY_PAGE_SIZE = 5;
 const Search = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const query = getSearchQuery(searchParams.get('q'));
-  const options = useMemo(() => getSearchOptions(searchParams), [searchParams]);
-  const { community: restrictedCommunity, nsfw = false } = options;
+  // The box's raw text stays in `q`, the way old.reddit keeps it, so a search
+  // with advanced-search prefixes is shareable and survives a reload.
+  const rawQuery = getSearchQuery(searchParams.get('q'));
+  const { filters, text: searchText } = useMemo(() => getAppliedSearchQuery(rawQuery), [rawQuery]);
+  const checkboxOptions = useMemo(() => getSearchOptions(searchParams), [searchParams]);
 
-  const terms = useMemo(() => getHighlightTerms(query), [query]);
+  // A `community:`/`nsfw:` prefix is typed deliberately, so it beats the checkbox.
+  const restrictedCommunity = filters.community ?? checkboxOptions.community;
+  const nsfw = filters.nsfw ?? checkboxOptions.nsfw ?? false;
+  const options = useMemo(() => ({ community: restrictedCommunity, nsfw }), [restrictedCommunity, nsfw]);
+
+  // Only the words are searched for and highlighted; the prefixes are not terms.
+  const terms = useMemo(() => getHighlightTerms(searchText), [searchText]);
+  const getCommunityDisplayName = useCommunityDisplayName();
 
   // Community matches are seedit's own; a search already pinned to one community does not repeat it.
-  const { communities } = useCommunitySearch(restrictedCommunity ? '' : query, nsfw);
+  const { communities } = useCommunitySearch(restrictedCommunity ? '' : searchText, nsfw);
   const [visibleCommunities, setVisibleCommunities] = useState(COMMUNITY_PAGE_SIZE);
   const [communityPageKey, setCommunityPageKey] = useState('');
-  const currentCommunityPageKey = `${query}|${nsfw}|${restrictedCommunity ?? ''}`;
+  const currentCommunityPageKey = `${searchText}|${nsfw}|${restrictedCommunity ?? ''}`;
   // Reset the reveal count when the search changes, without waiting for an effect.
   if (communityPageKey !== currentCommunityPageKey) {
     setCommunityPageKey(currentCommunityPageKey);
     setVisibleCommunities(COMMUNITY_PAGE_SIZE);
   }
 
-  const { comments, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(query, options);
+  const { comments, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(searchText, options);
   const nsfwCommunityAddresses = useNsfwCommunityAddresses();
   const posts = useMemo(
     () => (nsfw ? comments : comments.filter((comment) => !nsfwCommunityAddresses.has((comment.communityAddress ?? '').toLowerCase()))),
     [comments, nsfw, nsfwCommunityAddresses],
   );
 
-  const documentTitle = `${t('search_results')}: ${query} - Seedit`;
+  const documentTitle = `${t('search_results')}: ${rawQuery} - Seedit`;
   useEffect(() => {
     document.title = documentTitle;
   }, [documentTitle]);
 
   // /search never runs empty: with no query in the URL it searches for seedit itself
-  if (!query) {
-    return <Navigate to={getSearchPath(DEFAULT_SEARCH_QUERY, options)} replace />;
+  if (!rawQuery) {
+    return <Navigate to={getSearchPath(DEFAULT_SEARCH_QUERY, checkboxOptions)} replace />;
   }
 
   const shownCommunities = communities.slice(0, visibleCommunities);
@@ -70,7 +79,7 @@ const Search = () => {
               onLoadMore={() => setVisibleCommunities((current) => current + COMMUNITY_PAGE_SIZE)}
             >
               {shownCommunities.map((community) => (
-                <SearchResultCommunity community={community} key={community.address} nsfw={nsfw} query={query} terms={terms} />
+                <SearchResultCommunity community={community} key={community.address} nsfw={nsfw} query={searchText} terms={terms} />
               ))}
             </SearchResultGroup>
           )}
@@ -79,18 +88,18 @@ const Search = () => {
             hasMore={hasMore}
             heading={
               restrictedCommunity
-                ? t('search_results_in', { community: `s/${getShortDisplayAddress(restrictedCommunity)}`, interpolation: { escapeValue: false } })
+                ? t('search_results_in', { community: getCommunityDisplayName(restrictedCommunity), interpolation: { escapeValue: false } })
                 : t('posts')
             }
             isEmpty={!loading && !error && posts.length === 0}
             loadingMore={loadingMore}
-            onLoadMore={() => loadMoreArchiveSearch(query, options)}
+            onLoadMore={() => loadMoreArchiveSearch(searchText, options)}
           >
             {loading && <p className={styles.info}>{t('searching')}</p>}
             {error && (
               <p className={styles.error}>
                 {t('search_provider_unavailable')}
-                <button className={styles.retry} onClick={() => retryArchiveSearch(query, options)} type='button'>
+                <button className={styles.retry} onClick={() => retryArchiveSearch(searchText, options)} type='button'>
                   {t('retry')}
                 </button>
               </p>

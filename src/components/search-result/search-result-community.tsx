@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
+import { getFormattedTimeDuration } from '../../lib/utils/time-utils';
 import type { CommunitySearchResult } from '../../lib/utils/community-search-utils';
 import { getCommunityPath } from '../../lib/utils/community-route-utils';
 import { getSearchPath } from '../../lib/utils/search-utils';
@@ -19,6 +22,10 @@ interface SearchResultCommunityProps {
 
 const SearchResultCommunity = ({ community, nsfw, query, terms }: SearchResultCommunityProps) => {
   const { t } = useTranslation();
+  // Only the live community object carries createdAt, and only a cached read is
+  // affordable here: a results page must not resolve a community per row.
+  const liveCommunity = useCommunity({ community: getCommunityIdentifier(community.address), onlyIfCached: true });
+  const createdAt = liveCommunity?.createdAt;
   const communityPath = getCommunityPath(community.address);
   const displayAddress = getShortDisplayAddress(community.address);
   const communityLabel = `s/${displayAddress}`;
@@ -38,7 +45,7 @@ const SearchResultCommunity = ({ community, nsfw, query, terms }: SearchResultCo
         <Link to={communityPath}>
           <HighlightedText terms={terms} text={communityLabel} />
         </Link>
-        {community.tags && community.tags.length > 0 && <span> {community.tags.join(', ')}</span>}
+        {createdAt ? <span> {t('community_for', { date: getFormattedTimeDuration(createdAt) })}</span> : null}
       </div>
       {community.description && (
         <div className={styles.body}>

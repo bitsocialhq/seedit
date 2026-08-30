@@ -163,41 +163,39 @@
 
 .advancedSearch {
   color: var(--text);
-  padding-bottom: 5px;
+  margin: 5px 0;
+  padding: 5px 0 0;
 }
 
 .advancedSearchIntro {
   display: flex;
   gap: 5px;
   justify-content: space-between;
+  margin: 5px 0;
 }
 
 .advancedSearchParams {
-  margin: 5px 0 0;
+  margin: 5px 0;
 }
 
-.advancedSearchParam + .advancedSearchParam {
-  margin-top: 5px;
-}
-
+/* dt/dd sit at old.reddit's 10px/20px indents, with no gap between pairs. */
 .advancedSearchParam dt {
   font-weight: bold;
+  margin-left: 10px;
   word-break: break-word;
 }
 
 .advancedSearchParam dd {
-  color: var(--text-info);
-  margin: 0 0 0 10px;
+  margin-left: 20px;
   word-break: break-word;
 }
 
 .advancedSearchExample {
-  margin: 5px 0 0;
+  margin: 5px 0;
 }
 
 .advancedSearchExample code {
-  background-color: var(--code-background);
-  border: 1px solid var(--code-border);
-  padding: 0 2px;
+  font-family: monospace, monospace;
   word-break: break-word;
 }
+

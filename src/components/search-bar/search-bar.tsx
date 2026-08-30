@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { isHomeAboutView, isPostPageAboutView, isCommunityAboutView, isSearchView } from '../../lib/utils/view-utils';
-import { getSearchNsfw, getSearchPath, getSearchQuery, SEARCH_COMMUNITY_PARAM, SEARCH_NSFW_PARAM } from '../../lib/utils/search-utils';
-import { getShortDisplayAddress } from '../../lib/utils/address-utils';
+import { getAppliedSearchQuery, getSearchNsfw, getSearchPath, getSearchQuery, SEARCH_COMMUNITY_PARAM, SEARCH_NSFW_PARAM } from '../../lib/utils/search-utils';
+import useCommunityDisplayName from '../../hooks/use-community-display-name';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import AdvancedSearchHelp from './advanced-search-help';
 import styles from './search-bar.module.css';
@@ -19,6 +19,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const navigate = useNavigate();
   const params = useParams();
   const { communityAddress: currentCommunityAddress } = useResolvedCommunityRoute();
+  const getCommunityDisplayName = useCommunityDisplayName();
   const [searchParams] = useSearchParams();
 
   const isInHomeAboutView = isHomeAboutView(location.pathname);
@@ -26,13 +27,16 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInSearchView = isSearchView(location.pathname);
 
-  // A search already restricted to a community keeps its box ticked when the results page reloads.
-  const restrictedCommunity = isInSearchView ? searchParams.get(SEARCH_COMMUNITY_PARAM) : null;
-  const communityToRestrict = restrictedCommunity || currentCommunityAddress;
-
   // What the current route says the search is; the boxes and the input start from it.
   const routeQuery = isInSearchView ? getSearchQuery(searchParams.get('q')) : '';
-  const routeNsfw = getSearchNsfw(searchParams.get(SEARCH_NSFW_PARAM));
+  // A typed `community:`/`nsfw:` prefix beats the checkbox, so the boxes show what will actually happen.
+  const typedFilters = getAppliedSearchQuery(routeQuery).filters;
+
+  // A search already restricted to a community keeps its box ticked when the results page reloads.
+  const restrictedCommunity = isInSearchView ? (typedFilters.community ?? searchParams.get(SEARCH_COMMUNITY_PARAM)) : null;
+  const communityToRestrict = restrictedCommunity || currentCommunityAddress;
+
+  const routeNsfw = typedFilters.nsfw ?? getSearchNsfw(searchParams.get(SEARCH_NSFW_PARAM));
   // Inside a community the search is limited to it by default, the way the results page opens it.
   const routeLimitToCommunity = Boolean(restrictedCommunity) || (!isInSearchView && Boolean(currentCommunityAddress));
 
@@ -104,7 +108,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
         {communityToRestrict && (
           <label>
             <input type='checkbox' checked={limitToCommunity} onChange={(event) => setLimitToCommunity(event.target.checked)} />
-            {t('limit_my_search_to', { community: `s/${getShortDisplayAddress(communityToRestrict)}`, interpolation: { escapeValue: false } })}
+            {t('limit_my_search_to', { community: getCommunityDisplayName(communityToRestrict), interpolation: { escapeValue: false } })}
           </label>
         )}
         <label>
