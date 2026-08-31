@@ -3,7 +3,8 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { loadMoreArchiveSearch, retryArchiveSearch, useArchiveSearch } from '../../hooks/use-archive-search';
 import { useCommunitySearch } from '../../hooks/use-community-search';
-import { DEFAULT_SEARCH_QUERY, getAppliedSearchQuery, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
+import { DEFAULT_SEARCH_QUERY, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
+import { parseSearchQuery } from '../../lib/utils/search-query-utils';
 import { getHighlightTerms } from '../../lib/utils/search-highlight-utils';
 import useCommunityDisplayName from '../../hooks/use-community-display-name';
 import SearchResultCommunity from '../../components/search-result/search-result-community';
@@ -22,13 +23,13 @@ const Search = () => {
   // The box's raw text stays in `q`, the way old.reddit keeps it, so a search
   // with advanced-search prefixes is shareable and survives a reload.
   const rawQuery = getSearchQuery(searchParams.get('q'));
-  const { filters, text: searchText } = useMemo(() => getAppliedSearchQuery(rawQuery), [rawQuery]);
+  const { filters, freeText: searchText } = useMemo(() => parseSearchQuery(rawQuery), [rawQuery]);
   const checkboxOptions = useMemo(() => getSearchOptions(searchParams), [searchParams]);
 
-  // A `community:`/`nsfw:` prefix is typed deliberately, so it beats the checkbox.
+  // A typed prefix is deliberate, so it beats the equivalent checkbox.
   const restrictedCommunity = filters.community ?? checkboxOptions.community;
   const nsfw = filters.nsfw ?? checkboxOptions.nsfw ?? false;
-  const options = useMemo(() => ({ community: restrictedCommunity, nsfw }), [restrictedCommunity, nsfw]);
+  const options = useMemo(() => ({ ...filters, community: restrictedCommunity, nsfw }), [filters, restrictedCommunity, nsfw]);
 
   // Only the words are searched for and highlighted; the prefixes are not terms.
   const terms = useMemo(() => getHighlightTerms(searchText), [searchText]);

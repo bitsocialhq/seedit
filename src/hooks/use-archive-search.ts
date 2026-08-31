@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 import type { Comment } from '@bitsocial/bitsocial-react-hooks';
 import { fetchSearchPageFromChain, getIndexedPostComment } from '../lib/search-indexer';
 import { getSearchProviderChain, type SearchProvider } from '../lib/search-providers';
-import { getSearchKey, type SearchOptions } from '../lib/utils/search-utils';
+import { getSearchKey, hasSearchableInput, type SearchOptions } from '../lib/utils/search-utils';
 
 export interface ArchiveSearchState {
   comments: Comment[];
@@ -146,7 +146,7 @@ const getStore = (query: string, options: SearchOptions): ArchiveSearchStore => 
 };
 
 export const getArchiveSearchSnapshot = (query: string, options: SearchOptions = {}): ArchiveSearchState =>
-  query ? getStore(query, options).getSnapshot() : EMPTY_SNAPSHOT;
+  hasSearchableInput(query, options) ? getStore(query, options).getSnapshot() : EMPTY_SNAPSHOT;
 
 export const subscribeToArchiveSearch = (query: string, options: SearchOptions, listener: () => void): (() => void) => getStore(query, options).subscribe(listener);
 
@@ -165,6 +165,7 @@ export const retryArchiveSearch = (query: string, options: SearchOptions = {}): 
 
 /** Read an archive search feed for a query. This hook never reads or writes account state. */
 export const useArchiveSearch = (query: string, options: SearchOptions = {}): ArchiveSearchState => {
-  const store = query ? getStore(query, options) : null;
+  // A wordless `author:lena` is a real search, so an empty query is not the test.
+  const store = hasSearchableInput(query, options) ? getStore(query, options) : null;
   return useSyncExternalStore(store?.subscribe ?? emptySubscribe, store?.getSnapshot ?? getEmptySnapshot, store?.getSnapshot ?? getEmptySnapshot);
 };

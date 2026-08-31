@@ -107,6 +107,24 @@ describe('archive search store', () => {
     unsubscribe();
   });
 
+  it('runs a wordless search when a filter stands on its own, and not for community alone', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(searchResponse(1, [indexedPost('QmA')], 1));
+    vi.stubGlobal('fetch', fetchMock);
+
+    // `author:lena.bso` with no words is a real search.
+    const unsubscribe = subscribeToArchiveSearch('', { author: 'lena.bso' }, () => undefined);
+    await flushInFlight();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(getArchiveSearchSnapshot('', { author: 'lena.bso' }).comments).toHaveLength(1);
+    unsubscribe();
+
+    // A community or nsfw choice only narrows; on its own there is nothing to ask for.
+    fetchMock.mockClear();
+    expect(getArchiveSearchSnapshot('', { community: 'aww-posting.bso' }).comments).toEqual([]);
+    expect(getArchiveSearchSnapshot('', { nsfw: true }).comments).toEqual([]);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('retries a stale failure when a new subscriber arrives', async () => {
     vi.useFakeTimers();
     const fetchMock = vi

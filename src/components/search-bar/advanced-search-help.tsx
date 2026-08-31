@@ -2,11 +2,9 @@ import { useTranslation } from 'react-i18next';
 import styles from './search-bar.module.css';
 
 /**
- * The search parameters old.reddit documents under "advanced search".
- *
- * The panel is documentation only for now: the results page does not parse any
- * of these prefixes yet, so nothing here is wired to a query. It ships ahead of
- * the parser so the vocabulary is settled before it is implemented.
+ * The search parameters old.reddit documents under "advanced search", with its
+ * `subreddit:` renamed to `community:`. Every one of these is parsed out of the
+ * search box and sent to the indexer as a query parameter.
  */
 const ADVANCED_SEARCH_PARAMS = [
   { descriptionKey: 'advanced_search_community', syntax: 'community:', value: 'community' },

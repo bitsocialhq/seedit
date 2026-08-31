@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { isHomeAboutView, isPostPageAboutView, isCommunityAboutView, isSearchView } from '../../lib/utils/view-utils';
-import { getAppliedSearchQuery, getSearchNsfw, getSearchPath, getSearchQuery, SEARCH_COMMUNITY_PARAM, SEARCH_NSFW_PARAM } from '../../lib/utils/search-utils';
+import { getSearchNsfw, getSearchPath, getSearchQuery, SEARCH_COMMUNITY_PARAM, SEARCH_NSFW_PARAM } from '../../lib/utils/search-utils';
+import { parseSearchQuery } from '../../lib/utils/search-query-utils';
 import useCommunityDisplayName from '../../hooks/use-community-display-name';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import AdvancedSearchHelp from './advanced-search-help';
@@ -30,7 +31,7 @@ const SearchBar = ({ isFocused = false, onExpandoChange }: SearchBarProps) => {
   // What the current route says the search is; the boxes and the input start from it.
   const routeQuery = isInSearchView ? getSearchQuery(searchParams.get('q')) : '';
   // A typed `community:`/`nsfw:` prefix beats the checkbox, so the boxes show what will actually happen.
-  const typedFilters = getAppliedSearchQuery(routeQuery).filters;
+  const typedFilters = parseSearchQuery(routeQuery).filters;
 
   // A search already restricted to a community keeps its box ticked when the results page reloads.
   const restrictedCommunity = isInSearchView ? (typedFilters.community ?? searchParams.get(SEARCH_COMMUNITY_PARAM)) : null;

@@ -22,9 +22,9 @@ interface SearchResultCommunityProps {
 
 const SearchResultCommunity = ({ community, nsfw, query, terms }: SearchResultCommunityProps) => {
   const { t } = useTranslation();
-  // Only the live community object carries createdAt, and only a cached read is
-  // affordable here: a results page must not resolve a community per row.
-  const liveCommunity = useCommunity({ community: getCommunityIdentifier(community.address), onlyIfCached: true });
+  // Only the live community object carries createdAt, so a row resolves its own
+  // community rather than leaving the age blank for anything not already cached.
+  const liveCommunity = useCommunity({ community: getCommunityIdentifier(community.address) });
   const createdAt = liveCommunity?.createdAt;
   const communityPath = getCommunityPath(community.address);
   const displayAddress = getShortDisplayAddress(community.address);

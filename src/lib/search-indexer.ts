@@ -37,10 +37,16 @@ export interface IndexerSearchPage {
   total: number;
 }
 
-/** What the indexer itself can narrow a search by. */
+/** What the indexer itself can narrow a search by — the advanced-search filters. */
 export interface IndexerSearchOptions {
+  author?: string;
   community?: string;
   nsfw?: boolean;
+  /** Text posts only when true, link posts only when false, both when absent. */
+  self?: boolean;
+  selftext?: string;
+  site?: string;
+  url?: string;
 }
 
 export const SEARCH_PAGE_SIZE = 25;
@@ -106,7 +112,12 @@ const getSearchUrl = (provider: SearchProvider, query: string, page: number, opt
   url.searchParams.set('q', query);
   url.searchParams.set('page', String(page));
   url.searchParams.set('limit', String(SEARCH_PAGE_SIZE));
-  if (options.community) url.searchParams.set('community', options.community);
+  for (const key of ['author', 'community', 'selftext', 'site', 'url'] as const) {
+    const value = options[key]?.trim();
+    if (value) url.searchParams.set(key, value);
+  }
+  // The indexer takes self as yes/no so that absent can mean "either".
+  if (options.self !== undefined) url.searchParams.set('self', options.self ? 'yes' : 'no');
   // Always explicit: an indexer that does not know the parameter ignores it, and
   // one that does must not fall back to its own default.
   url.searchParams.set('nsfw', String(options.nsfw === true));
