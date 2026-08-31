@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getNsfwCommunityAddresses, mergeCommunitySources, searchCommunities } from './community-search-utils';
+import { mergeCommunitySources, searchCommunities } from './community-search-utils';
 import type { IndexedCommunity } from '../search-indexer';
 
 const indexed = (address: string, overrides: Partial<IndexedCommunity> = {}): IndexedCommunity => ({
@@ -12,7 +12,7 @@ const indexed = (address: string, overrides: Partial<IndexedCommunity> = {}): In
 });
 
 describe('mergeCommunitySources', () => {
-  it("keeps seedit's curated title and nsfw flag over the indexer's row", () => {
+  it("keeps seedit's curated title over the indexer's, and stays nsfw if either says so", () => {
     const merged = mergeCommunitySources({
       starter: [{ address: 'funny-posting.bso', title: 'Funny', nsfw: true }],
       archive: [indexed('funny-posting.bso', { title: 'Crawled Funny', post_count: 12 })],
@@ -98,13 +98,20 @@ describe('searchCommunities', () => {
   });
 });
 
-describe('getNsfwCommunityAddresses', () => {
-  it('collects the lowercased addresses seedit marks nsfw', () => {
-    const addresses = getNsfwCommunityAddresses({
-      starter: [{ address: 'Safe.bso' }, { address: 'Adult.bso', nsfw: true }],
-      directories: [{ address: 'directory-adult.bso', nsfw: true }],
-    });
+describe('nsfw from the indexer', () => {
+  it('marks a community nsfw when the indexer resolved it as nsfw', () => {
+    const [merged] = mergeCommunitySources({ archive: [indexed('after-dark.bso', { nsfw: 1 })] });
+    expect(merged.nsfw).toBe(true);
+  });
 
-    expect(addresses).toEqual(new Set(['adult.bso', 'directory-adult.bso']));
+  it('is not nsfw when the indexer says so, or is too old to say', () => {
+    expect(mergeCommunitySources({ archive: [indexed('safe.bso', { nsfw: 0 })] })[0].nsfw).toBe(false);
+    expect(mergeCommunitySources({ archive: [indexed('unknown.bso')] })[0].nsfw).toBe(false);
+  });
+
+  it('excludes an indexer-flagged community from a safe search', () => {
+    const sources = { archive: [indexed('after-dark.bso', { nsfw: 1, title: 'After Dark' })] };
+    expect(searchCommunities(sources, 'dark')).toEqual([]);
+    expect(searchCommunities(sources, 'dark', { includeNsfw: true })).toHaveLength(1);
   });
 });

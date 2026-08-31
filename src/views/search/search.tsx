@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { loadMoreArchiveSearch, retryArchiveSearch, useArchiveSearch } from '../../hooks/use-archive-search';
-import { useCommunitySearch, useNsfwCommunityAddresses } from '../../hooks/use-community-search';
+import { useCommunitySearch } from '../../hooks/use-community-search';
 import { DEFAULT_SEARCH_QUERY, getAppliedSearchQuery, getSearchOptions, getSearchPath, getSearchQuery } from '../../lib/utils/search-utils';
 import { getHighlightTerms } from '../../lib/utils/search-highlight-utils';
 import useCommunityDisplayName from '../../hooks/use-community-display-name';
@@ -45,12 +45,8 @@ const Search = () => {
     setVisibleCommunities(COMMUNITY_PAGE_SIZE);
   }
 
-  const { comments, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(searchText, options);
-  const nsfwCommunityAddresses = useNsfwCommunityAddresses();
-  const posts = useMemo(
-    () => (nsfw ? comments : comments.filter((comment) => !nsfwCommunityAddresses.has((comment.communityAddress ?? '').toLowerCase()))),
-    [comments, nsfw, nsfwCommunityAddresses],
-  );
+  // The indexer applies the nsfw choice server-side, so its total matches what is shown.
+  const { comments: posts, error, hasMore, loading, loadingMore, provider, total } = useArchiveSearch(searchText, options);
 
   const documentTitle = `${t('search_results')}: ${rawQuery} - Seedit`;
   useEffect(() => {

@@ -45,11 +45,20 @@ describe('fetchSearchPageFromChain', () => {
     const result = await fetchSearchPageFromChain([provider], 'hello world', 2);
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://api.seeditarchive.org/api/search?q=hello+world&page=2&limit=25',
+      'https://api.seeditarchive.org/api/search?q=hello+world&page=2&limit=25&nsfw=false',
       expect.objectContaining({ headers: { Accept: 'application/json' }, signal: expect.any(AbortSignal) }),
     );
     expect(result.provider.id).toBe('seeditarchive');
     expect(result.total).toBe(1);
+  });
+
+  it('sends the community and nsfw choice the caller asked for', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(okJson(searchResponse([indexedPost()])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchSearchPageFromChain([provider], 'hello', 1, { community: 'aww-posting.bso', nsfw: true });
+
+    expect(fetchMock).toHaveBeenCalledWith('https://api.seeditarchive.org/api/search?q=hello&page=1&limit=25&community=aww-posting.bso&nsfw=true', expect.anything());
   });
 
   it('rejects a response that does not match the search contract', async () => {

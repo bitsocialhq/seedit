@@ -11,7 +11,7 @@ export interface CommunitySearchResult {
   description?: string;
   /** The query is this community's exact address, so it is pinned to the top. */
   exact: boolean;
-  /** Only seedit's own lists carry this; the indexer has no nsfw concept. */
+  /** The indexer resolves this from the community's own `features.safeForWork`, its directory, and its content. */
   nsfw: boolean;
   tags?: string[];
   title?: string;
@@ -19,9 +19,10 @@ export interface CommunitySearchResult {
 
 /**
  * Seedit's curated lists and the indexer describe the same communities from
- * different angles: the lists carry the nsfw flag and a curated title, while
- * the indexer knows the crawled title and how much it has archived. A merged
- * entry keeps whichever source actually has each field, list first.
+ * different angles: the lists carry a curated title, while the indexer knows
+ * the crawled title, how much it has archived, and whether the community is
+ * nsfw. A merged entry keeps whichever source actually has each field, list
+ * first, and is nsfw if any source says so.
  */
 interface MergedCommunity extends Omit<CommunitySearchResult, 'exact'> {}
 
@@ -67,8 +68,9 @@ const fromIndexedCommunity = (community: IndexedCommunity): MergedCommunity => (
   address: community.address,
   archivedPostCount: community.post_count,
   description: community.description ?? undefined,
-  // The indexer has no nsfw concept, so it can never mark a community nsfw.
-  nsfw: false,
+  // Resolved by the indexer from the community's own features, its directory and
+  // its content; absent on an indexer too old to track it.
+  nsfw: community.nsfw === 1,
   title: community.title ?? undefined,
 });
 
@@ -97,17 +99,6 @@ export const mergeCommunitySources = (sources: CommunitySearchSources): MergedCo
 
   return [...merged.values()];
 };
-
-/**
- * The addresses seedit's lists mark nsfw, lowercased. The indexer has no nsfw
- * concept, so a post is judged by the community it was posted to.
- */
-export const getNsfwCommunityAddresses = (sources: CommunitySearchSources): Set<string> =>
-  new Set(
-    mergeCommunitySources(sources)
-      .filter((community) => community.nsfw)
-      .map((community) => normalizeAddress(community.address)),
-  );
 
 /**
  * Rank order, matching what the results page shows first: the exact address,

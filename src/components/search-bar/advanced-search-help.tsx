@@ -29,7 +29,7 @@ const AdvancedSearchHelp = ({ onCollapse }: AdvancedSearchHelpProps) => {
     <div className={styles.advancedSearch}>
       <div className={styles.advancedSearchIntro}>
         <span>{t('advanced_search_intro')}</span>
-        <button className={styles.advancedSearchCollapse} onClick={onCollapse} type='button'>
+        <button aria-label={t('hide_help')} className={styles.advancedSearchCollapse} onClick={onCollapse} type='button'>
           [-]
         </button>
       </div>

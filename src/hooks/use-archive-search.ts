@@ -56,7 +56,7 @@ const fetchPage = (store: ArchiveSearchStore, page: number): void => {
   const isFirstPage = store.loadedPages === 0;
   setSnapshot(store, { ...store.snapshot, loading: isFirstPage, loadingMore: !isFirstPage, error: null });
 
-  const request = fetchSearchPageFromChain(getSearchProviderChain(), store.query, page, store.options.community)
+  const request = fetchSearchPageFromChain(getSearchProviderChain(), store.query, page, store.options)
     .then((result) => {
       // Offset pagination can repeat a result when the index moves between pages.
       const seenCids = new Set(store.snapshot.comments.map((comment) => comment.cid));

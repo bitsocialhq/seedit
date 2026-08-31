@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAccount } from '@bitsocial/bitsocial-react-hooks';
 import { vendoredDirectoryLists } from '../data/vendored-directory-lists';
-import { getNsfwCommunityAddresses, searchCommunities, type CommunitySearchResult } from '../lib/utils/community-search-utils';
+import { searchCommunities, type CommunitySearchResult } from '../lib/utils/community-search-utils';
 import type { DirectoryListCommunity } from '../lib/utils/directory-list-utils';
 import { useArchiveCommunities } from './use-archive-communities';
 import { useDefaultSubscriptions } from './use-default-subscriptions';
@@ -32,14 +32,4 @@ export const useCommunitySearch = (query: string, includeNsfw: boolean): Communi
   );
 
   return { communities, loading };
-};
-
-/**
- * The communities seedit marks nsfw. Post results carry no nsfw flag of their
- * own — the indexer has no such concept — so a post is filtered by where it was
- * posted.
- */
-export const useNsfwCommunityAddresses = (): Set<string> => {
-  const starter = useDefaultSubscriptions();
-  return useMemo(() => getNsfwCommunityAddresses({ directories: vendoredDirectoryCommunities, starter }), [starter]);
 };

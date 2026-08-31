@@ -37,6 +37,12 @@ export interface IndexerSearchPage {
   total: number;
 }
 
+/** What the indexer itself can narrow a search by. */
+export interface IndexerSearchOptions {
+  community?: string;
+  nsfw?: boolean;
+}
+
 export const SEARCH_PAGE_SIZE = 25;
 const REQUEST_TIMEOUT_MS = 15_000;
 
@@ -95,12 +101,15 @@ const getApiUrl = (provider: SearchProvider, path: string): URL => {
   return new URL(path, apiBase);
 };
 
-const getSearchUrl = (provider: SearchProvider, query: string, page: number, community?: string): string => {
+const getSearchUrl = (provider: SearchProvider, query: string, page: number, options: IndexerSearchOptions = {}): string => {
   const url = getApiUrl(provider, 'api/search');
   url.searchParams.set('q', query);
   url.searchParams.set('page', String(page));
   url.searchParams.set('limit', String(SEARCH_PAGE_SIZE));
-  if (community) url.searchParams.set('community', community);
+  if (options.community) url.searchParams.set('community', options.community);
+  // Always explicit: an indexer that does not know the parameter ignores it, and
+  // one that does must not fall back to its own default.
+  url.searchParams.set('nsfw', String(options.nsfw === true));
   return url.toString();
 };
 
@@ -142,19 +151,19 @@ const fetchThreadPosts = async (provider: SearchProvider, posts: IndexedPost[]):
   return Object.fromEntries(threadPosts.filter((post) => post !== null).map((post) => [post.cid, post]));
 };
 
-const fetchSearchPage = async (provider: SearchProvider, query: string, page: number, community?: string): Promise<IndexerSearchPage> => {
-  const result: unknown = await fetchProviderJson(getSearchUrl(provider, query, page, community));
+const fetchSearchPage = async (provider: SearchProvider, query: string, page: number, options?: IndexerSearchOptions): Promise<IndexerSearchPage> => {
+  const result: unknown = await fetchProviderJson(getSearchUrl(provider, query, page, options));
   if (!isSearchResponse(result)) throw new Error('Search provider returned an invalid response');
   return { ...result, provider, threadPosts: await fetchThreadPosts(provider, result.posts) };
 };
 
 /** Ask each indexer in rank order, so one that is down or broken hands over to the next. */
-export const fetchSearchPageFromChain = async (providers: SearchProvider[], query: string, page: number, community?: string): Promise<IndexerSearchPage> => {
+export const fetchSearchPageFromChain = async (providers: SearchProvider[], query: string, page: number, options?: IndexerSearchOptions): Promise<IndexerSearchPage> => {
   let lastError: unknown = new Error('No search provider is available');
 
   for (const provider of providers) {
     try {
-      return await fetchSearchPage(provider, query, page, community);
+      return await fetchSearchPage(provider, query, page, options);
     } catch (error) {
       lastError = error;
     }
@@ -171,6 +180,8 @@ export interface IndexedCommunity {
   address: string;
   description: string | null;
   last_indexed_at: number | null;
+  /** SQLite flag, absent on an indexer too old to track it. */
+  nsfw?: 0 | 1;
   post_count: number;
   title: string | null;
 }
@@ -184,6 +195,7 @@ const isIndexedCommunity = (value: unknown): value is IndexedCommunity => {
     isNullableString(community.title) &&
     isNullableString(community.description) &&
     isNonNegativeInteger(community.post_count) &&
+    (community.nsfw === undefined || isFlag(community.nsfw)) &&
     (community.last_indexed_at === null || typeof community.last_indexed_at === 'number')
   );
 };
