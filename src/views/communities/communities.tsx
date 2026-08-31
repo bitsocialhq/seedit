@@ -18,6 +18,7 @@ import { isDirectoryCode } from '../../lib/utils/directory-codes';
 import useErrorStore from '../../stores/use-error-store';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { useDefaultSubscriptions } from '../../hooks/use-default-subscriptions';
+import { deriveCommunityNsfw } from '../../lib/utils/nsfw-utils';
 import useDisplayedSubscriptions from '../../hooks/use-displayed-subscriptions';
 import ErrorDisplay from '../../components/error-display';
 import Sidebar from '../../components/sidebar';
@@ -180,7 +181,7 @@ const AccountCommunities = ({ viewRole }: { viewRole: string }) => {
         const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address);
 
         if (currentTag === 'nsfw') {
-          return Boolean(defaultCommunity?.nsfw);
+          return deriveCommunityNsfw(communityData, defaultCommunity) === true;
         }
         return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
@@ -188,7 +189,9 @@ const AccountCommunities = ({ viewRole }: { viewRole: string }) => {
     })
     .map((communityData, index) => {
       const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === (communityData as any).address);
-      return <CommunityItem key={index} community={communityData} nsfw={defaultCommunity?.nsfw} tags={defaultCommunity?.tags} index={index} />;
+      return (
+        <CommunityItem key={index} community={communityData} nsfw={deriveCommunityNsfw(communityData, defaultCommunity)} tags={defaultCommunity?.tags} index={index} />
+      );
     });
 
   if (communityElements.length === 0) {
@@ -231,7 +234,7 @@ const SubscriberCommunities = () => {
       if (currentTag) {
         const defaultCommunity = defaultCommunities.find((defaultSub) => defaultSub.address === communityData.address);
         if (currentTag === 'nsfw') {
-          return Boolean(defaultCommunity?.nsfw);
+          return deriveCommunityNsfw(communityData, defaultCommunity) === true;
         }
         return Boolean(defaultCommunity?.tags?.includes(currentTag));
       }
@@ -243,7 +246,7 @@ const SubscriberCommunities = () => {
         <CommunityItem
           key={communityData.address || index}
           community={communityData}
-          nsfw={defaultCommunity?.nsfw}
+          nsfw={deriveCommunityNsfw(communityData, defaultCommunity)}
           tags={defaultCommunity?.tags}
           index={index}
           isUnsubscribed={isUnsubscribed(communityData.address)}
@@ -287,22 +290,25 @@ const AllAccountCommunities = () => {
   }, [communitiesError, setError]);
 
   const defaultsByAddress = new Map(defaultCommunities.map((community) => [community.address, community]));
-  const taggedAddresses = currentTag ? new Set<string>() : undefined;
-  if (currentTag) {
+  // The nsfw tag is decided per community below, because it can come from live protocol data.
+  const isNsfwTag = currentTag === 'nsfw';
+  const taggedAddresses = currentTag && !isNsfwTag ? new Set<string>() : undefined;
+  if (taggedAddresses) {
     for (const community of defaultCommunities) {
-      if (currentTag === 'nsfw' ? community.nsfw : community.tags?.some((tag) => tag === currentTag)) taggedAddresses?.add(community.address);
+      if (community.tags?.some((tag) => tag === currentTag)) taggedAddresses.add(community.address);
     }
   }
   const communityElements = Object.values(communities ?? {}).reduce<React.JSX.Element[]>((elements, communityData) => {
     if (!communityData) return elements;
     const defaultCommunity = defaultsByAddress.get(communityData.address);
-    const matchesTag = !taggedAddresses || taggedAddresses.has(communityData.address);
+    const nsfw = deriveCommunityNsfw(communityData, defaultCommunity);
+    const matchesTag = isNsfwTag ? nsfw === true : !taggedAddresses || taggedAddresses.has(communityData.address);
     if (!matchesTag) return elements;
     elements.push(
       <CommunityItem
         key={communityData.address}
         community={communityData}
-        nsfw={defaultCommunity?.nsfw}
+        nsfw={nsfw}
         tags={defaultCommunity?.tags}
         index={elements.length}
         isUnsubscribed={isUnsubscribed(communityData.address)}
