@@ -409,5 +409,6 @@
   "reset_feed": "אפס את הפיד",
   "enable_mock_content_all_communities_reload": "הפעל תוכן מדומה עבור כל הקהילות (טוען מחדש את Seedit)",
   "show_reset_feed_button": "הצג את כפתור איפוס הפיד",
-  "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת"
+  "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת",
+  "propose_new_directory": "הצע ספרייה חדשה"
 }

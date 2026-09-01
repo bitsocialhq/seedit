@@ -409,5 +409,6 @@
   "reset_feed": "resetează fluxul",
   "enable_mock_content_all_communities_reload": "activează conținutul simulat pentru toate comunitățile (reîncarcă Seedit)",
   "show_reset_feed_button": "afișează butonul de resetare a fluxului",
-  "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată"
+  "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată",
+  "propose_new_directory": "Propuneți un director nou"
 }

@@ -419,5 +419,6 @@
   "reset_feed": "reset feed",
   "enable_mock_content_all_communities_reload": "enable mock content for all communities (reloads Seedit)",
   "show_reset_feed_button": "show the reset feed button",
-  "mock_content_uncached_communities_description": "mock content is shown only for uncached communities; try a made-up .bso address"
+  "mock_content_uncached_communities_description": "mock content is shown only for uncached communities; try a made-up .bso address",
+  "propose_new_directory": "Propose a new directory"
 }

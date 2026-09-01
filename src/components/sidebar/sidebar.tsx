@@ -19,6 +19,7 @@ import {
   isCommunityAboutView,
   isCommunitySettingsView,
   isCommunitiesView,
+  isCommunitiesVoteView,
   isCommunityView,
 } from '../../lib/utils/view-utils';
 import useCommunitySubtitles from '../../hooks/use-community-subtitles';
@@ -27,7 +28,8 @@ import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
 import { getCommunityPath, getCommunityPostUrl, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
-import type { SeeditDirectoryCode } from '../../lib/utils/directory-codes';
+import { isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
+import { getDirectoryCommunityProposalUrl, getNewDirectoryProposalUrl } from '../../lib/utils/directory-proposal-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
@@ -192,8 +194,11 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const isInPendingPostView = isPendingPostView(location.pathname, params);
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInCommunitiesView = isCommunitiesView(location.pathname);
+  const isInCommunitiesVoteView = isCommunitiesVoteView(location.pathname);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
+  const proposedDirectoryCode = isDirectoryCode(params.directoryCode) ? params.directoryCode : undefined;
+  const directoryProposalUrl = proposedDirectoryCode ? getDirectoryCommunityProposalUrl(proposedDirectoryCode) : getNewDirectoryProposalUrl();
 
   const pendingPost = useOptionalAccountComment(params?.accountCommentIndex);
   const pendingPostCommunityAddress = getCommentCommunityAddress(pendingPost);
@@ -353,11 +358,11 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
           </div>
         )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
-        {isInCommunitiesView && (
-          <a href='https://github.com/bitsocialnet/lists' target='_blank' rel='noopener noreferrer'>
+        {isInCommunitiesVoteView && (
+          <a href={directoryProposalUrl} target='_blank' rel='noopener noreferrer'>
             <div className={styles.largeButton}>
               <div className={styles.nub} />
-              {t('submit_community')}
+              {t(proposedDirectoryCode ? 'submit_community' : 'propose_new_directory')}
             </div>
           </a>
         )}

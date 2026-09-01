@@ -1,6 +1,6 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Community as CommunityType, useCommunities } from '@bitsocial/bitsocial-react-hooks';
+import { useCommunities, type Community as CommunityType } from '@bitsocial/bitsocial-react-hooks';
 import { SEEDIT_DIRECTORY_CODES, isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { useDirectoryList } from '../../hooks/use-directory-list';
 import { pickDirectoryWinner, sortDirectoryCommunitiesByRank } from '../../lib/utils/directory-list-utils';
@@ -8,46 +8,68 @@ import { vendoredDirectoryDefaults } from '../../data/vendored-directory-lists';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { getCommunityPath, getDirectoryPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import Label from '../../components/post/label';
 import CommunityItem, { NoCommunitiesMessage } from './community-item';
 import communityStyles from './communities.module.css';
 import styles from './directory-vote.module.css';
 
-const getDirectoryTitle = (directoryCode: SeeditDirectoryCode): string | undefined => vendoredDirectoryDefaults.directories[directoryCode]?.title;
+const getDirectoryMetadata = (directoryCode: SeeditDirectoryCode) => vendoredDirectoryDefaults.directories[directoryCode];
+
+const DirectoryTags = ({ tags }: { tags: string[] | undefined }) =>
+  tags && (
+    <div className={styles.directoryTags}>
+      {tags.map((tag) => (
+        <span key={tag}>{tag}</span>
+      ))}
+    </div>
+  );
 
 const DirectoryIndexRow = ({ directoryCode }: { directoryCode: SeeditDirectoryCode }) => {
   const { t } = useTranslation();
   const { list } = useDirectoryList(directoryCode);
   const winner = list && pickDirectoryWinner(list.communities);
-  const title = getDirectoryTitle(directoryCode);
+  const { title, description } = getDirectoryMetadata(directoryCode) ?? {};
 
   return (
-    <div className={styles.directoryRow}>
+    <li className={styles.directoryRow}>
       <div className={styles.directoryTitle}>
         <Link to={getDirectoryVotePath(directoryCode)}>
           s/{directoryCode}
-          {title && `: ${title}`}
+          {title && <span className={styles.directoryName}>: {title}</span>}
         </Link>
       </div>
+      {description && <p className={styles.directoryDescription}>{description}</p>}
       <div className={styles.directoryTagline}>
-        {t('directory_candidates_count', { count: list?.communities.length ?? 0 })}
         {winner && (
+          <span className={styles.directoryWinner}>
+            <Label color='green' text='winner' title={t('directory_winner_explanation')} isFirstInLine />
+            <Link to={getCommunityPath(winner.address)}>{getDisplayAddress(winner.address)}</Link>
+            <span className={styles.directoryFactSeparator} aria-hidden='true'>
+              ·
+            </span>
+          </span>
+        )}
+        <span>{t('directory_candidates_count', { count: list?.communities.length ?? 0 })}</span>
+        {list && (
           <>
-            {' — '}
-            {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(winner.address)}>{getDisplayAddress(winner.address)}</Link>
+            <span className={styles.directoryFactSeparator} aria-hidden='true'>
+              ·
+            </span>
+            <span>{t('directory_list_revision', { revision: list.revision })}</span>
           </>
         )}
       </div>
-    </div>
+    </li>
   );
 };
 
 /** Lists every reserved /s/ route so a voter can pick which directory to inspect. */
 export const DirectoryIndex = () => (
-  <div className={styles.directoryIndex}>
+  <ul className={styles.directoryIndex} role='list'>
     {SEEDIT_DIRECTORY_CODES.map((directoryCode) => (
       <DirectoryIndexRow key={directoryCode} directoryCode={directoryCode} />
     ))}
-  </div>
+  </ul>
 );
 
 const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirectoryCode }) => {
@@ -63,16 +85,20 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
       .filter((community): community is CommunityType => Boolean(community?.address))
       .map((community) => [community.address, community]),
   );
-  const title = getDirectoryTitle(directoryCode);
+  const { title, description, tags } = getDirectoryMetadata(directoryCode) ?? {};
 
   return (
     <>
       <div className={styles.directoryHeading}>
-        <span className={styles.directoryHeadingTitle}>
-          <Link to={getDirectoryPath(directoryCode)}>s/{directoryCode}</Link>
-          {title && `: ${title}`}
-        </span>
-        {list && <span className={styles.directoryRevision}>{t('directory_list_revision', { revision: list.revision })}</span>}
+        <div>
+          <span className={styles.directoryHeadingTitle}>
+            <Link to={getDirectoryPath(directoryCode)}>s/{directoryCode}</Link>
+            {title && `: ${title}`}
+          </span>
+          {list && <span className={styles.directoryRevision}>{t('directory_list_revision', { revision: list.revision })}</span>}
+        </div>
+        {description && <p className={styles.directoryHeadingDescription}>{description}</p>}
+        <DirectoryTags tags={tags} />
       </div>
       {ranked.length === 0 ? (
         <NoCommunitiesMessage />

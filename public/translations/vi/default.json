@@ -409,5 +409,6 @@
   "reset_feed": "đặt lại bảng tin",
   "enable_mock_content_all_communities_reload": "bật nội dung mô phỏng cho tất cả cộng đồng (tải lại Seedit)",
   "show_reset_feed_button": "hiển thị nút đặt lại bảng tin",
-  "mock_content_uncached_communities_description": "nội dung mô phỏng chỉ hiển thị cho các cộng đồng chưa được lưu vào bộ nhớ đệm; hãy thử một địa chỉ .bso tự đặt"
+  "mock_content_uncached_communities_description": "nội dung mô phỏng chỉ hiển thị cho các cộng đồng chưa được lưu vào bộ nhớ đệm; hãy thử một địa chỉ .bso tự đặt",
+  "propose_new_directory": "Đề xuất danh mục mới"
 }

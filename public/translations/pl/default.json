@@ -409,5 +409,6 @@
   "reset_feed": "zresetuj kanał",
   "enable_mock_content_all_communities_reload": "włącz treści testowe dla wszystkich społeczności (ponownie ładuje Seedit)",
   "show_reset_feed_button": "pokaż przycisk resetowania kanału",
-  "mock_content_uncached_communities_description": "treść testowa jest wyświetlana tylko dla społeczności, których nie ma w pamięci podręcznej; wypróbuj zmyślony adres .bso"
+  "mock_content_uncached_communities_description": "treść testowa jest wyświetlana tylko dla społeczności, których nie ma w pamięci podręcznej; wypróbuj zmyślony adres .bso",
+  "propose_new_directory": "Zaproponuj nowy katalog"
 }

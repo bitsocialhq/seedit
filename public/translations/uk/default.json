@@ -409,5 +409,6 @@
   "reset_feed": "скинути стрічку",
   "enable_mock_content_all_communities_reload": "увімкнути тестовий вміст для всіх спільнот (перезавантажує Seedit)",
   "show_reset_feed_button": "показати кнопку скидання стрічки",
-  "mock_content_uncached_communities_description": "тестовий вміст показується лише для спільнот, яких немає в кеші; спробуйте вигадану адресу .bso"
+  "mock_content_uncached_communities_description": "тестовий вміст показується лише для спільнот, яких немає в кеші; спробуйте вигадану адресу .bso",
+  "propose_new_directory": "Запропонувати новий каталог"
 }

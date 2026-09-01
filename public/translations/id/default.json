@@ -409,5 +409,6 @@
   "reset_feed": "reset feed",
   "enable_mock_content_all_communities_reload": "aktifkan konten tiruan untuk semua komunitas (memuat ulang Seedit)",
   "show_reset_feed_button": "tampilkan tombol reset feed",
-  "mock_content_uncached_communities_description": "konten simulasi hanya ditampilkan untuk komunitas yang belum di-cache; coba alamat .bso rekaan"
+  "mock_content_uncached_communities_description": "konten simulasi hanya ditampilkan untuk komunitas yang belum di-cache; coba alamat .bso rekaan",
+  "propose_new_directory": "Usulkan direktori baru"
 }

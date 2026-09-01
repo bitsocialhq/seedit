@@ -409,5 +409,6 @@
   "reset_feed": "resetovat kanál",
   "enable_mock_content_all_communities_reload": "povolit testovací obsah pro všechny komunity (znovu načte Seedit)",
   "show_reset_feed_button": "zobrazit tlačítko pro resetování kanálu",
-  "mock_content_uncached_communities_description": "testovací obsah se zobrazuje jen u komunit, které nejsou v mezipaměti; zkuste vymyšlenou adresu .bso"
+  "mock_content_uncached_communities_description": "testovací obsah se zobrazuje jen u komunit, které nejsou v mezipaměti; zkuste vymyšlenou adresu .bso",
+  "propose_new_directory": "Navrhnout nový adresář"
 }

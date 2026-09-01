@@ -409,5 +409,6 @@
   "reset_feed": "フィードをリセット",
   "enable_mock_content_all_communities_reload": "すべてのコミュニティでモックコンテンツを有効にする（Seeditを再読み込みします）",
   "show_reset_feed_button": "フィードのリセットボタンを表示",
-  "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください"
+  "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください",
+  "propose_new_directory": "新しいディレクトリを提案"
 }

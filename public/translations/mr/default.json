@@ -409,5 +409,6 @@
   "reset_feed": "फीड रीसेट करा",
   "enable_mock_content_all_communities_reload": "सर्व समुदायांसाठी मॉक सामग्री सक्षम करा (Seedit पुन्हा लोड होते)",
   "show_reset_feed_button": "फीड रीसेट करण्याचे बटण दाखवा",
-  "mock_content_uncached_communities_description": "मॉक सामग्री फक्त कॅशमध्ये नसलेल्या कम्युनिटींसाठी दाखवली जाते; एखादा काल्पनिक .bso पत्ता वापरून पाहा"
+  "mock_content_uncached_communities_description": "मॉक सामग्री फक्त कॅशमध्ये नसलेल्या कम्युनिटींसाठी दाखवली जाते; एखादा काल्पनिक .bso पत्ता वापरून पाहा",
+  "propose_new_directory": "नवीन डिरेक्टरी सुचवा"
 }

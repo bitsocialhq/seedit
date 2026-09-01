@@ -409,5 +409,6 @@
   "reset_feed": "รีเซ็ตฟีด",
   "enable_mock_content_all_communities_reload": "เปิดใช้เนื้อหาจำลองสำหรับชุมชนทั้งหมด (โหลด Seedit ใหม่)",
   "show_reset_feed_button": "แสดงปุ่มรีเซ็ตฟีด",
-  "mock_content_uncached_communities_description": "เนื้อหาจำลองจะแสดงเฉพาะสำหรับชุมชนที่ยังไม่ถูกแคชเท่านั้น ลองใช้ที่อยู่ .bso ที่สมมติขึ้น"
+  "mock_content_uncached_communities_description": "เนื้อหาจำลองจะแสดงเฉพาะสำหรับชุมชนที่ยังไม่ถูกแคชเท่านั้น ลองใช้ที่อยู่ .bso ที่สมมติขึ้น",
+  "propose_new_directory": "เสนอไดเรกทอรีใหม่"
 }

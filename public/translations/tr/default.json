@@ -409,5 +409,6 @@
   "reset_feed": "akışı sıfırla",
   "enable_mock_content_all_communities_reload": "tüm topluluklar için örnek içeriği etkinleştir (Seedit yeniden yüklenir)",
   "show_reset_feed_button": "akışı sıfırlama düğmesini göster",
-  "mock_content_uncached_communities_description": "simüle edilmiş içerik yalnızca önbelleğe alınmamış topluluklar için gösterilir; uydurma bir .bso adresi deneyin"
+  "mock_content_uncached_communities_description": "simüle edilmiş içerik yalnızca önbelleğe alınmamış topluluklar için gösterilir; uydurma bir .bso adresi deneyin",
+  "propose_new_directory": "Yeni bir dizin öner"
 }

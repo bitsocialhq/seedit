@@ -409,5 +409,6 @@
   "reset_feed": "ఫీడ్‌ను రీసెట్ చేయండి",
   "enable_mock_content_all_communities_reload": "అన్ని కమ్యూనిటీల కోసం మాక్ కంటెంట్‌ను ప్రారంభించండి (Seedit మళ్లీ లోడ్ అవుతుంది)",
   "show_reset_feed_button": "ఫీడ్‌ను రీసెట్ చేసే బటన్‌ను చూపించండి",
-  "mock_content_uncached_communities_description": "మాక్ కంటెంట్ కాష్‌లో లేని కమ్యూనిటీలకు మాత్రమే చూపబడుతుంది; కల్పిత .bso చిరునామాను ప్రయత్నించండి"
+  "mock_content_uncached_communities_description": "మాక్ కంటెంట్ కాష్‌లో లేని కమ్యూనిటీలకు మాత్రమే చూపబడుతుంది; కల్పిత .bso చిరునామాను ప్రయత్నించండి",
+  "propose_new_directory": "కొత్త డైరెక్టరీని ప్రతిపాదించండి"
 }

@@ -409,5 +409,6 @@
   "reset_feed": "réinitialiser le fil",
   "enable_mock_content_all_communities_reload": "activer le contenu fictif pour toutes les communautés (recharge Seedit)",
   "show_reset_feed_button": "afficher le bouton de réinitialisation du fil",
-  "mock_content_uncached_communities_description": "le contenu simulé s’affiche uniquement pour les communautés qui ne sont pas en cache ; essayez une adresse .bso fictive"
+  "mock_content_uncached_communities_description": "le contenu simulé s’affiche uniquement pour les communautés qui ne sont pas en cache ; essayez une adresse .bso fictive",
+  "propose_new_directory": "Proposer un nouvel annuaire"
 }

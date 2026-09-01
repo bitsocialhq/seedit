@@ -409,5 +409,6 @@
   "reset_feed": "resetar feed",
   "enable_mock_content_all_communities_reload": "ativar conteúdo de teste para todas as comunidades (recarrega o Seedit)",
   "show_reset_feed_button": "mostrar o botão para resetar o feed",
-  "mock_content_uncached_communities_description": "o conteúdo simulado é mostrado apenas para comunidades que não estão em cache; experimente um endereço .bso inventado"
+  "mock_content_uncached_communities_description": "o conteúdo simulado é mostrado apenas para comunidades que não estão em cache; experimente um endereço .bso inventado",
+  "propose_new_directory": "Propor um novo diretório"
 }

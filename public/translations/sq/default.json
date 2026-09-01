@@ -409,5 +409,6 @@
   "reset_feed": "rivendos prurjen",
   "enable_mock_content_all_communities_reload": "aktivizo përmbajtjen e simuluar për të gjitha komunitetet (ringarkon Seedit)",
   "show_reset_feed_button": "shfaq butonin për rivendosjen e prurjes",
-  "mock_content_uncached_communities_description": "përmbajtja e simuluar shfaqet vetëm për komunitetet që nuk janë në memorien e fshehtë; provo një adresë .bso të sajuar"
+  "mock_content_uncached_communities_description": "përmbajtja e simuluar shfaqet vetëm për komunitetet që nuk janë në memorien e fshehtë; provo një adresë .bso të sajuar",
+  "propose_new_directory": "Propozo një direktori të re"
 }

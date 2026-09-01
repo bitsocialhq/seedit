@@ -409,5 +409,6 @@
   "reset_feed": "إعادة تعيين الخلاصة",
   "enable_mock_content_all_communities_reload": "تمكين المحتوى الوهمي لجميع المجتمعات (يعيد تحميل Seedit)",
   "show_reset_feed_button": "إظهار زر إعادة تعيين الخلاصة",
-  "mock_content_uncached_communities_description": "يُعرض المحتوى الوهمي فقط للمجتمعات غير المخزنة مؤقتًا؛ جرّب عنوان .bso مختلقًا"
+  "mock_content_uncached_communities_description": "يُعرض المحتوى الوهمي فقط للمجتمعات غير المخزنة مؤقتًا؛ جرّب عنوان .bso مختلقًا",
+  "propose_new_directory": "اقترح دليلاً جديداً"
 }

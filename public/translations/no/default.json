@@ -409,5 +409,6 @@
   "reset_feed": "nullstill feeden",
   "enable_mock_content_all_communities_reload": "aktiver testinnhold for alle fellesskapene (laster Seedit inn på nytt)",
   "show_reset_feed_button": "vis knappen for å nullstille feeden",
-  "mock_content_uncached_communities_description": "simulert innhold vises bare for fellesskap som ikke er bufret; prøv en oppdiktet .bso-adresse"
+  "mock_content_uncached_communities_description": "simulert innhold vises bare for fellesskap som ikke er bufret; prøv en oppdiktet .bso-adresse",
+  "propose_new_directory": "Foreslå en ny katalog"
 }

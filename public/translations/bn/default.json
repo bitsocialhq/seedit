@@ -409,5 +409,6 @@
   "reset_feed": "ফিড রিসেট করুন",
   "enable_mock_content_all_communities_reload": "সব কমিউনিটির জন্য মক কনটেন্ট চালু করুন (Seedit পুনরায় লোড হয়)",
   "show_reset_feed_button": "ফিড রিসেট বোতামটি দেখান",
-  "mock_content_uncached_communities_description": "মক কনটেন্ট শুধু ক্যাশে না থাকা কমিউনিটিগুলোর জন্য দেখানো হয়; একটি বানানো .bso ঠিকানা চেষ্টা করুন"
+  "mock_content_uncached_communities_description": "মক কনটেন্ট শুধু ক্যাশে না থাকা কমিউনিটিগুলোর জন্য দেখানো হয়; একটি বানানো .bso ঠিকানা চেষ্টা করুন",
+  "propose_new_directory": "একটি নতুন ডিরেক্টরি প্রস্তাব করুন"
 }
