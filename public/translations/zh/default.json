@@ -240,7 +240,7 @@
   "general": "一般",
   "more_posts_last_week": "{{count}} 帖子上个 {{currentTimeFilterName}}: <1>显示更多上周的帖子</1>",
   "more_posts_last_month": "{{count}} 帖子在 {{currentTimeFilterName}}：<1>显示更多来自上个月的帖子</1>",
-  "profile_info": "您的账户 u/{{shortAddress}} 已创建。 <1>设置显示名称</1>, <2>导出备份</2>, <3>了解更多</3>。",
+  "profile_info": "您的账户 u/{{shortAddress}} 已创建。 <1>设置显示名称</1>, <2>下载备份</2>, <3>了解更多</3>。",
   "show_all_instead": "显示自 {{timeFilterName}} 以来的帖子，<1>显示所有帖子</1>",
   "posts_last_synced_info": "帖子最后同步于{{time}}，社区可能离线，发布可能失败。",
   "import_account_backup": "<1>导入</1>账户备份",

@@ -240,7 +240,7 @@
   "general": "obecné",
   "more_posts_last_week": "{{count}} příspěvků minulý {{currentTimeFilterName}}: <1>zobrazit více příspěvků z minulého týdne</1>",
   "more_posts_last_month": "{{count}} příspěvků v {{currentTimeFilterName}}: <1>zobrazit více příspěvků z minulého měsíce</1>",
-  "profile_info": "Váš účet u/{{shortAddress}} byl vytvořen. <1>Nastavit zobrazované jméno</1>, <2>exportovat zálohu</2>, <3>další informace</3>.",
+  "profile_info": "Váš účet u/{{shortAddress}} byl vytvořen. <1>Nastavit zobrazované jméno</1>, <2>stáhnout zálohu</2>, <3>další informace</3>.",
   "show_all_instead": "Zobrazujeme příspěvky od {{timeFilterName}}, <1>zobrazit vše místo toho</1>",
   "posts_last_synced_info": "Příspěvky byly naposledy synchronizovány {{time}}, komunita může být offline a zveřejnění může selhat.",
   "import_account_backup": "<1>importovat</1> zálohu účtu",

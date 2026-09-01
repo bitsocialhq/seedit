@@ -240,7 +240,7 @@
   "general": "i përgjithshëm",
   "more_posts_last_week": "{{count}} postime javën {{currentTimeFilterName}}: <1>shiko postime më shumë nga java e kaluar</1>",
   "more_posts_last_month": "{{count}} postime në {{currentTimeFilterName}}: <1>shiko postime më shumë nga muaji i kaluar</1>",
-  "profile_info": "Llogaria juaj u/{{shortAddress}} u krijua. <1>Vendos emrin për shfaqje</1>, <2>eksportoni kopjen rezervë</2>, <3>më shumë informacion</3>.",
+  "profile_info": "Llogaria juaj u/{{shortAddress}} u krijua. <1>Vendos emrin për shfaqje</1>, <2>shkarkoni kopjen rezervë</2>, <3>më shumë informacion</3>.",
   "show_all_instead": "Duke treguar postimet që nga {{timeFilterName}}, <1>tregoni gjithçka në vend</1>",
   "posts_last_synced_info": "Postet u sinkronizuan për herë të fundit {{time}}, komunitetit mund t'i mungojë lidhja dhe botimi mund të dështojë.",
   "import_account_backup": "<1>importoni</1> kopjen e llogarisë",

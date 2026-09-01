@@ -240,7 +240,7 @@
   "general": "allgemein",
   "more_posts_last_week": "{{count}} Beiträge letzte {{currentTimeFilterName}}: <1>zeige mehr Beiträge aus letzter Woche</1>",
   "more_posts_last_month": "{{count}} Beiträge im {{currentTimeFilterName}}: <1>weitere Beiträge aus dem letzten Monat anzeigen</1>",
-  "profile_info": "Ihr Konto u/{{shortAddress}} wurde erstellt. <1>Anzeige Name festlegen</1>, <2>Backup exportieren</2>, <3>Erfahren Sie mehr</3>.",
+  "profile_info": "Ihr Konto u/{{shortAddress}} wurde erstellt. <1>Anzeige Name festlegen</1>, <2>Backup herunterladen</2>, <3>Erfahren Sie mehr</3>.",
   "show_all_instead": "Zeigt Beiträge seit {{timeFilterName}}, <1>stattdessen alles anzeigen</1>",
   "posts_last_synced_info": "Beiträge zuletzt synchronisiert {{time}}, die Gemeinschaft könnte offline sein und das Veröffentlichen könnte fehlschlagen.",
   "import_account_backup": "<1>importieren</1> Sie die Kontosicherung",

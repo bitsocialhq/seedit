@@ -240,7 +240,7 @@
   "general": "一般的な",
   "more_posts_last_week": "{{count}} 件の投稿先週 {{currentTimeFilterName}}: <1>先週の投稿をもっと表示</1>",
   "more_posts_last_month": "{{count}} 件の投稿 {{currentTimeFilterName}}: <1>先月の他の投稿を表示</1>",
-  "profile_info": "あなたのアカウント u/{{shortAddress}} が作成されました。 <1>表示名を設定</1>, <2>バックアップをエクスポート</2>, <3>詳細はこちら</3>.",
+  "profile_info": "あなたのアカウント u/{{shortAddress}} が作成されました。 <1>表示名を設定</1>, <2>バックアップをダウンロード</2>, <3>詳細はこちら</3>.",
   "show_all_instead": "{{timeFilterName}} からの投稿を表示しています。<1>その代わりにすべて表示</1>",
   "posts_last_synced_info": "投稿は最後に{{time}}に同期されました。コミュニティがオフラインの可能性があり、投稿に失敗する可能性があります。",
   "import_account_backup": "<1>インポート</1> アカウントバックアップ",

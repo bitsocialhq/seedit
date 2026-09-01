@@ -279,7 +279,7 @@
   "general": "general",
   "more_posts_last_week": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last week</1>",
   "more_posts_last_month": "{{count}} posts last {{currentTimeFilterName}}: <1>show more posts from last month</1>",
-  "profile_info": "Your account u/{{shortAddress}} was created. <1>Set display name</1>, <2>export backup</2>, <3>learn more</3>.",
+  "profile_info": "Your account u/{{shortAddress}} was created. <1>Set display name</1>, <2>download backup</2>, <3>learn more</3>.",
   "show_all_instead": "Showing posts since {{timeFilterName}}, <1>show all instead</1>",
   "posts_last_synced_info": "Posts last synced {{time}}, the community might be offline and publishing might fail.",
   "import_account_backup": "<1>import</1> account backup",

@@ -240,7 +240,7 @@
   "general": "ogólny",
   "more_posts_last_week": "{{count}} posty ostatni {{currentTimeFilterName}}: <1>pokaż więcej postów z zeszłego tygodnia</1>",
   "more_posts_last_month": "{{count}} postów w {{currentTimeFilterName}}: <1>pokaż więcej postów z poprzedniego miesiąca</1>",
-  "profile_info": "Twoje konto u/{{shortAddress}} zostało utworzone. <1>Ustaw nazwę wyświetlania</1>, <2>eksportuj kopię zapasową</2>, <3>dowiedz się więcej</3>.",
+  "profile_info": "Twoje konto u/{{shortAddress}} zostało utworzone. <1>Ustaw nazwę wyświetlania</1>, <2>pobierz kopię zapasową</2>, <3>dowiedz się więcej</3>.",
   "show_all_instead": "Pokazuje posty od {{timeFilterName}}, <1>pokaż wszystko zamiast tego</1>",
   "posts_last_synced_info": "Posty ostatnio zsynchronizowane {{time}}, społeczność może być w trybie offline i publikowanie może się nie powieść.",
   "import_account_backup": "<1>importuj</1> kopię zapasową konta",

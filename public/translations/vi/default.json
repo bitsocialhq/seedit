@@ -240,7 +240,7 @@
   "general": "chung",
   "more_posts_last_week": "{{count}} bài viết tuần trước {{currentTimeFilterName}}: <1>hiển thị thêm bài viết từ tuần trước</1>",
   "more_posts_last_month": "{{count}} bài đăng trong {{currentTimeFilterName}}: <1>hiển thị thêm bài đăng từ tháng trước</1>",
-  "profile_info": "Tài khoản của bạn u/{{shortAddress}} đã được tạo. <1>Đặt tên hiển thị</1>, <2>xuất bản sao lưu</2>, <3>tìm hiểu thêm</3>.",
+  "profile_info": "Tài khoản của bạn u/{{shortAddress}} đã được tạo. <1>Đặt tên hiển thị</1>, <2>tải xuống bản sao lưu</2>, <3>tìm hiểu thêm</3>.",
   "show_all_instead": "Đang hiển thị bài viết từ {{timeFilterName}}, <1>hiển thị tất cả thay vào đó</1>",
   "posts_last_synced_info": "Các bài viết được đồng bộ hóa lần cuối lúc {{time}}, cộng đồng có thể ngoại tuyến và đăng tải có thể không thành công.",
   "import_account_backup": "<1>nhập</1> sao lưu tài khoản",

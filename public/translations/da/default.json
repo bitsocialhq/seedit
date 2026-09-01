@@ -240,7 +240,7 @@
   "general": "almindelig",
   "more_posts_last_week": "{{count}} indlæg sidste {{currentTimeFilterName}}: <1>vis flere indlæg fra sidste uge</1>",
   "more_posts_last_month": "{{count}} indlæg sidste {{currentTimeFilterName}}: <1>vis flere indlæg fra sidste måned</1>",
-  "profile_info": "Din konto u/{{shortAddress}} blev oprettet. <1>Indstil visningsnavn</1>, <2>eksporter sikkerhedskopi</2>, <3>læs mere</3>.",
+  "profile_info": "Din konto u/{{shortAddress}} blev oprettet. <1>Indstil visningsnavn</1>, <2>download sikkerhedskopi</2>, <3>læs mere</3>.",
   "show_all_instead": "Viser indlæg siden {{timeFilterName}}, <1>vis alle i stedet</1>",
   "posts_last_synced_info": "Indlæg sidst synkroniseret {{time}}, fællesskabet kan være offline og publicering kan mislykkes.",
   "import_account_backup": "<1>importere</1> kontosikkerhedskopi",

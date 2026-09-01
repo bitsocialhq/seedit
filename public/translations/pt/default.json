@@ -240,7 +240,7 @@
   "general": "geral",
   "more_posts_last_week": "{{count}} postagens na última {{currentTimeFilterName}}: <1>mostrar mais postagens da semana passada</1>",
   "more_posts_last_month": "{{count}} postagens em {{currentTimeFilterName}}: <1>mostrar mais postagens do mês passado</1>",
-  "profile_info": "Sua conta u/{{shortAddress}} foi criada. <1>Definir nome de exibição</1>, <2>exportar backup</2>, <3>saiba mais</3>.",
+  "profile_info": "Sua conta u/{{shortAddress}} foi criada. <1>Definir nome de exibição</1>, <2>baixar backup</2>, <3>saiba mais</3>.",
   "show_all_instead": "Exibindo postagens desde {{timeFilterName}}, <1>mostrar tudo em vez disso</1>",
   "posts_last_synced_info": "Publicações sincronizadas pela última vez {{time}}, a comunidade pode estar offline e a publicação pode falhar.",
   "import_account_backup": "<1>importar</1> backup da conta",

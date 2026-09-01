@@ -240,7 +240,7 @@
   "general": "general",
   "more_posts_last_week": "{{count}} postări săptămâna trecută {{currentTimeFilterName}}: <1>arata mai multe postări de săptămâna trecută</1>",
   "more_posts_last_month": "{{count}} postări în {{currentTimeFilterName}}: <1>arată mai multe postări din luna trecută</1>",
-  "profile_info": "Contul tău u/{{shortAddress}} a fost creat. <1>Setează numele de afișare</1>, <2>exportă backup</2>, <3>află mai multe</3>.",
+  "profile_info": "Contul tău u/{{shortAddress}} a fost creat. <1>Setează numele de afișare</1>, <2>descarcă backup</2>, <3>află mai multe</3>.",
   "show_all_instead": "Afișând postări din {{timeFilterName}}, <1>afișați totul în schimb</1>",
   "posts_last_synced_info": "Postări sincronizate ultima dată {{time}}, comunitatea ar putea fi offline și publicarea ar putea eșua.",
   "import_account_backup": "<1>importați</1> backup-ul contului",
