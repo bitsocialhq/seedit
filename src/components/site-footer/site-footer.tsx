@@ -50,7 +50,7 @@ const SiteFooter = () => (
         <h2 className={styles.heading}>&lt;3</h2>
         <ul>
           <li>
-            <Link className={styles.goldLink} to='/gold'>
+            <Link className={styles.goldLink} to='/gold' onClick={() => requestAnimationFrame(() => window.scrollTo({ top: 0 }))}>
               seedit gold
             </Link>
           </li>
