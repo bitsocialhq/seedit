@@ -148,6 +148,13 @@ export default defineConfig({
         replacement: `${resolve(__dirname, 'src')}/`,
       },
       {
+        // bitsocial-react-hooks imports zustand/shallow's deprecated default export and
+        // passes it as a store equality fn, so its console.warn fires on every comparator
+        // call (~1000/s while feeds stream). Redirect to an unwrapped re-export.
+        find: 'zustand/shallow',
+        replacement: resolve(__dirname, 'src/lib/zustand-shallow-shim.ts'),
+      },
+      {
         find: 'node-fetch',
         replacement: 'isomorphic-fetch',
       },
