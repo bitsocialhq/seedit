@@ -18,14 +18,10 @@ interface FeedFooterProps {
   hasFeedLoaded: boolean;
   hasMore: boolean;
   communityAddresses: string[];
-  searchQuery?: string;
-  isSearching?: boolean;
-  showNoResults?: boolean;
-  onClearSearch?: () => void;
   onLoadMore: () => void;
 }
 
-const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, searchQuery, isSearching, showNoResults, onClearSearch, onLoadMore }: FeedFooterProps) => {
+const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, onLoadMore }: FeedFooterProps) => {
   let footerContent;
   const { t } = useTranslation();
   const location = useLocation();
@@ -40,8 +36,6 @@ const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, se
     communities,
     feedLength,
     isLoadingCommunityData: Boolean(feedStateString),
-    isSearching,
-    searchQuery,
   });
 
   // Add state to track initial loading
@@ -61,44 +55,9 @@ const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, se
     footerContent = <LoadingEllipsis string={t('loading_feed')} />;
   }
 
-  // Handle search state
-  if (isSearching) {
-    footerContent = (
-      <div className={styles.stateString}>
-        <LoadingEllipsis string={t('searching')} />
-      </div>
-    );
-  } else if (showNoResults && searchQuery) {
-    footerContent = (
-      <div className={styles.stateString}>
-        <span className={styles.noMatchesFound}>{t('no_matches_found_for', { query: searchQuery })}</span>
-        <br />
-        <br />
-        <div className={styles.morePostsSuggestion}>
-          <span className={styles.link} onClick={onClearSearch}>
-            {t('clear_search')}
-          </span>
-        </div>
-      </div>
-    );
-  } else if (searchQuery && feedLength > 0) {
-    // When search results are found
-    footerContent = (
-      <div className={styles.stateString}>
-        <span className={styles.searchResults}>{t('found_n_results_for', { count: feedLength, query: searchQuery })}</span>
-        <br />
-        <br />
-        <div className={styles.morePostsSuggestion}>
-          <span className={styles.link} onClick={onClearSearch}>
-            {t('clear_search')}
-          </span>
-        </div>
-      </div>
-    );
-  } else if (showEmptyFeed) {
+  if (showEmptyFeed) {
     footerContent = <EmptyFeedMessage />;
   } else if (hasMore || communityAddresses.length > 0 || (communityAddresses && communityAddresses.length === 0)) {
-    // Only show newer posts/weekly/monthly suggestions when not searching
     footerContent = (
       <>
         <div className={styles.stateString}>
@@ -119,10 +78,8 @@ const FeedFooter = ({ feedLength, hasFeedLoaded, hasMore, communityAddresses, se
                 {t('connect_community_notice')}
               </div>
             )
-          ) : !searchQuery ? (
-            shouldShowFeedLoading({ feedLength, hasMore, infiniteFeedEnabled }) ? (
-              <LoadingEllipsis string={feedStateString || loadingStateString} />
-            ) : null
+          ) : shouldShowFeedLoading({ feedLength, hasMore, infiniteFeedEnabled }) ? (
+            <LoadingEllipsis string={feedStateString || loadingStateString} />
           ) : null}
         </div>
       </>

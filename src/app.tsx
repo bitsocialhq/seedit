@@ -17,6 +17,7 @@ import Mod from './views/mod';
 import NotFound from './views/not-found';
 import PostPage from './views/post-page';
 import Profile from './views/profile';
+import Search from './views/search';
 import Settings from './views/settings';
 import AccountDataEditor from './views/settings/account-data-editor';
 import CommunityDataEditor from './views/community-settings/community-data-editor';
@@ -185,6 +186,8 @@ const App = () => {
             <Route path='/communities/create' element={<CommunitySettings />} />
           </Route>
           <Route element={feedLayout}>
+            <Route path='/search' element={<Search />} />
+
             <Route path='/:sortType?/:timeFilterName?' element={<Home />} />
 
             <Route path='/s/all/:sortType?/:timeFilterName?' element={<All />} />

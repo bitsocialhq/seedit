@@ -1,0 +1,221 @@
+/* The results page mirrors old.reddit's search layout: groups of dense rows,
+   each group with its own heading and its own "load more". */
+
+.listing {
+  margin: 0 0 10px 10px;
+}
+
+.group + .group {
+  margin-top: 10px;
+}
+
+.groupHeader {
+  align-items: baseline;
+  border-bottom: 1px solid var(--border-text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  padding-bottom: 2px;
+}
+
+.groupHeaderLabel {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.groupHeaderMenus {
+  color: var(--text-info);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  gap: 10px;
+}
+
+.contents {
+  padding-top: 5px;
+}
+
+.result {
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.resultHeader {
+  line-height: 1.2;
+}
+
+.title {
+  color: var(--link);
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+  font-size: 16px;
+  margin-right: 5px;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.title:visited {
+  color: var(--link-visited);
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.meta {
+  color: var(--text-info);
+  font-size: 10px;
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.meta a {
+  color: var(--text-info);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.meta a:hover {
+  text-decoration: underline;
+}
+
+.body {
+  color: var(--text);
+  font-size: 12px;
+  margin-top: 5px;
+  padding-right: 10px;
+  word-break: break-word;
+}
+
+.footer {
+  margin-top: 2px;
+}
+
+.footerLink {
+  color: var(--link-primary);
+  font-size: 12px;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+/* A community result carries the wider join button old.reddit uses in search. */
+.subscribe {
+  display: inline-block;
+  margin-right: 5px;
+  min-width: 104px;
+  text-align: center;
+}
+
+.subscribe > span {
+  display: inline-block;
+  min-width: 90px;
+}
+
+.stamp {
+  border: 1px solid var(--red-nsfw);
+  color: var(--red-nsfw);
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 5px;
+  padding: 0 2px;
+  text-transform: uppercase;
+}
+
+.thumbnail {
+  background-color: var(--background-thumbnail);
+  border: 1px solid var(--gray-border);
+  float: left;
+  height: 50px;
+  margin-right: 10px;
+  object-fit: cover;
+  width: 50px;
+}
+
+.resultContent {
+  overflow: hidden;
+}
+
+.expandoButton {
+  background: none;
+  border: none;
+  color: var(--text-info);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  margin-top: 2px;
+  padding: 0;
+  text-transform: lowercase;
+  width: fit-content;
+}
+
+.expandoButton:hover {
+  text-decoration: underline;
+}
+
+.collapsedBody {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.loadMoreRow {
+  padding: 5px 0 10px;
+}
+
+.loadMore {
+  background: var(--pagination-button-background);
+  border: var(--pagination-button-border);
+  border-radius: 3px;
+  color: var(--link-primary);
+  cursor: pointer;
+  font-weight: bold;
+  padding: 1px 4px;
+  text-transform: lowercase;
+}
+
+.loadMore:hover {
+  border: var(--pagination-button-border-hover);
+}
+
+.loadMore:disabled {
+  color: var(--text-info);
+  cursor: default;
+}
+
+.info,
+.error {
+  color: var(--text-info);
+  font-size: 12px;
+  margin: 5px 0;
+  text-transform: lowercase;
+}
+
+.retry {
+  background: none;
+  border: none;
+  color: var(--link-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  margin-left: 5px;
+  padding: 0;
+  text-transform: lowercase;
+}
+
+.retry:hover {
+  text-decoration: underline;
+}
+
+/* Search terms are marked by weight, not by a highlight fill, so the rows stay
+   as flat as the rest of the feed and matches never rely on color alone. */
+.listing mark {
+  background: none;
+  color: inherit;
+  font-weight: bold;
+}

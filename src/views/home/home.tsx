@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState, useMemo, useCallback, startTransition } from 'react';
-import { Link, Navigate, useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { Link, Navigate, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { useAccount, Comment } from '@bitsocial/bitsocial-react-hooks';
 import { Trans, useTranslation } from 'react-i18next';
-import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
-import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useAutoSubscribeStore } from '../../stores/use-auto-subscribe-store';
 import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import useRedirectToDefaultSort from '../../hooks/use-redirect-to-default-sort';
@@ -39,8 +37,6 @@ const Home = () => {
   const isCheckingSubscriptions = starterListLoading || !accountAddress || isCheckingAccount(accountAddress);
 
   const params = useParams<{ sortType?: string; timeFilterName?: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchQuery = searchParams.get('q') || '';
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,67 +56,19 @@ const Home = () => {
 
   const currentTimeFilterName = params.timeFilterName || timeFilterName || (sortType === 'top' ? 'all' : '24h');
 
-  const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
-  const [showNoResults, setShowNoResults] = useState(false);
-  const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
-  const commentFilter = useCallback(
-    (comment: Comment) => {
-      if (!searchQuery.trim()) return true;
-      return commentMatchesPattern(comment, searchQuery);
-    },
-    [searchQuery],
-  );
-
-  const feedOptions = useMemo(() => {
-    const options: any = {
-      newerThan: searchQuery ? 0 : timeFilterSeconds,
+  const feedOptions = useMemo(
+    () => ({
+      newerThan: timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
       sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
-    };
+    }),
+    [communityAddresses, feedSortType, timeFilterSeconds],
+  );
 
-    if (searchQuery) {
-      options.filter = {
-        filter: commentFilter,
-        key: `search-filter-${searchQuery}`,
-      };
-    }
-
-    return options;
-  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, commentFilter]);
-
-  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
-
-  useEffect(() => {
-    startTransition(() => {
-      setShowNoResults(false);
-      setSearchAttemptCompleted(false);
-    });
-  }, [searchQuery]);
-
-  useEffect(() => {
-    if (searchQuery && !isSearching && !searchAttemptCompleted) {
-      startTransition(() => {
-        setSearchAttemptCompleted(true);
-      });
-    }
-  }, [searchQuery, isSearching, searchAttemptCompleted]);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (searchQuery && feed?.length === 0 && searchAttemptCompleted) {
-      timer = setTimeout(() => {
-        startTransition(() => {
-          setShowNoResults(true);
-        });
-      }, 1500);
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [searchQuery, feed?.length, searchAttemptCompleted]);
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top', feedOptions });
 
   const virtuosoRef = useRef<VirtuosoHandle | null>(null);
 
@@ -128,15 +76,15 @@ const Home = () => {
     const setLastVirtuosoState = () => {
       virtuosoRef.current?.getState((snapshot: StateSnapshot) => {
         if (snapshot?.ranges?.length) {
-          lastVirtuosoStates[sortType + currentTimeFilterName + 'home' + searchQuery] = snapshot;
+          lastVirtuosoStates[sortType + currentTimeFilterName + 'home'] = snapshot;
         }
       });
     };
     window.addEventListener('scroll', setLastVirtuosoState);
     return () => window.removeEventListener('scroll', setLastVirtuosoState);
-  }, [sortType, currentTimeFilterName, searchQuery]);
+  }, [sortType, currentTimeFilterName]);
 
-  const lastVirtuosoState = lastVirtuosoStates?.[sortType + currentTimeFilterName + 'home' + searchQuery];
+  const lastVirtuosoState = lastVirtuosoStates?.[sortType + currentTimeFilterName + 'home'];
 
   // Memoize the item content renderer to prevent unnecessary rerenders
   const renderPost = useCallback((index: number, post: Comment) => {
@@ -147,27 +95,15 @@ const Home = () => {
     document.title = `seedit`;
   }, [t]);
 
-  const onClearSearch = useCallback(() => {
-    setSearchParams((prev) => {
-      prev.delete('q');
-      return prev;
-    });
-    reset();
-  }, [setSearchParams, reset]);
-
   const footerProps = useMemo(
     () => ({
       feedLength: feed?.length ?? 0,
       hasFeedLoaded: !!feed,
       hasMore,
       communityAddresses,
-      searchQuery: searchQuery,
-      isSearching,
-      showNoResults,
-      onClearSearch,
       onLoadMore: loadMore,
     }),
-    [feed, hasMore, communityAddresses, searchQuery, isSearching, showNoResults, onClearSearch, loadMore],
+    [feed, hasMore, communityAddresses, loadMore],
   );
 
   const [safeToShowNoSubscriptions, setSafeToShowNoSubscriptions] = useState(false);
@@ -183,7 +119,6 @@ const Home = () => {
   }, [isCheckingSubscriptions, accountAddress]);
 
   const subscriptionState = getHomeSubscriptionState({
-    hasSearchQuery: Boolean(searchQuery),
     subscriptionCount: subscriptions.length,
     feedLength: feed?.length,
     isCheckingSubscriptions,
@@ -210,13 +145,13 @@ const Home = () => {
         <div className={`${styles.sidebar}`}>
           <Sidebar />
         </div>
-        {subscriptionState === 'loading' && !searchQuery ? (
+        {subscriptionState === 'loading' ? (
           <div className={styles.feed}>
             <div className={styles.footer}>
               <LoadingEllipsis string={t('loading_feed')} />
             </div>
           </div>
-        ) : subscriptionState === 'noSubscriptions' && !searchQuery ? (
+        ) : subscriptionState === 'noSubscriptions' ? (
           <div className={styles.noSubscriptions}>
             <br />
             <Trans
@@ -238,7 +173,7 @@ const Home = () => {
         ) : (
           <div className={styles.feed}>
             <DevelopmentFeedResetButton onReset={reset} />
-            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
+            {sortType === 'top' && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 1200 }}
               totalCount={feed?.length || 0}

@@ -32,7 +32,7 @@ describe('shouldShowEmptyFeed', () => {
     ).toBe(false);
   });
 
-  it('does not show the empty state when posts or a search are present', () => {
+  it('does not show the empty state when posts exist or community data is still loading', () => {
     const loadedFeed = {
       requestedCommunityCount: 1,
       communities: [{ updatedAt: 1 }],
@@ -40,8 +40,6 @@ describe('shouldShowEmptyFeed', () => {
 
     expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 1 })).toBe(false);
     expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, isLoadingCommunityData: true })).toBe(false);
-    expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, isSearching: true })).toBe(false);
-    expect(shouldShowEmptyFeed({ ...loadedFeed, feedLength: 0, searchQuery: 'query' })).toBe(false);
   });
 });
 

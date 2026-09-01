@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Navigate, useLocation, useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAccountComments, useBlock, useCommunity, type Comment } from '@bitsocial/bitsocial-react-hooks';
+import { Navigate, useLocation, useParams, useNavigate } from 'react-router-dom';
+import { useAccountComments, useBlock, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { useTranslation } from 'react-i18next';
 import styles from '../home/home.module.css';
 import { useFeedStateString } from '../../hooks/use-state-string';
 import { filterOptimisticLocalPosts } from '../../lib/utils/account-history-utils';
-import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
-import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -45,9 +43,6 @@ interface FooterProps {
   isSubCreatedButNotYetPublished: boolean;
   hasMore: boolean;
   reset: () => void;
-  searchQuery: string;
-  isSearching: boolean;
-  setSearchParams: ReturnType<typeof useSearchParams>[1];
   onLoadMore: () => void;
 }
 
@@ -62,9 +57,6 @@ const Footer = ({
   isSubCreatedButNotYetPublished: _isSubCreatedButNotYetPublished,
   hasMore,
   reset,
-  searchQuery,
-  isSearching,
-  setSearchParams,
   onLoadMore,
 }: FooterProps) => {
   const { t } = useTranslation();
@@ -73,32 +65,6 @@ const Footer = ({
   const feedStateString = useFeedStateString(communityAddresses);
   const loadingStateString = feedStateString || t('loading');
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
-
-  const [showNoResults, setShowNoResults] = useState(false);
-  const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
-
-  useEffect(() => {
-    setShowNoResults(false);
-    setSearchAttemptCompleted(false);
-  }, [searchQuery]);
-
-  useEffect(() => {
-    if (searchQuery && !isSearching && !searchAttemptCompleted) {
-      setSearchAttemptCompleted(true);
-    }
-  }, [searchQuery, isSearching, searchAttemptCompleted]);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (searchQuery && feedLength === 0 && searchAttemptCompleted) {
-      timer = setTimeout(() => {
-        setShowNoResults(true);
-      }, 1500);
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [searchQuery, feedLength, searchAttemptCompleted]);
 
   const loadingString = (
     <>
@@ -115,14 +81,6 @@ const Footer = ({
       block();
     }
     setShowBlockConfirm(false);
-    reset();
-  };
-
-  const handleClearSearch = () => {
-    setSearchParams((prev) => {
-      prev.delete('q');
-      return prev;
-    });
     reset();
   };
 
@@ -148,52 +106,6 @@ const Footer = ({
         )}
       </>
     );
-  } else if (searchQuery) {
-    if (isSearching) {
-      footerFirstLine = (
-        <div className={styles.stateString}>
-          <LoadingEllipsis string={t('searching')} />
-        </div>
-      );
-    } else if (showNoResults) {
-      footerFirstLine = (
-        <div className={styles.stateString}>
-          <span className={styles.noMatchesFound}>{t('no_matches_found_for', { query: searchQuery })}</span>
-          <br />
-          <br />
-          <div className={styles.morePostsSuggestion}>
-            <span className={styles.link} onClick={handleClearSearch}>
-              {t('clear_search')}
-            </span>
-          </div>
-        </div>
-      );
-    } else if (feedLength > 0) {
-      footerFirstLine = (
-        <div className={styles.stateString}>
-          <span className={styles.searchResults}>{t('found_n_results_for', { count: feedLength, query: searchQuery })}</span>
-          <br />
-          <br />
-          <div className={styles.morePostsSuggestion}>
-            <span className={styles.link} onClick={handleClearSearch}>
-              {t('clear_search')}
-            </span>
-          </div>
-        </div>
-      );
-    } else if (feedLength === 0 && searchAttemptCompleted) {
-      footerFirstLine = (
-        <div className={styles.stateString}>
-          <LoadingEllipsis string={t('searching')} />
-        </div>
-      );
-    } else if (feedLength === 0 && !searchAttemptCompleted) {
-      footerFirstLine = (
-        <div className={styles.stateString}>
-          <LoadingEllipsis string={t('searching')} />
-        </div>
-      );
-    }
   } else if (feedLength === 0 && isOnline && hasCommunityLoaded && !feedStateString && !hasMore) {
     footerFirstLine = <EmptyFeedMessage />;
   } else if (paginationFeedLength === 0 || !isOnline) {
@@ -221,8 +133,6 @@ const CommunityView = () => {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchQuery = searchParams.get('q') || '';
 
   const rawCommunityIdentifier = params?.communityAddress || '';
   const { communityAddress: resolvedCommunityAddress, directoryCode, directoryList } = useResolvedCommunityRoute(rawCommunityIdentifier);
@@ -253,31 +163,19 @@ const CommunityView = () => {
   }, [params.timeFilterName, sortType, navigate]);
 
   const { timeFilterSeconds, timeFilterName, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
-  const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
 
-  const feedOptions = useMemo(() => {
-    const options: any = {
+  const feedOptions = useMemo(
+    () => ({
       communities: getCommunityIdentifiers(communityAddresses),
       postsPerPage: FEED_POSTS_PER_PAGE,
       sortType: feedSortType,
-      newerThan: searchQuery ? 0 : timeFilterSeconds,
-    };
+      newerThan: timeFilterSeconds,
+    }),
+    [communityAddresses, feedSortType, timeFilterSeconds],
+  );
 
-    if (searchQuery) {
-      options.filter = {
-        filter: (comment: Comment) => {
-          if (!searchQuery.trim()) return true;
-          return commentMatchesPattern(comment, searchQuery);
-        },
-        key: `search-filter-${searchQuery}`,
-      };
-    }
-
-    return options;
-  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery]);
-
-  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
+  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top', feedOptions });
 
   // show account comments instantly in the feed once published (cid defined), instead of waiting for the feed to update
   const { accountComments } = useAccountComments({ communityAddress, newerThan: 60 * 60 });
@@ -327,9 +225,6 @@ const CommunityView = () => {
     isSubCreatedButNotYetPublished,
     hasMore,
     reset,
-    searchQuery,
-    isSearching,
-    setSearchParams,
     onLoadMore: loadMore,
   };
 
@@ -339,14 +234,14 @@ const CommunityView = () => {
     const setLastVirtuosoState = () => {
       virtuosoRef.current?.getState((snapshot: StateSnapshot) => {
         if (snapshot?.ranges?.length) {
-          lastVirtuosoStates[communityAddress + sortType + timeFilterName + searchQuery] = snapshot;
+          lastVirtuosoStates[communityAddress + sortType + timeFilterName] = snapshot;
         }
       });
     };
     window.addEventListener('scroll', setLastVirtuosoState);
     return () => window.removeEventListener('scroll', setLastVirtuosoState);
-  }, [communityAddress, sortType, timeFilterName, searchQuery]);
-  const lastVirtuosoState = lastVirtuosoStates?.[communityAddress + sortType + timeFilterName + searchQuery];
+  }, [communityAddress, sortType, timeFilterName]);
+  const lastVirtuosoState = lastVirtuosoStates?.[communityAddress + sortType + timeFilterName];
 
   // Show the warning when default-community metadata marks this community NSFW.
   const { hideNsfwCommunities } = useContentOptionsStore();
@@ -402,7 +297,7 @@ const CommunityView = () => {
       )}
       <div className={styles.feed}>
         <DevelopmentFeedResetButton onReset={reset} />
-        {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={timeFilterName || 'all'} sessionKey={sessionKey} />}
+        {sortType === 'top' && <TopTimeFilter selectedTimeFilterName={timeFilterName || 'all'} sessionKey={sessionKey} />}
         <Virtuoso
           increaseViewportBy={{ bottom: 1200, top: 600 }}
           totalCount={combinedFeed?.length || 0}

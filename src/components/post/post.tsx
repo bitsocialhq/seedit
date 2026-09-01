@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { Comment, useAuthorAddress, useBlock, useComment, useEditedComment, useCommunity, useSubscribe } from '@bitsocial/bitsocial-react-hooks';
 import { getHasThumbnail } from '../../lib/utils/media-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
@@ -8,7 +8,6 @@ import { getPostScore, formatScore } from '../../lib/utils/post-utils';
 import { getFormattedTimeAgo, formatLocalizedUTCTimestamp } from '../../lib/utils/time-utils';
 import { getHostname } from '../../lib/utils/url-utils';
 import { isAllView, isAuthorView, isPendingPostView, isPostPageView, isProfileHiddenView, isProfileView, isCommunityView } from '../../lib/utils/view-utils';
-import { highlightMatchedText } from '../../lib/utils/pattern-utils';
 import { usePinnedPostsStore } from '../../stores/use-pinned-posts-store';
 import { useCommentMediaInfo } from '../../hooks/use-comment-media-info';
 import useDownvote from '../../hooks/use-downvote';
@@ -125,9 +124,6 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   } = post || {};
   const communityAddress = getCommentCommunityAddress(post);
 
-  const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get('q') || '';
-
   // Check if the community is NSFW based on its tags
   const isNsfwCommunity = useIsNsfwCommunity(communityAddress || '');
   const nsfw = post?.nsfw || isNsfwCommunity;
@@ -174,8 +170,6 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
   // Ensure we have a meaningful title - if it's only whitespace/newlines, treat as empty
   const cleanedTitle = postTitle?.trim();
   const finalTitle = cleanedTitle || '-';
-
-  const displayedTitle = searchQuery ? highlightMatchedText(finalTitle, searchQuery) : finalTitle;
 
   const hasThumbnail = getHasThumbnail(commentMediaInfo, link);
   const hostname = getHostname(link);
@@ -256,7 +250,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                 <p className={styles.title}>
                   {isInPostPageView && link ? (
                     <a href={link} className={linkClass} target='_blank' rel='noopener noreferrer' onClick={handlePostClick}>
-                      {displayedTitle}
+                      {finalTitle}
                     </a>
                   ) : (
                     <Link
@@ -264,7 +258,7 @@ const Post = ({ index, post = EMPTY_POST }: PostProps) => {
                       to={cid && communityAddress ? getCommunityPostPath(communityAddress, cid) : `/profile/${post?.index}`}
                       onClick={handlePostClick}
                     >
-                      {displayedTitle}
+                      {finalTitle}
                     </Link>
                   )}
                   {flair && (

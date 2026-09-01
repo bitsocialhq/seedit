@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle, StateSnapshot } from 'react-virtuoso';
 import { Comment, CommentsFilter } from '@bitsocial/bitsocial-react-hooks';
-import { commentMatchesPattern } from '../../lib/utils/pattern-utils';
-import useFeedFiltersStore from '../../stores/use-feed-filters-store';
 import { useDefaultSubscriptionAddresses } from '../../hooks/use-default-subscriptions';
 import useTimeFilter, { isValidTimeFilterName, isValidTopTimeFilterName } from '../../hooks/use-time-filter';
 import { FEED_POSTS_PER_PAGE, useInfiniteFeedEnabled } from '../../hooks/use-feed-pagination';
 import FeedFooter from '../../components/feed-footer';
 import TopTimeFilter from '../../components/top-time-filter';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
-import LoadingEllipsis from '../../components/loading-ellipsis';
 import Post from '../../components/post';
 import Sidebar from '../../components/sidebar';
 import styles from '../home/home.module.css';
@@ -23,20 +20,16 @@ const lastVirtuosoStates: { [key: string]: StateSnapshot } = {};
 const Domain = () => {
   const communityAddresses = useDefaultSubscriptionAddresses();
   const params = useParams<{ domain?: string; sortType?: string; timeFilterName?: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const searchQuery = searchParams.get('q') || '';
   const domain = params?.domain;
   const sortType = getRouteSortType(params.sortType);
   const feedSortType = getFeedSortType(sortType);
   const { timeFilterName, timeFilterSeconds, sessionKey, preferredTopTimeFilterPath } = useTimeFilter();
   const currentTimeFilterName = params.timeFilterName || timeFilterName || 'all';
 
-  const { isSearching } = useFeedFiltersStore();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const [showNoResults, setShowNoResults] = useState(false);
-  const [searchAttemptCompleted, setSearchAttemptCompleted] = useState(false);
 
   useEffect(() => {
     const hasInvalidTimeFilter = sortType === 'top' ? !isValidTopTimeFilterName(params.timeFilterName) : !isValidTimeFilterName(params.timeFilterName);
@@ -63,16 +56,6 @@ const Domain = () => {
   );
 
   const feedOptions = useMemo(() => {
-    const filterFunc = (comment: Comment) => {
-      const domainMatches = matchesDomain(comment);
-      if (searchQuery) {
-        return domainMatches && commentMatchesPattern(comment, searchQuery);
-      }
-      return domainMatches;
-    };
-
-    const filterKey = searchQuery ? `search-filter-${domain}-${searchQuery}` : `domain-filter-${domain}`;
-
     const options: {
       newerThan: number | undefined;
       postsPerPage: number;
@@ -80,42 +63,33 @@ const Domain = () => {
       communities: ReturnType<typeof getCommunityIdentifiers>;
       filter: CommentsFilter;
     } = {
-      newerThan: searchQuery ? 0 : timeFilterSeconds,
+      newerThan: timeFilterSeconds,
       postsPerPage: FEED_POSTS_PER_PAGE,
       sortType: feedSortType,
       communities: getCommunityIdentifiers(communityAddresses),
-      filter: { filter: filterFunc, key: filterKey },
+      filter: { filter: matchesDomain, key: `domain-filter-${domain}` },
     };
 
     return options;
-  }, [communityAddresses, feedSortType, timeFilterSeconds, searchQuery, matchesDomain, domain]);
+  }, [communityAddresses, feedSortType, timeFilterSeconds, matchesDomain, domain]);
 
-  const { feed, hasMore, loadMore, reset } = useProgressiveFeed({ enabled: sortType !== 'top' && !searchQuery, feedOptions });
-
-  useEffect(() => {
-    if (isSearching) {
-      setSearchAttemptCompleted(false);
-      setShowNoResults(false);
-    } else if (searchQuery || domain) {
-      setSearchAttemptCompleted(true);
-    }
-  }, [isSearching, searchQuery, domain]);
+  const { feed, hasMore, loadMore } = useProgressiveFeed({ enabled: sortType !== 'top', feedOptions });
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if ((searchQuery || domain) && feed?.length === 0 && searchAttemptCompleted && !showNoResults) {
+    if (domain && feed?.length === 0 && !showNoResults) {
       timer = setTimeout(() => {
         setShowNoResults(true);
       }, 2000);
-    } else if ((!searchQuery && !domain) || feed?.length > 0) {
+    } else if (!domain || feed?.length > 0) {
       setShowNoResults(false);
     }
 
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [searchQuery, domain, feed?.length, searchAttemptCompleted, showNoResults]);
+  }, [domain, feed?.length, showNoResults]);
 
   const documentTitle = domain + ' - Seedit';
   useEffect(() => {
@@ -143,19 +117,8 @@ const Domain = () => {
     hasFeedLoaded: !!feed,
     hasMore,
     communityAddresses,
-    searchQuery: searchQuery,
-    isSearching,
-    showNoResults,
     domain,
     onLoadMore: loadMore,
-  };
-
-  const handleClearSearch = () => {
-    setSearchParams((prev) => {
-      prev.delete('q');
-      return prev;
-    });
-    reset();
   };
 
   if (isLegacyTopRoute(params.sortType)) {
@@ -176,40 +139,17 @@ const Domain = () => {
         <div className={`${styles.sidebar}`}>
           <Sidebar />
         </div>
-        {isSearching ? (
+        {showNoResults ? (
           <div className={styles.feed}>
             <div className={styles.footer}>
               <div className={styles.stateString}>
-                <LoadingEllipsis string='searching' />
-              </div>
-            </div>
-          </div>
-        ) : showNoResults ? (
-          <div className={styles.feed}>
-            <div className={styles.footer}>
-              <div className={styles.stateString}>
-                {searchQuery ? (
-                  <span className={styles.noMatchesFound}>
-                    No matches found for "{searchQuery}" on {domain}
-                  </span>
-                ) : (
-                  <span className={styles.noMatchesFound}>No posts found from {domain}</span>
-                )}
-                <br />
-                <br />
-                <div className={styles.morePostsSuggestion}>
-                  {searchQuery && (
-                    <span className={styles.link} onClick={handleClearSearch}>
-                      Clear search
-                    </span>
-                  )}
-                </div>
+                <span className={styles.noMatchesFound}>No posts found from {domain}</span>
               </div>
             </div>
           </div>
         ) : (
           <>
-            {sortType === 'top' && !searchQuery && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
+            {sortType === 'top' && <TopTimeFilter selectedTimeFilterName={currentTimeFilterName} sessionKey={sessionKey} />}
             <Virtuoso
               increaseViewportBy={{ bottom: 1200, top: 600 }}
               totalCount={feed?.length || 0}

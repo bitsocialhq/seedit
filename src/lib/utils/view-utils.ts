@@ -61,6 +61,11 @@ export const isDomainView = (pathname: string): boolean => {
   return pathname.startsWith('/domain/');
 };
 
+export const isSearchView = (pathname: string): boolean => {
+  // the router tolerates a trailing slash on the route, so the view flag must too
+  return pathname === '/search' || pathname === '/search/';
+};
+
 export const isGoldView = (pathname: string): boolean => {
   return pathname === '/gold' || pathname.startsWith('/gold#');
 };

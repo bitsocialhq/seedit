@@ -72,11 +72,18 @@
 .slideDown {
   transform: scaleY(1);
   visibility: visible;
-  height: 50px;
+  height: 78px;
 }
 
 .lessHeight {
-  height: 22px;
+  height: 50px;
+}
+
+/* The parameter list has no fixed height, so the box grows to fit it. */
+.advancedOpen {
+  height: auto;
+  overflow-y: auto;
+  max-height: 60vh;
 }
 
 .slideUp {
@@ -137,3 +144,58 @@
 .dropdownItem:hover {
   color: var(--background);
 }
+.advancedSearchLink,
+.advancedSearchCollapse {
+  background: none;
+  border: none;
+  color: var(--link-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.advancedSearchLink:hover,
+.advancedSearchCollapse:hover {
+  text-decoration: underline;
+}
+
+.advancedSearch {
+  color: var(--text);
+  margin: 5px 0;
+  padding: 5px 0 0;
+}
+
+.advancedSearchIntro {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.advancedSearchParams {
+  margin: 5px 0;
+}
+
+/* dt/dd sit at old.reddit's 10px/20px indents, with no gap between pairs. */
+.advancedSearchParam dt {
+  font-weight: bold;
+  margin-left: 10px;
+  word-break: break-word;
+}
+
+.advancedSearchParam dd {
+  margin-left: 20px;
+  word-break: break-word;
+}
+
+.advancedSearchExample {
+  margin: 5px 0;
+}
+
+.advancedSearchExample code {
+  font-family: monospace, monospace;
+  word-break: break-word;
+}
+
