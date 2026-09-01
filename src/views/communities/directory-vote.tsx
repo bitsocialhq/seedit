@@ -4,6 +4,7 @@ import { Community as CommunityType, useCommunities } from '@bitsocial/bitsocial
 import { SEEDIT_DIRECTORY_CODES, isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { useDirectoryList } from '../../hooks/use-directory-list';
 import { pickDirectoryWinner, sortDirectoryCommunitiesByRank } from '../../lib/utils/directory-list-utils';
+import { deriveCommunityNsfw } from '../../lib/utils/nsfw-utils';
 import { vendoredDirectoryDefaults } from '../../data/vendored-directory-lists';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { getCommunityPath, getDirectoryPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
@@ -77,19 +78,22 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
       {ranked.length === 0 ? (
         <NoCommunitiesMessage />
       ) : (
-        ranked.map((candidate, index) => (
-          <CommunityItem
-            key={candidate.address}
-            community={loadedCommunities.get(candidate.address) ?? ({ address: candidate.address } as CommunityType)}
-            index={index}
-            score={candidate.score}
-            owner={candidate.owner}
-            isWinner={index === 0}
-            nsfw={candidate.nsfw}
-            tags={candidate.tags}
-            linkTags={false}
-          />
-        ))
+        ranked.map((candidate, index) => {
+          const loadedCommunity = loadedCommunities.get(candidate.address);
+          return (
+            <CommunityItem
+              key={candidate.address}
+              community={loadedCommunity ?? ({ address: candidate.address } as CommunityType)}
+              index={index}
+              score={candidate.score}
+              owner={candidate.owner}
+              isWinner={index === 0}
+              nsfw={deriveCommunityNsfw(loadedCommunity, candidate)}
+              tags={candidate.tags}
+              linkTags={false}
+            />
+          );
+        })
       )}
     </>
   );
