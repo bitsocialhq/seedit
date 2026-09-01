@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAccount, useCommunity } from '@bitsocial/bitsocial-react-hooks';
+import { type Comment, useAccount, useCommunity } from '@bitsocial/bitsocial-react-hooks';
 import { Capacitor } from '@capacitor/core';
 import FileUploader from '../../plugins/file-uploader';
 import { getLinkMediaInfo } from '../../lib/utils/media-utils';
@@ -497,7 +497,7 @@ const SubmitPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { crosspost, link, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
+  const { crosspost, content, link, nsfw, spoiler, title, communityAddress, publishCommentOptions, setPublishPostStore, resetPublishPostStore } = usePublishPostStore();
   const { communityAddress: routeCommunityAddress } = useResolvedCommunityRoute();
 
   useEffect(() => {
@@ -509,7 +509,18 @@ const SubmitPage = () => {
   const shortAddress = communityAddress && getShortDisplayAddress(communityAddress);
   const { isOffline, offlineTitle } = useIsCommunityOffline(selectedCommunityData);
 
-  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
+  // the store is cleared when the pending post is created, so the published draft is kept aside to
+  // put back in the form when the user abandons the challenge instead of publishing
+  const publishedDraftRef = useRef<Comment | undefined>(undefined);
+  const restorePublishedDraft = () => {
+    const publishedDraft = publishedDraftRef.current;
+    publishedDraftRef.current = undefined;
+    if (publishedDraft) {
+      setPublishPostStore(publishedDraft);
+    }
+  };
+
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions, restorePublishedDraft);
 
   const onPublish = () => {
     if (!title) {
@@ -525,6 +536,7 @@ const SubmitPage = () => {
       return;
     }
 
+    publishedDraftRef.current = { communityAddress, title, content, link, spoiler, nsfw, crosspost } as Comment;
     publishComment();
   };
 

@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+import type { Comment } from '@bitsocial/bitsocial-react-hooks';
 import usePublishReplyStore from '../stores/use-publish-reply-store';
 import usePublishCommentWithChallengeAbandon from './use-publish-comment-with-challenge-abandon';
 
@@ -15,6 +16,15 @@ const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; comm
 
   const setReplyStore = usePublishReplyStore((state) => state.setReplyStore);
   const resetReplyStore = usePublishReplyStore((state) => state.resetReplyStore);
+
+  const publishedDraftRef = useRef<Comment | undefined>(undefined);
+  const restorePublishedDraft = () => {
+    const publishedDraft = publishedDraftRef.current;
+    publishedDraftRef.current = undefined;
+    if (publishedDraft) {
+      setReplyStore(publishedDraft);
+    }
+  };
 
   const setPublishReplyOptions = useMemo(
     () => ({
@@ -64,9 +74,13 @@ const usePublishReply = ({ cid, communityAddress, postCid }: { cid: string; comm
 
   const resetPublishReplyOptions = useMemo(() => () => resetReplyStore(parentCid), [parentCid, resetReplyStore]);
 
-  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions);
+  const { index, publishComment } = usePublishCommentWithChallengeAbandon(publishCommentOptions, restorePublishedDraft);
+  const publishReply = () => {
+    publishedDraftRef.current = publishReplyOptions as Comment;
+    publishComment();
+  };
 
-  return { setPublishReplyOptions, resetPublishReplyOptions, replyIndex: index, publishReply: publishComment, publishReplyOptions };
+  return { setPublishReplyOptions, resetPublishReplyOptions, replyIndex: index, publishReply, publishReplyOptions };
 };
 
 export default usePublishReply;

@@ -68,4 +68,36 @@ describe('usePublishReply', () => {
 
     expect(testState.abandonPublish).toHaveBeenCalledOnce();
   });
+
+  it('puts the published draft back in the reply form when the challenge is cancelled', async () => {
+    await act(async () => {
+      latestValue.setPublishReplyOptions.content('Reply body');
+    });
+    await act(async () => {
+      latestValue.setPublishReplyOptions.link('https://example.com/image.png');
+    });
+    await act(async () => {
+      latestValue.setPublishReplyOptions.spoiler(true);
+    });
+    await act(async () => {
+      latestValue.setPublishReplyOptions.nsfw(true);
+    });
+    latestValue.publishReply();
+
+    await act(async () => {
+      await testState.lastOptions?.onChallenge({ challenges: [] }, { content: 'Reply body' });
+      latestValue.resetPublishReplyOptions();
+    });
+    expect(usePublishReplyStore.getState().content['parent-cid']).toBe(undefined);
+
+    await act(async () => {
+      await useChallengesStore.getState().abandonCurrentChallenge();
+    });
+
+    const restoredStore = usePublishReplyStore.getState();
+    expect(restoredStore.content['parent-cid']).toBe('Reply body');
+    expect(restoredStore.link['parent-cid']).toBe('https://example.com/image.png');
+    expect(restoredStore.spoiler['parent-cid']).toBe(true);
+    expect(restoredStore.nsfw['parent-cid']).toBe(true);
+  });
 });

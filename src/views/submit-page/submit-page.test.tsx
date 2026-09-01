@@ -112,6 +112,38 @@ describe('SubmitPage challenge cancellation', () => {
     expect(testState.abandonPublish).toHaveBeenCalledOnce();
   });
 
+  it('puts the published draft back in the form when the challenge is cancelled', async () => {
+    const draft = { communityAddress: 'example.bso', title: 'Test post', content: 'Test content', link: 'https://example.com', spoiler: true, nsfw: true };
+
+    await act(async () => {
+      usePublishPostStore.getState().setPublishPostStore(draft as any);
+    });
+
+    const submitButton = Array.from(container.querySelectorAll('button')).find((button) => button.textContent === 'submit');
+    await act(async () => {
+      submitButton?.click();
+    });
+
+    await act(async () => {
+      await testState.lastOptions?.onChallenge({ challenges: [] }, { title: 'Test post' });
+      // the pending post clears the form as soon as it is created
+      usePublishPostStore.getState().resetPublishPostStore();
+    });
+    expect(usePublishPostStore.getState().title).toBe(undefined);
+
+    await act(async () => {
+      await useChallengesStore.getState().abandonCurrentChallenge();
+    });
+
+    const restoredStore = usePublishPostStore.getState();
+    expect(restoredStore.title).toBe('Test post');
+    expect(restoredStore.content).toBe('Test content');
+    expect(restoredStore.link).toBe('https://example.com');
+    expect(restoredStore.communityAddress).toBe('example.bso');
+    expect(restoredStore.spoiler).toBe(true);
+    expect(restoredStore.nsfw).toBe(true);
+  });
+
   it('passes an embedded crosspost to the publish hook', async () => {
     const crosspost = {
       cid: 'source-cid',
