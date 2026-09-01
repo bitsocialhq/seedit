@@ -241,7 +241,7 @@
   "general": "generell",
   "more_posts_last_week": "{{count}} innlegg siste {{currentTimeFilterName}}: <1>vis flere innlegg fra forrige uke</1>",
   "more_posts_last_month": "{{count}} innlegg i {{currentTimeFilterName}}: <1>vis flere innlegg fra forrige måned</1>",
-  "profile_info": "Kontoen din u/{{shortAddress}} ble opprettet. <1>Sett visningsnavn</1>, <2>eksporter sikkerhetskopi</2>, <3>les mer</3>.",
+  "profile_info": "Kontoen din u/{{shortAddress}} ble opprettet. <1>Sett visningsnavn</1>, <2>last ned sikkerhetskopi</2>, <3>les mer</3>.",
   "show_all_instead": "Viser innlegg siden {{timeFilterName}}, <1>vis alt i stedet</1>",
   "posts_last_synced_info": "Innlegg synkronisert sist {{time}}, fellesskapet kan være offline og publisering kan mislykkes.",
   "import_account_backup": "<1>importere</1> konto sikkerhetskopi",

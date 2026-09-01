@@ -241,7 +241,7 @@
   "general": "generali",
   "more_posts_last_week": "{{count}} post da {{currentTimeFilterName}}: <1>mostra più post della settimana scorsa</1>",
   "more_posts_last_month": "{{count}} post da {{currentTimeFilterName}}: <1>mostra più post dal mese scorso</1>",
-  "profile_info": "Il tuo account u/{{shortAddress}} è stato creato. <1>Imposta nome visualizzato</1>, <2>esporta backup</2>, <3>scopri di più</3>.",
+  "profile_info": "Il tuo account u/{{shortAddress}} è stato creato. <1>Imposta nome visualizzato</1>, <2>scarica backup</2>, <3>scopri di più</3>.",
   "show_all_instead": "Stai visualizzando post da {{timeFilterName}}, <1>visualizza tutto invece</1>",
   "posts_last_synced_info": "Post sincronizzati per l'ultima volta {{time}}, la comunità potrebbe essere offline e la pubblicazione potrebbe fallire.",
   "import_account_backup": "<1>importa</1> backup dell'account",

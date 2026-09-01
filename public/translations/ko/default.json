@@ -241,7 +241,7 @@
   "general": "일반",
   "more_posts_last_week": "{{count}} 게시물 지난 {{currentTimeFilterName}}: <1>지난 주의 게시물을 더 보기</1>",
   "more_posts_last_month": "{{count}}개의 게시물 {{currentTimeFilterName}}: <1>지난 달의 더 많은 게시물 보기</1>",
-  "profile_info": "당신의 계정 u/{{shortAddress}}가 생성되었습니다. <1>표시 이름 설정</1>, <2>백업 내보내기</2>, <3>자세히 알아보기</3>.",
+  "profile_info": "당신의 계정 u/{{shortAddress}}가 생성되었습니다. <1>표시 이름 설정</1>, <2>백업 다운로드</2>, <3>자세히 알아보기</3>.",
   "show_all_instead": "{{timeFilterName}} 이후의 게시물이 표시됩니다. <1>대신 모두 표시</1>",
   "posts_last_synced_info": "게시물이 마지막으로 {{time}}에 동기화되었습니다. 커뮤니티가 오프라인 상태일 수 있으며 게시가 실패할 수 있습니다.",
   "import_account_backup": "<1>가져오기</1> 계정 백업",

@@ -241,7 +241,7 @@
   "general": "algemeen",
   "more_posts_last_week": "{{count}} berichten laatste {{currentTimeFilterName}}: <1>toon meer berichten van vorige week</1>",
   "more_posts_last_month": "{{count}} berichten in {{currentTimeFilterName}}: <1>toon meer berichten van vorige maand</1>",
-  "profile_info": "Je account u/{{shortAddress}} is aangemaakt. <1>Stel weergavenaam in</1>, <2>exporteer backup</2>, <3>meer leren</3>.",
+  "profile_info": "Je account u/{{shortAddress}} is aangemaakt. <1>Stel weergavenaam in</1>, <2>download back-up</2>, <3>meer leren</3>.",
   "show_all_instead": "Berichten sinds {{timeFilterName}}, <1>toon in plaats daarvan alles</1>",
   "posts_last_synced_info": "Berichten voor het laatst gesynchroniseerd {{time}}, de community kan offline zijn en publiceren kan mislukken.",
   "import_account_backup": "<1>importeer</1> accountback-up",

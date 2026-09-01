@@ -241,7 +241,7 @@
   "general": "általános",
   "more_posts_last_week": "{{count}} bejegyzések múlt {{currentTimeFilterName}}: <1>több bejegyzés megjelenítése a múlt héten</1>",
   "more_posts_last_month": "{{count}} bejegyzés a {{currentTimeFilterName}}-ben: <1>több bejegyzés megtekintése a múlt hónapból</1>",
-  "profile_info": "A fiókod u/{{shortAddress}} létrejött. <1>Állítsd be a megjelenítő nevet</1>, <2>biztonsági mentés exportálása</2>, <3>tudj meg többet</3>.",
+  "profile_info": "A fiókod u/{{shortAddress}} létrejött. <1>Állítsd be a megjelenítő nevet</1>, <2>biztonsági mentés letöltése</2>, <3>tudj meg többet</3>.",
   "show_all_instead": "A {{timeFilterName}} óta látható bejegyzések, <1>helyette mindent mutass</1>",
   "posts_last_synced_info": "Bejegyzések utoljára szinkronizálva {{time}}, a közösség lehet offline, és a közzététel meghiúsulhat.",
   "import_account_backup": "<1>importálás</1> fiók biztonsági másolat",

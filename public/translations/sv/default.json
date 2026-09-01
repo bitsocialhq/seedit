@@ -241,7 +241,7 @@
   "general": "allmän",
   "more_posts_last_week": "{{count}} inlägg senaste {{currentTimeFilterName}}: <1>visa fler inlägg från förra veckan</1>",
   "more_posts_last_month": "{{count}} inlägg i {{currentTimeFilterName}}: <1>visa fler inlägg från förra månaden</1>",
-  "profile_info": "Ditt konto u/{{shortAddress}} skapades. <1>Ställ in visningsnamn</1>, <2>exportera säkerhetskopia</2>, <3>läs mer</3>.",
+  "profile_info": "Ditt konto u/{{shortAddress}} skapades. <1>Ställ in visningsnamn</1>, <2>ladda ner säkerhetskopia</2>, <3>läs mer</3>.",
   "show_all_instead": "Visar inlägg sedan {{timeFilterName}}, <1>visa allt istället</1>",
   "posts_last_synced_info": "Inlägg synkroniserades senast {{time}}, gemenskapen kan vara offline och publiceringen kan misslyckas.",
   "import_account_backup": "<1>importera</1> kontots säkerhetskopiering",

@@ -241,7 +241,7 @@
   "general": "yleinen",
   "more_posts_last_week": "{{count}} viestiä viime {{currentTimeFilterName}}: <1>näytä lisää viestejä viime viikolta</1>",
   "more_posts_last_month": "{{count}} julkaisua viimeisimmässä {{currentTimeFilterName}}: <1>näytä lisää julkaisuja viime kuukaudelta</1>",
-  "profile_info": "Tilitilisi u/{{shortAddress}} on luotu. <1>Aseta näyttönimi</1>, <2>vienti varmuuskopio</2>, <3>lue lisää</3>.",
+  "profile_info": "Tilitilisi u/{{shortAddress}} on luotu. <1>Aseta näyttönimi</1>, <2>lataa varmuuskopio</2>, <3>lue lisää</3>.",
   "show_all_instead": "Näytetään viestejä ajasta {{timeFilterName}}, <1>näytä kaikki sen sijaan</1>",
   "posts_last_synced_info": "Viestit synkronoitu viimeksi {{time}}, yhteisö saattaa olla offline-tilassa ja julkaisu voi epäonnistua.",
   "import_account_backup": "<1>tuoda</1> tilin varmuuskopio",

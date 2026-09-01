@@ -241,7 +241,7 @@
   "general": "כללי",
   "more_posts_last_week": "{{count}} פוסטים בשבוע האחרון {{currentTimeFilterName}}: <1>הצג פוסטים נוספים מהשבוע שעבר</1>",
   "more_posts_last_month": "{{count}} פוסטים ב{{currentTimeFilterName}}: <1>הראה פוסטים נוספים מהחודש שעבר</1>",
-  "profile_info": "החשבון שלך u/{{shortAddress}} נוצר. <1>קבע שם תצוגה</1>, <2>ייצא גיבוי</2>, <3>למד עוד</3>.",
+  "profile_info": "החשבון שלך u/{{shortAddress}} נוצר. <1>קבע שם תצוגה</1>, <2>הורד גיבוי</2>, <3>למד עוד</3>.",
   "show_all_instead": "מראה פוסטים מאז {{timeFilterName}}, <1>הצג הכל במקום זאת</1>",
   "posts_last_synced_info": "הפוסטים סנכרנו לאחרונה {{time}}, הקהילה עשויה להיות במצב offline וההפרסום עלול להיכשל.",
   "import_account_backup": "<1>יבוא</1> גיבוי חשבון",
