@@ -4,7 +4,7 @@ import * as React from 'react';
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import SiteFooter from './site-footer';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -29,6 +29,7 @@ describe('SiteFooter', () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+    vi.unstubAllGlobals();
   });
 
   it('renders the Seedit footer destinations without unavailable links', () => {
@@ -67,6 +68,29 @@ describe('SiteFooter', () => {
 
     expect(goldLink?.getAttribute('href')).toBe('#/gold');
     expect(goldLink?.closest('section')?.querySelector('h2')?.textContent).toBe('<3');
+  });
+
+  it('scrolls to the top when opening seedit gold from the footer', () => {
+    let scrollFrame: FrameRequestCallback | undefined;
+    const scrollTo = vi.fn();
+    const requestAnimationFrame = vi.fn((callback: FrameRequestCallback) => {
+      scrollFrame = callback;
+      return 1;
+    });
+    vi.stubGlobal('scrollTo', scrollTo);
+    vi.stubGlobal('requestAnimationFrame', requestAnimationFrame);
+    renderFooter();
+
+    const goldLink = Array.from(container.querySelectorAll<HTMLAnchorElement>('a')).find((link) => link.textContent === 'seedit gold');
+
+    act(() => goldLink?.click());
+
+    expect(requestAnimationFrame).toHaveBeenCalledOnce();
+    expect(scrollTo).not.toHaveBeenCalled();
+
+    act(() => scrollFrame?.(0));
+
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0 });
   });
 
   it('uses the 5chan-style FOSS attribution and Bitsocial logo treatment', () => {
