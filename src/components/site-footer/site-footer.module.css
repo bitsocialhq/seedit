@@ -1,6 +1,7 @@
 .footer {
   clear: both;
   padding-top: 40px;
+  padding-bottom: 20px;
   color: var(--footer-legal-text);
   font-size: larger;
   text-align: center;
