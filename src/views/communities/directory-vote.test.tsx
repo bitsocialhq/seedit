@@ -11,6 +11,23 @@ vi.mock('@bitsocial/bitsocial-react-hooks', () => ({
   useCommunities: () => ({ communities: {} }),
 }));
 
+vi.mock('../../components/subscribe-button', async () => {
+  const { createElement } = await import('react');
+
+  return {
+    default: ({ address, directoryCode, directoryRevision }: { address?: string; directoryCode?: string; directoryRevision?: number }) =>
+      createElement(
+        'span',
+        {
+          'data-directory-subscription': directoryCode,
+          'data-address': address,
+          'data-revision': directoryRevision,
+        },
+        'join',
+      ),
+  };
+});
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, values?: Record<string, string | number>) => {
@@ -88,8 +105,13 @@ describe('directory vote views', () => {
     expect(rows?.[0].textContent).toContain('askseedit.bso');
     expect(rows?.[0].textContent).toContain('directory revision 3');
     expect(rows?.[0].textContent).toContain('discussion');
+    expect(rows?.[0].textContent).toContain('join');
+    expect(rows?.[0].querySelector('[data-directory-subscription="askseedit"]')?.getAttribute('data-address')).toBe('askseedit.bso');
+    expect(rows?.[0].querySelector('[data-directory-subscription="askseedit"]')?.getAttribute('data-revision')).toBe('3');
     expect(rows?.[0].querySelector('[title="Highest rated candidate, so it currently resolves this route."]')).toBeNull();
     expect(container.querySelector('input[type="search"]')?.getAttribute('placeholder')).toBe('search directories');
+    expect(container.querySelector('form[role="search"] h4')?.textContent).toBe('search directories');
+    expect(container.querySelector('form[role="search"] button[type="submit"]')?.getAttribute('aria-label')).toBe('search directories');
   });
 
   it('filters directories when a tag is selected', async () => {

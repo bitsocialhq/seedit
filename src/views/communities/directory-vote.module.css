@@ -22,24 +22,71 @@
 
 .directoryIndex {
   list-style: none;
-  padding: 0 0 0 125px;
-  margin: 5px 320px 20px 5px;
+  padding: 0;
+  margin: 5px 320px 20px 0;
 }
 
 .directorySearch {
-  margin: 7px 320px 0 135px;
+  position: relative;
+  min-height: 71px;
+  padding: 5px 5px 5px 96px;
+  border: 1px solid var(--border-text);
+  margin: 5px 320px 5px 0;
+  background-color: color-mix(in srgb, var(--background) 88%, var(--text));
+  color: var(--text-markdown);
+}
+
+.directorySearch::before,
+.directorySearch::after {
+  position: absolute;
+  content: '';
+  pointer-events: none;
+}
+
+.directorySearch::before {
+  top: 22px;
+  left: 35px;
+  width: 23px;
+  height: 23px;
+  border: 5px solid currentColor;
+  border-radius: 50%;
+}
+
+.directorySearch::after {
+  top: 49px;
+  left: 59px;
+  width: 19px;
+  height: 5px;
+  background-color: currentColor;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.directorySearch h4 {
+  margin: 0 0 3px;
+  color: var(--text-info);
+  font-size: 10px;
+}
+
+.directorySearchField {
+  position: relative;
+  width: 300px;
+  max-width: 100%;
 }
 
 .directorySearchInput {
+  appearance: none;
   box-sizing: border-box;
-  width: 250px;
-  padding: 3px 5px;
-  border: 1px solid var(--gray);
+  width: 100%;
+  height: 30px;
+  padding: 6px 25px 6px 9px;
+  border: 1px solid var(--border-text);
   border-radius: 0;
   background: var(--background);
   color: var(--text-input);
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
+  vertical-align: middle;
 }
 
 .directorySearchInput:focus-visible {
@@ -47,13 +94,76 @@
   outline-offset: 1px;
 }
 
+.directorySearchButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-info);
+  cursor: pointer;
+}
+
+.directorySearchButton::before,
+.directorySearchButton::after {
+  position: absolute;
+  content: '';
+}
+
+.directorySearchButton::before {
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.directorySearchButton::after {
+  right: 0;
+  bottom: 1px;
+  width: 6px;
+  height: 2px;
+  background-color: currentColor;
+  transform: rotate(45deg);
+  transform-origin: right center;
+}
+
+.directorySearchButton:hover,
+.directorySearchButton:focus-visible {
+  color: var(--link);
+}
+
+.directorySearchButton:focus-visible {
+  outline: 1px dotted var(--border-contrast);
+  outline-offset: 2px;
+}
+
 .directoryRow {
-  padding: 3px 5px 5px 0;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: 127px minmax(0, 1fr);
+  column-gap: 5px;
+  padding: 0 5px 0 0;
 }
 
 .directoryRow + .directoryRow {
   margin-top: 10px;
+}
+
+.directoryMidcol {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  min-width: 0;
+  padding-top: 7px;
+}
+
+.directoryEntry {
+  min-width: 0;
 }
 
 .directoryTitle {
@@ -188,7 +298,24 @@
 
 @media (max-width: 640px) {
   .directorySearch {
-    margin: 7px 5px 0;
+    min-height: 61px;
+    padding-left: 61px;
+    margin: 5px 5px 5px 0;
+  }
+
+  .directorySearch::before {
+    top: 22px;
+    left: 18px;
+    width: 18px;
+    height: 18px;
+    border-width: 4px;
+  }
+
+  .directorySearch::after {
+    top: 43px;
+    left: 37px;
+    width: 15px;
+    height: 4px;
   }
 
   .directorySearchInput {
@@ -196,11 +323,12 @@
   }
 
   .directoryIndex {
-    padding-left: 0;
-    margin: 5px 5px 20px;
+    margin: 5px 5px 20px 0;
   }
 
   .directoryRow {
+    grid-template-columns: 80px minmax(0, 1fr);
+    column-gap: 5px;
     padding-right: 0;
   }
 

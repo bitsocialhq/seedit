@@ -8,6 +8,7 @@ import { vendoredDirectoryDefaults, vendoredDirectoryLists } from '../../data/ve
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryCandidatesPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
+import SubscribeButton from '../../components/subscribe-button';
 import CommunityItem, { NoCommunitiesMessage } from './community-item';
 import communityStyles from './communities.module.css';
 import styles from './directory-vote.module.css';
@@ -53,33 +54,38 @@ const DirectoryIndexRow = ({ directoryCode, query, onTagSelect }: { directoryCod
 
   return (
     <li className={styles.directoryRow}>
-      <div className={styles.directoryTitle}>
-        <Link to={getDirectoryCandidatesPath(directoryCode)}>
-          s/{directoryCode}
-          {title && <span className={styles.directoryName}>: {title}</span>}
-        </Link>
+      <div className={styles.directoryMidcol}>
+        {winner && list && <SubscribeButton address={winner.address} directoryCode={directoryCode} directoryRevision={list.revision} />}
       </div>
-      {description && <p className={styles.directoryDescription}>{description}</p>}
-      <DirectoryTags tags={tags} onSelect={onTagSelect} />
-      <div className={styles.directoryTagline}>
-        {winner && (
-          <span className={styles.directoryWinner}>
-            <span className={styles.directoryWinnerLabel}>{t('current_winner')}</span>{' '}
-            <Link to={getCommunityPath(winner.address)}>{getDisplayAddress(winner.address)}</Link>
-            <span className={styles.directoryFactSeparator} aria-hidden='true'>
-              ·
+      <div className={styles.directoryEntry}>
+        <div className={styles.directoryTitle}>
+          <Link to={getDirectoryCandidatesPath(directoryCode)}>
+            s/{directoryCode}
+            {title && <span className={styles.directoryName}>: {title}</span>}
+          </Link>
+        </div>
+        {description && <p className={styles.directoryDescription}>{description}</p>}
+        <DirectoryTags tags={tags} onSelect={onTagSelect} />
+        <div className={styles.directoryTagline}>
+          {winner && (
+            <span className={styles.directoryWinner}>
+              <span className={styles.directoryWinnerLabel}>{t('current_winner')}</span>{' '}
+              <Link to={getCommunityPath(winner.address)}>{getDisplayAddress(winner.address)}</Link>
+              <span className={styles.directoryFactSeparator} aria-hidden='true'>
+                ·
+              </span>
             </span>
-          </span>
-        )}
-        <span>{t('directory_candidates_count', { count: list?.communities.length ?? 0 })}</span>
-        {list && (
-          <>
-            <span className={styles.directoryFactSeparator} aria-hidden='true'>
-              ·
-            </span>
-            <span>{t('directory_list_revision', { revision: list.revision })}</span>
-          </>
-        )}
+          )}
+          <span>{t('directory_candidates_count', { count: list?.communities.length ?? 0 })}</span>
+          {list && (
+            <>
+              <span className={styles.directoryFactSeparator} aria-hidden='true'>
+                ·
+              </span>
+              <span>{t('directory_list_revision', { revision: list.revision })}</span>
+            </>
+          )}
+        </div>
       </div>
     </li>
   );
@@ -104,14 +110,18 @@ export const DirectoryIndex = () => {
   return (
     <>
       <form className={styles.directorySearch} role='search' onSubmit={(event) => event.preventDefault()}>
-        <input
-          className={styles.directorySearchInput}
-          type='search'
-          value={query}
-          aria-label={t('search_directories')}
-          placeholder={t('search_directories')}
-          onChange={(event) => setQuery(event.target.value)}
-        />
+        <h4>{t('search_directories')}</h4>
+        <div className={styles.directorySearchField}>
+          <input
+            className={styles.directorySearchInput}
+            type='search'
+            value={query}
+            aria-label={t('search_directories')}
+            placeholder={t('search_directories')}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <button className={styles.directorySearchButton} type='submit' aria-label={t('search_directories')} />
+        </div>
       </form>
       <ul className={styles.directoryIndex} role='list'>
         {SEEDIT_DIRECTORY_CODES.map((directoryCode) => (
