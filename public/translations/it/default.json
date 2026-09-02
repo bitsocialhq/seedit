@@ -432,5 +432,6 @@
   "search_excerpt_less": "meno",
   "search_excerpt_more": "altro",
   "search_results_in": "risultati della ricerca in {{community}}",
-  "search_within_community": "cerca in {{community}}"
+  "search_within_community": "cerca in {{community}}",
+  "auto_hide_topbar_while_scrolling": "Nascondi automaticamente la topbar durante lo scorrimento"
 }

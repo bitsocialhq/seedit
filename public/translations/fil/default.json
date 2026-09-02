@@ -432,5 +432,6 @@
   "search_excerpt_less": "mas kaunti",
   "search_excerpt_more": "higit pa",
   "search_results_in": "mga resulta ng paghahanap sa {{community}}",
-  "search_within_community": "maghanap sa loob ng {{community}}"
+  "search_within_community": "maghanap sa loob ng {{community}}",
+  "auto_hide_topbar_while_scrolling": "Awtomatikong itago ang topbar habang nag-i-scroll"
 }

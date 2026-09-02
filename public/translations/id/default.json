@@ -432,5 +432,6 @@
   "search_excerpt_less": "lebih sedikit",
   "search_excerpt_more": "lainnya",
   "search_results_in": "hasil pencarian di {{community}}",
-  "search_within_community": "cari di {{community}}"
+  "search_within_community": "cari di {{community}}",
+  "auto_hide_topbar_while_scrolling": "Sembunyikan topbar secara otomatis saat menggulir"
 }

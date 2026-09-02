@@ -442,5 +442,6 @@
   "advanced_search_selftext": "search for \"text\" in post contents",
   "advanced_search_self": "include (or exclude) text posts",
   "advanced_search_nsfw": "include (or exclude) results marked as NSFW",
-  "advanced_search_example": "e.g."
+  "advanced_search_example": "e.g.",
+  "auto_hide_topbar_while_scrolling": "auto-hide topbar while scrolling"
 }

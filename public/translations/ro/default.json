@@ -432,5 +432,6 @@
   "search_excerpt_less": "mai puțin",
   "search_excerpt_more": "mai mult",
   "search_results_in": "rezultatele căutării în {{community}}",
-  "search_within_community": "caută în {{community}}"
+  "search_within_community": "caută în {{community}}",
+  "auto_hide_topbar_while_scrolling": "Ascunde automat bara de sus în timpul derulării"
 }

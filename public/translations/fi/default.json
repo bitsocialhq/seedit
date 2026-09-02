@@ -431,5 +431,6 @@
   "search_excerpt_less": "vähemmän",
   "search_excerpt_more": "lisää",
   "search_results_in": "hakutulokset kohteessa {{community}}",
-  "search_within_community": "hae kohteesta {{community}}"
+  "search_within_community": "hae kohteesta {{community}}",
+  "auto_hide_topbar_while_scrolling": "Piilota yläpalkki automaattisesti vieritettäessä"
 }

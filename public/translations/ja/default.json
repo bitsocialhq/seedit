@@ -432,5 +432,6 @@
   "search_excerpt_less": "折りたたむ",
   "search_excerpt_more": "もっと見る",
   "search_results_in": "{{community}} の検索結果",
-  "search_within_community": "{{community}} 内を検索"
+  "search_within_community": "{{community}} 内を検索",
+  "auto_hide_topbar_while_scrolling": "スクロール中にトップバーを自動的に隠す"
 }

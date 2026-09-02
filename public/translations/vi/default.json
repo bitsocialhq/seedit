@@ -432,5 +432,6 @@
   "search_excerpt_less": "ít hơn",
   "search_excerpt_more": "thêm",
   "search_results_in": "kết quả tìm kiếm trong {{community}}",
-  "search_within_community": "tìm trong {{community}}"
+  "search_within_community": "tìm trong {{community}}",
+  "auto_hide_topbar_while_scrolling": "Tự động ẩn thanh trên khi cuộn"
 }

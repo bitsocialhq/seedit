@@ -432,5 +432,6 @@
   "search_excerpt_less": "کم",
   "search_excerpt_more": "مزید",
   "search_results_in": "{{community}} میں تلاش کے نتائج",
-  "search_within_community": "{{community}} میں تلاش کریں"
+  "search_within_community": "{{community}} میں تلاش کریں",
+  "auto_hide_topbar_while_scrolling": "اسکرول کرتے وقت اوپر بار خودکار طور پر چھپائیں"
 }

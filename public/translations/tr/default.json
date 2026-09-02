@@ -432,5 +432,6 @@
   "search_excerpt_less": "daha az",
   "search_excerpt_more": "daha fazla",
   "search_results_in": "{{community}} içindeki arama sonuçları",
-  "search_within_community": "{{community}} içinde ara"
+  "search_within_community": "{{community}} içinde ara",
+  "auto_hide_topbar_while_scrolling": "Kaydırırken üst çubuğu otomatik olarak gizle"
 }

@@ -432,5 +432,6 @@
   "search_excerpt_less": "λιγότερα",
   "search_excerpt_more": "περισσότερα",
   "search_results_in": "αποτελέσματα αναζήτησης σε {{community}}",
-  "search_within_community": "αναζήτηση εντός {{community}}"
+  "search_within_community": "αναζήτηση εντός {{community}}",
+  "auto_hide_topbar_while_scrolling": "Αυτόματη απόκρυψη της πάνω μπάρας κατά την κύλιση"
 }

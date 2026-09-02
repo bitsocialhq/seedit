@@ -432,5 +432,6 @@
   "search_excerpt_less": "收起",
   "search_excerpt_more": "更多",
   "search_results_in": "{{community}} 中的搜索结果",
-  "search_within_community": "在 {{community}} 中搜索"
+  "search_within_community": "在 {{community}} 中搜索",
+  "auto_hide_topbar_while_scrolling": "滚动时自动隐藏顶部栏"
 }

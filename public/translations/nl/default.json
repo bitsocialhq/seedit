@@ -432,5 +432,6 @@
   "search_excerpt_less": "minder",
   "search_excerpt_more": "meer",
   "search_results_in": "zoekresultaten in {{community}}",
-  "search_within_community": "zoeken in {{community}}"
+  "search_within_community": "zoeken in {{community}}",
+  "auto_hide_topbar_while_scrolling": "Bovenbalk automatisch verbergen tijdens scrollen"
 }
