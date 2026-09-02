@@ -5,6 +5,7 @@ import useContentOptionsStore from '../../../stores/use-content-options-store';
 import { useDefaultSubscriptions } from '../../../hooks/use-default-subscriptions';
 import { handleNSFWSubscriptionPrompt } from '../../../lib/utils/nsfw-subscription-utils';
 import { useInfiniteFeedEnabled } from '../../../hooks/use-feed-pagination';
+import { useTopbarAutoHideEnabled } from '../../../hooks/use-topbar-auto-hide';
 
 const MediaOptions = () => {
   const { t } = useTranslation();
@@ -168,12 +169,19 @@ const FeedOptions = () => {
   const { t } = useTranslation();
   const infiniteFeedEnabled = useInfiniteFeedEnabled();
   const setInfiniteFeedEnabled = useContentOptionsStore((state) => state.setInfiniteFeedEnabled);
+  const autoHideTopbar = useTopbarAutoHideEnabled();
+  const setAutoHideTopbar = useContentOptionsStore((state) => state.setAutoHideTopbar);
 
   return (
     <div className={styles.contentOptions}>
       <label>
         <input type='checkbox' checked={infiniteFeedEnabled} onChange={(event) => setInfiniteFeedEnabled(event.target.checked)} />
         {t('enable_infinite_feed')}
+      </label>
+      <br />
+      <label>
+        <input type='checkbox' checked={autoHideTopbar} disabled={!infiniteFeedEnabled} onChange={(event) => setAutoHideTopbar(event.target.checked)} />
+        {t('auto_hide_topbar_while_scrolling')}
       </label>
     </div>
   );

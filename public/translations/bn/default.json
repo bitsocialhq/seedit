@@ -432,5 +432,6 @@
   "search_excerpt_less": "কম",
   "search_excerpt_more": "আরও",
   "search_results_in": "{{community}} এ অনুসন্ধানের ফলাফল",
-  "search_within_community": "{{community}} এর মধ্যে অনুসন্ধান করুন"
+  "search_within_community": "{{community}} এর মধ্যে অনুসন্ধান করুন",
+  "auto_hide_topbar_while_scrolling": "স্ক্রল করার সময় টপবার স্বয়ংক্রিয়ভাবে লুকান"
 }

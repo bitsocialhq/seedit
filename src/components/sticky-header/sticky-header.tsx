@@ -3,13 +3,17 @@ import styles from './sticky-header.module.css';
 import AccountBar from '../account-bar';
 import TopBar from '../topbar';
 import { debounce } from 'lodash';
+import { useTopbarAutoHideEnabled } from '../../hooks/use-topbar-auto-hide';
 
-const StickyHeader = () => {
+const StickyHeaderContent = ({ animate }: { animate: boolean }) => {
   // navbar animation on scroll
   const [visible, setVisible] = useState(true);
   const prevScrollPosRef = useRef(0);
 
   useEffect(() => {
+    if (!animate) return;
+
+    prevScrollPosRef.current = window.scrollY;
     const debouncedHandleScroll = debounce(() => {
       const currentScrollPos = window.scrollY;
       const prevScrollPos = prevScrollPosRef.current;
@@ -18,17 +22,26 @@ const StickyHeader = () => {
       prevScrollPosRef.current = currentScrollPos;
     }, 50);
 
-    window.addEventListener('scroll', debouncedHandleScroll);
+    window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', debouncedHandleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', debouncedHandleScroll);
+      debouncedHandleScroll.cancel();
+    };
+  }, [animate]);
 
   return (
-    <div className={styles.content} style={{ transform: visible ? 'translateY(0)' : 'translateY(-40px)' }}>
+    <div className={styles.content} style={{ transform: animate && !visible ? 'translateY(-40px)' : 'translateY(0)' }}>
       <TopBar />
       <AccountBar />
     </div>
   );
+};
+
+const StickyHeader = () => {
+  const autoHideEnabled = useTopbarAutoHideEnabled();
+
+  return <StickyHeaderContent key={String(autoHideEnabled)} animate={autoHideEnabled} />;
 };
 
 export default StickyHeader;

@@ -432,5 +432,6 @@
   "search_excerpt_less": "më pak",
   "search_excerpt_more": "më shumë",
   "search_results_in": "rezultatet e kërkimit në {{community}}",
-  "search_within_community": "kërko brenda {{community}}"
+  "search_within_community": "kërko brenda {{community}}",
+  "auto_hide_topbar_while_scrolling": "Fshih automatikisht shiritin e sipërm gjatë lëvizjes"
 }
