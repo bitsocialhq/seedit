@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "فعال‌سازی محتوای آزمایشی برای تمام جوامع (Seedit را دوباره بارگیری می‌کند)",
   "show_reset_feed_button": "نمایش دکمه بازنشانی خوراک",
   "mock_content_uncached_communities_description": "محتوای آزمایشی فقط برای انجمن‌هایی که در حافظهٔ پنهان نیستند نمایش داده می‌شود؛ یک نشانی ساختگی .bso را امتحان کنید",
-  "propose_new_directory": "پیشنهاد یک فهرست جدید"
+  "propose_new_directory": "پیشنهاد یک فهرست جدید",
+  "current_winner": "برنده فعلی:",
+  "no_directories_found": "هیچ فهرستی یافت نشد",
+  "search_directories": "جستجو در فهرست‌ها"
 }

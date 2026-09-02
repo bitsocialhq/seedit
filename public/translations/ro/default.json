@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "activează conținutul simulat pentru toate comunitățile (reîncarcă Seedit)",
   "show_reset_feed_button": "afișează butonul de resetare a fluxului",
   "mock_content_uncached_communities_description": "conținutul simulat este afișat numai pentru comunitățile care nu sunt în cache; încearcă o adresă .bso inventată",
-  "propose_new_directory": "Propuneți un director nou"
+  "propose_new_directory": "Propuneți un director nou",
+  "current_winner": "câștigătorul actual:",
+  "no_directories_found": "Nu s-au găsit directoare",
+  "search_directories": "caută directoare"
 }

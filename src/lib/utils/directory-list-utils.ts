@@ -20,6 +20,7 @@ export interface DirectoryList {
   title?: string;
   description?: string;
   tags?: string[];
+  rules?: string[];
   createdAt?: number;
   updatedAt?: number;
   communities: DirectoryListCommunity[];
@@ -50,6 +51,12 @@ const toTags = (value: unknown): string[] | undefined => {
   if (!Array.isArray(value)) return undefined;
   const tags = [...new Set(value.filter((tag): tag is string => typeof tag === 'string' && tag.length > 0))];
   return tags.length > 0 ? tags : undefined;
+};
+
+const toRules = (value: unknown): string[] | undefined => {
+  if (!Array.isArray(value)) return undefined;
+  const rules = [...new Set(value.filter((rule): rule is string => typeof rule === 'string' && rule.length > 0))];
+  return rules.length > 0 ? rules : undefined;
 };
 
 const normalizeDirectoryDefaultsEntry = (code: string, raw: unknown): DirectoryDefaultsEntry => {
@@ -125,7 +132,8 @@ export const normalizeDirectoryList = (raw: unknown, fallbackCode: string, defau
 
   const title = toString(defaultEntry?.title) ?? toString(raw.title);
   const description = toString(defaultEntry?.description) ?? toString(raw.description);
-  const tags = toTags(defaultEntry?.tags) ?? toTags(raw.tags);
+  const tags = toTags(raw.tags) ?? toTags(defaultEntry?.tags);
+  const rules = toRules(raw.rules);
   const createdAt = toNumber(raw.createdAt);
   const updatedAt = toNumber(raw.updatedAt);
 
@@ -136,6 +144,7 @@ export const normalizeDirectoryList = (raw: unknown, fallbackCode: string, defau
     ...(title ? { title } : {}),
     ...(description ? { description } : {}),
     ...(tags ? { tags } : {}),
+    ...(rules ? { rules } : {}),
     ...(createdAt !== undefined ? { createdAt } : {}),
     ...(updatedAt !== undefined ? { updatedAt } : {}),
     communities,

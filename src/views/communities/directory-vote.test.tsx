@@ -18,11 +18,13 @@ vi.mock('react-i18next', () => ({
         directory_route_currently_recommends: `s/${values?.directoryCode} currently recommends`,
         directory_candidates_count: `candidates: ${values?.count}`,
         directory_list_revision: `directory revision ${values?.revision}`,
-        directory_winner_explanation: 'Highest rated candidate, so it currently resolves this route.',
         directory_vote_explanation: "Seedit's short s/ routes are directories: communities compete for each route, and the highest rated candidate resolves it.",
         directory_vote_not_open: 'Voting is not open yet.',
         directory_vote_eligibility_link: 'see how eligibility will work',
-        winner: 'winner',
+        directory_winner_explanation: 'Highest rated candidate, so it currently resolves this route.',
+        current_winner: 'current winner:',
+        search_directories: 'search directories',
+        no_directories_found: 'no directories found',
       };
       return translations[key] ?? key;
     },
@@ -35,6 +37,7 @@ vi.mock('../../hooks/use-directory-list', () => ({
       schemaVersion: 1,
       revision: 3,
       directoryCode,
+      tags: directoryCode === 'aww' ? ['animals', 'cute'] : ['discussion'],
       communities: [{ address: `${directoryCode}.bso` }],
     },
     loading: false,
@@ -68,6 +71,7 @@ describe('directory vote views', () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+    window.location.hash = '';
   });
 
   it('presents the directory index as a descriptive list with explicit winners', () => {
@@ -79,10 +83,24 @@ describe('directory vote views', () => {
     expect(rows).toHaveLength(10);
     expect(rows?.[0].textContent).toContain('s/askseedit: AskSeedit');
     expect(rows?.[0].textContent).toContain('Ask the Seedit community anything');
-    expect(rows?.[0].textContent).toContain('winner');
+    expect(rows?.[0].textContent).toContain('current winner:');
     expect(rows?.[0].textContent).toContain('askseedit.bso');
     expect(rows?.[0].textContent).toContain('directory revision 3');
-    expect(rows?.[0].querySelector('[title="Highest rated candidate, so it currently resolves this route."]')).not.toBeNull();
+    expect(rows?.[0].textContent).toContain('discussion');
+    expect(rows?.[0].querySelector('[title="Highest rated candidate, so it currently resolves this route."]')).toBeNull();
+    expect(container.querySelector('input[type="search"]')?.getAttribute('placeholder')).toBe('search directories');
+  });
+
+  it('filters directories when a tag is selected', async () => {
+    render(createElement(DirectoryIndex));
+
+    const animalsTag = Array.from(container.querySelectorAll<HTMLButtonElement>('button')).find((button) => button.textContent === 'animals');
+    await act(async () => animalsTag?.click());
+
+    const rows = container.querySelectorAll('ul[role="list"] > li');
+    expect(rows).toHaveLength(1);
+    expect(rows[0].textContent).toContain('s/aww: Aww');
+    expect(container.querySelector<HTMLInputElement>('input[type="search"]')?.value).toBe('animals');
   });
 
   it('links the eligibility action to the gold explanation', () => {

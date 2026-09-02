@@ -4,7 +4,7 @@
   "title": "Seedit Directory Defaults",
   "description": "Display metadata for Seedit's contested short routes. These routes recommend exact communities but are never stored as subscriptions or used in post permalinks.",
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "directories": {
     "askseedit": {
       "directoryCode": "askseedit",
@@ -12,7 +12,8 @@
       "description": "Ask the Seedit community anything: thought-provoking and open-ended questions.",
       "tags": [
         "questions",
-        "discussion"
+        "discussion",
+        "conversation"
       ]
     },
     "memes": {
@@ -21,7 +22,8 @@
       "description": "Memes of all kinds. A way of describing cultural information being shared.",
       "tags": [
         "memes",
-        "humor"
+        "humor",
+        "culture"
       ]
     },
     "news": {
@@ -30,7 +32,9 @@
       "description": "News from around the world: current events, politics and everything in between.",
       "tags": [
         "news",
-        "world"
+        "world",
+        "journalism",
+        "current-events"
       ]
     },
     "pics": {
@@ -39,7 +43,8 @@
       "description": "A place for photographs, pictures, and other images.",
       "tags": [
         "pictures",
-        "photography"
+        "photography",
+        "images"
       ]
     },
     "todayilearned": {
@@ -48,7 +53,9 @@
       "description": "You learn something new every day; what did you learn today?",
       "tags": [
         "learning",
-        "facts"
+        "facts",
+        "knowledge",
+        "history"
       ]
     },
     "interestingasfuck": {
@@ -56,7 +63,10 @@
       "title": "Interesting As Fuck",
       "description": "For anything that is InterestingAsFuck.",
       "tags": [
-        "interesting"
+        "interesting",
+        "curiosity",
+        "science",
+        "nature"
       ]
     },
     "gaming": {
@@ -65,7 +75,8 @@
       "description": "A community for (almost) anything related to games: video games, board games, card games, and so on.",
       "tags": [
         "gaming",
-        "videogames"
+        "videogames",
+        "boardgames"
       ]
     },
     "videos": {
@@ -73,7 +84,10 @@
       "title": "Videos",
       "description": "The best place for video content of all kinds.",
       "tags": [
-        "videos"
+        "videos",
+        "film",
+        "clips",
+        "documentary"
       ]
     },
     "funny": {
@@ -82,7 +96,8 @@
       "description": "Seedit's largest humour depository.",
       "tags": [
         "humor",
-        "funny"
+        "comedy",
+        "jokes"
       ]
     },
     "aww": {
@@ -91,7 +106,9 @@
       "description": "Things that make you go AWW! Like puppies, bunnies, babies, and so on.",
       "tags": [
         "animals",
-        "cute"
+        "cute",
+        "pets",
+        "wholesome"
       ]
     }
   }

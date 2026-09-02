@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "aktivera testinnehåll för alla samhällen (läser in Seedit igen)",
   "show_reset_feed_button": "visa knappen för att återställa flödet",
   "mock_content_uncached_communities_description": "simulerat innehåll visas bara för communities som inte har cachelagrats; prova en påhittad .bso-adress",
-  "propose_new_directory": "Föreslå en ny katalog"
+  "propose_new_directory": "Föreslå en ny katalog",
+  "current_winner": "nuvarande vinnare:",
+  "no_directories_found": "Inga kataloger hittades",
+  "search_directories": "sök i kataloger"
 }

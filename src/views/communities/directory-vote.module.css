@@ -22,8 +22,29 @@
 
 .directoryIndex {
   list-style: none;
-  padding: 0;
-  margin: 7px 320px 20px 5px;
+  padding: 0 0 0 125px;
+  margin: 5px 320px 20px 5px;
+}
+
+.directorySearch {
+  margin: 7px 320px 0 135px;
+}
+
+.directorySearchInput {
+  box-sizing: border-box;
+  width: 250px;
+  padding: 3px 5px;
+  border: 1px solid var(--gray);
+  border-radius: 0;
+  background: var(--background);
+  color: var(--text-input);
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 11px;
+}
+
+.directorySearchInput:focus-visible {
+  outline: 1px dotted var(--border-contrast);
+  outline-offset: 1px;
 }
 
 .directoryRow {
@@ -32,7 +53,7 @@
 }
 
 .directoryRow + .directoryRow {
-  margin-top: 2px;
+  margin-top: 10px;
 }
 
 .directoryTitle {
@@ -69,14 +90,26 @@
   margin-top: 5px;
 }
 
-.directoryTags span {
+.directoryTags span,
+.directoryTags button {
   padding: 0 2px;
   border: 1px solid var(--flair-blank-border);
   background-color: var(--flair-blank-background);
   color: var(--flair-blank-color);
+  font-family: verdana, arial, helvetica, sans-serif;
   font-size: 10px;
   line-height: 1.3;
   text-transform: lowercase;
+}
+
+.directoryTags button {
+  cursor: pointer;
+}
+
+.directoryTags button:hover,
+.directoryTags button:focus-visible {
+  border-color: var(--border-contrast);
+  color: var(--link);
 }
 
 .directoryTagline {
@@ -94,6 +127,11 @@
   display: inline-flex;
   align-items: center;
   min-width: 0;
+}
+
+.directoryWinnerLabel {
+  margin-right: 3px;
+  color: var(--text-info);
 }
 
 .directoryWinner a {
@@ -136,9 +174,24 @@
   line-height: 1.35;
 }
 
+.directoryNoResults {
+  margin: 10px 320px 20px 135px;
+  color: var(--text-info);
+  font-size: 11px;
+}
+
 @media (max-width: 640px) {
+  .directorySearch {
+    margin: 7px 5px 0;
+  }
+
+  .directorySearchInput {
+    width: 100%;
+  }
+
   .directoryIndex {
-    margin: 7px 5px 20px;
+    padding-left: 0;
+    margin: 5px 5px 20px;
   }
 
   .directoryRow {
@@ -147,5 +200,9 @@
 
   .directoryDescription {
     font-size: 12px;
+  }
+
+  .directoryNoResults {
+    margin: 10px 5px 20px;
   }
 }

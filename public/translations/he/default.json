@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "הפעל תוכן מדומה עבור כל הקהילות (טוען מחדש את Seedit)",
   "show_reset_feed_button": "הצג את כפתור איפוס הפיד",
   "mock_content_uncached_communities_description": "תוכן מדומה מוצג רק עבור קהילות שאינן במטמון; נסו כתובת .bso מומצאת",
-  "propose_new_directory": "הצע ספרייה חדשה"
+  "propose_new_directory": "הצע ספרייה חדשה",
+  "current_winner": "הזוכה הנוכחי:",
+  "no_directories_found": "לא נמצאו ספריות",
+  "search_directories": "חיפוש בספריות"
 }

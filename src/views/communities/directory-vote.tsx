@@ -1,34 +1,55 @@
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCommunities, type Community as CommunityType } from '@bitsocial/bitsocial-react-hooks';
 import { SEEDIT_DIRECTORY_CODES, isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { useDirectoryList } from '../../hooks/use-directory-list';
 import { pickDirectoryWinner, sortDirectoryCommunitiesByRank } from '../../lib/utils/directory-list-utils';
-import { vendoredDirectoryDefaults } from '../../data/vendored-directory-lists';
+import { vendoredDirectoryDefaults, vendoredDirectoryLists } from '../../data/vendored-directory-lists';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { getCommunityPath, getDirectoryPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
-import Label from '../../components/post/label';
 import CommunityItem, { NoCommunitiesMessage } from './community-item';
 import communityStyles from './communities.module.css';
 import styles from './directory-vote.module.css';
 
 const getDirectoryMetadata = (directoryCode: SeeditDirectoryCode) => vendoredDirectoryDefaults.directories[directoryCode];
 
-const DirectoryTags = ({ tags }: { tags: string[] | undefined }) =>
-  tags && (
+const DirectoryTags = ({ tags, onSelect }: { tags: string[] | undefined; onSelect?: (tag: string) => void }) =>
+  tags?.length ? (
     <div className={styles.directoryTags}>
-      {tags.map((tag) => (
-        <span key={tag}>{tag}</span>
-      ))}
+      {tags.map((tag) =>
+        onSelect ? (
+          <button key={tag} type='button' onClick={() => onSelect(tag)}>
+            {tag}
+          </button>
+        ) : (
+          <span key={tag}>{tag}</span>
+        ),
+      )}
     </div>
-  );
+  ) : null;
 
-const DirectoryIndexRow = ({ directoryCode }: { directoryCode: SeeditDirectoryCode }) => {
+const directoryMatchesSearch = (
+  query: string,
+  directoryCode: SeeditDirectoryCode,
+  metadata: { title?: string; description?: string },
+  tags: string[] | undefined,
+): boolean => {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return true;
+
+  return [directoryCode, metadata.title, metadata.description, ...(tags ?? [])].some((value) => value?.toLowerCase().includes(normalizedQuery));
+};
+
+const DirectoryIndexRow = ({ directoryCode, query, onTagSelect }: { directoryCode: SeeditDirectoryCode; query: string; onTagSelect: (tag: string) => void }) => {
   const { t } = useTranslation();
   const { list } = useDirectoryList(directoryCode);
   const winner = list && pickDirectoryWinner(list.communities);
-  const { title, description } = getDirectoryMetadata(directoryCode) ?? {};
+  const metadata = getDirectoryMetadata(directoryCode) ?? {};
+  const { title, description } = metadata;
+  const tags = vendoredDirectoryLists[directoryCode].tags;
+
+  if (!directoryMatchesSearch(query, directoryCode, metadata, tags)) return null;
 
   return (
     <li className={styles.directoryRow}>
@@ -39,10 +60,11 @@ const DirectoryIndexRow = ({ directoryCode }: { directoryCode: SeeditDirectoryCo
         </Link>
       </div>
       {description && <p className={styles.directoryDescription}>{description}</p>}
+      <DirectoryTags tags={tags} onSelect={onTagSelect} />
       <div className={styles.directoryTagline}>
         {winner && (
           <span className={styles.directoryWinner}>
-            <Label color='green' text='winner' title={t('directory_winner_explanation')} isFirstInLine />
+            <span className={styles.directoryWinnerLabel}>{t('current_winner')}</span>{' '}
             <Link to={getCommunityPath(winner.address)}>{getDisplayAddress(winner.address)}</Link>
             <span className={styles.directoryFactSeparator} aria-hidden='true'>
               ·
@@ -64,13 +86,42 @@ const DirectoryIndexRow = ({ directoryCode }: { directoryCode: SeeditDirectoryCo
 };
 
 /** Lists every reserved /s/ route so a voter can pick which directory to inspect. */
-export const DirectoryIndex = () => (
-  <ul className={styles.directoryIndex} role='list'>
-    {SEEDIT_DIRECTORY_CODES.map((directoryCode) => (
-      <DirectoryIndexRow key={directoryCode} directoryCode={directoryCode} />
-    ))}
-  </ul>
-);
+export const DirectoryIndex = () => {
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('q') ?? '';
+  const setQuery = (nextQuery: string) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    if (nextQuery) nextSearchParams.set('q', nextQuery);
+    else nextSearchParams.delete('q');
+    setSearchParams(nextSearchParams, { replace: true });
+  };
+  const hasVendoredMatch = SEEDIT_DIRECTORY_CODES.some((directoryCode) => {
+    const metadata = getDirectoryMetadata(directoryCode) ?? {};
+    return directoryMatchesSearch(query, directoryCode, metadata, vendoredDirectoryLists[directoryCode].tags);
+  });
+
+  return (
+    <>
+      <form className={styles.directorySearch} role='search' onSubmit={(event) => event.preventDefault()}>
+        <input
+          className={styles.directorySearchInput}
+          type='search'
+          value={query}
+          aria-label={t('search_directories')}
+          placeholder={t('search_directories')}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </form>
+      <ul className={styles.directoryIndex} role='list'>
+        {SEEDIT_DIRECTORY_CODES.map((directoryCode) => (
+          <DirectoryIndexRow key={directoryCode} directoryCode={directoryCode} query={query} onTagSelect={setQuery} />
+        ))}
+      </ul>
+      {!hasVendoredMatch && <p className={styles.directoryNoResults}>{t('no_directories_found')}</p>}
+    </>
+  );
+};
 
 const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirectoryCode }) => {
   const { t } = useTranslation();
@@ -85,7 +136,7 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
       .filter((community): community is CommunityType => Boolean(community?.address))
       .map((community) => [community.address, community]),
   );
-  const { title, description, tags } = getDirectoryMetadata(directoryCode) ?? {};
+  const { title, description } = getDirectoryMetadata(directoryCode) ?? {};
 
   return (
     <>
@@ -98,7 +149,7 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
           {list && <span className={styles.directoryRevision}>{t('directory_list_revision', { revision: list.revision })}</span>}
         </div>
         {description && <p className={styles.directoryHeadingDescription}>{description}</p>}
-        <DirectoryTags tags={tags} />
+        <DirectoryTags tags={list?.tags} />
       </div>
       {ranked.length === 0 ? (
         <NoCommunitiesMessage />

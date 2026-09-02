@@ -3,8 +3,22 @@
   "revision": 1,
   "directoryCode": "askseedit",
   "description": "Communities competing for Seedit's /s/askseedit route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-askseedit-directory.json",
+  "tags": [
+    "questions",
+    "discussion",
+    "conversation"
+  ],
+  "rules": [
+    "Ask a clear, direct, open-ended question, and end the title with a question mark.",
+    "Keep questions broadly answerable; do not request personal, medical, legal, financial, or other professional advice.",
+    "Do not post loaded questions, surveys, either-or prompts, or questions with one factual answer.",
+    "Do not post or request personal information, target specific people, or encourage harassment.",
+    "Be civil; no bigotry, threats, sexualization of minors, or encouragement of self-harm.",
+    "Treat [Serious] posts sincerely and keep replies relevant to the question.",
+    "No spam, promotion, begging, vote manipulation, or automated low-effort content."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "askseedit.bso",

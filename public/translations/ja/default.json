@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "すべてのコミュニティでモックコンテンツを有効にする（Seeditを再読み込みします）",
   "show_reset_feed_button": "フィードのリセットボタンを表示",
   "mock_content_uncached_communities_description": "モックコンテンツはキャッシュされていないコミュニティにのみ表示されます。架空の .bso アドレスを試してください",
-  "propose_new_directory": "新しいディレクトリを提案"
+  "propose_new_directory": "新しいディレクトリを提案",
+  "current_winner": "現在の勝者：",
+  "no_directories_found": "ディレクトリが見つかりませんでした",
+  "search_directories": "ディレクトリを検索"
 }

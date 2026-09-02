@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "aktifkan konten tiruan untuk semua komunitas (memuat ulang Seedit)",
   "show_reset_feed_button": "tampilkan tombol reset feed",
   "mock_content_uncached_communities_description": "konten simulasi hanya ditampilkan untuk komunitas yang belum di-cache; coba alamat .bso rekaan",
-  "propose_new_directory": "Usulkan direktori baru"
+  "propose_new_directory": "Usulkan direktori baru",
+  "current_winner": "pemenang saat ini:",
+  "no_directories_found": "Tidak ada direktori yang ditemukan",
+  "search_directories": "cari direktori"
 }

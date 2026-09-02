@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "ota testisisältö käyttöön kaikissa yhteisöissä (lataa Seeditin uudelleen)",
   "show_reset_feed_button": "näytä syötteen nollauspainike",
   "mock_content_uncached_communities_description": "testisisältö näytetään vain välimuistiin tallentamattomille yhteisöille; kokeile keksittyä .bso-osoitetta",
-  "propose_new_directory": "Ehdota uutta hakemistoa"
+  "propose_new_directory": "Ehdota uutta hakemistoa",
+  "current_winner": "nykyinen voittaja:",
+  "no_directories_found": "Hakemistoja ei löytynyt",
+  "search_directories": "etsi hakemistoja"
 }

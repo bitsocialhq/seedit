@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "testinhoud inschakelen voor alle gemeenschappen (laadt Seedit opnieuw)",
   "show_reset_feed_button": "knop voor het resetten van de feed tonen",
   "mock_content_uncached_communities_description": "gesimuleerde inhoud wordt alleen getoond voor community's die niet in de cache staan; probeer een verzonnen .bso-adres",
-  "propose_new_directory": "Nieuwe directory voorstellen"
+  "propose_new_directory": "Nieuwe directory voorstellen",
+  "current_winner": "huidige winnaar:",
+  "no_directories_found": "Geen directories gevonden",
+  "search_directories": "doorzoek directory's"
 }

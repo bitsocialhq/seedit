@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "تمام کمیونٹیز کے لیے فرضی مواد فعال کریں (Seedit دوبارہ لوڈ ہوتا ہے)",
   "show_reset_feed_button": "فیڈ ری سیٹ کرنے کا بٹن دکھائیں",
   "mock_content_uncached_communities_description": "فرضی مواد صرف ان کمیونٹیز کے لیے دکھایا جاتا ہے جو کیش میں نہیں ہیں؛ کوئی من گھڑت .bso پتہ آزمائیں",
-  "propose_new_directory": "نئی ڈائریکٹری تجویز کریں"
+  "propose_new_directory": "نئی ڈائریکٹری تجویز کریں",
+  "current_winner": "موجودہ فاتح:",
+  "no_directories_found": "کوئی ڈائریکٹری نہیں ملی",
+  "search_directories": "ڈائریکٹریاں تلاش کریں"
 }

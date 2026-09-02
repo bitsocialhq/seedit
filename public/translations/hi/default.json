@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "सभी समुदायों के लिए मॉक सामग्री सक्षम करें (Seedit को फिर से लोड करता है)",
   "show_reset_feed_button": "फ़ीड रीसेट करने का बटन दिखाएँ",
   "mock_content_uncached_communities_description": "मॉक सामग्री केवल उन कम्युनिटी के लिए दिखाई जाती है जो कैश में नहीं हैं; कोई काल्पनिक .bso पता आज़माएँ",
-  "propose_new_directory": "नई डायरेक्टरी का प्रस्ताव दें"
+  "propose_new_directory": "नई डायरेक्टरी का प्रस्ताव दें",
+  "current_winner": "वर्तमान विजेता:",
+  "no_directories_found": "कोई डायरेक्टरी नहीं मिली",
+  "search_directories": "डायरेक्टरी खोजें"
 }

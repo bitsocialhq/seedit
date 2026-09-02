@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "为所有社区启用模拟内容（重新加载 Seedit）",
   "show_reset_feed_button": "显示重置信息流按钮",
   "mock_content_uncached_communities_description": "模拟内容仅对未缓存的社区显示；请尝试一个虚构的 .bso 地址",
-  "propose_new_directory": "提议创建新目录"
+  "propose_new_directory": "提议创建新目录",
+  "current_winner": "当前获胜者：",
+  "no_directories_found": "未找到目录",
+  "search_directories": "搜索目录"
 }

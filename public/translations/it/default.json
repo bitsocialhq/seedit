@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "abilita i contenuti di prova per tutte le comunità (ricarica Seedit)",
   "show_reset_feed_button": "mostra il pulsante per ripristinare il feed",
   "mock_content_uncached_communities_description": "il contenuto simulato viene mostrato solo per le comunità non memorizzate nella cache; prova un indirizzo .bso inventato",
-  "propose_new_directory": "Proponi una nuova directory"
+  "propose_new_directory": "Proponi una nuova directory",
+  "current_winner": "vincitore attuale:",
+  "no_directories_found": "Nessuna directory trovata",
+  "search_directories": "cerca nelle directory"
 }

@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "interestingasfuck",
   "description": "Communities competing for Seedit's /s/interestingasfuck route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-interestingasfuck-directory.json",
+  "tags": [
+    "interesting",
+    "curiosity",
+    "science",
+    "nature"
+  ],
+  "rules": [
+    "Posts must show something broadly remarkable, unusual, or genuinely interesting.",
+    "Use a descriptive title that directly matches the content and does not overstate what it proves.",
+    "Provide a credible source when a claim is not evident from the post itself.",
+    "No pornography, gore, doxxing, witch-hunts, brigading, or harassment.",
+    "Do not falsely claim ownership, flood the community, or use posts for self-promotion.",
+    "Be civil; bigotry, threats, and personal attacks are not welcome.",
+    "Avoid recent reposts, celebrity gossip, political advocacy, and AI-generated or AI-assisted content."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "interestingasfuck.bso",

@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "videos",
   "description": "Communities competing for Seedit's /s/videos route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-videos-directory.json",
+  "tags": [
+    "videos",
+    "film",
+    "clips",
+    "documentary"
+  ],
+  "rules": [
+    "Submissions must be videos.",
+    "Link directly to one video, not an embed-only page, shortened URL, playlist, or channel page.",
+    "Do not post personal information, encourage witch-hunts, or direct harassment toward anyone shown.",
+    "No pornography, gore, death footage, malicious assaults, or abuse of people or animals.",
+    "Do not solicit votes, views, followers, giveaways, donations, or fundraising support.",
+    "No hate speech, threats, or demeaning attacks on people or groups.",
+    "Do not submit third-party licensing bait, watermarked agency content, or self-promotional channel material."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "videos-posting.bso",

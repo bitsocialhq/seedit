@@ -3,8 +3,25 @@
   "revision": 1,
   "directoryCode": "aww",
   "description": "Communities competing for Seedit's /s/aww route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-aww-directory.json",
+  "tags": [
+    "animals",
+    "cute",
+    "pets",
+    "wholesome"
+  ],
+  "rules": [
+    "Keep posts uplifting and cute; no death, injury, abuse, or sad rescue stories.",
+    "Do not post memes, captioned media, comics, or pictures that are only text.",
+    "Do not ask for votes, approval, pet names, or other interaction in the title.",
+    "No harassment, slurs, sexual comments, or jokes about harming or eating animals.",
+    "NSFW content is not allowed.",
+    "Do not request donations, sponsorships, sales, or adoptions.",
+    "No bots, repetitive comments, flooding, spam, or self-promotion.",
+    "Post only content you own or created; do not make false ownership claims.",
+    "Do not use the community to promote social-media accounts."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "aww-posting.bso",

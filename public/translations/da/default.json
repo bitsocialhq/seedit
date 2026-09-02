@@ -410,5 +410,8 @@
   "enable_mock_content_all_communities_reload": "aktivér testindhold for alle samfund (genindlæser Seedit)",
   "show_reset_feed_button": "vis knappen til nulstilling af feedet",
   "mock_content_uncached_communities_description": "simuleret indhold vises kun for fællesskaber, der ikke er cachelagret; prøv en opdigtet .bso-adresse",
-  "propose_new_directory": "Foreslå et nyt katalog"
+  "propose_new_directory": "Foreslå et nyt katalog",
+  "current_winner": "nuværende vinder:",
+  "no_directories_found": "Ingen kataloger fundet",
+  "search_directories": "søg i kataloger"
 }
