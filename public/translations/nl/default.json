@@ -171,8 +171,6 @@
   "shown_in_sidebar": "getoond in de zijbalk van uw gemeenschap",
   "moderators_setting_info": "laat andere gebruikers modereren en posten zonder uitdagingen",
   "vote": "stemmen",
-  "passing": "slagen",
-  "rejecting": "afwijzing",
   "add_moderator": "een moderator toevoegen",
   "add_rule": "een regel toevoegen",
   "json_settings": "JSON-instellingen",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Nieuwe directory voorstellen",
   "current_winner": "huidige winnaar:",
   "no_directories_found": "Geen directories gevonden",
-  "search_directories": "doorzoek directory's"
+  "search_directories": "doorzoek directory's",
+  "back_to_all_directories": "terug naar alle directory's",
+  "directories": "directory's"
 }

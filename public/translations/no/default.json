@@ -171,8 +171,6 @@
   "shown_in_sidebar": "vist i sidepanelet for din fellesskap",
   "moderators_setting_info": "la andre brukere moderere og poste uten utfordringer",
   "vote": "stemme",
-  "passing": "bestått",
-  "rejecting": "avvisning",
   "add_moderator": "legg til en moderator",
   "add_rule": "legg til en regel",
   "json_settings": "JSON-innstillinger",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Foreslå en ny katalog",
   "current_winner": "nåværende vinner:",
   "no_directories_found": "Ingen kataloger funnet",
-  "search_directories": "søk i kataloger"
+  "search_directories": "søk i kataloger",
+  "back_to_all_directories": "tilbake til alle kataloger",
+  "directories": "kataloger"
 }

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "mostrato nella barra laterale della tua comunità",
   "moderators_setting_info": "lascia che altri utenti moderino e pubblichino senza challenge",
   "vote": "vota",
-  "passing": "in approvazione",
-  "rejecting": "in rifiuto",
   "add_moderator": "aggiungi un moderatore",
   "add_rule": "aggiungi una regola",
   "json_settings": "impostazioni JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Proponi una nuova directory",
   "current_winner": "vincitore attuale:",
   "no_directories_found": "Nessuna directory trovata",
-  "search_directories": "cerca nelle directory"
+  "search_directories": "cerca nelle directory",
+  "back_to_all_directories": "torna a tutte le directory",
+  "directories": "directory"
 }

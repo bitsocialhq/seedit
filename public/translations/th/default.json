@@ -171,8 +171,6 @@
   "shown_in_sidebar": "แสดงในแถบข้างของชุมชนของคุณ",
   "moderators_setting_info": "อนุญาตให้ผู้ใช้คนอื่นๆ ตรวจสอบและโพสต์โดยไม่มีความท้าทาย",
   "vote": "ลงคะแนนเสียง",
-  "passing": "ผ่าน",
-  "rejecting": "ปฏิเสธ",
   "add_moderator": "เพิ่มผู้ดูแล",
   "add_rule": "เพิ่มกฎ",
   "json_settings": "การตั้งค่า JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "เสนอไดเรกทอรีใหม่",
   "current_winner": "ผู้ชนะปัจจุบัน:",
   "no_directories_found": "ไม่พบไดเรกทอรี",
-  "search_directories": "ค้นหาไดเรกทอรี"
+  "search_directories": "ค้นหาไดเรกทอรี",
+  "back_to_all_directories": "กลับไปที่ไดเรกทอรีทั้งหมด",
+  "directories": "ไดเรกทอรี"
 }

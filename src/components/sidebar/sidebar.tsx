@@ -19,7 +19,7 @@ import {
   isCommunityAboutView,
   isCommunitySettingsView,
   isCommunitiesView,
-  isCommunitiesVoteView,
+  isCommunitiesDirectoryView,
   isCommunityView,
 } from '../../lib/utils/view-utils';
 import useCommunitySubtitles from '../../hooks/use-community-subtitles';
@@ -27,7 +27,7 @@ import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
-import { getCommunityPath, getCommunityPostUrl, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
+import { getCommunityPath, getCommunityPostUrl, getDirectoryCandidatesPath } from '../../lib/utils/community-route-utils';
 import { isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { getDirectoryCommunityProposalUrl, getNewDirectoryProposalUrl } from '../../lib/utils/directory-proposal-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
@@ -194,7 +194,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const isInPendingPostView = isPendingPostView(location.pathname, params);
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInCommunitiesView = isCommunitiesView(location.pathname);
-  const isInCommunitiesVoteView = isCommunitiesVoteView(location.pathname);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
   const proposedDirectoryCode = isDirectoryCode(params.directoryCode) ? params.directoryCode : undefined;
@@ -298,7 +298,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
               <div className={styles.directoryRouteDisclosure}>
                 {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
                 {' — '}
-                <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
+                <Link to={getDirectoryCandidatesPath(directoryCode)}>{t('directory_see_candidates')}</Link>
               </div>
             )}
             <div className={styles.subscribeContainer}>
@@ -358,7 +358,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
           </div>
         )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
-        {isInCommunitiesVoteView && (
+        {isInCommunitiesDirectoryView && (
           <a href={directoryProposalUrl} target='_blank' rel='noopener noreferrer'>
             <div className={styles.largeButton}>
               <div className={styles.nub} />

@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { DirectoryIndex, DirectoryVoteNotice } from './directory-vote';
+import { DirectoryCandidates, DirectoryIndex, DirectoryVoteNotice } from './directory-vote';
 
 vi.mock('@bitsocial/bitsocial-react-hooks', () => ({
   useCommunities: () => ({ communities: {} }),
@@ -25,6 +25,7 @@ vi.mock('react-i18next', () => ({
         current_winner: 'current winner:',
         search_directories: 'search directories',
         no_directories_found: 'no directories found',
+        back_to_all_directories: 'back to all directories',
       };
       return translations[key] ?? key;
     },
@@ -109,5 +110,14 @@ describe('directory vote views', () => {
     const eligibilityLink = container.querySelector<HTMLAnchorElement>('a[href="#/gold"]');
 
     expect(eligibilityLink?.textContent).toBe('see how eligibility will work');
+  });
+
+  it('links an individual directory back to the directory index', () => {
+    window.location.hash = '#/communities/directories/aww';
+    render(createElement(Routes, null, createElement(Route, { path: '/communities/directories/:directoryCode', element: createElement(DirectoryCandidates) })));
+
+    const backLink = container.querySelector<HTMLAnchorElement>('a[href="#/communities/directories"]');
+
+    expect(backLink?.textContent).toContain('back to all directories');
   });
 });

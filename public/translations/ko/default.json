@@ -171,8 +171,6 @@
   "shown_in_sidebar": "귀하의 커뮤니티 사이드바에 표시됩니다",
   "moderators_setting_info": "다른 사용자가 도전 없이 중재하고 게시하도록 허용합니다",
   "vote": "투표",
-  "passing": "통과",
-  "rejecting": "거부",
   "add_moderator": "모더레이터 추가",
   "add_rule": "규칙 추가",
   "json_settings": "JSON 설정",
@@ -413,5 +411,7 @@
   "propose_new_directory": "새 디렉터리 제안",
   "current_winner": "현재 승자:",
   "no_directories_found": "디렉터리를 찾을 수 없습니다",
-  "search_directories": "디렉터리 검색"
+  "search_directories": "디렉터리 검색",
+  "back_to_all_directories": "모든 디렉터리로 돌아가기",
+  "directories": "디렉터리"
 }

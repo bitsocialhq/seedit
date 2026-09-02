@@ -171,8 +171,6 @@
   "shown_in_sidebar": "显示在您社区的侧边栏中",
   "moderators_setting_info": "允许其他用户在没有挑战的情况下进行管理和发布",
   "vote": "投票",
-  "passing": "通过",
-  "rejecting": "拒绝",
   "add_moderator": "添加一名版主",
   "add_rule": "添加一条规则",
   "json_settings": "JSON设置",
@@ -413,5 +411,7 @@
   "propose_new_directory": "提议创建新目录",
   "current_winner": "当前获胜者：",
   "no_directories_found": "未找到目录",
-  "search_directories": "搜索目录"
+  "search_directories": "搜索目录",
+  "back_to_all_directories": "返回所有目录",
+  "directories": "目录"
 }

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "يُعرَض في الشريط الجانبي لمجتمعك",
   "moderators_setting_info": "اسمح للمستخدمين الآخرين بالتدخل والنشر دون تحديات",
   "vote": "صوت",
-  "passing": "مرور",
-  "rejecting": "رفض",
   "add_moderator": "إضافة مشرف",
   "add_rule": "إضافة قاعدة",
   "json_settings": "إعدادات JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "اقترح دليلاً جديداً",
   "current_winner": "الفائز الحالي:",
   "no_directories_found": "لم يتم العثور على أدلة",
-  "search_directories": "البحث في الأدلة"
+  "search_directories": "البحث في الأدلة",
+  "back_to_all_directories": "العودة إلى جميع الأدلة",
+  "directories": "الأدلة"
 }

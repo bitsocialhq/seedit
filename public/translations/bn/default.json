@@ -171,8 +171,6 @@
   "shown_in_sidebar": "আপনার সম্প্রদায়ের সাইডবারে দেখানো হয়",
   "moderators_setting_info": "অন্যান্য ব্যবহারকারীদের সম্মোদন করতে এবং চ্যালেঞ্জ ছাড়া পোস্ট করতে দিন",
   "vote": "ভোট দাও",
-  "passing": "পাস",
-  "rejecting": "বাতিল",
   "add_moderator": "একটি মডারেটর যোগ করুন",
   "add_rule": "একটি নিয়ম যোগ করুন",
   "json_settings": "JSON সেটিংস",
@@ -413,5 +411,7 @@
   "propose_new_directory": "একটি নতুন ডিরেক্টরি প্রস্তাব করুন",
   "current_winner": "বর্তমান বিজয়ী:",
   "no_directories_found": "কোনো ডিরেক্টরি পাওয়া যায়নি",
-  "search_directories": "ডিরেক্টরি খুঁজুন"
+  "search_directories": "ডিরেক্টরি খুঁজুন",
+  "back_to_all_directories": "সব ডিরেক্টরিতে ফিরে যান",
+  "directories": "ডিরেক্টরি"
 }

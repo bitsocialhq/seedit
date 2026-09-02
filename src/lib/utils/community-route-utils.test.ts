@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  DIRECTORY_INDEX_PATH,
   getCanonicalCommunityPostRedirectPath,
   getCanonicalCommunityPostAboutRedirectPath,
   getCanonicalCommunityRoutePathname,
@@ -10,7 +11,7 @@ import {
   getCommunityReferencePostPath,
   getCommunityRouteSegment,
   getDirectoryPath,
-  getDirectoryVotePath,
+  getDirectoryCandidatesPath,
   getExactCommunityActionRedirectPath,
   resolveCommunityRouteAddress,
 } from './community-route-utils';
@@ -86,9 +87,10 @@ describe('community route builders', () => {
     expect(getCommunityReferencePostPath('funny.bso', 'bafy-post-cid')).toBe('/s/funny.bso/comments/bafy-post-cid');
   });
 
-  it('builds the directory candidate list path without touching the discovery route', () => {
-    expect(getDirectoryVotePath('memes')).toBe('/communities/vote/memes');
-    expect(getDirectoryVotePath('memes')).not.toBe(getDirectoryPath('memes'));
+  it('builds the directory candidate list path without touching the community route', () => {
+    expect(DIRECTORY_INDEX_PATH).toBe('/communities/directories');
+    expect(getDirectoryCandidatesPath('memes')).toBe('/communities/directories/memes');
+    expect(getDirectoryCandidatesPath('memes')).not.toBe(getDirectoryPath('memes'));
   });
 
   it('round-trips every canonical address', () => {

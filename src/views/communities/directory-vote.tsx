@@ -6,7 +6,7 @@ import { useDirectoryList } from '../../hooks/use-directory-list';
 import { pickDirectoryWinner, sortDirectoryCommunitiesByRank } from '../../lib/utils/directory-list-utils';
 import { vendoredDirectoryDefaults, vendoredDirectoryLists } from '../../data/vendored-directory-lists';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
-import { getCommunityPath, getDirectoryPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
+import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryCandidatesPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
 import CommunityItem, { NoCommunitiesMessage } from './community-item';
 import communityStyles from './communities.module.css';
@@ -54,7 +54,7 @@ const DirectoryIndexRow = ({ directoryCode, query, onTagSelect }: { directoryCod
   return (
     <li className={styles.directoryRow}>
       <div className={styles.directoryTitle}>
-        <Link to={getDirectoryVotePath(directoryCode)}>
+        <Link to={getDirectoryCandidatesPath(directoryCode)}>
           s/{directoryCode}
           {title && <span className={styles.directoryName}>: {title}</span>}
         </Link>
@@ -141,6 +141,9 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
   return (
     <>
       <div className={styles.directoryHeading}>
+        <Link className={styles.directoryBackLink} to={DIRECTORY_INDEX_PATH}>
+          ← {t('back_to_all_directories')}
+        </Link>
         <div>
           <span className={styles.directoryHeadingTitle}>
             <Link to={getDirectoryPath(directoryCode)}>s/{directoryCode}</Link>
@@ -183,7 +186,7 @@ export const DirectoryCandidates = () => {
   return <DirectoryCandidateList directoryCode={directoryCode} />;
 };
 
-/** Explains what the vote section is and why the controls are inert, above every vote view. */
+/** Explains directory voting and why the controls are inert, above every directory view. */
 export const DirectoryVoteNotice = () => {
   const { t } = useTranslation();
 

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "מוצג בסרגל הצד של הקהילה שלך",
   "moderators_setting_info": "תאפשר למשתמשים אחרים להנהיג ולפרסם בלי אתגרים",
   "vote": "להצביע",
-  "passing": "עובר",
-  "rejecting": "דחיה",
   "add_moderator": "הוסף מנהל",
   "add_rule": "הוסף כלל",
   "json_settings": "הגדרות JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "הצע ספרייה חדשה",
   "current_winner": "הזוכה הנוכחי:",
   "no_directories_found": "לא נמצאו ספריות",
-  "search_directories": "חיפוש בספריות"
+  "search_directories": "חיפוש בספריות",
+  "back_to_all_directories": "חזרה לכל הספריות",
+  "directories": "ספריות"
 }

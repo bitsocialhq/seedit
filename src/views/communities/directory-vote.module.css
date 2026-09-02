@@ -151,6 +151,12 @@
   overflow: hidden;
 }
 
+.directoryBackLink {
+  display: inline-block;
+  margin-bottom: 3px;
+  font-size: 10px;
+}
+
 .directoryHeadingTitle {
   font-size: medium;
   unicode-bidi: isolate;

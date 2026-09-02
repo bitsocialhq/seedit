@@ -171,8 +171,6 @@
   "shown_in_sidebar": "відображається в бічній панелі вашої спільноти",
   "moderators_setting_info": "дозвольте іншим користувачам модерувати та публікувати без викликів",
   "vote": "голосувати",
-  "passing": "проходження",
-  "rejecting": "відхилення",
   "add_moderator": "додайте модератора",
   "add_rule": "додайте правило",
   "json_settings": "Налаштування JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Запропонувати новий каталог",
   "current_winner": "поточний переможець:",
   "no_directories_found": "Каталоги не знайдено",
-  "search_directories": "шукати в каталогах"
+  "search_directories": "шукати в каталогах",
+  "back_to_all_directories": "назад до всіх каталогів",
+  "directories": "каталоги"
 }

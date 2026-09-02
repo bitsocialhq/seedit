@@ -171,8 +171,6 @@
   "shown_in_sidebar": "afișat în bara laterală a comunității tale",
   "moderators_setting_info": "permiteți altor utilizatori să modereze și să posteze fără provocări",
   "vote": "vota",
-  "passing": "trecere",
-  "rejecting": "respingere",
   "add_moderator": "adăugați un moderator",
   "add_rule": "adăugați o regulă",
   "json_settings": "Setări JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Propuneți un director nou",
   "current_winner": "câștigătorul actual:",
   "no_directories_found": "Nu s-au găsit directoare",
-  "search_directories": "caută directoare"
+  "search_directories": "caută directoare",
+  "back_to_all_directories": "înapoi la toate directoarele",
+  "directories": "directoare"
 }

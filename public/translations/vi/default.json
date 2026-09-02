@@ -171,8 +171,6 @@
   "shown_in_sidebar": "được hiển thị ở thanh bên của cộng đồng của bạn",
   "moderators_setting_info": "cho phép người dùng khác kiểm duyệt và đăng bài mà không cần đối mặt với thách thức",
   "vote": "bỏ phiếu",
-  "passing": "đi qua",
-  "rejecting": "từ chối",
   "add_moderator": "thêm một quản trị viên",
   "add_rule": "thêm một quy tắc",
   "json_settings": "Cài đặt JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Đề xuất danh mục mới",
   "current_winner": "người chiến thắng hiện tại:",
   "no_directories_found": "Không tìm thấy danh mục nào",
-  "search_directories": "tìm kiếm danh mục"
+  "search_directories": "tìm kiếm danh mục",
+  "back_to_all_directories": "quay lại tất cả danh mục",
+  "directories": "danh mục"
 }

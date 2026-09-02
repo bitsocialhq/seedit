@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import {
+  DIRECTORY_INDEX_PATH,
   getCanonicalCommunityPostAboutRedirectPath,
   getCanonicalCommunityPostRedirectPath,
   getCommunityPath,
@@ -117,7 +118,7 @@ export const FAQ = () => {
         </p>
         <p>
           Seedit also has default communities and short <code>s/</code> directory routes for public discovery. You can{' '}
-          <Link to='/communities/vote'>inspect the current directories and their candidates</Link>; voting is not open yet. During this bootstrap period, proposals for
+          <Link to={DIRECTORY_INDEX_PATH}>inspect the current directories and their candidates</Link>; voting is not open yet. During this bootstrap period, proposals for
           the default community list are made through{' '}
           <a href='https://github.com/bitsocialnet/lists' target='_blank' rel='noopener noreferrer'>
             bitsocialnet/lists

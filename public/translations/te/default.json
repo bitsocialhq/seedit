@@ -171,8 +171,6 @@
   "shown_in_sidebar": "మీ కమ్యూనిటీ సైడ్‌బార్‌లో చూపించబడుతుంది",
   "moderators_setting_info": "ఇతర వాడకులను చేలెన్జీలేక మాడాలి మరియు పోస్ట్ చేయాలి",
   "vote": "వోటు వేయండి",
-  "passing": "పాస్",
-  "rejecting": "తిరస్కరిస్తోంది",
   "add_moderator": "ఒక నిర్వాహకును చేర్చండి",
   "add_rule": "ఒక నిబంధన చేయండి",
   "json_settings": "JSON సెట్టింగులు",
@@ -413,5 +411,7 @@
   "propose_new_directory": "కొత్త డైరెక్టరీని ప్రతిపాదించండి",
   "current_winner": "ప్రస్తుత విజేత:",
   "no_directories_found": "డైరెక్టరీలు ఏవీ కనుగొనబడలేదు",
-  "search_directories": "డైరెక్టరీలను వెతకండి"
+  "search_directories": "డైరెక్టరీలను వెతకండి",
+  "back_to_all_directories": "అన్ని డైరెక్టరీలకు తిరిగి వెళ్లండి",
+  "directories": "డైరెక్టరీలు"
 }

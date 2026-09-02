@@ -1,3 +1,5 @@
+import { DIRECTORY_INDEX_PATH } from './community-route-utils';
+
 export type ParamsType = {
   accountCommentIndex?: string;
   authorAddress?: string;
@@ -222,18 +224,6 @@ export const isCommunitiesOwnerView = (pathname: string): boolean => {
   return pathname === '/communities/owner';
 };
 
-export const isCommunitiesVoteView = (pathname: string): boolean => {
-  return pathname.startsWith('/communities/vote');
-};
-
-export const isCommunitiesVoteAllView = (pathname: string): boolean => {
-  return pathname === '/communities/vote';
-};
-
-export const isCommunitiesVotePassingView = (pathname: string): boolean => {
-  return pathname === '/communities/vote/passing';
-};
-
-export const isCommunitiesVoteRejectingView = (pathname: string): boolean => {
-  return pathname === '/communities/vote/rejecting';
+export const isCommunitiesDirectoryView = (pathname: string): boolean => {
+  return pathname === DIRECTORY_INDEX_PATH || pathname.startsWith(`${DIRECTORY_INDEX_PATH}/`);
 };

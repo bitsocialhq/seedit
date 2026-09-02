@@ -171,8 +171,6 @@
   "shown_in_sidebar": "im Seitenbereich Ihrer Community angezeigt",
   "moderators_setting_info": "lassen Sie andere Benutzer moderieren und posten, ohne Herausforderungen",
   "vote": "abstimmen",
-  "passing": "bestanden",
-  "rejecting": "ablehnend",
   "add_moderator": "einen Moderator hinzufügen",
   "add_rule": "eine Regel hinzufügen",
   "json_settings": "JSON-Einstellungen",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Neues Verzeichnis vorschlagen",
   "current_winner": "aktueller Gewinner:",
   "no_directories_found": "Keine Verzeichnisse gefunden",
-  "search_directories": "Verzeichnisse durchsuchen"
+  "search_directories": "Verzeichnisse durchsuchen",
+  "back_to_all_directories": "zurück zu allen Verzeichnissen",
+  "directories": "Verzeichnisse"
 }

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "εμφανίζεται στην πλευρική μπάρα της κοινότητάς σας",
   "moderators_setting_info": "αφήστε άλλους χρήστες να διαμεσολαβούν και να δημοσιεύουν χωρίς προκλήσεις",
   "vote": "ψηφίστε",
-  "passing": "πέρασμα",
-  "rejecting": "απόρριψη",
   "add_moderator": "προσθέστε έναν διαχειριστή",
   "add_rule": "προσθέστε μια κανόνα",
   "json_settings": "Ρυθμίσεις JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Προτείνετε έναν νέο κατάλογο",
   "current_winner": "τρέχων νικητής:",
   "no_directories_found": "Δεν βρέθηκαν κατάλογοι",
-  "search_directories": "αναζήτηση καταλόγων"
+  "search_directories": "αναζήτηση καταλόγων",
+  "back_to_all_directories": "επιστροφή σε όλους τους καταλόγους",
+  "directories": "κατάλογοι"
 }

@@ -6,7 +6,7 @@ import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from 
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useDefaultSubscriptions, useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
-import { getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
+import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
 import { sortTypes } from '../../constants/sort-types';
@@ -271,7 +271,7 @@ const TopBar = memo(() => {
               })}
           </ul>
         </div>
-        <Link to='/communities/vote' className={styles.editLink}>
+        <Link to={DIRECTORY_INDEX_PATH} className={styles.editLink}>
           {t('edit')} »
         </Link>
       </div>

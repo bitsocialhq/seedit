@@ -32,7 +32,7 @@ import {
   isCommunitiesSubscriberView,
   isCommunitiesModeratorView,
   isCommunitiesAdminView,
-  isCommunitiesVoteView,
+  isCommunitiesDirectoryView,
   isCommunitiesOwnerView,
   isProfileUpvotedView,
   isSettingsContentOptionsView,
@@ -45,7 +45,7 @@ import {
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
-import { getCommunityPath, getCommunityPostPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
+import { DIRECTORY_INDEX_PATH, getCommunityPath, getCommunityPostPath, getDirectoryCandidatesPath } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -218,19 +218,19 @@ const CommunitiesHeaderTabs = () => {
   const isInCommunitiesModeratorView = isCommunitiesModeratorView(location.pathname);
   const isInCommunitiesAdminView = isCommunitiesAdminView(location.pathname);
   const isInCommunitiesOwnerView = isCommunitiesOwnerView(location.pathname);
-  const isInCommunitiesVoteView = isCommunitiesVoteView(location.pathname);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInCommunitiesView =
     isCommunitiesView(location.pathname) &&
     !isInCommunitiesSubscriberView &&
     !isInCommunitiesModeratorView &&
     !isInCommunitiesAdminView &&
     !isInCommunitiesOwnerView &&
-    !isInCommunitiesVoteView;
+    !isInCommunitiesDirectoryView;
 
   return (
     <>
-      <li className={`${isInCommunitiesVoteView ? styles.selected : styles.choice}`}>
-        <Link to={'/communities/vote'}>{t('vote')}</Link>
+      <li className={`${isInCommunitiesDirectoryView ? styles.selected : styles.choice}`}>
+        <Link to={DIRECTORY_INDEX_PATH}>{t('directories')}</Link>
       </li>
       <li
         className={
@@ -513,7 +513,7 @@ const Header = () => {
         <div className={styles.mobileDirectoryDisclosure}>
           {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(communityAddress)}>{getDisplayAddress(communityAddress)}</Link>
           {' — '}
-          <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
+          <Link to={getDirectoryCandidatesPath(directoryCode)}>{t('directory_see_candidates')}</Link>
         </div>
       )}
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (

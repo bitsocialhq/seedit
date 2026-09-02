@@ -171,8 +171,6 @@
   "shown_in_sidebar": "të shfaqet në anën e majtë të komunitetit tuaj",
   "moderators_setting_info": "lejojini të tjerët të moderohen dhe të postohen pa challenge",
   "vote": "voto",
-  "passing": "kalimi",
-  "rejecting": "refuzim",
   "add_moderator": "shtoni një moderator",
   "add_rule": "shtoni një rregull",
   "json_settings": "Cilësimet JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Propozo një direktori të re",
   "current_winner": "fituesi aktual:",
   "no_directories_found": "Nuk u gjetën drejtori",
-  "search_directories": "kërko në drejtori"
+  "search_directories": "kërko në drejtori",
+  "back_to_all_directories": "kthehu te të gjitha drejtoritë",
+  "directories": "drejtori"
 }

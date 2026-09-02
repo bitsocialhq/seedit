@@ -210,8 +210,6 @@
   "shown_in_sidebar": "shown in the sidebar of your community",
   "moderators_setting_info": "let other users moderate and post without challenges",
   "vote": "vote",
-  "passing": "passing",
-  "rejecting": "rejecting",
   "add_moderator": "add a moderator",
   "add_rule": "add a rule",
   "json_settings": "JSON settings",
@@ -423,5 +421,7 @@
   "propose_new_directory": "Propose a new directory",
   "current_winner": "current winner:",
   "no_directories_found": "no directories found",
-  "search_directories": "search directories"
+  "search_directories": "search directories",
+  "back_to_all_directories": "back to all directories",
+  "directories": "directories"
 }

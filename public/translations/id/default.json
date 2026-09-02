@@ -171,8 +171,6 @@
   "shown_in_sidebar": "ditampilkan di bilah samping komunitas Anda",
   "moderators_setting_info": "biarkan pengguna lain memoderasi dan memposting tanpa tantangan",
   "vote": "memilih",
-  "passing": "lulus",
-  "rejecting": "menolak",
   "add_moderator": "tambahkan moderator",
   "add_rule": "tambahkan aturan",
   "json_settings": "Pengaturan JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Usulkan direktori baru",
   "current_winner": "pemenang saat ini:",
   "no_directories_found": "Tidak ada direktori yang ditemukan",
-  "search_directories": "cari direktori"
+  "search_directories": "cari direktori",
+  "back_to_all_directories": "kembali ke semua direktori",
+  "directories": "direktori"
 }

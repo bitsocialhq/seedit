@@ -171,8 +171,6 @@
   "shown_in_sidebar": "ipinapakita sa sidebar ng iyong komunidad",
   "moderators_setting_info": "pabayaang mag-moderate at mag-post ang iba pang mga gumagamit nang walang mga hamon",
   "vote": "bumoto",
-  "passing": "pumapasa",
-  "rejecting": "tanggihan",
   "add_moderator": "magdagdag ng isang moderator",
   "add_rule": "magdagdag ng isang patakaran",
   "json_settings": "Mga setting ng JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Magmungkahi ng bagong direktoryo",
   "current_winner": "kasalukuyang nanalo:",
   "no_directories_found": "Walang natagpuang mga direktoryo",
-  "search_directories": "maghanap sa mga direktoryo"
+  "search_directories": "maghanap sa mga direktoryo",
+  "back_to_all_directories": "bumalik sa lahat ng direktoryo",
+  "directories": "mga direktoryo"
 }

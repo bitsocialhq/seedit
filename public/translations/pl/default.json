@@ -171,8 +171,6 @@
   "shown_in_sidebar": "wyświetlane na pasku bocznym twojej społeczności",
   "moderators_setting_info": "pozwól innym użytkownikom moderować i publikować bez wyzwań",
   "vote": "głosować",
-  "passing": "zaliczenie",
-  "rejecting": "odrzucanie",
   "add_moderator": "dodaj moderatora",
   "add_rule": "dodaj regułę",
   "json_settings": "Ustawienia JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Zaproponuj nowy katalog",
   "current_winner": "obecny zwycięzca:",
   "no_directories_found": "Nie znaleziono katalogów",
-  "search_directories": "przeszukaj katalogi"
+  "search_directories": "przeszukaj katalogi",
+  "back_to_all_directories": "powrót do wszystkich katalogów",
+  "directories": "katalogi"
 }

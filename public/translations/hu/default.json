@@ -171,8 +171,6 @@
   "shown_in_sidebar": "megjelenik a közösséged oldalsávjában",
   "moderators_setting_info": "engedje meg más felhasználóknak a moderálást és a bejegyzést kihívások nélkül",
   "vote": "szavaz",
-  "passing": "átmenő",
-  "rejecting": "elutasítás",
   "add_moderator": "moderátort hozzáad",
   "add_rule": "szabály hozzáadása",
   "json_settings": "JSON beállítások",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Új címtár javaslata",
   "current_winner": "jelenlegi győztes:",
   "no_directories_found": "Nem találhatók címtárak",
-  "search_directories": "keresés a címtárakban"
+  "search_directories": "keresés a címtárakban",
+  "back_to_all_directories": "vissza az összes címtárhoz",
+  "directories": "címtárak"
 }

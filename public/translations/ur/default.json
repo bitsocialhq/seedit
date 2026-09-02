@@ -171,8 +171,6 @@
   "shown_in_sidebar": "آپ کے کمیونٹی کے سائیڈبار میں دکھایا جاتا ہے",
   "moderators_setting_info": "دوسرے صارفین کو معتدل کرنے اور بغیر چیلنج کے پوسٹ کرنے کی اجازت دیں",
   "vote": "ووٹ دیں",
-  "passing": "گزرنے والا",
-  "rejecting": "مسترد کرنے والا",
   "add_moderator": "ایک موڈریٹر شامل کریں",
   "add_rule": "ایک قاعدہ شامل کریں",
   "json_settings": "JSON ترتیبات",
@@ -413,5 +411,7 @@
   "propose_new_directory": "نئی ڈائریکٹری تجویز کریں",
   "current_winner": "موجودہ فاتح:",
   "no_directories_found": "کوئی ڈائریکٹری نہیں ملی",
-  "search_directories": "ڈائریکٹریاں تلاش کریں"
+  "search_directories": "ڈائریکٹریاں تلاش کریں",
+  "back_to_all_directories": "تمام ڈائریکٹریوں پر واپس جائیں",
+  "directories": "ڈائریکٹریاں"
 }

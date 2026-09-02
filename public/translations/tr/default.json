@@ -171,8 +171,6 @@
   "shown_in_sidebar": "topluluğunuzun yan çubuğunda gösterilir",
   "moderators_setting_info": "diğer kullanıcıların sorunsuzca moderasyon yapmasına ve göndermesine izin verin",
   "vote": "oy vermek",
-  "passing": "geçen",
-  "rejecting": "reddetme",
   "add_moderator": "bir moderatör ekleyin",
   "add_rule": "bir kural ekleyin",
   "json_settings": "JSON ayarları",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Yeni bir dizin öner",
   "current_winner": "mevcut kazanan:",
   "no_directories_found": "Dizin bulunamadı",
-  "search_directories": "dizinlerde ara"
+  "search_directories": "dizinlerde ara",
+  "back_to_all_directories": "tüm dizinlere geri dön",
+  "directories": "dizinler"
 }

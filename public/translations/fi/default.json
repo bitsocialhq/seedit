@@ -171,8 +171,6 @@
   "shown_in_sidebar": "näytetään yhteisösi sivupalkissa",
   "moderators_setting_info": "anna muiden käyttäjien moderoida ja lähettää ilman haasteita",
   "vote": "äänestää",
-  "passing": "läpäisy",
-  "rejecting": "hylkääminen",
   "add_moderator": "lisää moderaattori",
   "add_rule": "lisää sääntö",
   "json_settings": "JSON-asetukset",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Ehdota uutta hakemistoa",
   "current_winner": "nykyinen voittaja:",
   "no_directories_found": "Hakemistoja ei löytynyt",
-  "search_directories": "etsi hakemistoja"
+  "search_directories": "etsi hakemistoja",
+  "back_to_all_directories": "takaisin kaikkiin hakemistoihin",
+  "directories": "hakemistot"
 }

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "در نوار کناری اجتماع شما نشان داده می‌شود",
   "moderators_setting_info": "به کاربران دیگر اجازه دهید که بدون چالش ها مدیریت و ارسال کنند",
   "vote": "رأی دادن",
-  "passing": "گذراندن",
-  "rejecting": "رد کردن",
   "add_moderator": "افزودن یک ناظر",
   "add_rule": "افزودن یک قانون",
   "json_settings": "تنظیمات JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "پیشنهاد یک فهرست جدید",
   "current_winner": "برنده فعلی:",
   "no_directories_found": "هیچ فهرستی یافت نشد",
-  "search_directories": "جستجو در فهرست‌ها"
+  "search_directories": "جستجو در فهرست‌ها",
+  "back_to_all_directories": "بازگشت به همه فهرست‌ها",
+  "directories": "فهرست‌ها"
 }

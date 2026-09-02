@@ -171,8 +171,6 @@
   "shown_in_sidebar": "affiché dans la barre latérale de votre communauté",
   "moderators_setting_info": "laissez d'autres utilisateurs modérer et publier sans défis",
   "vote": "voter",
-  "passing": "passage",
-  "rejecting": "rejet",
   "add_moderator": "ajouter un modérateur",
   "add_rule": "ajouter une règle",
   "json_settings": "Paramètres JSON",
@@ -413,5 +411,7 @@
   "propose_new_directory": "Proposer un nouvel annuaire",
   "current_winner": "gagnant actuel :",
   "no_directories_found": "Aucun annuaire trouvé",
-  "search_directories": "rechercher dans les annuaires"
+  "search_directories": "rechercher dans les annuaires",
+  "back_to_all_directories": "retour à tous les annuaires",
+  "directories": "annuaires"
 }

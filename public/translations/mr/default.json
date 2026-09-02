@@ -171,8 +171,6 @@
   "shown_in_sidebar": "तुमच्या समुदायाच्या साइडबारमध्ये दर्शविले जाते",
   "moderators_setting_info": "इतर वापरकर्त्यांना चॅलेंज न करून मॉडरेट आणि पोस्ट करू द्या",
   "vote": "वोट द्या",
-  "passing": "अशीत करणे",
-  "rejecting": "अस्वीकृत करणारे",
   "add_moderator": "मॉडरेटर जोडा",
   "add_rule": "नियम जोडा",
   "json_settings": "JSON सेटिंग्ज",
@@ -413,5 +411,7 @@
   "propose_new_directory": "नवीन डिरेक्टरी सुचवा",
   "current_winner": "सध्याचा विजेता:",
   "no_directories_found": "कोणतीही डिरेक्टरी आढळली नाही",
-  "search_directories": "डिरेक्टरी शोधा"
+  "search_directories": "डिरेक्टरी शोधा",
+  "back_to_all_directories": "सर्व डिरेक्टरींवर परत जा",
+  "directories": "डिरेक्टरी"
 }

@@ -171,8 +171,6 @@
   "shown_in_sidebar": "あなたのコミュニティのサイドバーに表示されます",
   "moderators_setting_info": "他のユーザーにチャレンジなしでモデレートおよび投稿を許可",
   "vote": "投票する",
-  "passing": "合格",
-  "rejecting": "拒否",
   "add_moderator": "モデレーターを追加",
   "add_rule": "ルールを追加",
   "json_settings": "JSON設定",
@@ -413,5 +411,7 @@
   "propose_new_directory": "新しいディレクトリを提案",
   "current_winner": "現在の勝者：",
   "no_directories_found": "ディレクトリが見つかりませんでした",
-  "search_directories": "ディレクトリを検索"
+  "search_directories": "ディレクトリを検索",
+  "back_to_all_directories": "すべてのディレクトリに戻る",
+  "directories": "ディレクトリ"
 }

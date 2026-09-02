@@ -171,8 +171,6 @@
   "shown_in_sidebar": "आपके समुदाय के साइडबार में दिखाया जाता है",
   "moderators_setting_info": "अन्य उपयोगकर्ताओं को बिना चुनौतियों के मॉडरेट और पोस्ट करने दें",
   "vote": "वोट दें",
-  "passing": "बरताना",
-  "rejecting": "अस्वीकृत करना",
   "add_moderator": "मॉडरेटर जोड़ें",
   "add_rule": "नियम जोड़ें",
   "json_settings": "JSON सेटिंग्स",
@@ -413,5 +411,7 @@
   "propose_new_directory": "नई डायरेक्टरी का प्रस्ताव दें",
   "current_winner": "वर्तमान विजेता:",
   "no_directories_found": "कोई डायरेक्टरी नहीं मिली",
-  "search_directories": "डायरेक्टरी खोजें"
+  "search_directories": "डायरेक्टरी खोजें",
+  "back_to_all_directories": "सभी डायरेक्टरी पर वापस जाएँ",
+  "directories": "डायरेक्टरी"
 }
