@@ -55,14 +55,14 @@ const StatValueCell = ({ row }: { row: TextStatRow }) => {
 };
 
 const ConnectedPeersValue = ({ row }: { row: ConnectedPeersStatRow }) => (
-  <details open>
-    {/* The summary keeps the shared label/value columns, the map and peer list below sit under the value column. */}
-    <summary className={`${styles.category} ${styles.connectedPeersSummary}`}>
+  <div>
+    {/* The heading keeps the shared label/value columns, the map and peer list below sit under the value column. */}
+    <div className={styles.category}>
       <span className={styles.categoryTitle}>{row.name}</span>
       <span className={styles.categorySettings}>
         {formatCount(row.peerCount, 'peer')}, {formatCount(row.connectionCount, 'connection')}
       </span>
-    </summary>
+    </div>
     <div className={styles.connectedPeersPanel}>
       <PeerWorldMap peers={row.mapEntries ?? row.entries} />
       <div className={styles.connectedPeerList}>
@@ -111,7 +111,7 @@ const ConnectedPeersValue = ({ row }: { row: ConnectedPeersStatRow }) => (
         )}
       </div>
     </div>
-  </details>
+  </div>
 );
 
 const P2pStats = () => {

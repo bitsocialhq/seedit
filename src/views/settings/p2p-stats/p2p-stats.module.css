@@ -50,10 +50,6 @@
   text-decoration: underline;
 }
 
-.connectedPeersSummary {
-  cursor: pointer;
-}
-
 /* The map and peer list line up under the value column, and take the full
    width once the narrow layout drops the label column to a stub. */
 .connectedPeersPanel {
