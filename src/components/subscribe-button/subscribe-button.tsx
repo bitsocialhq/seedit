@@ -27,6 +27,8 @@ const SubscribeButton = ({ address, directoryCode, directoryRevision, onUnsubscr
   const isInAuthorView = isAuthorView(location.pathname);
   const isInProfileView = isProfileView(location.pathname);
   const isInPendingPostView = isPendingPostView(location.pathname, params);
+  if (subscribed === undefined) return null;
+
   const communityPageString = subscribed ? `${t('leave')}` : `${t('join')}`;
   const authorPageString = '+ friends'; // TODO: add functionality once implemented in backend
 
