@@ -31,7 +31,7 @@
   min-height: 71px;
   padding: 5px 5px 5px 96px;
   border: 1px solid var(--border-text);
-  margin: 5px 320px 5px 0;
+  margin: 5px 305px 5px 0;
   background-color: color-mix(in srgb, var(--background) 88%, var(--text));
   color: var(--text-markdown);
 }
