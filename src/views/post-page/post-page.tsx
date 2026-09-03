@@ -6,7 +6,7 @@ import findTopParentCidOfReply from '../../lib/utils/cid-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { sortRepliesByBest } from '../../lib/utils/post-utils';
 import { getCanonicalCommunityPostRedirectPath, getCommunityPostPath, resolveCommunityRouteAddress } from '../../lib/utils/community-route-utils';
-import { isPendingPostView, isPostContextView } from '../../lib/utils/view-utils';
+import { getPendingPostKey, getPendingPostRedirect, isPendingPostView, isPostContextView, RenderedPendingPost } from '../../lib/utils/view-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useFeedResetStore from '../../stores/use-feed-reset-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -266,24 +266,28 @@ const PostPage = () => {
       accountComments?.length > 0 &&
       parseInt(accountCommentIndex) < accountComments.length);
 
+  const accountComment = useOptionalAccountComment(commentIndex);
+  const pendingPost = accountComment;
+
   // a pending post that was already rendered disappears when its publication is abandoned during the
   // challenge, because abandoning deletes the account comment; go back instead of showing not found
-  const renderedAccountCommentIndexRef = useRef<string | undefined>(undefined);
+  const pendingPostKey = getPendingPostKey(accountComment);
+  const renderedPendingPostRef = useRef<RenderedPendingPost>({});
 
   useEffect(() => {
-    if (isValidAccountCommentIndex) {
-      renderedAccountCommentIndexRef.current = accountCommentIndex;
+    const current = { accountCommentIndex, key: pendingPostKey };
+    const redirect = getPendingPostRedirect(renderedPendingPostRef.current, current, isValidAccountCommentIndex);
+    if (!redirect) {
+      renderedPendingPostRef.current = current;
       return;
     }
-    if (renderedAccountCommentIndexRef.current === accountCommentIndex) {
+    if (redirect === 'back') {
       navigate(-1);
       return;
     }
     navigate('/not-found', { replace: true });
-  }, [accountCommentIndex, isValidAccountCommentIndex, navigate]);
+  }, [accountCommentIndex, isValidAccountCommentIndex, navigate, pendingPostKey]);
 
-  const accountComment = useOptionalAccountComment(commentIndex);
-  const pendingPost = accountComment;
   const pendingPostCommunityAddress = getCommentCommunityAddress(pendingPost);
 
   // in pending post route, redirect to post page route when post is published (cid is defined)
