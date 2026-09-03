@@ -1,3 +1,4 @@
+import { type Comment } from '@bitsocial/bitsocial-react-hooks';
 import { isDirectoryCode } from './directory-codes';
 import { DIRECTORY_INDEX_PATH, getDirectoryAboutPath } from './community-route-utils';
 
@@ -114,6 +115,30 @@ export const isModView = (pathname: string): boolean => {
 
 export const isPendingPostView = (pathname: string, params: ParamsType): boolean => {
   return pathname === `/profile/${params.accountCommentIndex}`;
+};
+
+export interface RenderedPendingPost {
+  accountCommentIndex?: string;
+  key?: string;
+}
+
+// a pending account comment has no cid yet; its publish timestamp and community identify it across
+// the reindexing that happens when an earlier account comment is deleted
+export const getPendingPostKey = (accountComment?: Comment): string | undefined =>
+  accountComment?.timestamp === undefined ? undefined : `${accountComment.communityAddress ?? ''}:${accountComment.timestamp}`;
+
+// abandoning a pending post deletes its account comment, so the post page that rendered it must go back
+// instead of showing not found, also when a later account comment shifted into the same index
+export const getPendingPostRedirect = (
+  rendered: RenderedPendingPost,
+  current: RenderedPendingPost,
+  isValidAccountCommentIndex: boolean,
+): 'back' | 'not-found' | undefined => {
+  const wasRenderedHere = rendered.key !== undefined && rendered.accountCommentIndex === current.accountCommentIndex;
+  if (isValidAccountCommentIndex && !(wasRenderedHere && rendered.key !== current.key)) {
+    return undefined;
+  }
+  return wasRenderedHere ? 'back' : 'not-found';
 };
 
 export const isPostPageView = (pathname: string, params: ParamsType): boolean => {
