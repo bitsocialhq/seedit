@@ -413,5 +413,6 @@
   "no_directories_found": "ไม่พบไดเรกทอรี",
   "search_directories": "ค้นหาไดเรกทอรี",
   "back_to_all_directories": "กลับไปที่ไดเรกทอรีทั้งหมด",
-  "directories": "ไดเรกทอรี"
+  "directories": "ไดเรกทอรี",
+  "search_communities": "ค้นหาชุมชน"
 }

@@ -413,5 +413,6 @@
   "no_directories_found": "Geen directories gevonden",
   "search_directories": "doorzoek directory's",
   "back_to_all_directories": "terug naar alle directory's",
-  "directories": "directory's"
+  "directories": "directory's",
+  "search_communities": "gemeenschappen zoeken"
 }

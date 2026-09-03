@@ -413,5 +413,6 @@
   "no_directories_found": "Nuk u gjetën drejtori",
   "search_directories": "kërko në drejtori",
   "back_to_all_directories": "kthehu te të gjitha drejtoritë",
-  "directories": "drejtori"
+  "directories": "drejtori",
+  "search_communities": "kërko komunitete"
 }

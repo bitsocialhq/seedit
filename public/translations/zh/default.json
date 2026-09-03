@@ -413,5 +413,6 @@
   "no_directories_found": "未找到目录",
   "search_directories": "搜索目录",
   "back_to_all_directories": "返回所有目录",
-  "directories": "目录"
+  "directories": "目录",
+  "search_communities": "搜索社区"
 }

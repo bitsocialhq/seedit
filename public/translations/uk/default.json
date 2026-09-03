@@ -413,5 +413,6 @@
   "no_directories_found": "Каталоги не знайдено",
   "search_directories": "шукати в каталогах",
   "back_to_all_directories": "назад до всіх каталогів",
-  "directories": "каталоги"
+  "directories": "каталоги",
+  "search_communities": "пошук спільнот"
 }

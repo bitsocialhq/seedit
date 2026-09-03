@@ -413,5 +413,6 @@
   "no_directories_found": "Nem találhatók címtárak",
   "search_directories": "keresés a címtárakban",
   "back_to_all_directories": "vissza az összes címtárhoz",
-  "directories": "címtárak"
+  "directories": "címtárak",
+  "search_communities": "közösségek keresése"
 }

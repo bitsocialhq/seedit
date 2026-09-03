@@ -413,5 +413,6 @@
   "no_directories_found": "Tidak ada direktori yang ditemukan",
   "search_directories": "cari direktori",
   "back_to_all_directories": "kembali ke semua direktori",
-  "directories": "direktori"
+  "directories": "direktori",
+  "search_communities": "cari komunitas"
 }

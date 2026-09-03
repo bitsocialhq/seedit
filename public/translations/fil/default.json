@@ -413,5 +413,6 @@
   "no_directories_found": "Walang natagpuang mga direktoryo",
   "search_directories": "maghanap sa mga direktoryo",
   "back_to_all_directories": "bumalik sa lahat ng direktoryo",
-  "directories": "mga direktoryo"
+  "directories": "mga direktoryo",
+  "search_communities": "maghanap ng mga komunidad"
 }

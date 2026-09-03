@@ -413,5 +413,6 @@
   "no_directories_found": "لم يتم العثور على أدلة",
   "search_directories": "البحث في الأدلة",
   "back_to_all_directories": "العودة إلى جميع الأدلة",
-  "directories": "الأدلة"
+  "directories": "الأدلة",
+  "search_communities": "البحث عن مجتمعات"
 }

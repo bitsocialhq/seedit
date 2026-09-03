@@ -3,17 +3,31 @@ import { useTranslation } from 'react-i18next';
 import { useCommunities, type Community as CommunityType } from '@bitsocial/bitsocial-react-hooks';
 import { SEEDIT_DIRECTORY_CODES, isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
 import { useDirectoryList } from '../../hooks/use-directory-list';
-import { pickDirectoryWinner, sortDirectoryCommunitiesByRank } from '../../lib/utils/directory-list-utils';
+import { pickDirectoryWinner, sortDirectoryCommunitiesByRank, type DirectoryListCommunity } from '../../lib/utils/directory-list-utils';
 import { vendoredDirectoryDefaults, vendoredDirectoryLists } from '../../data/vendored-directory-lists';
 import { getCommunityIdentifiers } from '../../hooks/use-community-identifier';
 import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryCandidatesPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
 import { getDisplayAddress } from '../../lib/utils/address-utils';
 import SubscribeButton from '../../components/subscribe-button';
 import CommunityItem, { NoCommunitiesMessage } from './community-item';
+import DirectorySearch from './directory-search';
 import communityStyles from './communities.module.css';
 import styles from './directory-vote.module.css';
 
 const getDirectoryMetadata = (directoryCode: SeeditDirectoryCode) => vendoredDirectoryDefaults.directories[directoryCode];
+
+const useDirectorySearchQuery = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('q') ?? '';
+  const setQuery = (nextQuery: string) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    if (nextQuery) nextSearchParams.set('q', nextQuery);
+    else nextSearchParams.delete('q');
+    setSearchParams(nextSearchParams, { replace: true });
+  };
+
+  return { query, setQuery };
+};
 
 const DirectoryTags = ({ tags, onSelect }: { tags: string[] | undefined; onSelect?: (tag: string) => void }) =>
   tags?.length ? (
@@ -94,14 +108,7 @@ const DirectoryIndexRow = ({ directoryCode, query, onTagSelect }: { directoryCod
 /** Lists every reserved /s/ route so a voter can pick which directory to inspect. */
 export const DirectoryIndex = () => {
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q') ?? '';
-  const setQuery = (nextQuery: string) => {
-    const nextSearchParams = new URLSearchParams(searchParams);
-    if (nextQuery) nextSearchParams.set('q', nextQuery);
-    else nextSearchParams.delete('q');
-    setSearchParams(nextSearchParams, { replace: true });
-  };
+  const { query, setQuery } = useDirectorySearchQuery();
   const hasVendoredMatch = SEEDIT_DIRECTORY_CODES.some((directoryCode) => {
     const metadata = getDirectoryMetadata(directoryCode) ?? {};
     return directoryMatchesSearch(query, directoryCode, metadata, vendoredDirectoryLists[directoryCode].tags);
@@ -109,20 +116,7 @@ export const DirectoryIndex = () => {
 
   return (
     <>
-      <form className={styles.directorySearch} role='search' onSubmit={(event) => event.preventDefault()}>
-        <h4>{t('search_directories')}</h4>
-        <div className={styles.directorySearchField}>
-          <input
-            className={styles.directorySearchInput}
-            type='search'
-            value={query}
-            aria-label={t('search_directories')}
-            placeholder={t('search_directories')}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <button className={styles.directorySearchButton} type='submit' aria-label={t('search_directories')} />
-        </div>
-      </form>
+      <DirectorySearch label={t('search_directories')} query={query} onQueryChange={setQuery} />
       <ul className={styles.directoryIndex} role='list'>
         {SEEDIT_DIRECTORY_CODES.map((directoryCode) => (
           <DirectoryIndexRow key={directoryCode} directoryCode={directoryCode} query={query} onTagSelect={setQuery} />
@@ -133,8 +127,18 @@ export const DirectoryIndex = () => {
   );
 };
 
+const communityMatchesSearch = (query: string, candidate: DirectoryListCommunity, community: CommunityType): boolean => {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return true;
+
+  return [candidate.address, candidate.owner, ...(candidate.tags ?? []), community.shortAddress, community.title, community.description].some((value) =>
+    value?.toLowerCase().includes(normalizedQuery),
+  );
+};
+
 const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirectoryCode }) => {
   const { t } = useTranslation();
+  const { query, setQuery } = useDirectorySearchQuery();
   const { list } = useDirectoryList(directoryCode);
   const ranked = list ? sortDirectoryCommunitiesByRank(list.communities) : [];
 
@@ -147,6 +151,11 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
       .map((community) => [community.address, community]),
   );
   const { title, description } = getDirectoryMetadata(directoryCode) ?? {};
+  const visibleCandidates = ranked.reduce<{ candidate: DirectoryListCommunity; community: CommunityType; rankIndex: number }[]>((matches, candidate, rankIndex) => {
+    const community = loadedCommunities.get(candidate.address) ?? ({ address: candidate.address } as CommunityType);
+    if (communityMatchesSearch(query, candidate, community)) matches.push({ candidate, community, rankIndex });
+    return matches;
+  }, []);
 
   return (
     <>
@@ -164,17 +173,20 @@ const DirectoryCandidateList = ({ directoryCode }: { directoryCode: SeeditDirect
         {description && <p className={styles.directoryHeadingDescription}>{description}</p>}
         <DirectoryTags tags={list?.tags} />
       </div>
+      <DirectorySearch label={t('search_communities')} query={query} onQueryChange={setQuery} />
       {ranked.length === 0 ? (
         <NoCommunitiesMessage />
+      ) : visibleCandidates.length === 0 ? (
+        <p className={styles.directoryNoResults}>{t('no_matches_found_for', { query })}</p>
       ) : (
-        ranked.map((candidate, index) => (
+        visibleCandidates.map(({ candidate, community, rankIndex }) => (
           <CommunityItem
             key={candidate.address}
-            community={loadedCommunities.get(candidate.address) ?? ({ address: candidate.address } as CommunityType)}
-            index={index}
+            community={community}
+            index={rankIndex}
             score={candidate.score}
             owner={candidate.owner}
-            isWinner={index === 0}
+            isWinner={rankIndex === 0}
             nsfw={candidate.nsfw}
             tags={candidate.tags}
             linkTags={false}

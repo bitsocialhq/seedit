@@ -413,5 +413,6 @@
   "no_directories_found": "Hakemistoja ei löytynyt",
   "search_directories": "etsi hakemistoja",
   "back_to_all_directories": "takaisin kaikkiin hakemistoihin",
-  "directories": "hakemistot"
+  "directories": "hakemistot",
+  "search_communities": "etsi yhteisöjä"
 }

@@ -413,5 +413,6 @@
   "no_directories_found": "Nessuna directory trovata",
   "search_directories": "cerca nelle directory",
   "back_to_all_directories": "torna a tutte le directory",
-  "directories": "directory"
+  "directories": "directory",
+  "search_communities": "cerca comunità"
 }

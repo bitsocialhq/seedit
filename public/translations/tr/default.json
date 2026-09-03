@@ -413,5 +413,6 @@
   "no_directories_found": "Dizin bulunamadı",
   "search_directories": "dizinlerde ara",
   "back_to_all_directories": "tüm dizinlere geri dön",
-  "directories": "dizinler"
+  "directories": "dizinler",
+  "search_communities": "toplulukları ara"
 }

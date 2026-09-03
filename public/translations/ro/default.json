@@ -413,5 +413,6 @@
   "no_directories_found": "Nu s-au găsit directoare",
   "search_directories": "caută directoare",
   "back_to_all_directories": "înapoi la toate directoarele",
-  "directories": "directoare"
+  "directories": "directoare",
+  "search_communities": "caută comunități"
 }

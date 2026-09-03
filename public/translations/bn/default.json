@@ -413,5 +413,6 @@
   "no_directories_found": "কোনো ডিরেক্টরি পাওয়া যায়নি",
   "search_directories": "ডিরেক্টরি খুঁজুন",
   "back_to_all_directories": "সব ডিরেক্টরিতে ফিরে যান",
-  "directories": "ডিরেক্টরি"
+  "directories": "ডিরেক্টরি",
+  "search_communities": "সম্প্রদায় খুঁজুন"
 }

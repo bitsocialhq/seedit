@@ -413,5 +413,6 @@
   "no_directories_found": "Δεν βρέθηκαν κατάλογοι",
   "search_directories": "αναζήτηση καταλόγων",
   "back_to_all_directories": "επιστροφή σε όλους τους καταλόγους",
-  "directories": "κατάλογοι"
+  "directories": "κατάλογοι",
+  "search_communities": "αναζήτηση κοινοτήτων"
 }

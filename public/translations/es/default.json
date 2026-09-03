@@ -413,5 +413,6 @@
   "no_directories_found": "No se encontraron directorios",
   "search_directories": "buscar directorios",
   "back_to_all_directories": "volver a todos los directorios",
-  "directories": "directorios"
+  "directories": "directorios",
+  "search_communities": "buscar comunidades"
 }

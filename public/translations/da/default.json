@@ -413,5 +413,6 @@
   "no_directories_found": "Ingen kataloger fundet",
   "search_directories": "søg i kataloger",
   "back_to_all_directories": "tilbage til alle kataloger",
-  "directories": "kataloger"
+  "directories": "kataloger",
+  "search_communities": "søg efter fællesskaber"
 }

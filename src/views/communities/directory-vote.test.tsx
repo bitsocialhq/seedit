@@ -8,7 +8,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DirectoryCandidates, DirectoryIndex, DirectoryVoteNotice } from './directory-vote';
 
 vi.mock('@bitsocial/bitsocial-react-hooks', () => ({
-  useCommunities: () => ({ communities: {} }),
+  useCommunities: () => ({
+    communities: {
+      'aww.bso': { address: 'aww.bso', title: 'Aww' },
+      'cute-animals.bso': { address: 'cute-animals.bso', description: 'A community for wildlife fans', title: 'Cute Animals' },
+    },
+  }),
 }));
 
 vi.mock('../../components/subscribe-button', async () => {
@@ -41,7 +46,9 @@ vi.mock('react-i18next', () => ({
         directory_winner_explanation: 'Highest rated candidate, so it currently resolves this route.',
         current_winner: 'current winner:',
         search_directories: 'search directories',
+        search_communities: 'search communities',
         no_directories_found: 'no directories found',
+        no_matches_found_for: `no matches found for "${values?.query}"`,
         back_to_all_directories: 'back to all directories',
       };
       return translations[key] ?? key;
@@ -56,7 +63,13 @@ vi.mock('../../hooks/use-directory-list', () => ({
       revision: 3,
       directoryCode,
       tags: directoryCode === 'aww' ? ['animals', 'cute'] : ['discussion'],
-      communities: [{ address: `${directoryCode}.bso` }],
+      communities:
+        directoryCode === 'aww'
+          ? [
+              { address: 'aww.bso', owner: 'first-owner.bso', score: 10, tags: ['cute'] },
+              { address: 'cute-animals.bso', owner: 'second-owner.bso', score: 5, tags: ['animals'] },
+            ]
+          : [{ address: `${directoryCode}.bso` }],
     },
     loading: false,
     error: null,
@@ -64,8 +77,17 @@ vi.mock('../../hooks/use-directory-list', () => ({
 }));
 
 vi.mock('./community-item', () => ({
-  default: () => null,
-  NoCommunitiesMessage: () => null,
+  default: ({ community, index, isWinner }: { community: { address: string; title?: string }; index: number; isWinner: boolean }) =>
+    createElement(
+      'div',
+      {
+        'data-community-address': community.address,
+        'data-rank': index + 1,
+        'data-winner': isWinner,
+      },
+      community.title ?? community.address,
+    ),
+  NoCommunitiesMessage: () => createElement('div', null, 'nothing found'),
 }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -141,5 +163,27 @@ describe('directory vote views', () => {
     const backLink = container.querySelector<HTMLAnchorElement>('a[href="#/communities/directories"]');
 
     expect(backLink?.textContent).toContain('back to all directories');
+  });
+
+  it('searches a directory without changing candidate ranks or winner state', async () => {
+    window.location.hash = '#/communities/directories/aww';
+    render(createElement(Routes, null, createElement(Route, { path: '/communities/directories/:directoryCode', element: createElement(DirectoryCandidates) })));
+
+    const searchInput = container.querySelector<HTMLInputElement>('input[type="search"]');
+    expect(searchInput?.getAttribute('placeholder')).toBe('search communities');
+    expect(container.querySelectorAll('[data-community-address]')).toHaveLength(2);
+
+    await act(async () => {
+      const valueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+      valueSetter?.call(searchInput, 'wildlife');
+      searchInput?.dispatchEvent(new Event('input', { bubbles: true }));
+      searchInput?.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    const visibleCandidate = container.querySelector('[data-community-address]');
+    expect(container.querySelectorAll('[data-community-address]')).toHaveLength(1);
+    expect(visibleCandidate?.getAttribute('data-community-address')).toBe('cute-animals.bso');
+    expect(visibleCandidate?.getAttribute('data-rank')).toBe('2');
+    expect(visibleCandidate?.getAttribute('data-winner')).toBe('false');
   });
 });

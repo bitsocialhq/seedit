@@ -413,5 +413,6 @@
   "no_directories_found": "Nebyly nalezeny žádné adresáře",
   "search_directories": "prohledat adresáře",
   "back_to_all_directories": "zpět na všechny adresáře",
-  "directories": "adresáře"
+  "directories": "adresáře",
+  "search_communities": "hledat komunity"
 }
