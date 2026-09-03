@@ -11,6 +11,7 @@ import {
   getCommunityReferencePostPath,
   getCommunityRouteSegment,
   getDirectoryPath,
+  getDirectoryAboutPath,
   getDirectoryCandidatesPath,
   getExactCommunityActionRedirectPath,
   resolveCommunityRouteAddress,
@@ -91,6 +92,11 @@ describe('community route builders', () => {
     expect(DIRECTORY_INDEX_PATH).toBe('/communities/directories');
     expect(getDirectoryCandidatesPath('memes')).toBe('/communities/directories/memes');
     expect(getDirectoryCandidatesPath('memes')).not.toBe(getDirectoryPath('memes'));
+  });
+
+  it('builds mobile about paths for the directory index and candidate lists', () => {
+    expect(getDirectoryAboutPath()).toBe('/communities/directories/about');
+    expect(getDirectoryAboutPath('memes')).toBe('/communities/directories/memes/about');
   });
 
   it('round-trips every canonical address', () => {

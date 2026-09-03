@@ -46,7 +46,7 @@ vi.mock('react-i18next', () => ({
         directory_winner_explanation: 'Highest rated candidate, so it currently resolves this route.',
         current_winner: 'current winner:',
         search_directories: 'search directories',
-        search_communities: 'search communities',
+        search_communities: 'search communities in this directory',
         no_directories_found: 'no directories found',
         no_matches_found_for: `no matches found for "${values?.query}"`,
         back_to_all_directories: 'back to all directories',
@@ -170,7 +170,7 @@ describe('directory vote views', () => {
     render(createElement(Routes, null, createElement(Route, { path: '/communities/directories/:directoryCode', element: createElement(DirectoryCandidates) })));
 
     const searchInput = container.querySelector<HTMLInputElement>('input[type="search"]');
-    expect(searchInput?.getAttribute('placeholder')).toBe('search communities');
+    expect(searchInput?.getAttribute('placeholder')).toBe('search communities in this directory');
     expect(container.querySelectorAll('[data-community-address]')).toHaveLength(2);
 
     await act(async () => {

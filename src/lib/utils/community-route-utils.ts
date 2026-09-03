@@ -34,6 +34,10 @@ export const getDirectoryPath = (directoryCode: SeeditDirectoryCode): string => 
 /** The directory's candidate list, where the communities competing for the route are ranked. */
 export const getDirectoryCandidatesPath = (directoryCode: SeeditDirectoryCode): string => `${DIRECTORY_INDEX_PATH}/${encodeURIComponent(directoryCode)}`;
 
+/** The mobile sidebar view for the directory index or one directory's candidate list. */
+export const getDirectoryAboutPath = (directoryCode?: SeeditDirectoryCode): string =>
+  directoryCode ? `${getDirectoryCandidatesPath(directoryCode)}/about` : `${DIRECTORY_INDEX_PATH}/about`;
+
 /** Use for typed or linked references that may intentionally name a directory route. */
 export const getCommunityReferencePath = (communityReference: string): string =>
   isDirectoryCode(communityReference) ? getDirectoryPath(communityReference) : getCommunityPath(communityReference);

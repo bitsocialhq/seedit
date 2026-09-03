@@ -32,6 +32,7 @@ import {
   isCommunitiesSubscriberView,
   isCommunitiesModeratorView,
   isCommunitiesAdminView,
+  isCommunitiesDirectoryAboutView,
   isCommunitiesDirectoryView,
   isCommunitiesOwnerView,
   isProfileUpvotedView,
@@ -70,9 +71,14 @@ const AboutButton = () => {
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
+  const isInCommunitiesDirectoryAboutView = isCommunitiesDirectoryAboutView(location.pathname);
 
   return (
-    <li className={`${styles.about} ${isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? styles.selected : styles.choice}`}>
+    <li
+      className={`${styles.about} ${
+        isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView || isInCommunitiesDirectoryAboutView ? styles.selected : styles.choice
+      }`}
+    >
       <Link to={aboutLink}>{t('about')}</Link>
     </li>
   );
@@ -219,6 +225,7 @@ const CommunitiesHeaderTabs = () => {
   const isInCommunitiesAdminView = isCommunitiesAdminView(location.pathname);
   const isInCommunitiesOwnerView = isCommunitiesOwnerView(location.pathname);
   const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
+  const isInCommunitiesDirectoryAboutView = isCommunitiesDirectoryAboutView(location.pathname);
   const isInCommunitiesView =
     isCommunitiesView(location.pathname) &&
     !isInCommunitiesSubscriberView &&
@@ -229,7 +236,7 @@ const CommunitiesHeaderTabs = () => {
 
   return (
     <>
-      <li className={`${isInCommunitiesDirectoryView ? styles.selected : styles.choice}`}>
+      <li className={`${isInCommunitiesDirectoryView && !isInCommunitiesDirectoryAboutView ? styles.selected : styles.choice}`}>
         <Link to={DIRECTORY_INDEX_PATH}>{t('directories')}</Link>
       </li>
       <li
@@ -446,6 +453,7 @@ const Header = () => {
   const isInSubmitView = isSubmitView(location.pathname);
   const isInCommunitySubmitView = isCommunitySubmitView(location.pathname, params);
   const isInCommunitySettingsView = isCommunitySettingsView(location.pathname, params);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInNotFoundView = useNotFoundStore((state) => state.isNotFound);
 
   const hasFewTabs = isInPostPageView || isInSubmitView || isInCommunitySubmitView || isInCommunitySettingsView || isInSettingsView || isInInboxView || isInSettingsView;
@@ -519,8 +527,8 @@ const Header = () => {
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
         <ul className={`${styles.tabMenu} ${isInProfileView || isInSettingsView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />
-          {(isInHomeView || isInHomeAboutView || isInCommunityView || isInHomeAboutView || isInPostPageView) && <AboutButton />}
-          {!isInSubmitView && !isInSettingsView && (
+          {(isInHomeView || isInHomeAboutView || isInCommunityView || isInPostPageView || isInCommunitiesDirectoryView) && <AboutButton />}
+          {!isInSubmitView && !isInSettingsView && !isInCommunitiesDirectoryView && (
             <li>
               <Link to={mobileSubmitButtonRoute} className={styles.submitButton}>
                 {t('submit')}

@@ -1,10 +1,12 @@
-import { DIRECTORY_INDEX_PATH } from './community-route-utils';
+import { isDirectoryCode } from './directory-codes';
+import { DIRECTORY_INDEX_PATH, getDirectoryAboutPath } from './community-route-utils';
 
 export type ParamsType = {
   accountCommentIndex?: string;
   authorAddress?: string;
   commentCid?: string;
   communityAddress?: string;
+  directoryCode?: string;
   timeFilterName?: string;
 };
 
@@ -16,7 +18,9 @@ export const getAboutLink = (pathname: string, params: ParamsType): string => {
   // some communities might use emojis in their address, so we need to decode the pathname
   const decodedPathname = decodeURIComponent(pathname);
 
-  if (decodedPathname.startsWith(`/s/${params.communityAddress}/comments/${params.commentCid}`)) {
+  if (isCommunitiesDirectoryView(decodedPathname)) {
+    return getDirectoryAboutPath(isDirectoryCode(params.directoryCode) ? params.directoryCode : undefined);
+  } else if (decodedPathname.startsWith(`/s/${params.communityAddress}/comments/${params.commentCid}`)) {
     return `/s/${params.communityAddress}/comments/${params.commentCid}/about`;
   } else if (decodedPathname.startsWith(`/s/${params.communityAddress}`)) {
     return `/s/${params.communityAddress}/about`;
@@ -226,4 +230,8 @@ export const isCommunitiesOwnerView = (pathname: string): boolean => {
 
 export const isCommunitiesDirectoryView = (pathname: string): boolean => {
   return pathname === DIRECTORY_INDEX_PATH || pathname.startsWith(`${DIRECTORY_INDEX_PATH}/`);
+};
+
+export const isCommunitiesDirectoryAboutView = (pathname: string): boolean => {
+  return isCommunitiesDirectoryView(pathname) && pathname.endsWith('/about');
 };

@@ -6,6 +6,7 @@ import { useAutoSubscribe } from './hooks/use-auto-subscribe';
 import { useBrowserPureP2PAccountUpgrade } from './hooks/use-browser-pure-p2p-account-upgrade';
 import useCanonicalCommunityRoute from './hooks/use-canonical-community-route';
 import AboutView from './views/about';
+import DirectoryAboutView from './views/about/directory-about';
 import All from './views/all';
 import Author from './views/author';
 import Domain from './views/domain';
@@ -169,7 +170,9 @@ const App = () => {
             <Route path='/communities/admin' element={<Communities />} />
             <Route path='/communities/owner' element={<Communities />} />
             <Route path={DIRECTORY_INDEX_PATH} element={<Communities />} />
+            <Route path={`${DIRECTORY_INDEX_PATH}/about`} element={<DirectoryAboutView />} />
             <Route path={`${DIRECTORY_INDEX_PATH}/:directoryCode`} element={<Communities />} />
+            <Route path={`${DIRECTORY_INDEX_PATH}/:directoryCode/about`} element={<DirectoryAboutView />} />
             <Route path='/communities/vote' element={<LegacyDirectoryRouteRedirect />} />
             <Route path='/communities/vote/passing' element={<LegacyDirectoryRouteRedirect />} />
             <Route path='/communities/vote/rejecting' element={<LegacyDirectoryRouteRedirect />} />
