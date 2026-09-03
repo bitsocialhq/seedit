@@ -432,5 +432,12 @@
   "search_excerpt_more": "lisää",
   "search_results_in": "hakutulokset kohteessa {{community}}",
   "search_within_community": "hae kohteesta {{community}}",
-  "auto_hide_topbar_while_scrolling": "Piilota yläpalkki automaattisesti vieritettäessä"
+  "auto_hide_topbar_while_scrolling": "Piilota yläpalkki automaattisesti vieritettäessä",
+  "propose_new_directory": "Ehdota uutta hakemistoa",
+  "current_winner": "nykyinen voittaja:",
+  "no_directories_found": "Hakemistoja ei löytynyt",
+  "search_directories": "etsi hakemistoja",
+  "back_to_all_directories": "takaisin kaikkiin hakemistoihin",
+  "directories": "hakemistot",
+  "search_communities": "etsi yhteisöjä tästä hakemistosta"
 }

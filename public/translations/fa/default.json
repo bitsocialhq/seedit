@@ -433,5 +433,12 @@
   "search_excerpt_more": "بیشتر",
   "search_results_in": "نتایج جستجو در {{community}}",
   "search_within_community": "جستجو در {{community}}",
-  "auto_hide_topbar_while_scrolling": "پنهان کردن خودکار نوار بالای صفحه هنگام پیمایش"
+  "auto_hide_topbar_while_scrolling": "پنهان کردن خودکار نوار بالای صفحه هنگام پیمایش",
+  "propose_new_directory": "پیشنهاد یک فهرست جدید",
+  "current_winner": "برنده فعلی:",
+  "no_directories_found": "هیچ فهرستی یافت نشد",
+  "search_directories": "جستجو در فهرست‌ها",
+  "back_to_all_directories": "بازگشت به همه فهرست‌ها",
+  "directories": "فهرست‌ها",
+  "search_communities": "جستجوی انجمن‌ها در این فهرست"
 }

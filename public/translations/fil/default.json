@@ -433,5 +433,12 @@
   "search_excerpt_more": "higit pa",
   "search_results_in": "mga resulta ng paghahanap sa {{community}}",
   "search_within_community": "maghanap sa loob ng {{community}}",
-  "auto_hide_topbar_while_scrolling": "Awtomatikong itago ang topbar habang nag-i-scroll"
+  "auto_hide_topbar_while_scrolling": "Awtomatikong itago ang topbar habang nag-i-scroll",
+  "propose_new_directory": "Magmungkahi ng bagong direktoryo",
+  "current_winner": "kasalukuyang nanalo:",
+  "no_directories_found": "Walang natagpuang mga direktoryo",
+  "search_directories": "maghanap sa mga direktoryo",
+  "back_to_all_directories": "bumalik sa lahat ng direktoryo",
+  "directories": "mga direktoryo",
+  "search_communities": "maghanap ng mga komunidad sa direktoryong ito"
 }

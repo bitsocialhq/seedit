@@ -433,5 +433,12 @@
   "search_excerpt_more": "更多",
   "search_results_in": "{{community}} 中的搜索结果",
   "search_within_community": "在 {{community}} 中搜索",
-  "auto_hide_topbar_while_scrolling": "滚动时自动隐藏顶部栏"
+  "auto_hide_topbar_while_scrolling": "滚动时自动隐藏顶部栏",
+  "propose_new_directory": "提议创建新目录",
+  "current_winner": "当前获胜者：",
+  "no_directories_found": "未找到目录",
+  "search_directories": "搜索目录",
+  "back_to_all_directories": "返回所有目录",
+  "directories": "目录",
+  "search_communities": "搜索此目录中的社区"
 }

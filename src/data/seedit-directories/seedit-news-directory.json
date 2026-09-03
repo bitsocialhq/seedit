@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "news",
   "description": "Communities competing for Seedit's /s/news route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-news-directory.json",
+  "tags": [
+    "news",
+    "world",
+    "journalism",
+    "current-events"
+  ],
+  "rules": [
+    "Submit reporting about a specific, recent news event rather than a general topic or personal post.",
+    "Use straight news sources; opinion, analysis, advocacy, and press-release rewrites do not belong here.",
+    "Use an accurate, factual title that matches the linked article without editorializing it.",
+    "Link the original accessible source when possible; avoid paywalls, content farms, and copied reporting.",
+    "Do not repeatedly submit the same event, spam a story, or manipulate attention around it.",
+    "Keep discussion substantive and civil; no bigotry, harassment, personal attacks, or celebration of violence.",
+    "Do not expose personal information, organize witch-hunts, or use bots and novelty accounts to disrupt discussion."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "news-posting.bso",

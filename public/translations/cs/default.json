@@ -433,5 +433,12 @@
   "search_excerpt_more": "více",
   "search_results_in": "výsledky hledání v {{community}}",
   "search_within_community": "hledat v {{community}}",
-  "auto_hide_topbar_while_scrolling": "Automaticky skrývat horní panel při posouvání"
+  "auto_hide_topbar_while_scrolling": "Automaticky skrývat horní panel při posouvání",
+  "propose_new_directory": "Navrhnout nový adresář",
+  "current_winner": "aktuální vítěz:",
+  "no_directories_found": "Nebyly nalezeny žádné adresáře",
+  "search_directories": "prohledat adresáře",
+  "back_to_all_directories": "zpět na všechny adresáře",
+  "directories": "adresáře",
+  "search_communities": "hledat komunity v tomto adresáři"
 }

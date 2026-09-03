@@ -3,8 +3,24 @@
   "revision": 1,
   "directoryCode": "gaming",
   "description": "Communities competing for Seedit's /s/gaming route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-gaming-directory.json",
+  "tags": [
+    "gaming",
+    "videogames",
+    "boardgames"
+  ],
+  "rules": [
+    "Posts must be directly about games or gaming; a forced caption or generic meme template is not enough.",
+    "Reply to an existing discussion instead of making response posts, bandwagons, raids, or ragebait.",
+    "Do not request, enable, or link to piracy.",
+    "Mark spoilers and NSFW content clearly, and never put spoilers in the title.",
+    "No giveaways, trades, sales, donation requests, referral links, or other promotional schemes.",
+    "Link the original source and avoid URL shorteners, rehosts, and website screenshots.",
+    "Keep self-promotion limited and do not post surveys, livestream promotion, affiliate spam, or AI-generated filler.",
+    "Post open-ended gaming discussions as text posts.",
+    "No bigotry, threats, harassment, or toxic personal attacks."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "gaming-posting.bso",

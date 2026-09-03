@@ -4,6 +4,8 @@ const DEFAULT_COMMUNITY_TLD = '.bso';
 const RESERVED_COMMUNITY_ROUTE_SEGMENTS = new Set(['all', 'mod']);
 const BASE58_PUBLIC_KEY_PATTERN = /^[1-9A-HJ-NP-Za-km-z]{30,}$/;
 
+export const DIRECTORY_INDEX_PATH = '/communities/directories';
+
 const isReservedCommunityRouteSegment = (segment: string): boolean => RESERVED_COMMUNITY_ROUTE_SEGMENTS.has(segment.toLowerCase());
 
 const isLikelyBase58PublicKey = (value: string): boolean => BASE58_PUBLIC_KEY_PATTERN.test(value);
@@ -30,7 +32,11 @@ export const getCommunityPath = (communityAddress: string): string => `/s/${enco
 export const getDirectoryPath = (directoryCode: SeeditDirectoryCode): string => `/s/${encodeURIComponent(directoryCode)}`;
 
 /** The directory's candidate list, where the communities competing for the route are ranked. */
-export const getDirectoryVotePath = (directoryCode: SeeditDirectoryCode): string => `/communities/vote/${encodeURIComponent(directoryCode)}`;
+export const getDirectoryCandidatesPath = (directoryCode: SeeditDirectoryCode): string => `${DIRECTORY_INDEX_PATH}/${encodeURIComponent(directoryCode)}`;
+
+/** The mobile sidebar view for the directory index or one directory's candidate list. */
+export const getDirectoryAboutPath = (directoryCode?: SeeditDirectoryCode): string =>
+  directoryCode ? `${getDirectoryCandidatesPath(directoryCode)}/about` : `${DIRECTORY_INDEX_PATH}/about`;
 
 /** Use for typed or linked references that may intentionally name a directory route. */
 export const getCommunityReferencePath = (communityReference: string): string =>

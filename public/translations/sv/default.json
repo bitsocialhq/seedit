@@ -433,5 +433,12 @@
   "search_excerpt_more": "mer",
   "search_results_in": "sökresultat i {{community}}",
   "search_within_community": "sök i {{community}}",
-  "auto_hide_topbar_while_scrolling": "Dölj det övre fältet automatiskt vid rullning"
+  "auto_hide_topbar_while_scrolling": "Dölj det övre fältet automatiskt vid rullning",
+  "propose_new_directory": "Föreslå en ny katalog",
+  "current_winner": "nuvarande vinnare:",
+  "no_directories_found": "Inga kataloger hittades",
+  "search_directories": "sök i kataloger",
+  "back_to_all_directories": "tillbaka till alla kataloger",
+  "directories": "kataloger",
+  "search_communities": "sök efter gemenskaper i den här katalogen"
 }

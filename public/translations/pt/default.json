@@ -433,5 +433,12 @@
   "search_excerpt_more": "mais",
   "search_results_in": "resultados da pesquisa em {{community}}",
   "search_within_community": "pesquisar em {{community}}",
-  "auto_hide_topbar_while_scrolling": "Ocultar automaticamente a barra superior ao rolar"
+  "auto_hide_topbar_while_scrolling": "Ocultar automaticamente a barra superior ao rolar",
+  "propose_new_directory": "Propor um novo diretório",
+  "current_winner": "vencedor atual:",
+  "no_directories_found": "Nenhum diretório encontrado",
+  "search_directories": "pesquisar diretórios",
+  "back_to_all_directories": "voltar para todos os diretórios",
+  "directories": "diretórios",
+  "search_communities": "pesquisar comunidades neste diretório"
 }

@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState, useMemo, memo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-hooks';
-import { isAllView, isHomeView, isModView } from '../../lib/utils/view-utils';
+import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useDefaultSubscriptions, useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
-import { getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
+import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
+import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
+import { sortTypes } from '../../constants/sort-types';
+import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
 const getSubscriptionDisplayName = (subscription: string) => getCompactCommunityDisplayName(subscription);
@@ -70,6 +73,124 @@ export const CommunitiesDropdown = () => {
   );
 };
 
+const SortTypesDropdown = () => {
+  const { t } = useTranslation();
+  const params = useParams();
+  const location = useLocation();
+  const isInCommunityView = isCommunityView(location.pathname, params);
+  const isinAllView = isAllView(location.pathname);
+  const { timeFilterName } = useTimeFilter();
+
+  const selectedSortType = params.sortType || 'hot';
+  const { communityAddress } = useResolvedCommunityRoute();
+
+  const getSelectedSortLabel = () => {
+    const index = sortTypes.indexOf(selectedSortType);
+    return index >= 0 ? sortLabels[index] : sortLabels[0];
+  };
+
+  const [isSortsDropdownOpen, setIsSortsDropdownOpen] = useState(false);
+  const toggleSortsDropdown = () => setIsSortsDropdownOpen(!isSortsDropdownOpen);
+  const sortsDropdownRef = useRef<HTMLDivElement>(null);
+  const sortsdropdownItemsRef = useRef<HTMLDivElement>(null);
+  const sortsDropdownClass = isSortsDropdownOpen ? styles.visible : styles.hidden;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortsDropdownRef.current && !sortsDropdownRef.current.contains(event.target as Node)) {
+        setIsSortsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className={styles.dropdown} ref={sortsDropdownRef} onClick={toggleSortsDropdown}>
+      <span className={styles.selectedTitle}>{t(getSelectedSortLabel())}</span>
+      <div className={`${styles.dropChoices} ${styles.sortsDropChoices} ${sortsDropdownClass}`} ref={sortsdropdownItemsRef}>
+        {sortTypes.map((sortType, index) => {
+          let dropdownLink = isInCommunityView && communityAddress ? `${getCommunityPath(communityAddress)}/${sortType}` : isinAllView ? `/s/all/${sortType}` : sortType;
+          if (timeFilterName) {
+            dropdownLink += `/${timeFilterName}`;
+          }
+          return (
+            <Link to={dropdownLink} key={sortType} className={styles.dropdownItem}>
+              {t(sortLabels[index])}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const TimeFilterDropdown = () => {
+  const params = useParams();
+  const location = useLocation();
+  const isInCommunityView = isCommunityView(location.pathname, params);
+  const isInDomainView = isDomainView(location.pathname);
+  const isinAllView = isAllView(location.pathname);
+  const isInModView = isModView(location.pathname);
+  const { timeFilterName, timeFilterNames, sessionKey } = useTimeFilter();
+  const selectedTimeFilter = timeFilterName || (isInCommunityView ? 'all' : timeFilterName);
+
+  const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] = useState(false);
+  const toggleTimeFilterDropdown = () => setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen);
+  const timeFilterDropdownRef = useRef<HTMLDivElement>(null);
+  const timeFilterdropdownItemsRef = useRef<HTMLDivElement>(null);
+  const timeFilterDropdownClass = isTimeFilterDropdownOpen ? styles.visible : styles.hidden;
+
+  const selectedSortType = params.sortType || 'hot';
+  const { communityAddress } = useResolvedCommunityRoute();
+
+  const getTimeFilterLink = (timeFilterName: string) => {
+    return isInCommunityView
+      ? `${communityAddress ? getCommunityPath(communityAddress) : '/s'}/${selectedSortType}/${timeFilterName}`
+      : isinAllView
+        ? `s/all/${selectedSortType}/${timeFilterName}`
+        : isInModView
+          ? `/s/mod/${selectedSortType}/${timeFilterName}`
+          : isInDomainView
+            ? `/domain/${params.domain}/${selectedSortType}/${timeFilterName}`
+            : `/${selectedSortType}/${timeFilterName}`;
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (timeFilterDropdownRef.current && !timeFilterDropdownRef.current.contains(event.target as Node)) {
+        setIsTimeFilterDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className={styles.dropdown} ref={timeFilterDropdownRef} onClick={toggleTimeFilterDropdown}>
+      <span className={styles.selectedTitle}>{selectedTimeFilter}</span>
+      <div className={`${styles.dropChoices} ${styles.filterDropChoices} ${timeFilterDropdownClass}`} ref={timeFilterdropdownItemsRef}>
+        {timeFilterNames.slice(0, -1).map((timeFilterName, index) => (
+          <Link
+            to={getTimeFilterLink(timeFilterName)}
+            key={timeFilterName}
+            className={styles.dropdownItem}
+            onClick={() => setSessionTimeFilterPreference(sessionKey, timeFilterName)}
+          >
+            {timeFilterNames[index]}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const TopBar = memo(() => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -97,6 +218,8 @@ const TopBar = memo(() => {
     <div className={styles.headerArea}>
       <div className={styles.widthClip}>
         <CommunitiesDropdown />
+        <SortTypesDropdown />
+        <TimeFilterDropdown />
         <div className={styles.srList}>
           <ul className={styles.srBar}>
             <li>
@@ -148,7 +271,7 @@ const TopBar = memo(() => {
               })}
           </ul>
         </div>
-        <Link to='/communities/vote' className={styles.editLink}>
+        <Link to={DIRECTORY_INDEX_PATH} className={styles.editLink}>
           {t('edit')} »
         </Link>
       </div>

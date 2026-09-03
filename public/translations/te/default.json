@@ -433,5 +433,12 @@
   "search_excerpt_more": "మరింత",
   "search_results_in": "{{community}} లో శోధన ఫలితాలు",
   "search_within_community": "{{community}} లో శోధించండి",
-  "auto_hide_topbar_while_scrolling": "స్క్రోల్ చేస్తున్నప్పుడు టాప్‌బార్‌ను స్వయంచాలకంగా దాచండి"
+  "auto_hide_topbar_while_scrolling": "స్క్రోల్ చేస్తున్నప్పుడు టాప్‌బార్‌ను స్వయంచాలకంగా దాచండి",
+  "propose_new_directory": "కొత్త డైరెక్టరీని ప్రతిపాదించండి",
+  "current_winner": "ప్రస్తుత విజేత:",
+  "no_directories_found": "డైరెక్టరీలు ఏవీ కనుగొనబడలేదు",
+  "search_directories": "డైరెక్టరీలను వెతకండి",
+  "back_to_all_directories": "అన్ని డైరెక్టరీలకు తిరిగి వెళ్లండి",
+  "directories": "డైరెక్టరీలు",
+  "search_communities": "ఈ డైరెక్టరీలో కమ్యూనిటీలను శోధించండి"
 }

@@ -3,8 +3,21 @@
   "revision": 1,
   "directoryCode": "memes",
   "description": "Communities competing for Seedit's /s/memes route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-memes-directory.json",
+  "tags": [
+    "memes",
+    "humor",
+    "culture"
+  ],
+  "rules": [
+    "Posts must use a recognizable meme format with the joke contained in the media, not only in the title.",
+    "Do not post plain text, unedited social-media screenshots, unrelated clips, or other non-meme content.",
+    "No hateful, exploitative, graphic, tragedy-focused, or political-agenda memes.",
+    "Avoid overused templates, chain posts, flooding, reposts, and other repetitive content.",
+    "No interaction bait, vote begging, personal information, watermarks, or self-promotion.",
+    "Mark permitted mature content as NSFW; pornography and sexualized content involving minors are forbidden."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "memes-posting.bso",

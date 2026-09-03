@@ -433,5 +433,12 @@
   "search_excerpt_more": "เพิ่มเติม",
   "search_results_in": "ผลการค้นหาใน {{community}}",
   "search_within_community": "ค้นหาใน {{community}}",
-  "auto_hide_topbar_while_scrolling": "ซ่อนแถบด้านบนอัตโนมัติขณะเลื่อน"
+  "auto_hide_topbar_while_scrolling": "ซ่อนแถบด้านบนอัตโนมัติขณะเลื่อน",
+  "propose_new_directory": "เสนอไดเรกทอรีใหม่",
+  "current_winner": "ผู้ชนะปัจจุบัน:",
+  "no_directories_found": "ไม่พบไดเรกทอรี",
+  "search_directories": "ค้นหาไดเรกทอรี",
+  "back_to_all_directories": "กลับไปที่ไดเรกทอรีทั้งหมด",
+  "directories": "ไดเรกทอรี",
+  "search_communities": "ค้นหาชุมชนในไดเรกทอรีนี้"
 }

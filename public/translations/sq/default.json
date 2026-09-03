@@ -433,5 +433,12 @@
   "search_excerpt_more": "më shumë",
   "search_results_in": "rezultatet e kërkimit në {{community}}",
   "search_within_community": "kërko brenda {{community}}",
-  "auto_hide_topbar_while_scrolling": "Fshih automatikisht shiritin e sipërm gjatë lëvizjes"
+  "auto_hide_topbar_while_scrolling": "Fshih automatikisht shiritin e sipërm gjatë lëvizjes",
+  "propose_new_directory": "Propozo një direktori të re",
+  "current_winner": "fituesi aktual:",
+  "no_directories_found": "Nuk u gjetën drejtori",
+  "search_directories": "kërko në drejtori",
+  "back_to_all_directories": "kthehu te të gjitha drejtoritë",
+  "directories": "drejtori",
+  "search_communities": "kërko komunitete në këtë direktori"
 }

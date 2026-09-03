@@ -433,5 +433,12 @@
   "search_excerpt_more": "meer",
   "search_results_in": "zoekresultaten in {{community}}",
   "search_within_community": "zoeken in {{community}}",
-  "auto_hide_topbar_while_scrolling": "Bovenbalk automatisch verbergen tijdens scrollen"
+  "auto_hide_topbar_while_scrolling": "Bovenbalk automatisch verbergen tijdens scrollen",
+  "propose_new_directory": "Nieuwe directory voorstellen",
+  "current_winner": "huidige winnaar:",
+  "no_directories_found": "Geen directories gevonden",
+  "search_directories": "doorzoek directory's",
+  "back_to_all_directories": "terug naar alle directory's",
+  "directories": "directory's",
+  "search_communities": "gemeenschappen zoeken in deze directory"
 }

@@ -433,5 +433,12 @@
   "search_excerpt_more": "مزید",
   "search_results_in": "{{community}} میں تلاش کے نتائج",
   "search_within_community": "{{community}} میں تلاش کریں",
-  "auto_hide_topbar_while_scrolling": "اسکرول کرتے وقت اوپر بار خودکار طور پر چھپائیں"
+  "auto_hide_topbar_while_scrolling": "اسکرول کرتے وقت اوپر بار خودکار طور پر چھپائیں",
+  "propose_new_directory": "نئی ڈائریکٹری تجویز کریں",
+  "current_winner": "موجودہ فاتح:",
+  "no_directories_found": "کوئی ڈائریکٹری نہیں ملی",
+  "search_directories": "ڈائریکٹریاں تلاش کریں",
+  "back_to_all_directories": "تمام ڈائریکٹریوں پر واپس جائیں",
+  "directories": "ڈائریکٹریاں",
+  "search_communities": "اس ڈائریکٹری میں کمیونٹیز تلاش کریں"
 }

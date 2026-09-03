@@ -433,5 +433,12 @@
   "search_excerpt_more": "mehr",
   "search_results_in": "Suchergebnisse in {{community}}",
   "search_within_community": "in {{community}} suchen",
-  "auto_hide_topbar_while_scrolling": "Obere Leiste beim Scrollen automatisch ausblenden"
+  "auto_hide_topbar_while_scrolling": "Obere Leiste beim Scrollen automatisch ausblenden",
+  "propose_new_directory": "Neues Verzeichnis vorschlagen",
+  "current_winner": "aktueller Gewinner:",
+  "no_directories_found": "Keine Verzeichnisse gefunden",
+  "search_directories": "Verzeichnisse durchsuchen",
+  "back_to_all_directories": "zurück zu allen Verzeichnissen",
+  "directories": "Verzeichnisse",
+  "search_communities": "Communities in diesem Verzeichnis durchsuchen"
 }

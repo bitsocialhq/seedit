@@ -433,5 +433,12 @@
   "search_excerpt_more": "mer",
   "search_results_in": "søkeresultater i {{community}}",
   "search_within_community": "søk i {{community}}",
-  "auto_hide_topbar_while_scrolling": "Skjul toppfeltet automatisk under rulling"
+  "auto_hide_topbar_while_scrolling": "Skjul toppfeltet automatisk under rulling",
+  "propose_new_directory": "Foreslå en ny katalog",
+  "current_winner": "nåværende vinner:",
+  "no_directories_found": "Ingen kataloger funnet",
+  "search_directories": "søk i kataloger",
+  "back_to_all_directories": "tilbake til alle kataloger",
+  "directories": "kataloger",
+  "search_communities": "søk etter fellesskap i denne katalogen"
 }

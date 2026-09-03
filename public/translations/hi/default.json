@@ -433,5 +433,12 @@
   "search_excerpt_more": "और",
   "search_results_in": "{{community}} में खोज परिणाम",
   "search_within_community": "{{community}} में खोजें",
-  "auto_hide_topbar_while_scrolling": "स्क्रॉल करते समय टॉपबार अपने आप छिपाएँ"
+  "auto_hide_topbar_while_scrolling": "स्क्रॉल करते समय टॉपबार अपने आप छिपाएँ",
+  "propose_new_directory": "नई डायरेक्टरी का प्रस्ताव दें",
+  "current_winner": "वर्तमान विजेता:",
+  "no_directories_found": "कोई डायरेक्टरी नहीं मिली",
+  "search_directories": "डायरेक्टरी खोजें",
+  "back_to_all_directories": "सभी डायरेक्टरी पर वापस जाएँ",
+  "directories": "डायरेक्टरी",
+  "search_communities": "इस डायरेक्टरी में समुदाय खोजें"
 }

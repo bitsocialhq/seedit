@@ -433,5 +433,12 @@
   "search_excerpt_more": "আরও",
   "search_results_in": "{{community}} এ অনুসন্ধানের ফলাফল",
   "search_within_community": "{{community}} এর মধ্যে অনুসন্ধান করুন",
-  "auto_hide_topbar_while_scrolling": "স্ক্রল করার সময় টপবার স্বয়ংক্রিয়ভাবে লুকান"
+  "auto_hide_topbar_while_scrolling": "স্ক্রল করার সময় টপবার স্বয়ংক্রিয়ভাবে লুকান",
+  "propose_new_directory": "একটি নতুন ডিরেক্টরি প্রস্তাব করুন",
+  "current_winner": "বর্তমান বিজয়ী:",
+  "no_directories_found": "কোনো ডিরেক্টরি পাওয়া যায়নি",
+  "search_directories": "ডিরেক্টরি খুঁজুন",
+  "back_to_all_directories": "সব ডিরেক্টরিতে ফিরে যান",
+  "directories": "ডিরেক্টরি",
+  "search_communities": "এই ডিরেক্টরিতে সম্প্রদায় খুঁজুন"
 }

@@ -34,7 +34,8 @@ import {
   isCommunitiesSubscriberView,
   isCommunitiesModeratorView,
   isCommunitiesAdminView,
-  isCommunitiesVoteView,
+  isCommunitiesDirectoryAboutView,
+  isCommunitiesDirectoryView,
   isCommunitiesOwnerView,
   isProfileUpvotedView,
   isSettingsContentOptionsView,
@@ -48,7 +49,7 @@ import {
   isSettingsAccountDataView,
 } from '../../lib/utils/view-utils';
 import { getDisplayAddress, getShortDisplayAddress } from '../../lib/utils/address-utils';
-import { getCommunityPath, getCommunityPostPath, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
+import { DIRECTORY_INDEX_PATH, getCommunityPath, getCommunityPostPath, getDirectoryCandidatesPath } from '../../lib/utils/community-route-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import useNotFoundStore from '../../stores/use-not-found-store';
 import { useIsNsfwCommunity } from '../../hooks/use-is-nsfw-community';
@@ -73,9 +74,14 @@ const AboutButton = () => {
   const isInHomeAboutView = isHomeAboutView(location.pathname);
   const isInPostPageAboutView = isPostPageAboutView(location.pathname, params);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
+  const isInCommunitiesDirectoryAboutView = isCommunitiesDirectoryAboutView(location.pathname);
 
   return (
-    <li className={`${styles.about} ${isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView ? styles.selected : styles.choice}`}>
+    <li
+      className={`${styles.about} ${
+        isInHomeAboutView || isInCommunityAboutView || isInPostPageAboutView || isInCommunitiesDirectoryAboutView ? styles.selected : styles.choice
+      }`}
+    >
       <Link to={aboutLink}>{t('about')}</Link>
     </li>
   );
@@ -216,19 +222,20 @@ const CommunitiesHeaderTabs = () => {
   const isInCommunitiesModeratorView = isCommunitiesModeratorView(location.pathname);
   const isInCommunitiesAdminView = isCommunitiesAdminView(location.pathname);
   const isInCommunitiesOwnerView = isCommunitiesOwnerView(location.pathname);
-  const isInCommunitiesVoteView = isCommunitiesVoteView(location.pathname);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
+  const isInCommunitiesDirectoryAboutView = isCommunitiesDirectoryAboutView(location.pathname);
   const isInCommunitiesView =
     isCommunitiesView(location.pathname) &&
     !isInCommunitiesSubscriberView &&
     !isInCommunitiesModeratorView &&
     !isInCommunitiesAdminView &&
     !isInCommunitiesOwnerView &&
-    !isInCommunitiesVoteView;
+    !isInCommunitiesDirectoryView;
 
   return (
     <>
-      <li className={`${isInCommunitiesVoteView ? styles.selected : styles.choice}`}>
-        <Link to={'/communities/vote'}>{t('vote')}</Link>
+      <li className={`${isInCommunitiesDirectoryView && !isInCommunitiesDirectoryAboutView ? styles.selected : styles.choice}`}>
+        <Link to={DIRECTORY_INDEX_PATH}>{t('directories')}</Link>
       </li>
       <li
         className={
@@ -451,6 +458,7 @@ const Header = () => {
   const isInSubmitView = isSubmitView(location.pathname);
   const isInCommunitySubmitView = isCommunitySubmitView(location.pathname, params);
   const isInCommunitySettingsView = isCommunitySettingsView(location.pathname, params);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInNotFoundView = useNotFoundStore((state) => state.isNotFound);
 
   const hasFewTabs = isInPostPageView || isInSubmitView || isInCommunitySubmitView || isInCommunitySettingsView || isInSettingsView || isInInboxView || isInSettingsView;
@@ -519,14 +527,14 @@ const Header = () => {
         <div className={styles.mobileDirectoryDisclosure}>
           {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(communityAddress)}>{getDisplayAddress(communityAddress)}</Link>
           {' — '}
-          <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
+          <Link to={getDirectoryCandidatesPath(directoryCode)}>{t('directory_see_candidates')}</Link>
         </div>
       )}
       {isMobile && !isInCommunitySubmitView && !isHiddenNsfwCommunity && (
         <ul className={`${styles.tabMenu} ${isInProfileView || isInSettingsView ? styles.horizontalScroll : ''}`}>
           <HeaderTabs />
-          {(isInHomeView || isInHomeAboutView || isInCommunityView || isInHomeAboutView || isInPostPageView) && <AboutButton />}
-          {!isInSubmitView && !isInSettingsView && (
+          {(isInHomeView || isInHomeAboutView || isInCommunityView || isInPostPageView || isInCommunitiesDirectoryView) && <AboutButton />}
+          {!isInSubmitView && !isInSettingsView && !isInCommunitiesDirectoryView && (
             <li>
               <Link to={mobileSubmitButtonRoute} className={styles.submitButton}>
                 {t('submit')}

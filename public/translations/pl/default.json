@@ -433,5 +433,12 @@
   "search_excerpt_more": "więcej",
   "search_results_in": "wyniki wyszukiwania w {{community}}",
   "search_within_community": "szukaj w {{community}}",
-  "auto_hide_topbar_while_scrolling": "Automatycznie ukrywaj górny pasek podczas przewijania"
+  "auto_hide_topbar_while_scrolling": "Automatycznie ukrywaj górny pasek podczas przewijania",
+  "propose_new_directory": "Zaproponuj nowy katalog",
+  "current_winner": "obecny zwycięzca:",
+  "no_directories_found": "Nie znaleziono katalogów",
+  "search_directories": "przeszukaj katalogi",
+  "back_to_all_directories": "powrót do wszystkich katalogów",
+  "directories": "katalogi",
+  "search_communities": "szukaj społeczności w tym katalogu"
 }

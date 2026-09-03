@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import useIsMobile from '../../hooks/use-is-mobile';
 import Sidebar from '../../components/sidebar';
+import { DIRECTORY_INDEX_PATH } from '../../lib/utils/community-route-utils';
 // the gold page is the about FAQ with gold accents, so it reuses that page's chrome
 import faqStyles from '../about/about.module.css';
 import styles from './gold.module.css';
@@ -14,7 +15,7 @@ export const GoldFaq = () => {
       <div className={styles.notice}>
         <span className={styles.goldName}>seedit gold</span> is a planned yearly supporter subscription. It is <strong>not available yet</strong>: there is nothing to
         buy, activate, or renew today. When it launches, gold holders will publish without solving a challenge on communities that support the gold challenge, and will be
-        eligible to vote on <Link to='/communities/vote'>directory pages</Link>. Checkout will be crypto only.
+        eligible to vote on <Link to={DIRECTORY_INDEX_PATH}>directory pages</Link>. Checkout will be crypto only.
       </div>
       <ul className={isMobile ? faqStyles.tocMobile : faqStyles.toc}>
         <li>
@@ -53,8 +54,8 @@ export const GoldFaq = () => {
       </h3>
       <p>
         Seedit gold is an upcoming supporter subscription for people who want to fund Seedit directly. When it launches, it will unlock two things: publishing without
-        solving a challenge on communities that support the gold challenge, and eligibility to vote on the <Link to='/communities/vote'>community directory pages</Link>{' '}
-        that decide Seedit's default community list.
+        solving a challenge on communities that support the gold challenge, and eligibility to vote on the{' '}
+        <Link to={DIRECTORY_INDEX_PATH}>community directory pages</Link> that decide Seedit's default community list.
       </p>
       <hr />
       <h3 id='available'>Is it available now?</h3>
@@ -75,9 +76,9 @@ export const GoldFaq = () => {
       <hr />
       <h3 id='directoryVoting'>What is directory vote eligibility?</h3>
       <p>
-        Seedit's <Link to='/communities/vote'>default community list</Link> is curated through public directory pages, where communities can be voted toward being listed
-        or removed. When gold launches, holding it will make an account eligible to vote on those directory pages. Directory voting is meant as a governance signal, not a
-        final override: the direction is to keep it aligned with BSO holders and existing safeguards rather than handing control to subscribers.
+        Seedit's <Link to={DIRECTORY_INDEX_PATH}>default community list</Link> is curated through public directory pages, where communities can be voted toward being
+        listed or removed. When gold launches, holding it will make an account eligible to vote on those directory pages. Directory voting is meant as a governance
+        signal, not a final override: the direction is to keep it aligned with BSO holders and existing safeguards rather than handing control to subscribers.
       </p>
       <hr />
       <h3 id='whatItIsNot'>What does gold not do?</h3>

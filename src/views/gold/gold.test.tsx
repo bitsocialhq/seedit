@@ -58,7 +58,7 @@ describe('GoldFaq', () => {
   it('links directory vote eligibility to the default community list route', () => {
     renderGoldFaq();
 
-    const directoryLinks = Array.from(container.querySelectorAll<HTMLAnchorElement>('a')).filter((link) => link.getAttribute('href') === '#/communities/vote');
+    const directoryLinks = Array.from(container.querySelectorAll<HTMLAnchorElement>('a')).filter((link) => link.getAttribute('href') === '#/communities/directories');
 
     expect(directoryLinks.length).toBeGreaterThan(0);
   });

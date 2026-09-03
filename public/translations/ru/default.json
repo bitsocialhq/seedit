@@ -433,5 +433,12 @@
   "search_excerpt_more": "ещё",
   "search_results_in": "результаты поиска в {{community}}",
   "search_within_community": "искать в {{community}}",
-  "auto_hide_topbar_while_scrolling": "Автоматически скрывать верхнюю панель при прокрутке"
+  "auto_hide_topbar_while_scrolling": "Автоматически скрывать верхнюю панель при прокрутке",
+  "propose_new_directory": "Предложить новый каталог",
+  "current_winner": "текущий победитель:",
+  "no_directories_found": "Каталоги не найдены",
+  "search_directories": "искать в каталогах",
+  "back_to_all_directories": "назад ко всем каталогам",
+  "directories": "каталоги",
+  "search_communities": "поиск сообществ в этом каталоге"
 }

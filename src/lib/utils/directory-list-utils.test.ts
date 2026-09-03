@@ -25,13 +25,14 @@ describe('directory list normalization', () => {
       },
     });
 
-    expect(normalizeDirectoryList(directoryPayload(), 'funny', defaults)).toEqual({
+    expect(normalizeDirectoryList(directoryPayload({ tags: ['comedy', 'comedy'], rules: ['Be funny.', 'Be funny.', 'Be civil.'] }), 'funny', defaults)).toEqual({
       schemaVersion: 1,
       revision: 1,
       directoryCode: 'funny',
       title: 'Funny',
       description: 'Humour.',
-      tags: ['humor'],
+      tags: ['comedy'],
+      rules: ['Be funny.', 'Be civil.'],
       createdAt: 100,
       updatedAt: 100,
       communities: [{ address: 'funny-posting.bso', owner: 'owner.bso', addedAt: 10 }],

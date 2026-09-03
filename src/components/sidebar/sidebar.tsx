@@ -20,6 +20,7 @@ import {
   isCommunityAboutView,
   isCommunitySettingsView,
   isCommunitiesView,
+  isCommunitiesDirectoryView,
   isCommunityView,
   isSearchView,
 } from '../../lib/utils/view-utils';
@@ -28,8 +29,9 @@ import useIsMobile from '../../hooks/use-is-mobile';
 import useIsCommunityOffline from '../../hooks/use-is-community-offline';
 import { getCommunityIdentifier } from '../../hooks/use-community-identifier';
 import useOptionalAccountComment from '../../hooks/use-account-comment';
-import { getCommunityPath, getCommunityPostUrl, getDirectoryVotePath } from '../../lib/utils/community-route-utils';
-import type { SeeditDirectoryCode } from '../../lib/utils/directory-codes';
+import { getCommunityPath, getCommunityPostUrl, getDirectoryCandidatesPath } from '../../lib/utils/community-route-utils';
+import { isDirectoryCode, type SeeditDirectoryCode } from '../../lib/utils/directory-codes';
+import { getDirectoryCommunityProposalUrl, getNewDirectoryProposalUrl } from '../../lib/utils/directory-proposal-utils';
 import { getCommentCommunityAddress } from '../../lib/utils/comment-utils';
 import { FAQ } from '../../views/about/about';
 import LoadingEllipsis from '../loading-ellipsis';
@@ -196,8 +198,11 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
   const isInPendingPostView = isPendingPostView(location.pathname, params);
   const isInPostPageView = isPostPageView(location.pathname, params);
   const isInCommunitiesView = isCommunitiesView(location.pathname);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInCommunityAboutView = isCommunityAboutView(location.pathname, params);
   const isInCommunityView = isCommunityView(location.pathname, params);
+  const proposedDirectoryCode = isDirectoryCode(params.directoryCode) ? params.directoryCode : undefined;
+  const directoryProposalUrl = proposedDirectoryCode ? getDirectoryCommunityProposalUrl(proposedDirectoryCode) : getNewDirectoryProposalUrl();
 
   // the community title box only belongs on routes that stand for a community, not on the standalone pages
   const showsCommunityTitleBox =
@@ -310,7 +315,7 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
               <div className={styles.directoryRouteDisclosure}>
                 {t('directory_route_currently_recommends', { directoryCode })} <Link to={getCommunityPath(address)}>{getDisplayAddress(address)}</Link>
                 {' — '}
-                <Link to={getDirectoryVotePath(directoryCode)}>{t('directory_see_candidates')}</Link>
+                <Link to={getDirectoryCandidatesPath(directoryCode)}>{t('directory_see_candidates')}</Link>
               </div>
             )}
             <div className={styles.subscribeContainer}>
@@ -370,11 +375,11 @@ const Sidebar = ({ comment, communityAddress, directoryCode, directoryRevision, 
           </div>
         )}
         {(moderatorRole || isOwner) && <ModerationTools address={address} />}
-        {isInCommunitiesView && (
-          <a href='https://github.com/bitsocialnet/lists' target='_blank' rel='noopener noreferrer'>
+        {isInCommunitiesDirectoryView && (
+          <a href={directoryProposalUrl} target='_blank' rel='noopener noreferrer'>
             <div className={styles.largeButton}>
               <div className={styles.nub} />
-              {t('submit_community')}
+              {t(proposedDirectoryCode ? 'submit_community' : 'propose_new_directory')}
             </div>
           </a>
         )}

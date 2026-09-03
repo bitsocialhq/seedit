@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "todayilearned",
   "description": "Communities competing for Seedit's /s/todayilearned route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-todayilearned-directory.json",
+  "tags": [
+    "learning",
+    "facts",
+    "knowledge",
+    "history"
+  ],
+  "rules": [
+    "Link directly to a reliable source that supports every factual claim in the title.",
+    "Share verifiable facts, not personal opinions, anecdotes, or subjective recommendations.",
+    "Avoid breaking news and very recent sources; this directory is for established knowledge.",
+    "Do not use the format for political advocacy, agenda pushing, or misleading claims.",
+    "Begin the title with 'TIL' or 'Today I Learned' and make it concise, specific, and understandable on its own.",
+    "Do not omit essential context or imply a connection the source does not establish.",
+    "Mark NSFW links clearly."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "til-posting.bso",

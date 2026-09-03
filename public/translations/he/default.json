@@ -433,5 +433,12 @@
   "search_excerpt_more": "עוד",
   "search_results_in": "תוצאות חיפוש ב-{{community}}",
   "search_within_community": "חפש בתוך {{community}}",
-  "auto_hide_topbar_while_scrolling": "הסתרה אוטומטית של הסרגל העליון בזמן גלילה"
+  "auto_hide_topbar_while_scrolling": "הסתרה אוטומטית של הסרגל העליון בזמן גלילה",
+  "propose_new_directory": "הצע ספרייה חדשה",
+  "current_winner": "הזוכה הנוכחי:",
+  "no_directories_found": "לא נמצאו ספריות",
+  "search_directories": "חיפוש בספריות",
+  "back_to_all_directories": "חזרה לכל הספריות",
+  "directories": "ספריות",
+  "search_communities": "חיפוש קהילות בספרייה זו"
 }

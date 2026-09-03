@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "funny",
   "description": "Communities competing for Seedit's /s/funny route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-funny-directory.json",
+  "tags": [
+    "humor",
+    "comedy",
+    "jokes"
+  ],
+  "rules": [
+    "Every post must make a genuine attempt at humor.",
+    "Memes belong in the memes directory; do not post memetic formats here.",
+    "Do not repost material that has already appeared in the community.",
+    "No personal information, hate speech, harassment, or encouragement of attacks on others.",
+    "Keep politics and political figures out of posts.",
+    "Do not ask for votes or use low-effort, misleading, or interaction-bait titles.",
+    "No gore, pornography, sexually graphic material, or animal cruelty; mark other mature content NSFW.",
+    "Do not post text-only images, social-media screenshots, message screenshots, or AI-generated content."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "funny-posting.bso",

@@ -433,5 +433,12 @@
   "search_excerpt_more": "더보기",
   "search_results_in": "{{community}} 검색 결과",
   "search_within_community": "{{community}} 내 검색",
-  "auto_hide_topbar_while_scrolling": "스크롤하는 동안 상단바 자동 숨기기"
+  "auto_hide_topbar_while_scrolling": "스크롤하는 동안 상단바 자동 숨기기",
+  "propose_new_directory": "새 디렉터리 제안",
+  "current_winner": "현재 승자:",
+  "no_directories_found": "디렉터리를 찾을 수 없습니다",
+  "search_directories": "디렉터리 검색",
+  "back_to_all_directories": "모든 디렉터리로 돌아가기",
+  "directories": "디렉터리",
+  "search_communities": "이 디렉터리에서 커뮤니티 검색"
 }

@@ -3,8 +3,23 @@
   "revision": 1,
   "directoryCode": "pics",
   "description": "Communities competing for Seedit's /s/pics route. The highest-rated finalized candidate resolves the route. Subscriptions and post links continue to use exact community addresses.\n\nhttps://github.com/bitsocialnet/lists/blob/master/seedit-directories/seedit-pics-directory.json",
+  "tags": [
+    "pictures",
+    "photography",
+    "images"
+  ],
+  "rules": [
+    "Submit photographs or still images, not screenshots, screen-focused pictures, animations, videos, or AI-generated images.",
+    "Do not add captions, emojis, or other digital text directly onto the image.",
+    "Use a concise, accurate title that describes what the picture shows.",
+    "No pornography or gore; mark other mature material appropriately.",
+    "Do not reveal personal information, encourage harassment, or organize witch-hunts.",
+    "Link directly to the image or a reputable image host rather than an unrelated landing page.",
+    "Do not falsely claim ownership, flood the community, or repost material as original content.",
+    "Remain civil in titles and comments."
+  ],
   "createdAt": 1783123200,
-  "updatedAt": 1783123200,
+  "updatedAt": 1788286365,
   "communities": [
     {
       "address": "pics-posting.bso",

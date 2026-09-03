@@ -433,5 +433,12 @@
   "search_excerpt_more": "plus",
   "search_results_in": "résultats de recherche dans {{community}}",
   "search_within_community": "rechercher dans {{community}}",
-  "auto_hide_topbar_while_scrolling": "Masquer automatiquement la barre supérieure pendant le défilement"
+  "auto_hide_topbar_while_scrolling": "Masquer automatiquement la barre supérieure pendant le défilement",
+  "propose_new_directory": "Proposer un nouvel annuaire",
+  "current_winner": "gagnant actuel :",
+  "no_directories_found": "Aucun annuaire trouvé",
+  "search_directories": "rechercher dans les annuaires",
+  "back_to_all_directories": "retour à tous les annuaires",
+  "directories": "annuaires",
+  "search_communities": "rechercher des communautés dans cet annuaire"
 }

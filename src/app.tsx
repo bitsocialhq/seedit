@@ -1,12 +1,13 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { initializeNotificationSystem } from './lib/push';
 import useTheme from './hooks/use-theme';
 import { useAutoSubscribe } from './hooks/use-auto-subscribe';
 import { useBrowserPureP2PAccountUpgrade } from './hooks/use-browser-pure-p2p-account-upgrade';
 import useCanonicalCommunityRoute from './hooks/use-canonical-community-route';
 import AboutView from './views/about';
+import DirectoryAboutView from './views/about/directory-about';
 import All from './views/all';
 import Author from './views/author';
 import Domain from './views/domain';
@@ -36,6 +37,7 @@ import DirectorySubscriptionReconciler from './components/directory-subscription
 import ExactCommunityActionRoute from './components/exact-community-action-route';
 import StickyHeader from './components/sticky-header';
 import TopBar from './components/topbar';
+import { DIRECTORY_INDEX_PATH } from './lib/utils/community-route-utils';
 import styles from './app.module.css';
 
 initializeNotificationSystem();
@@ -43,6 +45,14 @@ initializeNotificationSystem();
 const SettingsUpgradeModal = lazy(() => import('./components/settings-upgrade-modal'));
 // the changelog inlines the whole CHANGELOG.md, so it loads as its own chunk instead of weighing down first paint
 const Changelog = lazy(() => import('./views/changelog'));
+
+const LegacyDirectoryRouteRedirect = () => {
+  const location = useLocation();
+  const { directoryCode } = useParams();
+  const pathname = directoryCode ? `${DIRECTORY_INDEX_PATH}/${encodeURIComponent(directoryCode)}` : DIRECTORY_INDEX_PATH;
+
+  return <Navigate to={{ pathname, search: location.search, hash: location.hash }} replace />;
+};
 
 const App = () => {
   const { t } = useTranslation();
@@ -179,10 +189,14 @@ const App = () => {
             <Route path='/communities/moderator' element={<Communities />} />
             <Route path='/communities/admin' element={<Communities />} />
             <Route path='/communities/owner' element={<Communities />} />
-            <Route path='/communities/vote' element={<Communities />} />
-            <Route path='/communities/vote/passing' element={<Communities />} />
-            <Route path='/communities/vote/rejecting' element={<Communities />} />
-            <Route path='/communities/vote/:directoryCode' element={<Communities />} />
+            <Route path={DIRECTORY_INDEX_PATH} element={<Communities />} />
+            <Route path={`${DIRECTORY_INDEX_PATH}/about`} element={<DirectoryAboutView />} />
+            <Route path={`${DIRECTORY_INDEX_PATH}/:directoryCode`} element={<Communities />} />
+            <Route path={`${DIRECTORY_INDEX_PATH}/:directoryCode/about`} element={<DirectoryAboutView />} />
+            <Route path='/communities/vote' element={<LegacyDirectoryRouteRedirect />} />
+            <Route path='/communities/vote/passing' element={<LegacyDirectoryRouteRedirect />} />
+            <Route path='/communities/vote/rejecting' element={<LegacyDirectoryRouteRedirect />} />
+            <Route path='/communities/vote/:directoryCode' element={<LegacyDirectoryRouteRedirect />} />
             <Route path='/communities/create' element={<CommunitySettings />} />
           </Route>
           <Route element={feedLayout}>

@@ -433,5 +433,12 @@
   "search_excerpt_more": "több",
   "search_results_in": "találatok itt: {{community}}",
   "search_within_community": "keresés itt: {{community}}",
-  "auto_hide_topbar_while_scrolling": "Felső sáv automatikus elrejtése görgetés közben"
+  "auto_hide_topbar_while_scrolling": "Felső sáv automatikus elrejtése görgetés közben",
+  "propose_new_directory": "Új címtár javaslata",
+  "current_winner": "jelenlegi győztes:",
+  "no_directories_found": "Nem találhatók címtárak",
+  "search_directories": "keresés a címtárakban",
+  "back_to_all_directories": "vissza az összes címtárhoz",
+  "directories": "címtárak",
+  "search_communities": "közösségek keresése ebben a címtárban"
 }

@@ -433,5 +433,12 @@
   "search_excerpt_more": "المزيد",
   "search_results_in": "نتائج البحث في {{community}}",
   "search_within_community": "البحث داخل {{community}}",
-  "auto_hide_topbar_while_scrolling": "إخفاء شريط الأدوات العلوي تلقائيًا أثناء التمرير"
+  "auto_hide_topbar_while_scrolling": "إخفاء شريط الأدوات العلوي تلقائيًا أثناء التمرير",
+  "propose_new_directory": "اقترح دليلاً جديداً",
+  "current_winner": "الفائز الحالي:",
+  "no_directories_found": "لم يتم العثور على أدلة",
+  "search_directories": "البحث في الأدلة",
+  "back_to_all_directories": "العودة إلى جميع الأدلة",
+  "directories": "الأدلة",
+  "search_communities": "البحث عن مجتمعات في هذا الدليل"
 }

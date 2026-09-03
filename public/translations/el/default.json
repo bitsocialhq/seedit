@@ -433,5 +433,12 @@
   "search_excerpt_more": "περισσότερα",
   "search_results_in": "αποτελέσματα αναζήτησης σε {{community}}",
   "search_within_community": "αναζήτηση εντός {{community}}",
-  "auto_hide_topbar_while_scrolling": "Αυτόματη απόκρυψη της πάνω μπάρας κατά την κύλιση"
+  "auto_hide_topbar_while_scrolling": "Αυτόματη απόκρυψη της πάνω μπάρας κατά την κύλιση",
+  "propose_new_directory": "Προτείνετε έναν νέο κατάλογο",
+  "current_winner": "τρέχων νικητής:",
+  "no_directories_found": "Δεν βρέθηκαν κατάλογοι",
+  "search_directories": "αναζήτηση καταλόγων",
+  "back_to_all_directories": "επιστροφή σε όλους τους καταλόγους",
+  "directories": "κατάλογοι",
+  "search_communities": "αναζήτηση κοινοτήτων σε αυτόν τον κατάλογο"
 }

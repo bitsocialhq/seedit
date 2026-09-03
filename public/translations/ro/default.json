@@ -433,5 +433,12 @@
   "search_excerpt_more": "mai mult",
   "search_results_in": "rezultatele căutării în {{community}}",
   "search_within_community": "caută în {{community}}",
-  "auto_hide_topbar_while_scrolling": "Ascunde automat bara de sus în timpul derulării"
+  "auto_hide_topbar_while_scrolling": "Ascunde automat bara de sus în timpul derulării",
+  "propose_new_directory": "Propuneți un director nou",
+  "current_winner": "câștigătorul actual:",
+  "no_directories_found": "Nu s-au găsit directoare",
+  "search_directories": "caută directoare",
+  "back_to_all_directories": "înapoi la toate directoarele",
+  "directories": "directoare",
+  "search_communities": "caută comunități în acest director"
 }

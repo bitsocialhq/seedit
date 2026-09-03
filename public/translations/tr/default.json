@@ -433,5 +433,12 @@
   "search_excerpt_more": "daha fazla",
   "search_results_in": "{{community}} içindeki arama sonuçları",
   "search_within_community": "{{community}} içinde ara",
-  "auto_hide_topbar_while_scrolling": "Kaydırırken üst çubuğu otomatik olarak gizle"
+  "auto_hide_topbar_while_scrolling": "Kaydırırken üst çubuğu otomatik olarak gizle",
+  "propose_new_directory": "Yeni bir dizin öner",
+  "current_winner": "mevcut kazanan:",
+  "no_directories_found": "Dizin bulunamadı",
+  "search_directories": "dizinlerde ara",
+  "back_to_all_directories": "tüm dizinlere geri dön",
+  "directories": "dizinler",
+  "search_communities": "bu dizindeki toplulukları ara"
 }

@@ -9,10 +9,7 @@ import {
   isCommunitiesModeratorView,
   isCommunitiesAdminView,
   isCommunitiesOwnerView,
-  isCommunitiesVoteView,
-  isCommunitiesVoteAllView,
-  isCommunitiesVotePassingView,
-  isCommunitiesVoteRejectingView,
+  isCommunitiesDirectoryView,
 } from '../../lib/utils/view-utils';
 import { isDirectoryCode } from '../../lib/utils/directory-codes';
 import useErrorStore from '../../stores/use-error-store';
@@ -56,46 +53,6 @@ const MyCommunitiesTabs = () => {
       <span className={styles.separator}>|</span>
       <Link to='/communities/owner' className={isInCommunitiesOwnerView ? styles.selected : styles.choice}>
         {t('owner')}
-      </Link>
-    </div>
-  );
-};
-
-const VoteTabs = () => {
-  const { t } = useTranslation();
-  const location = useLocation();
-  const isInCommunitiesVoteAllView = isCommunitiesVoteAllView(location.pathname);
-  const isInCommunitiesVotePassingView = isCommunitiesVotePassingView(location.pathname);
-  const isInCommunitiesVoteRejectingView = isCommunitiesVoteRejectingView(location.pathname);
-
-  return (
-    <div className={styles.communitiesTabs}>
-      <Link to='/communities/vote' className={isInCommunitiesVoteAllView ? styles.selected : styles.choice}>
-        {t('all')}
-      </Link>
-      <span className={styles.separator}>|</span>
-      <Link
-        to='/communities/vote/passing'
-        className={isInCommunitiesVotePassingView ? styles.selected : styles.choice}
-        onClick={(e) => {
-          e.preventDefault();
-          alert('This feature is not available yet.');
-        }}
-        style={{ cursor: 'not-allowed' }}
-      >
-        {t('passing')}
-      </Link>
-      <span className={styles.separator}>|</span>
-      <Link
-        to='/communities/vote/rejecting'
-        className={isInCommunitiesVoteRejectingView ? styles.selected : styles.choice}
-        onClick={(e) => {
-          e.preventDefault();
-          alert('This feature is not available yet.');
-        }}
-        style={{ cursor: 'not-allowed' }}
-      >
-        {t('rejecting')}
       </Link>
     </div>
   );
@@ -348,14 +305,14 @@ const Communities = () => {
   const isInCommunitiesModeratorView = isCommunitiesModeratorView(location.pathname);
   const isInCommunitiesAdminView = isCommunitiesAdminView(location.pathname);
   const isInCommunitiesOwnerView = isCommunitiesOwnerView(location.pathname);
-  const isInCommunitiesVoteView = isCommunitiesVoteView(location.pathname);
+  const isInCommunitiesDirectoryView = isCommunitiesDirectoryView(location.pathname);
   const isInCommunitiesView =
     isCommunitiesView(location.pathname) &&
     !isInCommunitiesSubscriberView &&
     !isInCommunitiesModeratorView &&
     !isInCommunitiesAdminView &&
     !isInCommunitiesOwnerView &&
-    !isInCommunitiesVoteView;
+    !isInCommunitiesDirectoryView;
 
   let viewRole = 'subscriber';
   if (isInCommunitiesModeratorView) {
@@ -368,8 +325,8 @@ const Communities = () => {
 
   const documentTitle = useMemo(() => {
     let title = t('communities').charAt(0).toUpperCase() + t('communities').slice(1);
-    if (isInCommunitiesVoteView) {
-      title += ` - ${_.startCase(t('vote'))}`;
+    if (isInCommunitiesDirectoryView) {
+      title += ` - ${_.startCase(t('directories'))}`;
       // an unknown code redirects to /not-found, so it must not title the page after a directory
       if (isDirectoryCode(directoryCode)) {
         title += ` - s/${directoryCode}`;
@@ -393,7 +350,7 @@ const Communities = () => {
     isInCommunitiesAdminView,
     isInCommunitiesOwnerView,
     isInCommunitiesView,
-    isInCommunitiesVoteView,
+    isInCommunitiesDirectoryView,
     t,
   ]);
 
@@ -429,14 +386,10 @@ const Communities = () => {
       <div className={styles.sidebar}>
         <Sidebar />
       </div>
-      {isInCommunitiesSubscriberView || isInCommunitiesModeratorView || isInCommunitiesAdminView || isInCommunitiesOwnerView || isInCommunitiesView ? (
-        <MyCommunitiesTabs />
-      ) : (
-        <VoteTabs />
-      )}
-      {isInCommunitiesVoteView ? <DirectoryVoteNotice /> : <Infobar />}
+      {!isInCommunitiesDirectoryView && <MyCommunitiesTabs />}
+      {isInCommunitiesDirectoryView ? <DirectoryVoteNotice /> : <Infobar />}
       <div className={styles.error}>{renderErrors()}</div>
-      {isInCommunitiesVoteView && (directoryCode ? <DirectoryCandidates /> : <DirectoryIndex />)}
+      {isInCommunitiesDirectoryView && (directoryCode ? <DirectoryCandidates /> : <DirectoryIndex />)}
       {(isInCommunitiesModeratorView || isInCommunitiesAdminView || isInCommunitiesOwnerView) && <AccountCommunities viewRole={viewRole} />}
       {isInCommunitiesSubscriberView && <SubscriberCommunities />}
       {isInCommunitiesView && <AllAccountCommunities />}

@@ -433,5 +433,12 @@
   "search_excerpt_more": "lainnya",
   "search_results_in": "hasil pencarian di {{community}}",
   "search_within_community": "cari di {{community}}",
-  "auto_hide_topbar_while_scrolling": "Sembunyikan topbar secara otomatis saat menggulir"
+  "auto_hide_topbar_while_scrolling": "Sembunyikan topbar secara otomatis saat menggulir",
+  "propose_new_directory": "Usulkan direktori baru",
+  "current_winner": "pemenang saat ini:",
+  "no_directories_found": "Tidak ada direktori yang ditemukan",
+  "search_directories": "cari direktori",
+  "back_to_all_directories": "kembali ke semua direktori",
+  "directories": "direktori",
+  "search_communities": "cari komunitas di direktori ini"
 }
