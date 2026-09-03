@@ -266,11 +266,21 @@ const PostPage = () => {
       accountComments?.length > 0 &&
       parseInt(accountCommentIndex) < accountComments.length);
 
+  // a pending post that was already rendered disappears when its publication is abandoned during the
+  // challenge, because abandoning deletes the account comment; go back instead of showing not found
+  const renderedAccountCommentIndexRef = useRef<string | undefined>(undefined);
+
   useEffect(() => {
-    if (!isValidAccountCommentIndex) {
-      navigate('/not-found', { replace: true });
+    if (isValidAccountCommentIndex) {
+      renderedAccountCommentIndexRef.current = accountCommentIndex;
+      return;
     }
-  }, [isValidAccountCommentIndex, navigate]);
+    if (renderedAccountCommentIndexRef.current === accountCommentIndex) {
+      navigate(-1);
+      return;
+    }
+    navigate('/not-found', { replace: true });
+  }, [accountCommentIndex, isValidAccountCommentIndex, navigate]);
 
   const accountComment = useOptionalAccountComment(commentIndex);
   const pendingPost = accountComment;
