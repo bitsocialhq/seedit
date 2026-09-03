@@ -300,7 +300,7 @@
   .directorySearch {
     min-height: 61px;
     padding-left: 61px;
-    margin: 5px 5px 5px 0;
+    margin: 5px;
   }
 
   .directorySearch::before {
