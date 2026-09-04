@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState, useMemo, memo } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useAccountCommunities } from '@bitsocial/bitsocial-react-hooks';
-import { isAllView, isDomainView, isHomeView, isModView, isCommunityView } from '../../lib/utils/view-utils';
+import { isAllView, isHomeView, isModView } from '../../lib/utils/view-utils';
 import { getCompactCommunityDisplayName } from '../../lib/utils/address-utils';
 import useContentOptionsStore from '../../stores/use-content-options-store';
 import { useDefaultSubscriptions, useFilteredDefaultSubscriptions, type DefaultSubscription } from '../../hooks/use-default-subscriptions';
 import { DIRECTORY_INDEX_PATH, getCommunityPath, getDirectoryPath } from '../../lib/utils/community-route-utils';
-import useTimeFilter, { setSessionTimeFilterPreference } from '../../hooks/use-time-filter';
 import useResolvedCommunityRoute from '../../hooks/use-resolved-community-route';
-import { sortTypes } from '../../constants/sort-types';
-import { sortLabels } from '../../constants/sort-labels';
 import styles from './topbar.module.css';
 
 const getSubscriptionDisplayName = (subscription: string) => getCompactCommunityDisplayName(subscription);
@@ -218,8 +215,6 @@ const TopBar = memo(() => {
     <div className={styles.headerArea}>
       <div className={styles.widthClip}>
         <CommunitiesDropdown />
-        <SortTypesDropdown />
-        <TimeFilterDropdown />
         <div className={styles.srList}>
           <ul className={styles.srBar}>
             <li>
